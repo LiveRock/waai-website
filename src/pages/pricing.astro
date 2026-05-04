@@ -3,60 +3,59 @@ import PageLayout from '../layouts/PageLayout.astro';
 import SectionHeading from '../components/shared/SectionHeading.astro';
 import CTAButton from '../components/shared/CTAButton.astro';
 import Accordion from '../components/shared/Accordion.astro';
-import { features } from '../data/features';
 
-const planFeatures = {
+const API_BASE = import.meta.env.API_BASE_URL || 'https://waaichat.hsi.asia/api';
+
+// Fetch plans from WAAIChat backend at build time
+let dbPlans: { name: string; display_name: string; description: string | null; price_monthly: number; price_yearly: number; max_qa_pairs: number | null; max_flows: number | null; max_messages_monthly: number | null; trial_days: number | null }[] = [];
+try {
+  const res = await fetch(`${API_BASE}/billing/public/plans`);
+  if (res.ok) dbPlans = await res.json();
+} catch {}
+
+function formatPrice(cents: number | null | undefined): string {
+  if (cents === null || cents === undefined) return 'Contact';
+  if (cents === 0) return 'Free';
+  return `$${(cents / 100).toFixed(0)}`;
+}
+
+function formatLimit(val: number | null | undefined): string {
+  if (val === null || val === undefined) return 'Unlimited';
+  return val.toLocaleString();
+}
+
+const planFeatureMap: Record<string, string[]> = {
   trial: ['50 Q&A Pairs', '3 Logic Flows', '500 Messages/month', 'AI Auto-Responder', 'Knowledge Base', 'Test Chat', '14-Day Free Trial'],
   starter: ['200 Q&A Pairs', '20 Logic Flows', '5,000 Messages/month', 'AI Auto-Responder', 'Knowledge Base', 'Logic Flows', 'Analytics Dashboard', 'Business Templates', 'CSV/JSON Import'],
   pro: ['Unlimited Q&A Pairs', 'Unlimited Flows', 'Unlimited Messages', 'Everything in Starter', 'Google Workspace Plugins', 'Super Powers (Vision, Web Search)', 'Document Generation', 'AI Multi-Provider', 'Priority Support'],
   custom: ['Everything in Pro', 'Custom Message Limits', 'Dedicated Account Manager', 'Custom Integrations', 'SLA Guarantee', 'Priority Onboarding', 'Advanced Analytics', 'Custom AI Training'],
 };
 
-const plans = [
-  {
-    name: 'Trial',
-    key: 'trial',
-    price: 'Free',
-    period: '14 days',
-    description: 'Get started with a free trial',
-    highlighted: false,
-    cta: 'Start Free Trial',
-    ctaHref: '/signup',
-  },
-  {
-    name: 'Starter',
-    key: 'starter',
-    price: '$29',
-    period: '/month',
-    yearlyPrice: '$290/year',
-    description: 'For small businesses getting started',
-    highlighted: false,
-    cta: 'Get Started',
-    ctaHref: '/signup',
-  },
-  {
-    name: 'Pro',
-    key: 'pro',
-    price: '$99',
-    period: '/month',
-    yearlyPrice: '$990/year',
-    description: 'Unlimited messaging and automations',
-    highlighted: true,
-    cta: 'Start Free Trial',
-    ctaHref: '/signup',
-  },
-  {
-    name: 'Custom',
-    key: 'custom',
-    price: 'Contact',
-    period: 'us',
-    yearlyPrice: '',
-    description: 'Tailored plan for enterprise needs',
-    highlighted: false,
-    cta: 'Contact Sales',
-    ctaHref: '/contact',
-  },
-];
+// Build plans from DB data; fall back to hardcoded if API unreachable
+const plans = dbPlans.length > 0
+  ? dbPlans.map((p) => ({
+      name: p.display_name,
+      key: p.name,
+      price: formatPrice(p.price_monthly),
+      period: p.price_monthly === 0 ? `${p.trial_days || 14} days` : '/month',
+      yearlyPrice: p.price_yearly > 0 ? `${formatPrice(p.price_yearly)}/year` : '',
+      description: p.description || '',
+      highlighted: p.name === 'pro',
+      cta: p.name === 'custom' ? 'Contact Sales' : 'Start Free Trial',
+      ctaHref: p.name === 'custom' ? '/contact' : '/signup',
+      features: [
+        ...(p.max_qa_pairs ? [`${formatLimit(p.max_qa_pairs)} Q&A Pairs`] : ['Unlimited Q&A Pairs']),
+        ...(p.max_flows ? [`${formatLimit(p.max_flows)} Logic Flows`] : ['Unlimited Flows']),
+        ...(p.max_messages_monthly ? [`${formatLimit(p.max_messages_monthly)} Messages/month`] : ['Unlimited Messages']),
+        ...(planFeatureMap[p.name] || []).slice(3),
+      ],
+    }))
+  : [
+      { name: 'Trial', key: 'trial', price: 'Free', period: '14 days', yearlyPrice: '', description: 'Get started with a free trial', highlighted: false, cta: 'Start Free Trial', ctaHref: '/signup', features: planFeatureMap.trial },
+      { name: 'Starter', key: 'starter', price: '$29', period: '/month', yearlyPrice: '$290/year', description: 'For small businesses getting started', highlighted: false, cta: 'Get Started', ctaHref: '/signup', features: planFeatureMap.starter },
+      { name: 'Pro', key: 'pro', price: '$99', period: '/month', yearlyPrice: '$990/year', description: 'Unlimited messaging and automations', highlighted: true, cta: 'Start Free Trial', ctaHref: '/signup', features: planFeatureMap.pro },
+      { name: 'Custom', key: 'custom', price: 'Contact', period: 'us', yearlyPrice: '', description: 'Tailored plan for enterprise needs', highlighted: false, cta: 'Contact Sales', ctaHref: '/contact', features: planFeatureMap.custom },
+    ];
 
 const faqItems = [
   { question: 'How does the 14-day free trial work?', answer: 'Sign up with just your email — no credit card required. You get full access to the Trial plan features for 14 days. After that, choose a paid plan or continue with limited features.' },
@@ -117,7 +116,7 @@ const faqItems = [
               )}
             </div>
             <ul class="space-y-3 mb-8 flex-1">
-              {planFeatures[plan.key as keyof typeof planFeatures].map((feature) => (
+              {plan.features.map((feature) => (
                 <li class="flex items-start gap-2 text-sm text-gray-600">
                   <svg class="w-5 h-5 text-wa-green shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
