@@ -4,14 +4,18 @@ import SectionHeading from '../components/shared/SectionHeading.astro';
 import CTAButton from '../components/shared/CTAButton.astro';
 import Accordion from '../components/shared/Accordion.astro';
 
-const API_BASE = import.meta.env.API_BASE_URL || 'https://waaichat.hsi.asia/api';
+const API_URLS = [
+  'http://127.0.0.1:8000/api/public/plans',
+  'https://waaichat.hsi.asia/api/public/plans',
+];
 
-// Fetch plans from WAAIChat backend at build time
 let dbPlans: { name: string; display_name: string; description: string | null; price_monthly: number; price_yearly: number; max_qa_pairs: number | null; max_flows: number | null; max_messages_monthly: number | null; trial_days: number | null }[] = [];
-try {
-  const res = await fetch(`${API_BASE}/billing/public/plans`);
-  if (res.ok) dbPlans = await res.json();
-} catch {}
+for (const url of API_URLS) {
+  try {
+    const res = await fetch(url);
+    if (res.ok) { dbPlans = await res.json(); break; }
+  } catch {}
+}
 
 function formatPrice(cents: number | null | undefined): string {
   if (cents === null || cents === undefined) return 'Contact';
