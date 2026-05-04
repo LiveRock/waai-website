@@ -1,0 +1,23 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import CTAButton from '../components/shared/CTAButton.astro';
+---
+
+<PageLayout
+  title="Page Not Found"
+  description="The page you're looking for doesn't exist. Return to the waai.me homepage."
+>
+  <section class="py-24 sm:py-32 bg-white">
+    <div class="max-w-lg mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div class="text-8xl sm:text-9xl font-extrabold text-gray-100 mb-4">404</div>
+      <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">Page Not Found</h1>
+      <p class="text-lg text-gray-600 mb-8">
+        Sorry, the page you're looking for doesn't exist or has been moved.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <CTAButton href="/" size="lg">Go to Homepage</CTAButton>
+        <CTAButton href="/contact" variant="secondary" size="lg">Contact Us</CTAButton>
+      </div>
+    </div>
+  </section>
+</PageLayout>

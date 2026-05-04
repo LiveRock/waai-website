@@ -5,7 +5,7 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://waai.me',
   output: 'static',
-  trailingSlash: 'never',
+  trailingSlash: 'always',
   integrations: [
     sitemap(),
   ],

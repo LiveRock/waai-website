@@ -1,0 +1,146 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import SectionHeading from '../../components/shared/SectionHeading.astro';
+import CTAButton from '../../components/shared/CTAButton.astro';
+import { solutions } from '../../data/solutions';
+
+export function getStaticPaths() {
+  return solutions.map(s => ({ params: { slug: s.slug }, props: { solution: s } }));
+}
+
+const { solution } = Astro.props;
+
+const painPointIcons: Record<string, string> = {
+  'trending-down': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/></svg>',
+  'clock': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
+  'users': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>',
+  'phone-off': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-12.728 12.728M3.515 8.464a1 1 0 010-1.414l3.536-3.536a1 1 0 011.414 0l2.121 2.122a1 1 0 010 1.414l-1.06 1.06m5.656 5.657l1.06 1.06a1 1 0 010 1.414l-3.535 3.536a1 1 0 01-1.414 0l-2.122-2.121"/></svg>',
+  'shuffle': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>',
+  'file': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>',
+  'headphones': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>',
+  'moon': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>',
+  'message-circle': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>',
+};
+---
+
+<PageLayout
+  title={`${solution.title} — WAAIChat`}
+  description={solution.metaDescription}
+  canonicalPath={`/solutions/${solution.slug}`}
+>
+  <!-- Hero -->
+  <section class="relative py-20 sm:py-28 bg-gradient-to-b from-green-50 to-white overflow-hidden">
+    <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle, #25D366 1px, transparent 1px); background-size: 24px 24px;"></div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Breadcrumb -->
+      <nav class="mb-8 text-sm text-gray-500">
+        <a href="/" class="hover:text-wa-green transition-colors">Home</a>
+        <span class="mx-2">/</span>
+        <a href="/solutions/marketing" class="hover:text-wa-green transition-colors">Solutions</a>
+        <span class="mx-2">/</span>
+        <span class="text-gray-900 font-medium">{solution.title}</span>
+      </nav>
+
+      <div class="max-w-3xl">
+        <span class="inline-block px-3 py-1 text-xs font-semibold text-wa-green bg-green-50 rounded-full uppercase tracking-wider mb-4">
+          {solution.title}
+        </span>
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight mb-6">
+          {solution.headline}
+        </h1>
+        <p class="text-lg sm:text-xl text-gray-600 leading-relaxed mb-8">
+          {solution.description}
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <CTAButton href="/signup" size="lg">Start Free Trial</CTAButton>
+          <CTAButton href="/pricing" variant="secondary" size="lg">View Pricing</CTAButton>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pain Points -->
+  <section class="py-20 sm:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <SectionHeading
+        title="The Problems You Face"
+        subtitle="Sound familiar? Your customers expect more, and you need a better way to deliver."
+        align="center"
+      />
+
+      <div class="grid md:grid-cols-3 gap-8">
+        {solution.painPoints.map((point) => (
+          <div class="bg-white rounded-2xl border border-gray-100 p-8 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg">
+            <div class="w-12 h-12 bg-red-50 rounded-xl flex items-center justify-center mb-5 text-red-500">
+              <Fragment set:html={painPointIcons[point.icon] || painPointIcons['clock']} />
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-3">{point.title}</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">{point.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="py-20 sm:py-24 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <SectionHeading
+        title="How WAAIChat Helps"
+        subtitle="Everything you need to transform your WhatsApp into a powerful business tool."
+        align="center"
+      />
+
+      <div class="grid md:grid-cols-2 gap-8">
+        {solution.features.map((feature, index) => (
+          <div class="bg-white rounded-2xl border border-gray-100 p-8 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg">
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center shrink-0">
+                <span class="text-wa-green font-bold text-lg">{index + 1}</span>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">{feature.title}</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">{feature.description}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="py-20 sm:py-24 bg-wa-teal">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">The Results Speak for Themselves</h2>
+        <p class="text-lg text-green-100">Businesses using WAAIChat see measurable improvements from day one.</p>
+      </div>
+
+      <div class="grid sm:grid-cols-3 gap-8 sm:gap-12">
+        {solution.stats.map((stat) => (
+          <div class="text-center">
+            <div class="text-5xl sm:text-6xl font-extrabold text-white mb-3">{stat.value}</div>
+            <div class="text-green-100 text-lg font-medium">{stat.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-20 sm:py-24 bg-white">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+        Ready to Transform Your {solution.title.replace('For ', '')}?
+      </h2>
+      <p class="text-lg text-gray-600 mb-8">
+        Start your 14-day free trial. No credit card required. Set up in under an hour.
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <CTAButton href="/signup" size="lg">Start Free Trial</CTAButton>
+        <CTAButton href="/pricing" variant="secondary" size="lg">See All Plans</CTAButton>
+      </div>
+    </div>
+  </section>
+</PageLayout>

@@ -1,0 +1,89 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import SectionHeading from '../../components/shared/SectionHeading.astro';
+import CTAButton from '../../components/shared/CTAButton.astro';
+
+const posts = [
+  {
+    slug: 'whatsapp-ai-agent-guide',
+    title: 'The Complete Guide to WhatsApp AI Agents for Business',
+    excerpt: 'Learn how AI-powered WhatsApp agents transform customer service, automate responses, and drive sales — without adding headcount. Covers setup, best practices, and ROI expectations.',
+    date: '2026-04-28',
+    readTime: '8 min read',
+    category: 'Guides',
+    categoryColor: 'bg-green-50 text-green-700',
+  },
+  {
+    slug: 'logic-flows-vs-knowledge-base',
+    title: 'Logic Flows vs Knowledge Base: When to Use Each',
+    excerpt: 'Not every customer question needs an AI response. Discover how rule-based logic flows and AI-powered knowledge base work together to deliver faster, more accurate answers at lower cost.',
+    date: '2026-04-15',
+    readTime: '6 min read',
+    category: 'Product',
+    categoryColor: 'bg-blue-50 text-blue-700',
+  },
+  {
+    slug: 'google-workspace-automation',
+    title: '5 Ways Google Workspace Integration Saves Your Team Hours',
+    excerpt: 'From automated appointment booking to generating invoices as Google Docs, see how businesses are using WAAIChat\'s Google integration to eliminate manual tasks and delight customers.',
+    date: '2026-04-02',
+    readTime: '5 min read',
+    category: 'Integrations',
+    categoryColor: 'bg-yellow-50 text-yellow-700',
+  },
+];
+---
+
+<PageLayout
+  title="Blog"
+  description="Insights, guides, and product updates from the WAAIChat team. Learn how to get the most from your WhatsApp AI agent."
+  canonicalPath="/blog"
+>
+  <section class="py-20 sm:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <SectionHeading
+        title="Blog"
+        subtitle="Insights, guides, and updates to help you get the most from your WhatsApp AI agent."
+      />
+
+      <!-- Featured Post -->
+      <a href={`/blog/${posts[0].slug}`} class="block mb-12 group">
+        <div class="bg-gray-50 rounded-2xl border border-gray-200 p-8 sm:p-10 hover:border-gray-300 hover:shadow-md transition-all">
+          <div class="flex items-center gap-3 mb-4">
+            <span class={`px-3 py-1 text-xs font-semibold rounded-full ${posts[0].categoryColor}`}>{posts[0].category}</span>
+            <span class="text-sm text-gray-400">{posts[0].date}</span>
+            <span class="text-sm text-gray-400">{posts[0].readTime}</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 group-hover:text-wa-teal transition-colors">{posts[0].title}</h2>
+          <p class="text-lg text-gray-600 leading-relaxed mb-4">{posts[0].excerpt}</p>
+          <span class="text-wa-green font-semibold text-sm group-hover:underline">Read article &rarr;</span>
+        </div>
+      </a>
+
+      <!-- Post Grid -->
+      <div class="grid sm:grid-cols-2 gap-8">
+        {posts.slice(1).map((post) => (
+          <a href={`/blog/${post.slug}`} class="group bg-white rounded-2xl border border-gray-200 p-8 hover:border-gray-300 hover:shadow-md transition-all">
+            <div class="flex items-center gap-3 mb-4">
+              <span class={`px-3 py-1 text-xs font-semibold rounded-full ${post.categoryColor}`}>{post.category}</span>
+              <span class="text-sm text-gray-400">{post.date}</span>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-wa-teal transition-colors">{post.title}</h3>
+            <p class="text-gray-600 text-sm leading-relaxed mb-4">{post.excerpt}</p>
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-gray-400">{post.readTime}</span>
+              <span class="text-wa-green font-semibold text-sm group-hover:underline">Read more &rarr;</span>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <!-- Newsletter CTA -->
+      <div class="mt-16 bg-gray-50 rounded-2xl border border-gray-200 p-8 sm:p-10 text-center">
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Stay in the Loop</h3>
+        <p class="text-gray-600 mb-6">Get the latest guides, product updates, and WhatsApp business tips delivered to your inbox.</p>
+        <CTAButton href="/signup" size="md">Get Started for Free</CTAButton>
+      </div>
+    </div>
+  </section>
+</PageLayout>
