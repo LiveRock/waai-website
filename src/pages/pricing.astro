@@ -1,0 +1,238 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import SectionHeading from '../components/shared/SectionHeading.astro';
+import CTAButton from '../components/shared/CTAButton.astro';
+import Accordion from '../components/shared/Accordion.astro';
+import { features } from '../data/features';
+
+const planFeatures = {
+  trial: ['50 Q&A Pairs', '3 Logic Flows', '500 Messages/month', 'AI Auto-Responder', 'Knowledge Base', 'Test Chat', '14-Day Free Trial'],
+  starter: ['200 Q&A Pairs', '20 Logic Flows', '5,000 Messages/month', 'AI Auto-Responder', 'Knowledge Base', 'Logic Flows', 'Analytics Dashboard', 'Business Templates', 'CSV/JSON Import'],
+  pro: ['Unlimited Q&A Pairs', 'Unlimited Flows', 'Unlimited Messages', 'Everything in Starter', 'Google Workspace Plugins', 'Super Powers (Vision, Web Search)', 'Document Generation', 'AI Multi-Provider', 'Priority Support'],
+  custom: ['Everything in Pro', 'Custom Message Limits', 'Dedicated Account Manager', 'Custom Integrations', 'SLA Guarantee', 'Priority Onboarding', 'Advanced Analytics', 'Custom AI Training'],
+};
+
+const plans = [
+  {
+    name: 'Trial',
+    key: 'trial',
+    price: 'Free',
+    period: '14 days',
+    description: 'Get started with a free trial',
+    highlighted: false,
+    cta: 'Start Free Trial',
+    ctaHref: '/signup',
+  },
+  {
+    name: 'Starter',
+    key: 'starter',
+    price: '$29',
+    period: '/month',
+    yearlyPrice: '$290/year',
+    description: 'For small businesses getting started',
+    highlighted: false,
+    cta: 'Get Started',
+    ctaHref: '/signup',
+  },
+  {
+    name: 'Pro',
+    key: 'pro',
+    price: '$99',
+    period: '/month',
+    yearlyPrice: '$990/year',
+    description: 'Unlimited messaging and automations',
+    highlighted: true,
+    cta: 'Start Free Trial',
+    ctaHref: '/signup',
+  },
+  {
+    name: 'Custom',
+    key: 'custom',
+    price: 'Contact',
+    period: 'us',
+    yearlyPrice: '',
+    description: 'Tailored plan for enterprise needs',
+    highlighted: false,
+    cta: 'Contact Sales',
+    ctaHref: '/contact',
+  },
+];
+
+const faqItems = [
+  { question: 'How does the 14-day free trial work?', answer: 'Sign up with just your email — no credit card required. You get full access to the Trial plan features for 14 days. After that, choose a paid plan or continue with limited features.' },
+  { question: 'Can I switch plans at any time?', answer: 'Yes, you can upgrade or downgrade your plan at any time. When upgrading, you get immediate access to new features. When downgrading, the change takes effect at your next billing cycle.' },
+  { question: 'What happens if I exceed my message limit?', answer: 'We\'ll notify you as you approach your limit. On Starter plans, messages beyond the limit are paused until the next billing cycle. Pro and Custom plans have unlimited messaging.' },
+  { question: 'Do I need my own WhatsApp Business number?', answer: 'Yes, you need a WhatsApp Business API account through Meta. We guide you through the setup process, which typically takes under an hour.' },
+  { question: 'Which AI providers do you support?', answer: 'We support OpenAI (GPT-4, GPT-3.5), Anthropic (Claude), z.ai, llama.cpp (local), and OpenRouter. Each customer can configure their preferred provider and model.' },
+  { question: 'Is my data secure?', answer: 'All API keys and tokens are encrypted at rest using AES (Fernet). We use secure HTTPS connections for all API calls. Your data is never shared with third parties.' },
+  { question: 'What payment methods do you accept?', answer: 'We accept all major credit and debit cards through Stripe. Annual billing is available with a discount equivalent to 2 months free.' },
+];
+---
+
+<PageLayout
+  title="Pricing"
+  description="Simple, transparent pricing for WhatsApp AI agents. Start free for 14 days, then choose the plan that fits your business."
+  canonicalPath="/pricing"
+>
+  <section class="py-20 sm:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <SectionHeading
+        title="Simple Pricing, Powerful Features"
+        subtitle="Start free, scale as you grow. No hidden fees, no surprises."
+      />
+
+      <!-- Pricing Toggle -->
+      <div class="flex justify-center mb-12">
+        <div class="inline-flex items-center gap-3 bg-gray-100 rounded-full px-1.5 py-1.5">
+          <button id="toggle-monthly" class="px-5 py-2 text-sm font-semibold rounded-full bg-wa-green text-white transition-all">Monthly</button>
+          <button id="toggle-yearly" class="px-5 py-2 text-sm font-semibold rounded-full text-gray-600 hover:text-gray-800 transition-all">Yearly <span class="text-xs text-wa-green font-normal">Save 17%</span></button>
+        </div>
+      </div>
+
+      <!-- Plan Cards -->
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4">
+        {plans.map((plan) => (
+          <div class:list={[
+            'relative rounded-2xl border p-6 sm:p-8 flex flex-col transition-all duration-200',
+            plan.highlighted
+              ? 'border-wa-green shadow-lg shadow-green-500/10 scale-[1.02]'
+              : 'border-gray-200 hover:border-gray-300 hover:shadow-md',
+          ]}>
+            {plan.highlighted && (
+              <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-wa-green text-white text-xs font-semibold rounded-full">
+                Most Popular
+              </div>
+            )}
+            <div class="mb-6">
+              <h3 class="text-xl font-bold text-gray-900 mb-1">{plan.name}</h3>
+              <p class="text-sm text-gray-500">{plan.description}</p>
+            </div>
+            <div class="mb-6">
+              <div class="flex items-baseline gap-1">
+                <span class="text-4xl font-extrabold text-gray-900" data-price={plan.key}>{plan.price}</span>
+                <span class="text-gray-500" data-period={plan.key}>{plan.period}</span>
+              </div>
+              {plan.yearlyPrice && (
+                <p class="text-sm text-gray-400 mt-1 yearly-price hidden" data-yearly={plan.key}>{plan.yearlyPrice}</p>
+              )}
+            </div>
+            <ul class="space-y-3 mb-8 flex-1">
+              {planFeatures[plan.key as keyof typeof planFeatures].map((feature) => (
+                <li class="flex items-start gap-2 text-sm text-gray-600">
+                  <svg class="w-5 h-5 text-wa-green shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                  </svg>
+                  {feature}
+                </li>
+              ))}
+            </ul>
+            <a href={plan.ctaHref} class:list={[
+              'block w-full text-center px-5 py-3 rounded-lg font-semibold text-sm transition-all',
+              plan.highlighted
+                ? 'bg-wa-green text-white hover:bg-wa-green-dark shadow-sm'
+                : 'border-2 border-wa-green text-wa-green hover:bg-wa-green hover:text-white',
+            ]}>
+              {plan.cta}
+            </a>
+          </div>
+        ))}
+      </div>
+
+      <!-- Feature Comparison -->
+      <div class="mt-20">
+        <h3 class="text-2xl font-bold text-gray-900 text-center mb-8">Compare Plans</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full min-w-[640px]">
+            <thead>
+              <tr class="border-b border-gray-200">
+                <th class="py-4 px-4 text-left text-sm font-semibold text-gray-900">Feature</th>
+                <th class="py-4 px-4 text-center text-sm font-semibold text-gray-900">Trial</th>
+                <th class="py-4 px-4 text-center text-sm font-semibold text-gray-900">Starter</th>
+                <th class="py-4 px-4 text-center text-sm font-semibold text-wa-green">Pro</th>
+                <th class="py-4 px-4 text-center text-sm font-semibold text-gray-900">Custom</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-gray-100">
+                <td class="py-3 px-4 text-sm text-gray-600">Q&A Pairs</td>
+                <td class="py-3 px-4 text-sm text-center text-gray-600">50</td>
+                <td class="py-3 px-4 text-sm text-center text-gray-600">200</td>
+                <td class="py-3 px-4 text-sm text-center text-gray-900 font-medium">Unlimited</td>
+                <td class="py-3 px-4 text-sm text-center text-gray-900 font-medium">Unlimited</td>
+              </tr>
+              <tr class="border-b border-gray-100">
+                <td class="py-3 px-4 text-sm text-gray-600">Logic Flows</td>
+                <td class="py-3 px-4 text-sm text-center text-gray-600">3</td>
+                <td class="py-3 px-4 text-sm text-center text-gray-600">20</td>
+                <td class="py-3 px-4 text-sm text-center text-gray-900 font-medium">Unlimited</td>
+                <td class="py-3 px-4 text-sm text-center text-gray-900 font-medium">Unlimited</td>
+              </tr>
+              <tr class="border-b border-gray-100">
+                <td class="py-3 px-4 text-sm text-gray-600">Messages/month</td>
+                <td class="py-3 px-4 text-sm text-center text-gray-600">500</td>
+                <td class="py-3 px-4 text-sm text-center text-gray-600">5,000</td>
+                <td class="py-3 px-4 text-sm text-center text-gray-900 font-medium">Unlimited</td>
+                <td class="py-3 px-4 text-sm text-center text-gray-900 font-medium">Custom</td>
+              </tr>
+              <tr class="border-b border-gray-100">
+                <td class="py-3 px-4 text-sm text-gray-600">AI Auto-Responder</td>
+                <td class="py-3 px-4 text-center"><svg class="w-5 h-5 text-wa-green mx-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></td>
+                <td class="py-3 px-4 text-center"><svg class="w-5 h-5 text-wa-green mx-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></td>
+                <td class="py-3 px-4 text-center"><svg class="w-5 h-5 text-wa-green mx-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></td>
+                <td class="py-3 px-4 text-center"><svg class="w-5 h-5 text-wa-green mx-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></td>
+              </tr>
+              <tr class="border-b border-gray-100">
+                <td class="py-3 px-4 text-sm text-gray-600">Google Workspace</td>
+                <td class="py-3 px-4 text-center text-gray-400">—</td>
+                <td class="py-3 px-4 text-center text-gray-400">—</td>
+                <td class="py-3 px-4 text-center"><svg class="w-5 h-5 text-wa-green mx-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></td>
+                <td class="py-3 px-4 text-center"><svg class="w-5 h-5 text-wa-green mx-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></td>
+              </tr>
+              <tr class="border-b border-gray-100">
+                <td class="py-3 px-4 text-sm text-gray-600">Super Powers (Vision, Search)</td>
+                <td class="py-3 px-4 text-center text-gray-400">—</td>
+                <td class="py-3 px-4 text-center text-gray-400">—</td>
+                <td class="py-3 px-4 text-center"><svg class="w-5 h-5 text-wa-green mx-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></td>
+                <td class="py-3 px-4 text-center"><svg class="w-5 h-5 text-wa-green mx-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></td>
+              </tr>
+              <tr class="border-b border-gray-100">
+                <td class="py-3 px-4 text-sm text-gray-600">Document Generation</td>
+                <td class="py-3 px-4 text-center text-gray-400">—</td>
+                <td class="py-3 px-4 text-center text-gray-400">—</td>
+                <td class="py-3 px-4 text-center"><svg class="w-5 h-5 text-wa-green mx-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></td>
+                <td class="py-3 px-4 text-center"><svg class="w-5 h-5 text-wa-green mx-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="mt-20 max-w-3xl mx-auto">
+        <h3 class="text-2xl font-bold text-gray-900 text-center mb-8">Frequently Asked Questions</h3>
+        <Accordion items={faqItems} />
+      </div>
+    </div>
+  </section>
+</PageLayout>
+
+<script>
+  const monthlyBtn = document.getElementById('toggle-monthly');
+  const yearlyBtn = document.getElementById('toggle-yearly');
+
+  monthlyBtn?.addEventListener('click', () => {
+    monthlyBtn.classList.add('bg-wa-green', 'text-white');
+    monthlyBtn.classList.remove('text-gray-600');
+    yearlyBtn?.classList.remove('bg-wa-green', 'text-white');
+    yearlyBtn?.classList.add('text-gray-600');
+    document.querySelectorAll('.yearly-price').forEach((el) => el.classList.add('hidden'));
+  });
+
+  yearlyBtn?.addEventListener('click', () => {
+    yearlyBtn.classList.add('bg-wa-green', 'text-white');
+    yearlyBtn.classList.remove('text-gray-600');
+    monthlyBtn?.classList.remove('bg-wa-green', 'text-white');
+    monthlyBtn?.classList.add('text-gray-600');
+    document.querySelectorAll('.yearly-price').forEach((el) => el.classList.remove('hidden'));
+  });
+</script>

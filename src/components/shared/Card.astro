@@ -1,0 +1,33 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  icon?: string;
+  href?: string;
+  badge?: string;
+}
+
+const { title, description, icon, href, badge } = Astro.props;
+const Tag = href ? 'a' : 'div';
+---
+
+<Tag href={href} class:list={['block bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg', href && 'cursor-pointer']}>
+  {badge && (
+    <span class="inline-block px-2.5 py-0.5 text-xs font-medium text-ai-purple bg-purple-50 rounded-full mb-3">
+      {badge}
+    </span>
+  )}
+  {icon && (
+    <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center mb-4">
+      <Fragment set:html={icon} />
+    </div>
+  )}
+  <h3 class="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
+  <p class="text-gray-600 text-sm leading-relaxed">{description}</p>
+  {href && (
+    <div class="mt-4 text-sm font-medium text-wa-green flex items-center gap-1">
+      Learn more
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+    </div>
+  )}
+</Tag>

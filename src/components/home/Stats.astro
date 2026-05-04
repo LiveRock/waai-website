@@ -1,0 +1,39 @@
+---
+import SectionHeading from '../shared/SectionHeading.astro';
+---
+
+<section class="py-20 sm:py-24 bg-wa-teal relative overflow-hidden">
+  <div class="absolute inset-0 opacity-10">
+    <div class="absolute top-10 left-10 w-72 h-72 bg-wa-green rounded-full blur-3xl"></div>
+    <div class="absolute bottom-10 right-10 w-72 h-72 bg-ai-purple rounded-full blur-3xl"></div>
+  </div>
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <SectionHeading
+      title="Built for Reliability. Designed for Growth."
+      subtitle="Enterprise-grade infrastructure powering businesses around the clock."
+      badge="Infrastructure"
+    >
+      <Fragment slot="subtitle">
+        <p class="text-lg text-green-100/80 leading-relaxed">Enterprise-grade infrastructure powering businesses around the clock.</p>
+      </Fragment>
+    </SectionHeading>
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 mt-12">
+      <div class="text-center">
+        <div class="text-4xl sm:text-5xl font-extrabold text-white mb-2">99.9%</div>
+        <div class="text-green-200 text-sm font-medium">Uptime SLA</div>
+      </div>
+      <div class="text-center">
+        <div class="text-4xl sm:text-5xl font-extrabold text-wa-green mb-2">&lt;1s</div>
+        <div class="text-green-200 text-sm font-medium">Response Time</div>
+      </div>
+      <div class="text-center">
+        <div class="text-4xl sm:text-5xl font-extrabold text-white mb-2">24/7</div>
+        <div class="text-green-200 text-sm font-medium">AI Availability</div>
+      </div>
+      <div class="text-center">
+        <div class="text-4xl sm:text-5xl font-extrabold text-wa-green mb-2">AES</div>
+        <div class="text-green-200 text-sm font-medium">Encrypted at Rest</div>
+      </div>
+    </div>
+  </div>
+</section>

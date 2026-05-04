@@ -1,0 +1,39 @@
+---
+import CTAButton from '../shared/CTAButton.astro';
+---
+
+<section class="py-20 sm:py-24 bg-gradient-to-br from-wa-teal via-wa-teal-light to-wa-green-dark relative overflow-hidden">
+  <div class="absolute inset-0 opacity-10">
+    <div class="absolute top-0 left-1/4 w-96 h-96 bg-wa-green rounded-full blur-3xl"></div>
+  </div>
+  <div class="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-6">
+      Ready to Stop Asking "Why Me?"
+    </h2>
+    <p class="text-lg sm:text-xl text-green-100/90 leading-relaxed mb-8 max-w-2xl mx-auto">
+      Your customers are messaging you right now. Give them instant, intelligent responses — and get your time back.
+    </p>
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+      <CTAButton href="/signup" variant="primary" size="lg">
+        Start Your Free Trial
+      </CTAButton>
+      <CTAButton href="/pricing" variant="secondary" size="lg" class="!border-white/30 !text-white hover:!bg-white/10">
+        View Pricing
+      </CTAButton>
+    </div>
+    <div class="mt-8 flex items-center justify-center gap-6 text-sm text-green-100/70">
+      <span class="flex items-center gap-1.5">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+        Free 14-day trial
+      </span>
+      <span class="flex items-center gap-1.5">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+        No credit card required
+      </span>
+      <span class="flex items-center gap-1.5">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+        Setup in minutes
+      </span>
+    </div>
+  </div>
+</section>

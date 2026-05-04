@@ -1,0 +1,38 @@
+---
+interface Props {
+  items: { question: string; answer: string }[];
+}
+
+const { items } = Astro.props;
+---
+
+<div class="space-y-3">
+  {items.map((item, i) => (
+    <div class="border border-gray-200 rounded-xl overflow-hidden">
+      <button
+        class="w-full flex items-center justify-between px-6 py-4 text-left hover:bg-gray-50 transition-colors"
+        data-accordion={`item-${i}`}
+      >
+        <span class="font-medium text-gray-900">{item.question}</span>
+        <svg class="w-5 h-5 text-gray-400 transition-transform duration-200 shrink-0 ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+      </button>
+      <div class="hidden px-6 pb-4" data-accordion-content={`item-${i}`}>
+        <p class="text-gray-600 text-sm leading-relaxed">{item.answer}</p>
+      </div>
+    </div>
+  ))}
+</div>
+
+<script>
+  document.querySelectorAll('[data-accordion]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-accordion');
+      const content = document.querySelector(`[data-accordion-content="${id}"]`);
+      const svg = btn.querySelector('svg');
+      content?.classList.toggle('hidden');
+      svg?.classList.toggle('rotate-180');
+    });
+  });
+</script>
