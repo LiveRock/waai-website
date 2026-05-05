@@ -55,6 +55,12 @@ waai-website/
 - App logo (`public/images/logos/logo.jpg`) is the single source of truth for all favicon/icon files
 - Favicon files generated via ImageMagick from the logo (not hand-crafted)
 - Dynamic routes (`[slug].astro`) for features, industries, solutions — content driven by `src/data/*.ts`
+- Currency is Singapore dollars (`$`); database stores prices in **cents** — `formatPrice()` divides by 100
+- Pricing page monthly/yearly toggle uses inline `onclick` handlers (`is:inline` script) because Astro hoists `<script>` tags after `</html>` where they may not execute
+- Plan card features built from DB data (limits) + static feature labels from `planFeatureMap` (no hardcoded numbers)
+- Custom plan card is simplified: just name + "Contact Us" button (no features list)
+- Comparison table excludes Custom plan; data-driven from DB
+- Signup page posts to `POST /api/auth/signup` with `plan_name` field; filters out Custom plan
 
 ## Commands Reference
 

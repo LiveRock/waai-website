@@ -20,7 +20,8 @@ for (const url of API_URLS) {
 function formatPrice(cents: number | null | undefined): string {
   if (cents === null || cents === undefined) return 'Contact';
   if (cents === 0) return 'Free';
-  return `$${(cents / 100).toFixed(0)}`;
+  const dollars = cents / 100;
+  return dollars % 1 === 0 ? `$${dollars.toLocaleString()}` : `$${dollars.toFixed(2)}`;
 }
 
 function formatLimit(val: number | null | undefined): string {
@@ -29,16 +30,16 @@ function formatLimit(val: number | null | undefined): string {
 }
 
 const planFeatureMap: Record<string, string[]> = {
-  trial: ['50 Q&A Pairs', '3 Logic Flows', '500 Messages/month', 'AI Auto-Responder', 'Knowledge Base', 'Test Chat', '14-Day Free Trial'],
-  starter: ['200 Q&A Pairs', '20 Logic Flows', '5,000 Messages/month', 'AI Auto-Responder', 'Knowledge Base', 'Logic Flows', 'Analytics Dashboard', 'Business Templates', 'CSV/JSON Import'],
-  pro: ['Unlimited Q&A Pairs', 'Unlimited Flows', 'Unlimited Messages', 'Everything in Starter', 'Google Workspace Plugins', 'Super Powers (Vision, Web Search)', 'Document Generation', 'AI Multi-Provider', 'Priority Support'],
-  custom: ['Everything in Pro', 'Custom Message Limits', 'Dedicated Account Manager', 'Custom Integrations', 'SLA Guarantee', 'Priority Onboarding', 'Advanced Analytics', 'Custom AI Training'],
+  trial: ['AI Auto-Responder', 'Knowledge Base', 'Test Chat'],
+  starter: ['AI Auto-Responder', 'Knowledge Base', 'Logic Flows', 'Analytics Dashboard', 'Business Templates', 'CSV/JSON Import'],
+  pro: ['Everything in Starter', 'Google Workspace Plugins', 'Super Powers (Vision, Web Search)', 'Document Generation', 'AI Multi-Provider', 'Priority Support'],
 };
 
 // Build plans from DB data; fall back to hardcoded if API unreachable
 const plans = dbPlans.length > 0
   ? dbPlans.map((p) => ({
-      name: p.display_name,
+      name: p.name,
+      display_name: p.display_name,
       key: p.name,
       price: formatPrice(p.price_monthly),
       period: p.price_monthly === 0 ? `${p.trial_days || 14} days` : '/month',
@@ -51,18 +52,25 @@ const plans = dbPlans.length > 0
         ...(p.max_qa_pairs ? [`${formatLimit(p.max_qa_pairs)} Q&A Pairs`] : ['Unlimited Q&A Pairs']),
         ...(p.max_flows ? [`${formatLimit(p.max_flows)} Logic Flows`] : ['Unlimited Flows']),
         ...(p.max_messages_monthly ? [`${formatLimit(p.max_messages_monthly)} Messages/month`] : ['Unlimited Messages']),
-        ...(planFeatureMap[p.name] || []).slice(3),
+        ...(planFeatureMap[p.name] || []),
       ],
     }))
   : [
-      { name: 'Trial', key: 'trial', price: 'Free', period: '14 days', yearlyPrice: '', description: 'Get started with a free trial', highlighted: false, cta: 'Start Free Trial', ctaHref: '/signup', features: planFeatureMap.trial },
-      { name: 'Starter', key: 'starter', price: '$29', period: '/month', yearlyPrice: '$290/year', description: 'For small businesses getting started', highlighted: false, cta: 'Get Started', ctaHref: '/signup', features: planFeatureMap.starter },
-      { name: 'Pro', key: 'pro', price: '$99', period: '/month', yearlyPrice: '$990/year', description: 'Unlimited messaging and automations', highlighted: true, cta: 'Start Free Trial', ctaHref: '/signup', features: planFeatureMap.pro },
-      { name: 'Custom', key: 'custom', price: 'Contact', period: 'us', yearlyPrice: '', description: 'Tailored plan for enterprise needs', highlighted: false, cta: 'Contact Sales', ctaHref: '/contact', features: planFeatureMap.custom },
+      { name: 'trial', display_name: 'Trial', key: 'trial', price: 'Free', period: '7 days', yearlyPrice: '', description: 'Get started with a free trial', highlighted: false, cta: 'Start Free Trial', ctaHref: '/signup', features: planFeatureMap.trial },
+      { name: 'starter', display_name: 'Starter', key: 'starter', price: '¥2,000', period: '/month', yearlyPrice: '¥22,000/year', description: 'For small businesses getting started', highlighted: false, cta: 'Get Started', ctaHref: '/signup', features: planFeatureMap.starter },
+      { name: 'pro', display_name: 'Pro', key: 'pro', price: '¥9,900', period: '/month', yearlyPrice: '¥109,900/year', description: 'Unlimited messaging and automations', highlighted: true, cta: 'Start Free Trial', ctaHref: '/signup', features: planFeatureMap.pro },
+      { name: 'custom', display_name: 'Custom', key: 'custom', price: 'Contact', period: 'us', yearlyPrice: '', description: 'Tailored plan for enterprise needs', highlighted: false, cta: 'Contact Sales', ctaHref: '/contact', features: planFeatureMap.custom },
     ];
 
+// Plans for the comparison table (exclude custom, use raw DB data)
+const tablePlans = dbPlans.length > 0
+  ? dbPlans.filter(p => p.name !== 'custom')
+  : [];
+
+const trialDays = dbPlans.find(p => p.name === 'trial')?.trial_days || 7;
+
 const faqItems = [
-  { question: 'How does the 14-day free trial work?', answer: 'Sign up with just your email — no credit card required. You get full access to the Trial plan features for 14 days. After that, choose a paid plan or continue with limited features.' },
+  { question: 'How does the free trial work?', answer: 'Sign up with just your email — no credit card required. You get full access to the Trial plan features for ' + trialDays + ' days. After that, choose a paid plan or continue with limited features.' },
   { question: 'Can I switch plans at any time?', answer: 'Yes, you can upgrade or downgrade your plan at any time. When upgrading, you get immediate access to new features. When downgrading, the change takes effect at your next billing cycle.' },
   { question: 'What happens if I exceed my message limit?', answer: 'We\'ll notify you as you approach your limit. On Starter plans, messages beyond the limit are paused until the next billing cycle. Pro and Custom plans have unlimited messaging.' },
   { question: 'Do I need my own WhatsApp Business number?', answer: 'Yes, you need a WhatsApp Business API account through Meta. We guide you through the setup process, which typically takes under an hour.' },
@@ -87,14 +95,23 @@ const faqItems = [
       <!-- Pricing Toggle -->
       <div class="flex justify-center mb-12">
         <div class="inline-flex items-center gap-3 bg-gray-100 rounded-full px-1.5 py-1.5">
-          <button id="toggle-monthly" class="px-5 py-2 text-sm font-semibold rounded-full bg-wa-green text-white transition-all">Monthly</button>
-          <button id="toggle-yearly" class="px-5 py-2 text-sm font-semibold rounded-full text-gray-600 hover:text-gray-800 transition-all">Yearly <span class="text-xs text-wa-green font-normal">Save 17%</span></button>
+          <button id="toggle-monthly" onclick="togglePricing('monthly')" class="px-5 py-2 text-sm font-semibold rounded-full bg-wa-green text-white transition-all cursor-pointer">Monthly</button>
+          <button id="toggle-yearly" onclick="togglePricing('yearly')" class="px-5 py-2 text-sm font-semibold rounded-full text-gray-600 hover:text-gray-800 transition-all cursor-pointer">Yearly <span class="text-xs text-wa-green font-normal">Save 17%</span></button>
         </div>
       </div>
 
       <!-- Plan Cards -->
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4">
         {plans.map((plan) => (
+          plan.key === 'custom' ? (
+            <div class="relative rounded-2xl border border-gray-200 hover:border-gray-300 hover:shadow-md p-6 sm:p-8 flex flex-col items-center justify-center text-center transition-all duration-200">
+              <h3 class="text-xl font-bold text-gray-900 mb-1">{plan.display_name}</h3>
+              <p class="text-sm text-gray-500 mb-8">Need something tailored?</p>
+              <a href="/contact" class="block w-full text-center px-5 py-3 rounded-lg font-semibold text-sm border-2 border-wa-green text-wa-green hover:bg-wa-green hover:text-white transition-all">
+                Contact Us
+              </a>
+            </div>
+          ) : (
           <div class:list={[
             'relative rounded-2xl border p-6 sm:p-8 flex flex-col transition-all duration-200',
             plan.highlighted
@@ -107,16 +124,19 @@ const faqItems = [
               </div>
             )}
             <div class="mb-6">
-              <h3 class="text-xl font-bold text-gray-900 mb-1">{plan.name}</h3>
+              <h3 class="text-xl font-bold text-gray-900 mb-1">{plan.display_name}</h3>
               <p class="text-sm text-gray-500">{plan.description}</p>
             </div>
             <div class="mb-6">
-              <div class="flex items-baseline gap-1">
-                <span class="text-4xl font-extrabold text-gray-900" data-price={plan.key}>{plan.price}</span>
-                <span class="text-gray-500" data-period={plan.key}>{plan.period}</span>
+              <div class="flex items-baseline gap-1 monthly-price" data-monthly={plan.key}>
+                <span class="text-4xl font-extrabold text-gray-900">{plan.price}</span>
+                <span class="text-gray-500">{plan.period}</span>
               </div>
               {plan.yearlyPrice && (
-                <p class="text-sm text-gray-400 mt-1 yearly-price hidden" data-yearly={plan.key}>{plan.yearlyPrice}</p>
+                <div class="flex items-baseline gap-1 yearly-price hidden" data-yearly={plan.key}>
+                  <span class="text-4xl font-extrabold text-gray-900">{plan.yearlyPrice.split('/')[0]}</span>
+                  <span class="text-gray-500">/year</span>
+                </div>
               )}
             </div>
             <ul class="space-y-3 mb-8 flex-1">
@@ -138,6 +158,7 @@ const faqItems = [
               {plan.cta}
             </a>
           </div>
+          )
         ))}
       </div>
 
@@ -145,66 +166,58 @@ const faqItems = [
       <div class="mt-20">
         <h3 class="text-2xl font-bold text-gray-900 text-center mb-8">Compare Plans</h3>
         <div class="overflow-x-auto">
-          <table class="w-full min-w-[640px]">
+          <table class="w-full min-w-[480px]">
             <thead>
               <tr class="border-b border-gray-200">
                 <th class="py-4 px-4 text-left text-sm font-semibold text-gray-900">Feature</th>
-                <th class="py-4 px-4 text-center text-sm font-semibold text-gray-900">Trial</th>
-                <th class="py-4 px-4 text-center text-sm font-semibold text-gray-900">Starter</th>
-                <th class="py-4 px-4 text-center text-sm font-semibold text-wa-green">Pro</th>
-                <th class="py-4 px-4 text-center text-sm font-semibold text-gray-900">Custom</th>
+                {tablePlans.map((p) => (
+                  <th class:list={[
+                    'py-4 px-4 text-center text-sm font-semibold',
+                    p.name === 'pro' ? 'text-wa-green' : 'text-gray-900',
+                  ]}>{p.display_name}</th>
+                ))}
               </tr>
             </thead>
             <tbody>
-              <tr class="border-b border-gray-100">
-                <td class="py-3 px-4 text-sm text-gray-600">Q&A Pairs</td>
-                <td class="py-3 px-4 text-sm text-center text-gray-600">50</td>
-                <td class="py-3 px-4 text-sm text-center text-gray-600">200</td>
-                <td class="py-3 px-4 text-sm text-center text-gray-900 font-medium">Unlimited</td>
-                <td class="py-3 px-4 text-sm text-center text-gray-900 font-medium">Unlimited</td>
-              </tr>
-              <tr class="border-b border-gray-100">
-                <td class="py-3 px-4 text-sm text-gray-600">Logic Flows</td>
-                <td class="py-3 px-4 text-sm text-center text-gray-600">3</td>
-                <td class="py-3 px-4 text-sm text-center text-gray-600">20</td>
-                <td class="py-3 px-4 text-sm text-center text-gray-900 font-medium">Unlimited</td>
-                <td class="py-3 px-4 text-sm text-center text-gray-900 font-medium">Unlimited</td>
-              </tr>
-              <tr class="border-b border-gray-100">
-                <td class="py-3 px-4 text-sm text-gray-600">Messages/month</td>
-                <td class="py-3 px-4 text-sm text-center text-gray-600">500</td>
-                <td class="py-3 px-4 text-sm text-center text-gray-600">5,000</td>
-                <td class="py-3 px-4 text-sm text-center text-gray-900 font-medium">Unlimited</td>
-                <td class="py-3 px-4 text-sm text-center text-gray-900 font-medium">Custom</td>
-              </tr>
-              <tr class="border-b border-gray-100">
-                <td class="py-3 px-4 text-sm text-gray-600">AI Auto-Responder</td>
-                <td class="py-3 px-4 text-center"><svg class="w-5 h-5 text-wa-green mx-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></td>
-                <td class="py-3 px-4 text-center"><svg class="w-5 h-5 text-wa-green mx-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></td>
-                <td class="py-3 px-4 text-center"><svg class="w-5 h-5 text-wa-green mx-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></td>
-                <td class="py-3 px-4 text-center"><svg class="w-5 h-5 text-wa-green mx-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></td>
-              </tr>
-              <tr class="border-b border-gray-100">
-                <td class="py-3 px-4 text-sm text-gray-600">Google Workspace</td>
-                <td class="py-3 px-4 text-center text-gray-400">—</td>
-                <td class="py-3 px-4 text-center text-gray-400">—</td>
-                <td class="py-3 px-4 text-center"><svg class="w-5 h-5 text-wa-green mx-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></td>
-                <td class="py-3 px-4 text-center"><svg class="w-5 h-5 text-wa-green mx-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></td>
-              </tr>
-              <tr class="border-b border-gray-100">
-                <td class="py-3 px-4 text-sm text-gray-600">Super Powers (Vision, Search)</td>
-                <td class="py-3 px-4 text-center text-gray-400">—</td>
-                <td class="py-3 px-4 text-center text-gray-400">—</td>
-                <td class="py-3 px-4 text-center"><svg class="w-5 h-5 text-wa-green mx-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></td>
-                <td class="py-3 px-4 text-center"><svg class="w-5 h-5 text-wa-green mx-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></td>
-              </tr>
-              <tr class="border-b border-gray-100">
-                <td class="py-3 px-4 text-sm text-gray-600">Document Generation</td>
-                <td class="py-3 px-4 text-center text-gray-400">—</td>
-                <td class="py-3 px-4 text-center text-gray-400">—</td>
-                <td class="py-3 px-4 text-center"><svg class="w-5 h-5 text-wa-green mx-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></td>
-                <td class="py-3 px-4 text-center"><svg class="w-5 h-5 text-wa-green mx-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></td>
-              </tr>
+              {[
+                { label: 'Trial Period', key: 'trial_days', format: (v: number | null) => v ? `${v} days` : '—' },
+                { label: 'Q&A Pairs', key: 'max_qa_pairs' },
+                { label: 'Logic Flows', key: 'max_flows' },
+                { label: 'Messages / month', key: 'max_messages_monthly' },
+              ].map((row) => (
+                <tr class="border-b border-gray-100">
+                  <td class="py-3 px-4 text-sm text-gray-600">{row.label}</td>
+                  {tablePlans.map((p) => {
+                    const val = (p as any)[row.key];
+                    const display = row.format ? row.format(val) : (val === null || val === undefined ? 'Unlimited' : val.toLocaleString());
+                    return (
+                      <td class:list={[
+                        'py-3 px-4 text-sm text-center',
+                        val === null || val === undefined ? 'text-gray-900 font-medium' : 'text-gray-600',
+                      ]}>{display}</td>
+                    );
+                  })}
+                </tr>
+              ))}
+              {[
+                { label: 'AI Auto-Responder', plans: ['trial', 'starter', 'pro'] },
+                { label: 'Google Workspace Plugins', plans: ['pro'] },
+                { label: 'Super Powers (Vision, Search)', plans: ['pro'] },
+                { label: 'Document Generation', plans: ['pro'] },
+              ].map((row) => (
+                <tr class="border-b border-gray-100">
+                  <td class="py-3 px-4 text-sm text-gray-600">{row.label}</td>
+                  {tablePlans.map((p) => (
+                    <td class="py-3 px-4 text-center">
+                      {row.plans.includes(p.name) ? (
+                        <svg class="w-5 h-5 text-wa-green mx-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                      ) : (
+                        <span class="text-gray-400">—</span>
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -219,23 +232,24 @@ const faqItems = [
   </section>
 </PageLayout>
 
-<script>
-  const monthlyBtn = document.getElementById('toggle-monthly');
-  const yearlyBtn = document.getElementById('toggle-yearly');
-
-  monthlyBtn?.addEventListener('click', () => {
-    monthlyBtn.classList.add('bg-wa-green', 'text-white');
-    monthlyBtn.classList.remove('text-gray-600');
-    yearlyBtn?.classList.remove('bg-wa-green', 'text-white');
-    yearlyBtn?.classList.add('text-gray-600');
-    document.querySelectorAll('.yearly-price').forEach((el) => el.classList.add('hidden'));
-  });
-
-  yearlyBtn?.addEventListener('click', () => {
-    yearlyBtn.classList.add('bg-wa-green', 'text-white');
-    yearlyBtn.classList.remove('text-gray-600');
-    monthlyBtn?.classList.remove('bg-wa-green', 'text-white');
-    monthlyBtn?.classList.add('text-gray-600');
-    document.querySelectorAll('.yearly-price').forEach((el) => el.classList.remove('hidden'));
-  });
+<script is:inline>
+  function togglePricing(mode) {
+    var monthlyBtn = document.getElementById('toggle-monthly');
+    var yearlyBtn = document.getElementById('toggle-yearly');
+    if (mode === 'monthly') {
+      monthlyBtn.classList.add('bg-wa-green', 'text-white');
+      monthlyBtn.classList.remove('text-gray-600');
+      yearlyBtn.classList.remove('bg-wa-green', 'text-white');
+      yearlyBtn.classList.add('text-gray-600');
+      document.querySelectorAll('.monthly-price').forEach(function(el) { el.classList.remove('hidden'); });
+      document.querySelectorAll('.yearly-price').forEach(function(el) { el.classList.add('hidden'); });
+    } else {
+      yearlyBtn.classList.add('bg-wa-green', 'text-white');
+      yearlyBtn.classList.remove('text-gray-600');
+      monthlyBtn.classList.remove('bg-wa-green', 'text-white');
+      monthlyBtn.classList.add('text-gray-600');
+      document.querySelectorAll('.monthly-price').forEach(function(el) { el.classList.add('hidden'); });
+      document.querySelectorAll('.yearly-price').forEach(function(el) { el.classList.remove('hidden'); });
+    }
+  }
 </script>

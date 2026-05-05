@@ -1,23 +1,98 @@
 ---
 import PageLayout from '../layouts/PageLayout.astro';
 import SectionHeading from '../components/shared/SectionHeading.astro';
-import CTAButton from '../components/shared/CTAButton.astro';
+
+const API_URLS = [
+  'http://127.0.0.1:8000/api/public/plans',
+  'https://waaichat.hsi.asia/api/public/plans',
+];
+
+let dbPlans: { name: string; display_name: string; description: string | null; price_monthly: number; price_yearly: number; max_qa_pairs: number | null; max_flows: number | null; max_messages_monthly: number | null; trial_days: number | null }[] = [];
+for (const url of API_URLS) {
+  try {
+    const res = await fetch(url);
+    if (res.ok) { dbPlans = await res.json(); break; }
+  } catch {}
+}
+
+function formatPrice(cents: number | null | undefined): string {
+  if (cents === null || cents === undefined) return 'Custom';
+  if (cents === 0) return 'Free';
+  const dollars = cents / 100;
+  return dollars % 1 === 0 ? `$${dollars.toLocaleString()}` : `$${dollars.toFixed(2)}`;
+}
+
+function formatLimit(val: number | null | undefined): string {
+  if (val === null || val === undefined) return 'Unlimited';
+  return val.toLocaleString();
+}
+
+const trialDays = dbPlans.find(p => p.name === 'trial')?.trial_days || 7;
+
+// Filter out custom plan from signup (they need to contact sales)
+const signupPlans = dbPlans.length > 0
+  ? dbPlans.filter(p => p.name !== 'custom').map(p => ({
+      name: p.name,
+      display_name: p.display_name,
+      price: formatPrice(p.price_monthly),
+      period: p.price_monthly === 0 ? `${p.trial_days || 7} days` : '/month',
+      description: p.description || '',
+      highlights: [
+        ...(p.max_qa_pairs ? [`${formatLimit(p.max_qa_pairs)} Q&A pairs`] : ['Unlimited Q&A pairs']),
+        ...(p.max_flows ? [`${formatLimit(p.max_flows)} Logic flows`] : ['Unlimited Logic flows']),
+        ...(p.max_messages_monthly ? [`${formatLimit(p.max_messages_monthly)} messages/mo`] : ['Unlimited messages']),
+      ],
+    }))
+  : [
+      { name: 'trial', display_name: 'Trial', price: 'Free', period: `${trialDays} days`, description: 'Get started with a free trial', highlights: ['5 Q&A pairs', '3 Logic flows', '10 messages/mo'] },
+      { name: 'starter', display_name: 'Starter', price: '¥2,000', period: '/month', description: 'For small businesses getting started', highlights: ['50 Q&A pairs', '10 Logic flows', '1,500 messages/mo'] },
+      { name: 'pro', display_name: 'Pro', price: '¥9,900', period: '/month', description: 'Unlimited messaging and automations', highlights: ['500 Q&A pairs', '200 Logic flows', '5,000 messages/mo'] },
+    ];
 ---
 
 <PageLayout
   title="Sign Up"
-  description="Create your WAAIChat account. Start your 14-day free trial — no credit card required."
+  description={`Create your WAAIChat account. Choose a plan and set up your WhatsApp AI agent in minutes.`}
   canonicalPath="/signup"
 >
   <section class="py-16 sm:py-20 bg-gray-50">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
       <SectionHeading
         title="Create Your Account"
-        subtitle="Start your 14-day free trial. No credit card required. Set up your WhatsApp AI agent in minutes."
+        subtitle="Choose a plan, then fill in your details. No credit card required."
       />
 
       <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 sm:p-10">
         <form id="signup-form" class="space-y-5">
+
+          <!-- Plan Selection (first) -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-3">Choose Your Plan</label>
+            <div class="grid sm:grid-cols-3 gap-3">
+              {signupPlans.map((plan, i) => (
+                <label class="relative cursor-pointer">
+                  <input type="radio" name="plan_name" value={plan.name} class="peer sr-only" checked={i === 0} />
+                  <div class="rounded-xl border-2 border-gray-200 p-4 peer-checked:border-wa-green peer-checked:bg-green-50 transition-all h-full">
+                    <div class="flex items-center justify-between mb-2">
+                      <span class="text-sm font-bold text-gray-900">{plan.display_name}</span>
+                      <span class={`text-xs font-semibold px-2 py-0.5 rounded-full ${plan.name === 'pro' ? 'text-ai-purple bg-purple-100' : plan.price === 'Free' ? 'text-wa-green bg-green-100' : 'text-gray-700 bg-gray-100'}`}>
+                        {plan.price}
+                      </span>
+                    </div>
+                    <p class="text-xs text-gray-400 mb-2">{plan.period}</p>
+                    <ul class="text-xs text-gray-500 space-y-0.5">
+                      {plan.highlights.map(h => (
+                        <li>{h}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <hr class="border-gray-100" />
+
           <!-- Company Name -->
           <div>
             <label for="company_name" class="block text-sm font-medium text-gray-700 mb-1.5">Company Name</label>
@@ -97,45 +172,6 @@ import CTAButton from '../components/shared/CTAButton.astro';
             </div>
           </div>
 
-          <!-- Plan Selection -->
-          <div class="pt-2">
-            <label class="block text-sm font-medium text-gray-700 mb-3">Choose Your Plan</label>
-            <div class="grid sm:grid-cols-3 gap-3">
-              <label class="relative cursor-pointer">
-                <input type="radio" name="plan" value="trial" class="peer sr-only" checked />
-                <div class="rounded-xl border-2 border-gray-200 p-4 peer-checked:border-wa-green peer-checked:bg-green-50 transition-all">
-                  <div class="flex items-center justify-between mb-2">
-                    <span class="text-sm font-bold text-gray-900">Trial</span>
-                    <span class="text-xs font-semibold text-wa-green bg-green-100 px-2 py-0.5 rounded-full">Free</span>
-                  </div>
-                  <p class="text-xs text-gray-500">14 days, 500 messages. Try before you commit.</p>
-                </div>
-              </label>
-
-              <label class="relative cursor-pointer">
-                <input type="radio" name="plan" value="starter" class="peer sr-only" />
-                <div class="rounded-xl border-2 border-gray-200 p-4 peer-checked:border-wa-green peer-checked:bg-green-50 transition-all">
-                  <div class="flex items-center justify-between mb-2">
-                    <span class="text-sm font-bold text-gray-900">Starter</span>
-                    <span class="text-xs font-semibold text-gray-700 bg-gray-100 px-2 py-0.5 rounded-full">$29/mo</span>
-                  </div>
-                  <p class="text-xs text-gray-500">5,000 messages, 200 Q&A pairs, logic flows.</p>
-                </div>
-              </label>
-
-              <label class="relative cursor-pointer">
-                <input type="radio" name="plan" value="pro" class="peer sr-only" />
-                <div class="rounded-xl border-2 border-gray-200 p-4 peer-checked:border-wa-green peer-checked:bg-green-50 transition-all">
-                  <div class="flex items-center justify-between mb-2">
-                    <span class="text-sm font-bold text-gray-900">Pro</span>
-                    <span class="text-xs font-semibold text-ai-purple bg-purple-100 px-2 py-0.5 rounded-full">$99/mo</span>
-                  </div>
-                  <p class="text-xs text-gray-500">Unlimited. Google plugins, Super Powers, docs.</p>
-                </div>
-              </label>
-            </div>
-          </div>
-
           <!-- Validation Message -->
           <div id="form-message" class="hidden text-sm font-medium rounded-lg px-4 py-3"></div>
 
@@ -183,7 +219,6 @@ import CTAButton from '../components/shared/CTAButton.astro';
     const password = (document.getElementById('password') as HTMLInputElement).value;
     const confirmPassword = (document.getElementById('confirm_password') as HTMLInputElement).value;
 
-    // Client-side validation
     if (password.length < 6) {
       showMessage('Password must be at least 6 characters.', 'error');
       return;
@@ -203,7 +238,7 @@ import CTAButton from '../components/shared/CTAButton.astro';
       email: (document.getElementById('email') as HTMLInputElement).value,
       phone: (document.getElementById('phone') as HTMLInputElement).value || undefined,
       password: password,
-      plan: (document.querySelector('input[name="plan"]:checked') as HTMLInputElement).value,
+      plan_name: (document.querySelector('input[name="plan_name"]:checked') as HTMLInputElement).value,
     };
 
     try {
