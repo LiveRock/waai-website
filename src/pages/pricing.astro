@@ -31,8 +31,8 @@ function formatLimit(val: number | null | undefined): string {
 
 const planFeatureMap: Record<string, string[]> = {
   trial: ['AI Auto-Responder', 'Knowledge Base', 'Test Chat'],
-  starter: ['AI Auto-Responder', 'Knowledge Base', 'Logic Flows', 'Analytics Dashboard', 'Business Templates', 'CSV/JSON Import'],
-  pro: ['Everything in Starter', 'Google Workspace Plugins', 'Super Powers (Vision, Web Search)', 'Document Generation', 'AI Multi-Provider', 'Priority Support'],
+  starter: ['AI Auto-Responder', 'Knowledge Base', 'Logic Flows', 'Analytics Dashboard', 'Business Templates', 'CSV/JSON Import', 'Google Workspace Plugins'],
+  pro: ['Everything in Starter', 'Super Powers (Vision, Web Search)', 'Document Generation', 'AI Multi-Provider', 'Priority Support'],
 };
 
 // Build plans from DB data; fall back to hardcoded if API unreachable
@@ -201,7 +201,7 @@ const faqItems = [
               ))}
               {[
                 { label: 'AI Auto-Responder', plans: ['trial', 'starter', 'pro'] },
-                { label: 'Google Workspace Plugins', plans: ['pro'] },
+                { label: 'Google Workspace Plugins', plans: ['starter', 'pro'] },
                 { label: 'Super Powers (Vision, Search)', plans: ['pro'] },
                 { label: 'Document Generation', plans: ['pro'] },
               ].map((row) => (
