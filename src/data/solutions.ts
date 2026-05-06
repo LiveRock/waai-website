@@ -16,9 +16,9 @@ export const solutions: Solution[] = [
     headline: 'Turn WhatsApp Into Your Best Marketing Channel',
     description: 'Capture leads, nurture prospects, and drive conversions through WhatsApp — where your customers actually pay attention. Automate campaigns, track results, and grow your audience.',
     painPoints: [
-      { icon: 'trending-down', title: 'Low Email Open Rates', description: 'Email marketing averages 20% open rates. WhatsApp delivers 98% — your messages actually get seen.' },
-      { icon: 'clock', title: 'Slow Lead Response', description: 'Every minute of delay reduces lead conversion by 10%. Your AI responds instantly, 24/7.' },
-      { icon: 'users', title: 'Can\'t Scale Personalization', description: 'Sending the same generic message to everyone? AI makes every interaction feel personal.' },
+      { icon: 'trending-down', title: 'Can I reach customers who actually pay attention?', description: 'Email marketing averages 20% open rates. WhatsApp delivers 98% — your messages actually get seen.' },
+      { icon: 'clock', title: 'Can I respond to leads before they move on?', description: 'Every minute of delay reduces lead conversion by 10%. Your AI responds instantly, 24/7.' },
+      { icon: 'users', title: 'Can I personalize every message without hiring more people?', description: 'Sending the same generic message to everyone? AI makes every interaction feel personal.' },
     ],
     features: [
       { title: 'WhatsApp Campaigns', description: 'Send targeted broadcast messages with template-based campaigns.' },
@@ -39,9 +39,9 @@ export const solutions: Solution[] = [
     headline: 'Close Deals Faster on WhatsApp',
     description: 'Qualify leads automatically, schedule appointments, send quotes and proposals, and close deals — all through WhatsApp. Your AI sales agent works around the clock.',
     painPoints: [
-      { icon: 'phone-off', title: 'Missed Opportunities', description: 'Leads come in after hours and go cold by morning. AI engages them instantly, any time of day.' },
-      { icon: 'shuffle', title: 'Manual Qualification', description: 'Hours wasted on unqualified leads. Logic flows qualify automatically so you focus on hot prospects.' },
-      { icon: 'file', title: 'Slow Quoting', description: 'Generate and send professional quotes, proposals, and invoices directly from the conversation.' },
+      { icon: 'phone-off', title: 'Can I capture leads after hours?', description: 'Leads come in after hours and go cold by morning. AI engages them instantly, any time of day.' },
+      { icon: 'shuffle', title: 'Can I stop wasting time on unqualified leads?', description: 'Hours wasted on unqualified leads. Logic flows qualify automatically so you focus on hot prospects.' },
+      { icon: 'file', title: 'Can I send quotes and proposals in seconds?', description: 'Generate and send professional quotes, proposals, and invoices directly from the conversation.' },
     ],
     features: [
       { title: 'Lead Qualification Flows', description: 'Automated multi-step flows that score and qualify leads before your team gets involved.' },
@@ -62,9 +62,9 @@ export const solutions: Solution[] = [
     headline: 'AI-Powered Support That Never Sleeps',
     description: 'Resolve 80% of support queries automatically with AI that knows your business inside out. Escalate complex issues to humans seamlessly. Your customers get instant help, any time.',
     painPoints: [
-      { icon: 'headphones', title: 'Overwhelmed Agents', description: 'Repetitive questions eat up agent time. AI handles the routine so humans handle the complex.' },
-      { icon: 'moon', title: 'No After-Hours Support', description: 'Customers need help at 11pm. Your AI agent is always available with accurate answers.' },
-      { icon: 'message-circle', title: 'Slow Response Times', description: 'Customers wait hours for email replies. WhatsApp support delivers answers in seconds.' },
+      { icon: 'headphones', title: 'Can I stop answering the same questions over and over?', description: 'Repetitive questions eat up agent time. AI handles the routine so humans handle the complex.' },
+      { icon: 'moon', title: 'Can I offer support around the clock?', description: 'Customers need help at 11pm. Your AI agent is always available with accurate answers.' },
+      { icon: 'message-circle', title: 'Can I resolve issues in seconds, not hours?', description: 'Customers wait hours for email replies. WhatsApp support delivers answers in seconds.' },
     ],
     features: [
       { title: 'Knowledge Base', description: 'Comprehensive Q&A system that handles common questions instantly.' },

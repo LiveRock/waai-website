@@ -482,14 +482,14 @@ Your WhatsApp number is your best marketing channel. Start using it.
 **Subheadline:**
 98% open rate. Instant delivery. Direct to their pocket. Stop fighting email algorithms and start having conversations that convert.
 
-**Pain Points:**
+**Pain Points (framed as "Can I..." questions):**
 
-- **Email open rates keep dropping.** Your carefully crafted newsletter lands in spam or gets ignored. Meanwhile, your customers open every WhatsApp message within minutes.
-- **Social media reach is pay-to-play.** Organic reach on Facebook and Instagram keeps shrinking. You are paying for eyeballs that scroll past.
-- **You cannot personalize at scale.** Sending the same message to everyone does not work. But personalizing hundreds of messages manually is impossible.
+- **Can I reach customers who actually pay attention?** Email open rates keep dropping. Your carefully crafted newsletter lands in spam or gets ignored. Meanwhile, your customers open every WhatsApp message within minutes.
+- **Can I respond to leads before they move on?** Every minute of delay reduces lead conversion by 10%. Your AI responds instantly, 24/7.
+- **Can I personalize every message without hiring more people?** Sending the same message to everyone does not work. But personalizing hundreds of messages manually is impossible.
 - **You cannot measure what you cannot track.** Did that promotion drive sales? Which message resonated? Without data, marketing is just guessing.
 
-**How WAAIChat Solves It:**
+**waai YES! (replaces "How WAAIChat Solves It"):**
 
 WAAIChat turns your WhatsApp Business number into a marketing machine. Capture leads automatically with instant AI responses. Qualify prospects with logic flows that ask the right questions. Send targeted campaigns with personalized variables. Track every message, every reply, every conversion. Your AI agent handles the volume. You focus on the strategy.
 
@@ -509,14 +509,14 @@ The fastest deal is the one you reply to first
 **Subheadline:**
 Your prospects message you at 11 PM. Your competitors reply at 8 AM. By then, the deal is gone. WAAIChat ensures you are always first to respond.
 
-**Pain Points:**
+**Pain Points (framed as "Can I..." questions):**
 
-- **Speed to lead wins deals.** A prospect who messages you expects a reply within minutes. Every hour of delay reduces your chance of closing by 80%.
-- **Lead qualification eats your time.** Not every prospect is ready to buy. Spending 30 minutes on a discovery call with someone who is just browsing wastes your team's capacity.
-- **Follow-up falls through the cracks.** The money is in the follow-up, but your sales team is busy closing the hot leads. Warm prospects go cold because nobody circled back.
+- **Can I capture leads after hours?** Speed to lead wins deals. A prospect who messages you expects a reply within minutes. Every hour of delay reduces your chance of closing by 80%.
+- **Can I stop wasting time on unqualified leads?** Lead qualification eats your time. Not every prospect is ready to buy. Spending 30 minutes on a discovery call with someone who is just browsing wastes your team's capacity.
+- **Can I send quotes and proposals in seconds?** Generate and send professional quotes, proposals, and invoices directly from the conversation.
 - **You cannot sell while you sleep.** Deals happen across time zones. If your business hours end at 6 PM, your selling hours end with them.
 
-**How WAAIChat Solves It:**
+**waai YES! (replaces "How WAAIChat Solves It"):**
 
 WAAIChat gives your sales team an AI assistant that never clocks out. Instant replies capture leads the moment they reach out. Logic flows qualify prospects automatically -- collecting budget, timeline, and needs before a human ever joins the conversation. Documents like quotes and proposals generate and send automatically. When a deal needs the human touch, it escalates to your team inbox seamlessly.
 
@@ -536,14 +536,14 @@ Your customers do not care that it is a holiday
 **Subheadline:**
 They want answers now. WAAIChat gives them instant, accurate support around the clock -- without adding agents to your payroll.
 
-**Pain Points:**
+**Pain Points (framed as "Can I..." questions):**
 
-- **Support tickets pile up after hours.** Your team goes home at 6 PM. Your customers keep messaging. By morning, you are 40 messages behind and growing.
-- **The same 20 questions drain your team.** "What are your hours?" "How do I reset my account?" "Where is my order?" Your agents spend 80% of their time on repeat questions that have simple answers.
+- **Can I stop answering the same questions over and over?** The same 20 questions drain your team. "What are your hours?" "How do I reset my account?" "Where is my order?" Your agents spend 80% of their time on repeat questions that have simple answers.
+- **Can I offer support around the clock?** Support tickets pile up after hours. Your team goes home at 6 PM. Your customers keep messaging. By morning, you are 40 messages behind and growing.
+- **Can I resolve issues in seconds, not hours?** Customers expect instant replies. A two-hour response time feels like two days. Your customers measure your service by your speed, and slow support drives them to competitors.
 - **Scaling support means scaling costs.** Every new support agent costs $30,000 to $50,000 per year. And they still cannot work 24 hours.
-- **Customers expect instant replies.** A two-hour response time feels like two days. Your customers measure your service by your speed, and slow support drives them to competitors.
 
-**How WAAIChat Solves It:**
+**waai YES! (replaces "How WAAIChat Solves It"):**
 
 WAAIChat handles the repetitive questions instantly with knowledge base matching. Complex issues route through logic flows that troubleshoot, gather information, and resolve problems step by step. When a conversation genuinely needs a human, it lands in your team inbox with full context. Auto-reminders alert you to expiring subscriptions, quota limits, and overdue follow-ups. Your support operation runs 24/7 without running you ragged.
 
