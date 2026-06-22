@@ -7,11 +7,32 @@ const API_URLS = [
   'https://waaichat.hsi.asia/api/public/plans',
 ];
 
-let dbPlans: { name: string; display_name: string; description: string | null; price_monthly: number; price_yearly: number; max_qa_pairs: number | null; max_flows: number | null; max_messages_monthly: number | null; trial_days: number | null }[] = [];
+let dbPlans: { name: string; display_name: string; description: string | null; price_monthly: number; price_yearly: number; max_qa_pairs: number | null; max_flows: number | null; max_messages_monthly: number | null; max_respondents: number | null; max_web_pages: number | null; max_drive_sends_monthly: number | null; max_qa_translations_per_lang_monthly: number | null; max_flow_translations_per_lang_monthly: number | null; trial_days: number | null }[] = [];
 for (const url of API_URLS) {
   try {
     const res = await fetch(url);
     if (res.ok) { dbPlans = await res.json(); break; }
+  } catch {}
+}
+
+// Optional Onboarding Assistance one-time fees (cents), keyed by plan name.
+// Sourced from waaiChat SA site_content (onboarding_service_settings);
+// fallback mirrors the SA default — Starter $99, Pro $299.
+const SITE_CONTENT_URLS = [
+  'http://127.0.0.1:8000/api/site-content/onboarding_service_settings',
+  'https://waaichat.hsi.asia/api/site-content/onboarding_service_settings',
+];
+const onboardingFee: Record<string, number> = { starter: 9900, pro: 29900 };
+for (const url of SITE_CONTENT_URLS) {
+  try {
+    const res = await fetch(url);
+    if (res.ok) {
+      const data = await res.json();
+      const cfg = typeof data.content === 'string' ? JSON.parse(data.content) : data.content;
+      if (cfg?.starter?.fee_cents) onboardingFee.starter = cfg.starter.fee_cents;
+      if (cfg?.pro?.fee_cents) onboardingFee.pro = cfg.pro.fee_cents;
+      break;
+    }
   } catch {}
 }
 
@@ -27,6 +48,12 @@ function formatLimit(val: number | null | undefined): string {
   return val.toLocaleString();
 }
 
+// Compact feature differentiators per plan (kept short for the radio tiles).
+const signupFeatureMap: Record<string, string[]> = {
+  starter: ['Google Workspace plugins'],
+  pro: ['Cal.com integration', 'Language translations'],
+};
+
 const trialDays = dbPlans.find(p => p.name === 'trial')?.trial_days || 7;
 
 // Filter out custom plan from signup (they need to contact sales)
@@ -41,18 +68,20 @@ const signupPlans = dbPlans.length > 0
         ...(p.max_qa_pairs ? [`${formatLimit(p.max_qa_pairs)} Q&A pairs`] : ['Unlimited Q&A pairs']),
         ...(p.max_flows ? [`${formatLimit(p.max_flows)} Logic flows`] : ['Unlimited Logic flows']),
         ...(p.max_messages_monthly ? [`${formatLimit(p.max_messages_monthly)} messages/mo`] : ['Unlimited messages']),
+        ...(signupFeatureMap[p.name] || []),
+        ...(onboardingFee[p.name] ? ['Optional onboarding assistance'] : []),
       ],
     }))
   : [
       { name: 'trial', display_name: 'Trial', price: 'Free', period: `${trialDays} days`, description: 'Get started with a free trial', highlights: ['5 Q&A pairs', '3 Logic flows', '10 messages/mo'] },
-      { name: 'starter', display_name: 'Starter', price: '¥2,000', period: '/month', description: 'For small businesses getting started', highlights: ['50 Q&A pairs', '10 Logic flows', '1,500 messages/mo'] },
-      { name: 'pro', display_name: 'Pro', price: '¥9,900', period: '/month', description: 'Unlimited messaging and automations', highlights: ['500 Q&A pairs', '200 Logic flows', '5,000 messages/mo'] },
+      { name: 'starter', display_name: 'Starter', price: '$20', period: '/month', description: 'For small businesses getting started with AI chat', highlights: ['50 Q&A pairs', '10 Logic flows', '1,500 messages/mo', 'Google Workspace plugins', 'Optional onboarding assistance'] },
+      { name: 'pro', display_name: 'Pro', price: '$99', period: '/month', description: 'Optimised messaging and automations for growing businesses', highlights: ['500 Q&A pairs', '200 Logic flows', '5,000 messages/mo', 'Cal.com integration', 'Language translations', 'Optional onboarding assistance'] },
     ];
 ---
 
 <PageLayout
   title="Sign Up"
-  description={`Create your WAAIChat account. Choose a plan and set up your WhatsApp AI agent in minutes.`}
+  description={`Create your waai account. Choose a plan and set up your WhatsApp AI agent in minutes.`}
   canonicalPath="/signup"
 >
   <section class="py-16 sm:py-20 bg-gray-50">
@@ -90,6 +119,11 @@ const signupPlans = dbPlans.length > 0
               ))}
             </div>
           </div>
+
+          <!-- Optional Onboarding Assistance note -->
+          <p class="text-xs text-gray-500 mt-3">
+            Prefer hands-on setup? Add <span class="font-medium text-gray-700">Optional Onboarding Assistance</span> after signup — we configure your bot for you ({formatPrice(onboardingFee.starter)} Starter / {formatPrice(onboardingFee.pro)} Pro, one-time). <a href="/pricing" class="text-wa-teal hover:underline">See pricing</a>.
+          </p>
 
           <hr class="border-gray-100" />
 
@@ -251,7 +285,7 @@ const signupPlans = dbPlans.length > 0
       if (res.ok) {
         showMessage('Account created! Redirecting to login...', 'success');
         setTimeout(() => {
-          window.location.href = 'https://waaichat.hsi.asia/login';
+          window.location.href = 'https://waaichat.hsi.asia/login?new_signup=true';
         }, 1500);
       } else {
         const body = await res.json().catch(() => ({}));
