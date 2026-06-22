@@ -9,11 +9,32 @@ const API_URLS = [
   'https://waaichat.hsi.asia/api/public/plans',
 ];
 
-let dbPlans: { name: string; display_name: string; description: string | null; price_monthly: number; price_yearly: number; max_qa_pairs: number | null; max_flows: number | null; max_messages_monthly: number | null; trial_days: number | null }[] = [];
+let dbPlans: { name: string; display_name: string; description: string | null; price_monthly: number; price_yearly: number; max_qa_pairs: number | null; max_flows: number | null; max_messages_monthly: number | null; max_respondents: number | null; max_web_pages: number | null; max_drive_sends_monthly: number | null; max_qa_translations_per_lang_monthly: number | null; max_flow_translations_per_lang_monthly: number | null; trial_days: number | null }[] = [];
 for (const url of API_URLS) {
   try {
     const res = await fetch(url);
     if (res.ok) { dbPlans = await res.json(); break; }
+  } catch {}
+}
+
+// Optional Onboarding Assistance one-time fees (cents), keyed by plan name.
+// Sourced from waaiChat SA site_content (onboarding_service_settings);
+// fallback mirrors the SA default — Starter $99, Pro $299.
+const SITE_CONTENT_URLS = [
+  'http://127.0.0.1:8000/api/site-content/onboarding_service_settings',
+  'https://waaichat.hsi.asia/api/site-content/onboarding_service_settings',
+];
+const onboardingFee: Record<string, number> = { starter: 9900, pro: 29900 };
+for (const url of SITE_CONTENT_URLS) {
+  try {
+    const res = await fetch(url);
+    if (res.ok) {
+      const data = await res.json();
+      const cfg = typeof data.content === 'string' ? JSON.parse(data.content) : data.content;
+      if (cfg?.starter?.fee_cents) onboardingFee.starter = cfg.starter.fee_cents;
+      if (cfg?.pro?.fee_cents) onboardingFee.pro = cfg.pro.fee_cents;
+      break;
+    }
   } catch {}
 }
 
@@ -29,11 +50,21 @@ function formatLimit(val: number | null | undefined): string {
   return val.toLocaleString();
 }
 
+// Like formatLimit, but renders 0 as "—" (feature not included on that plan).
+function fmtCount(val: number | null | undefined): string {
+  if (val === null || val === undefined) return 'Unlimited';
+  return val > 0 ? val.toLocaleString() : '—';
+}
+
 const planFeatureMap: Record<string, string[]> = {
   trial: ['AI Auto-Responder', 'Knowledge Base', 'Test Chat'],
   starter: ['AI Auto-Responder', 'Knowledge Base', 'Logic Flows', 'Analytics Dashboard', 'Business Templates', 'CSV/JSON Import', 'Google Workspace Plugins'],
-  pro: ['Everything in Starter', 'Super Powers (Vision, Web Search)', 'Document Generation', 'AI Multi-Provider', 'Priority Support'],
+  pro: ['Everything in Starter', 'Cal.com Integration', 'Language Translations', 'Super Powers (Vision, Web Search)', 'Document Generation', 'AI Multi-Provider', 'Priority Support'],
 };
+
+// Onboarding Assistance line shown on Starter & Pro cards, with the live one-time fee.
+const onboardingLabel = (name: string): string | null =>
+  onboardingFee[name] ? `Optional Onboarding Assistance (${formatPrice(onboardingFee[name])})` : null;
 
 // Build plans from DB data; fall back to hardcoded if API unreachable
 const plans = dbPlans.length > 0
@@ -53,12 +84,13 @@ const plans = dbPlans.length > 0
         ...(p.max_flows ? [`${formatLimit(p.max_flows)} Logic Flows`] : ['Unlimited Flows']),
         ...(p.max_messages_monthly ? [`${formatLimit(p.max_messages_monthly)} Messages/month`] : ['Unlimited Messages']),
         ...(planFeatureMap[p.name] || []),
+        ...(onboardingLabel(p.name) ? [onboardingLabel(p.name) as string] : []),
       ],
     }))
   : [
       { name: 'trial', display_name: 'Trial', key: 'trial', price: 'Free', period: '7 days', yearlyPrice: '', description: 'Get started with a free trial', highlighted: false, cta: 'Start Free Trial', ctaHref: '/signup', features: planFeatureMap.trial },
-      { name: 'starter', display_name: 'Starter', key: 'starter', price: '¥2,000', period: '/month', yearlyPrice: '¥22,000/year', description: 'For small businesses getting started', highlighted: false, cta: 'Get Started', ctaHref: '/signup', features: planFeatureMap.starter },
-      { name: 'pro', display_name: 'Pro', key: 'pro', price: '¥9,900', period: '/month', yearlyPrice: '¥109,900/year', description: 'Unlimited messaging and automations', highlighted: true, cta: 'Start Free Trial', ctaHref: '/signup', features: planFeatureMap.pro },
+      { name: 'starter', display_name: 'Starter', key: 'starter', price: '$20', period: '/month', yearlyPrice: '$220/year', description: 'For small businesses getting started', highlighted: false, cta: 'Get Started', ctaHref: '/signup', features: [...planFeatureMap.starter, ...(onboardingLabel('starter') ? [onboardingLabel('starter') as string] : [])] },
+      { name: 'pro', display_name: 'Pro', key: 'pro', price: '$99', period: '/month', yearlyPrice: '$1,099/year', description: 'Optimised messaging and automations for growing businesses', highlighted: true, cta: 'Start Free Trial', ctaHref: '/signup', features: [...planFeatureMap.pro, ...(onboardingLabel('pro') ? [onboardingLabel('pro') as string] : [])] },
       { name: 'custom', display_name: 'Custom', key: 'custom', price: 'Contact', period: 'us', yearlyPrice: '', description: 'Tailored plan for enterprise needs', highlighted: false, cta: 'Contact Sales', ctaHref: '/contact', features: planFeatureMap.custom },
     ];
 
@@ -72,6 +104,7 @@ const trialDays = dbPlans.find(p => p.name === 'trial')?.trial_days || 7;
 const faqItems = [
   { question: 'How does the free trial work?', answer: 'Sign up with just your email — no credit card required. You get full access to the Trial plan features for ' + trialDays + ' days. After that, choose a paid plan or continue with limited features.' },
   { question: 'Can I switch plans at any time?', answer: 'Yes, you can upgrade or downgrade your plan at any time. When upgrading, you get immediate access to new features. When downgrading, the change takes effect at your next billing cycle.' },
+  { question: 'What is Optional Onboarding Assistance?', answer: `If you'd rather not set things up yourself, add Onboarding Assistance for a one-time fee (${formatPrice(onboardingFee.starter)} on Starter, ${formatPrice(onboardingFee.pro)} on Pro). A specialist configures your WhatsApp agent — building your Q&A knowledge base, Logic Flows, and AI setup — via assisted mode, typically within 30 days. It's entirely optional; you can always self-serve for free.` },
   { question: 'What happens if I exceed my message limit?', answer: 'We\'ll notify you as you approach your limit. On Starter plans, messages beyond the limit are paused until the next billing cycle. Pro and Custom plans have unlimited messaging.' },
   { question: 'Do I need my own WhatsApp Business number?', answer: 'Yes, you need a WhatsApp Business API account through Meta. We guide you through the setup process, which typically takes under an hour.' },
   { question: 'Which AI providers do you support?', answer: 'We support OpenAI (GPT-4, GPT-3.5), Anthropic (Claude), z.ai, llama.cpp (local), and OpenRouter. Each customer can configure their preferred provider and model.' },
@@ -162,6 +195,43 @@ const faqItems = [
         ))}
       </div>
 
+      <!-- Optional Onboarding Assistance -->
+      <div class="mt-12 rounded-2xl border border-wa-green/30 bg-green-50/40 p-6 sm:p-8">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div class="max-w-2xl">
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Optional Onboarding Assistance</h3>
+            <p class="text-sm text-gray-600 mb-4">Rather have an expert set things up? Add Onboarding Assistance and a specialist configures your WhatsApp agent for you — no technical work on your end.</p>
+            <ul class="space-y-2 text-sm text-gray-600">
+              <li class="flex items-start gap-2">
+                <svg class="w-5 h-5 text-wa-green shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                <span>An onboarder builds your Q&amp;A knowledge base, Logic Flows, and AI setup via assisted mode.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <svg class="w-5 h-5 text-wa-green shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                <span>First-come-first-served marketplace, with typical completion within 30 days.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <svg class="w-5 h-5 text-wa-green shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                <span>One-time fee — no recurring charge. Available on Starter and Pro plans.</span>
+              </li>
+            </ul>
+          </div>
+          <div class="flex flex-col items-center md:items-end gap-4 shrink-0">
+            <div class="flex gap-8 text-center">
+              <div>
+                <div class="text-3xl font-extrabold text-gray-900">{formatPrice(onboardingFee.starter)}</div>
+                <div class="text-xs text-gray-500 mt-1">Starter · one-time</div>
+              </div>
+              <div>
+                <div class="text-3xl font-extrabold text-gray-900">{formatPrice(onboardingFee.pro)}</div>
+                <div class="text-xs text-gray-500 mt-1">Pro · one-time</div>
+              </div>
+            </div>
+            <a href="/signup" class="inline-block px-5 py-3 rounded-lg font-semibold text-sm bg-wa-green text-white hover:bg-wa-green-dark transition-all">Add During Signup</a>
+          </div>
+        </div>
+      </div>
+
       <!-- Feature Comparison -->
       <div class="mt-20">
         <h3 class="text-2xl font-bold text-gray-900 text-center mb-8">Compare Plans</h3>
@@ -184,6 +254,10 @@ const faqItems = [
                 { label: 'Q&A Pairs', key: 'max_qa_pairs' },
                 { label: 'Logic Flows', key: 'max_flows' },
                 { label: 'Messages / month', key: 'max_messages_monthly' },
+                { label: 'Survey Respondents', key: 'max_respondents', format: fmtCount },
+                { label: 'Web Pages', key: 'max_web_pages', format: fmtCount },
+                { label: 'Workspace Sends / month', key: 'max_drive_sends_monthly', format: fmtCount },
+                { label: 'Translations / language / month', key: 'max_qa_translations_per_lang_monthly', format: fmtCount },
               ].map((row) => (
                 <tr class="border-b border-gray-100">
                   <td class="py-3 px-4 text-sm text-gray-600">{row.label}</td>
@@ -202,8 +276,11 @@ const faqItems = [
               {[
                 { label: 'AI Auto-Responder', plans: ['trial', 'starter', 'pro'] },
                 { label: 'Google Workspace Plugins', plans: ['starter', 'pro'] },
+                { label: 'Cal.com Integration', plans: ['pro'] },
+                { label: 'Language Translations', plans: ['pro'] },
                 { label: 'Super Powers (Vision, Search)', plans: ['pro'] },
                 { label: 'Document Generation', plans: ['pro'] },
+                { label: 'Optional Onboarding Assistance', plans: ['starter', 'pro'] },
               ].map((row) => (
                 <tr class="border-b border-gray-100">
                   <td class="py-3 px-4 text-sm text-gray-600">{row.label}</td>
