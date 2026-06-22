@@ -1,0 +1,58 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+---
+
+<PageLayout
+  title="Google API Compliance"
+  description="Google API Services User Data Policy — Limited Use Compliance for waai."
+  canonicalPath="/google-compliance"
+>
+  <section class="py-16 sm:py-20 bg-white">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-2">Google API Compliance</h1>
+      <p class="text-sm text-gray-500 mb-10">Last updated: June 1, 2026</p>
+
+      <div class="prose prose-gray max-w-none space-y-8 text-gray-700 leading-relaxed">
+        <div>
+          <h2 class="text-xl font-bold text-gray-900 mb-3">Google API Services User Data Policy &mdash; Limited Use Compliance</h2>
+          <p>waai's use and transfer of information received from Google APIs to any other app will adhere to the <a href="https://developers.google.com/terms/api-services-user-data-policy" class="text-wa-teal hover:underline" target="_blank" rel="noopener">Google API Services User Data Policy</a>, including the Limited Use requirements.</p>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold text-gray-900 mb-3">How We Handle Your Google Data</h2>
+          <ul class="list-disc list-inside space-y-2">
+            <li><strong>Minimum scope.</strong> We only request the OAuth scopes necessary to provide the features you enable — Google Calendar (read/write events), Google Drive (read/upload/share files), Google Docs (read/template documents), and Google Sheets (read/append rows).</li>
+            <li><strong>Purpose-limited use.</strong> Data received from Google APIs is used solely to deliver the requested waai features. We do not process Google data for any purpose unrelated to the services you have explicitly enabled.</li>
+            <li><strong>No selling or sharing.</strong> We do not sell, rent, or transfer Google API data to third parties for any purpose.</li>
+            <li><strong>No advertising.</strong> Google API data is never used for advertising, analytics, or any purpose beyond providing the waai service.</li>
+            <li><strong>Encrypted at rest.</strong> All Google OAuth tokens are encrypted at rest using Fernet symmetric encryption and are never stored in plaintext.</li>
+            <li><strong>User control.</strong> You may revoke waai's access to your Google data at any time by disconnecting the plugin from the waai Settings page or through your <a href="https://myaccount.google.com/permissions" class="text-wa-teal hover:underline" target="_blank" rel="noopener">Google Account Permissions</a> page.</li>
+          </ul>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold text-gray-900 mb-3">Data Retention</h2>
+          <p>Google API data is retained only for as long as the plugin connection is active. When a customer disconnects their Google account, stored OAuth tokens and any cached Google data are deleted from our systems.</p>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold text-gray-900 mb-3">Limited Use Disclosure</h2>
+          <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+            <p class="font-medium">The use and transfer of raw or derived user data received from Google Workspace APIs will adhere to the <a href="https://developers.google.com/terms/api-services-user-data-policy" class="text-wa-teal hover:underline" target="_blank" rel="noopener">Google API Services User Data Policy</a>, including the Limited Use requirements.</p>
+          </div>
+        </div>
+
+        <div>
+          <h2 class="text-xl font-bold text-gray-900 mb-3">Contact</h2>
+          <p>If you have questions about how waai handles Google API data, please contact us at <a href="mailto:hello@waai.me" class="text-wa-teal hover:underline">hello@waai.me</a>.</p>
+        </div>
+
+        <div class="pt-4 border-t border-gray-200 text-sm text-gray-400">
+          <a href="/terms" class="text-wa-teal hover:underline">Terms &amp; Conditions</a>
+          {' · '}
+          <a href="/privacy" class="text-wa-teal hover:underline">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</PageLayout>

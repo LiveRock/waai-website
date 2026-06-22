@@ -22,3 +22,7 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# local session logs / build scratch
+.remember/
+rebuild.log

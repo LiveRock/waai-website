@@ -82,5 +82,6 @@ export const footerLinks = {
   legal: [
     { label: 'Terms & Conditions', href: '/terms' },
     { label: 'Privacy Policy', href: '/privacy' },
+    { label: 'Google Compliance', href: '/google-compliance' },
   ],
 };

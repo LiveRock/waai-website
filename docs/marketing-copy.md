@@ -1,4 +1,4 @@
-# WAAIChat Marketing Copy -- waai.me
+# waai Marketing Copy -- waai.me
 
 > Complete marketing copy document for the waai.me product website.
 > Brand angle: "waai.me" = "why me?" -- turning customer frustration into action.
@@ -30,7 +30,7 @@
 Why am I still answering the same questions at midnight?
 
 **Subheadline:**
-Your customers message you on WhatsApp. WAAIChat answers them instantly -- with the right information, the right tone, 24 hours a day. No hiring. No training. No sleep required.
+Your customers message you on WhatsApp. waai answers them instantly -- with the right information, the right tone, 24 hours a day. No hiring. No training. No sleep required.
 
 **Primary CTA:** Start Your Free 14-Day Trial
 **Secondary CTA:** See How It Works
@@ -65,21 +65,21 @@ Three intelligences, one unstoppable agent
 **Title:** Knows your answers before you do
 
 **Body:**
-Upload your FAQs, product specs, pricing tables, and policies. WAAIChat uses fuzzy matching to understand what customers are really asking -- even with typos, slang, and shorthand. When a question matches your knowledge base, the answer fires back in under a second. No AI hallucinations. No guesswork. Just your information, delivered instantly.
+Upload your FAQs, product specs, pricing tables, and policies. waai uses fuzzy matching to understand what customers are really asking -- even with typos, slang, and shorthand. When a question matches your knowledge base, the answer fires back in under a second. No AI hallucinations. No guesswork. Just your information, delivered instantly.
 
 **Card 2: Logic Flows**
 
 **Title:** Conversations that actually go somewhere
 
 **Body:**
-Not every inquiry is a simple question. Booking appointments, qualifying leads, processing returns -- these are conversations with branches. WAAIChat Logic Flows let you map out multi-step interactions with conditions, variables, and actions. Your AI agent walks customers through complex processes step by step, collecting exactly the information you need.
+Not every inquiry is a simple question. Booking appointments, qualifying leads, processing returns -- these are conversations with branches. waai Logic Flows let you map out multi-step interactions with conditions, variables, and actions. Your AI agent walks customers through complex processes step by step, collecting exactly the information you need.
 
 **Card 3: LLM Fallback**
 
 **Title:** When rules run out, intelligence kicks in
 
 **Body:**
-Some questions do not have a scripted answer. When the knowledge base and logic flows do not match, WAAIChat hands off to a large language model -- OpenAI, Anthropic, or your preferred provider. Your customer still gets a helpful, on-brand response. You pick the AI provider, the model, and the system prompt. Full control, zero gaps.
+Some questions do not have a scripted answer. When the knowledge base and logic flows do not match, waai hands off to a large language model -- OpenAI, Anthropic, or your preferred provider. Your customer still gets a helpful, on-brand response. You pick the AI provider, the model, and the system prompt. Full control, zero gaps.
 
 ---
 
@@ -93,7 +93,7 @@ Built for every stage of your customer conversation
 **Title:** Turn every WhatsApp message into a marketing opportunity
 
 **Body:**
-Your WhatsApp Business number is not just a support line -- it is a direct channel to your most engaged audience. WAAIChat captures leads automatically, qualifies them with logic flows, and nurtures them with personalized responses. Run campaigns, share promotions, and track which messages drive action. No email open rates to worry about. WhatsApp messages get read.
+Your WhatsApp Business number is not just a support line -- it is a direct channel to your most engaged audience. waai captures leads automatically, qualifies them with logic flows, and nurtures them with personalized responses. Run campaigns, share promotions, and track which messages drive action. No email open rates to worry about. WhatsApp messages get read.
 
 **CTA:** Explore Marketing Solutions
 
@@ -102,7 +102,7 @@ Your WhatsApp Business number is not just a support line -- it is a direct chann
 **Title:** Close deals while you sleep
 
 **Body:**
-A potential customer messages you at 11 PM asking about pricing. By morning, they have already bought from your competitor. WAAIChat stops that from happening. Your AI agent qualifies leads, answers objections, collects contact details, and books appointments -- all in real time, right inside WhatsApp. When a conversation needs a human touch, it escalates seamlessly to your team inbox.
+A potential customer messages you at 11 PM asking about pricing. By morning, they have already bought from your competitor. waai stops that from happening. Your AI agent qualifies leads, answers objections, collects contact details, and books appointments -- all in real time, right inside WhatsApp. When a conversation needs a human touch, it escalates seamlessly to your team inbox.
 
 **CTA:** Explore Sales Solutions
 
@@ -111,7 +111,7 @@ A potential customer messages you at 11 PM asking about pricing. By morning, the
 **Title:** Support that scales without the headcount
 
 **Body:**
-Your customers do not care that it is a holiday. They want answers now. WAAIChat delivers instant, accurate support 24/7 by drawing from your knowledge base, processing returns through logic flows, and escalating complex issues to your team. Track every conversation, measure response times, and watch customer satisfaction climb -- without adding another agent to payroll.
+Your customers do not care that it is a holiday. They want answers now. waai delivers instant, accurate support 24/7 by drawing from your knowledge base, processing returns through logic flows, and escalating complex issues to your team. Track every conversation, measure response times, and watch customer satisfaction climb -- without adding another agent to payroll.
 
 **CTA:** Explore Support Solutions
 
@@ -165,7 +165,7 @@ Numbers that speak for themselves
 **Stat 4:** 80% reduction in repetitive support messages
 
 **Supporting copy:**
-Your customers expect instant replies. WAAIChat delivers them -- accurately, consistently, and at any hour.
+Your customers expect instant replies. waai delivers them -- accurately, consistently, and at any hour.
 
 ---
 
@@ -200,7 +200,7 @@ Every incoming message gets an instant, accurate response. Your customers never 
 
 **Three Benefits:**
 
-1. **Sub-second response times.** The moment a message arrives, WAAIChat matches it against your knowledge base and fires back the right answer. No queue, no delay, no customer left waiting.
+1. **Sub-second response times.** The moment a message arrives, waai matches it against your knowledge base and fires back the right answer. No queue, no delay, no customer left waiting.
 
 2. **Handles the repetitive work for you.** "What are your hours?" "Where are you located?" "How much does X cost?" These questions make up 80% of your inbox. Let your AI agent handle them while you focus on the conversations that actually need a human.
 
@@ -208,9 +208,9 @@ Every incoming message gets an instant, accurate response. Your customers never 
 
 **How It Works (3 Steps):**
 
-1. **Upload your knowledge.** Add Q&A pairs manually, import from CSV, or paste your existing FAQ. WAAIChat indexes everything instantly.
+1. **Upload your knowledge.** Add Q&A pairs manually, import from CSV, or paste your existing FAQ. waai indexes everything instantly.
 
-2. **Set your fallback.** When a question does not match your knowledge base, WAAIChat can hand off to an LLM for a smart response, or send a custom fallback message of your choosing.
+2. **Set your fallback.** When a question does not match your knowledge base, waai can hand off to an LLM for a smart response, or send a custom fallback message of your choosing.
 
 3. **Go live.** Connect your WhatsApp Business number, and your auto-responder starts working immediately. Monitor performance from your dashboard and refine as you go.
 
@@ -224,7 +224,7 @@ Every incoming message gets an instant, accurate response. Your customers never 
 Give your AI agent a brain
 
 **Subheadline:**
-Upload what you know. WAAIChat delivers it to every customer, every time, without fail.
+Upload what you know. waai delivers it to every customer, every time, without fail.
 
 **Three Benefits:**
 
@@ -442,13 +442,13 @@ Go beyond text conversations. Your WhatsApp AI agent can analyze images, search 
 
 ### 2.10 Features Overview
 
-**Page Title:** WAAIChat Features -- Everything Your WhatsApp Business Needs
+**Page Title:** waai Features -- Everything Your WhatsApp Business Needs
 
 **Headline:**
 One platform. Every capability. Zero compromises.
 
 **Subheadline:**
-WAAIChat combines rule-based matching, multi-step logic flows, multi-provider AI, team collaboration, document generation, and enterprise integrations into a single WhatsApp AI platform. Here is what is inside.
+waai combines rule-based matching, multi-step logic flows, multi-provider AI, team collaboration, document generation, and enterprise integrations into a single WhatsApp AI platform. Here is what is inside.
 
 **Three Benefits:**
 
@@ -460,7 +460,7 @@ WAAIChat combines rule-based matching, multi-step logic flows, multi-provider AI
 
 **How It Works (3 Steps):**
 
-1. **Set up your knowledge.** Import your FAQ, build your Q&A pairs, and configure your AI provider. WAAIChat handles the rest.
+1. **Set up your knowledge.** Import your FAQ, build your Q&A pairs, and configure your AI provider. waai handles the rest.
 
 2. **Design your flows.** Map out your customer conversations with the visual flow editor. Add integrations, conditions, and document generation steps.
 
@@ -489,9 +489,9 @@ Your WhatsApp number is your best marketing channel. Start using it.
 - **Can I personalize every message without hiring more people?** Sending the same message to everyone does not work. But personalizing hundreds of messages manually is impossible.
 - **You cannot measure what you cannot track.** Did that promotion drive sales? Which message resonated? Without data, marketing is just guessing.
 
-**waai YES! (replaces "How WAAIChat Solves It"):**
+**waai YES! (replaces "How waai Solves It"):**
 
-WAAIChat turns your WhatsApp Business number into a marketing machine. Capture leads automatically with instant AI responses. Qualify prospects with logic flows that ask the right questions. Send targeted campaigns with personalized variables. Track every message, every reply, every conversion. Your AI agent handles the volume. You focus on the strategy.
+waai turns your WhatsApp Business number into a marketing machine. Capture leads automatically with instant AI responses. Qualify prospects with logic flows that ask the right questions. Send targeted campaigns with personalized variables. Track every message, every reply, every conversion. Your AI agent handles the volume. You focus on the strategy.
 
 **Key Features:** Knowledge Base, Logic Flows, Campaigns, Analytics, Multi-Provider AI
 
@@ -507,7 +507,7 @@ WAAIChat turns your WhatsApp Business number into a marketing machine. Capture l
 The fastest deal is the one you reply to first
 
 **Subheadline:**
-Your prospects message you at 11 PM. Your competitors reply at 8 AM. By then, the deal is gone. WAAIChat ensures you are always first to respond.
+Your prospects message you at 11 PM. Your competitors reply at 8 AM. By then, the deal is gone. waai ensures you are always first to respond.
 
 **Pain Points (framed as "Can I..." questions):**
 
@@ -516,9 +516,9 @@ Your prospects message you at 11 PM. Your competitors reply at 8 AM. By then, th
 - **Can I send quotes and proposals in seconds?** Generate and send professional quotes, proposals, and invoices directly from the conversation.
 - **You cannot sell while you sleep.** Deals happen across time zones. If your business hours end at 6 PM, your selling hours end with them.
 
-**waai YES! (replaces "How WAAIChat Solves It"):**
+**waai YES! (replaces "How waai Solves It"):**
 
-WAAIChat gives your sales team an AI assistant that never clocks out. Instant replies capture leads the moment they reach out. Logic flows qualify prospects automatically -- collecting budget, timeline, and needs before a human ever joins the conversation. Documents like quotes and proposals generate and send automatically. When a deal needs the human touch, it escalates to your team inbox seamlessly.
+waai gives your sales team an AI assistant that never clocks out. Instant replies capture leads the moment they reach out. Logic flows qualify prospects automatically -- collecting budget, timeline, and needs before a human ever joins the conversation. Documents like quotes and proposals generate and send automatically. When a deal needs the human touch, it escalates to your team inbox seamlessly.
 
 **Key Features:** Auto-Responder, Logic Flows, Document Generation, Team Inbox, AI Chatbot
 
@@ -534,7 +534,7 @@ WAAIChat gives your sales team an AI assistant that never clocks out. Instant re
 Your customers do not care that it is a holiday
 
 **Subheadline:**
-They want answers now. WAAIChat gives them instant, accurate support around the clock -- without adding agents to your payroll.
+They want answers now. waai gives them instant, accurate support around the clock -- without adding agents to your payroll.
 
 **Pain Points (framed as "Can I..." questions):**
 
@@ -543,9 +543,9 @@ They want answers now. WAAIChat gives them instant, accurate support around the 
 - **Can I resolve issues in seconds, not hours?** Customers expect instant replies. A two-hour response time feels like two days. Your customers measure your service by your speed, and slow support drives them to competitors.
 - **Scaling support means scaling costs.** Every new support agent costs $30,000 to $50,000 per year. And they still cannot work 24 hours.
 
-**waai YES! (replaces "How WAAIChat Solves It"):**
+**waai YES! (replaces "How waai Solves It"):**
 
-WAAIChat handles the repetitive questions instantly with knowledge base matching. Complex issues route through logic flows that troubleshoot, gather information, and resolve problems step by step. When a conversation genuinely needs a human, it lands in your team inbox with full context. Auto-reminders alert you to expiring subscriptions, quota limits, and overdue follow-ups. Your support operation runs 24/7 without running you ragged.
+waai handles the repetitive questions instantly with knowledge base matching. Complex issues route through logic flows that troubleshoot, gather information, and resolve problems step by step. When a conversation genuinely needs a human, it lands in your team inbox with full context. Auto-reminders alert you to expiring subscriptions, quota limits, and overdue follow-ups. Your support operation runs 24/7 without running you ragged.
 
 **Key Features:** Knowledge Base, Auto-Responder, Logic Flows, Team Inbox, Auto-Reminders, Analytics
 
@@ -565,7 +565,7 @@ WAAIChat handles the repetitive questions instantly with knowledge base matching
 From "is this in stock?" to "take my money" in under a minute
 
 **Subheadline:**
-Your customers want to browse, compare, and buy -- all without leaving WhatsApp. WAAIChat makes it happen.
+Your customers want to browse, compare, and buy -- all without leaving WhatsApp. waai makes it happen.
 
 **Use Case:**
 A customer messages your WhatsApp number asking about a product. Your AI agent checks inventory, shares pricing, answers questions about sizing and materials, processes the order confirmation, and generates a receipt document -- all in a single conversation. Complex questions about returns or shipping route through logic flows. If they want to talk to a person, the conversation escalates to your team.
@@ -590,7 +590,7 @@ A customer messages your WhatsApp number asking about a product. Your AI agent c
 Patients have questions. Your staff has patients.
 
 **Subheadline:**
-Let WAAIChat handle appointment scheduling, FAQs, and intake -- so your staff can focus on care, not calls.
+Let waai handle appointment scheduling, FAQs, and intake -- so your staff can focus on care, not calls.
 
 **Use Case:**
 A patient messages your clinic on WhatsApp. Your AI agent confirms availability, books the appointment on your Google Calendar, sends a confirmation with preparation instructions, and collects intake information through a structured logic flow. Reminders go out automatically. Cancellations and rescheduling happen without a phone call.
@@ -615,7 +615,7 @@ A patient messages your clinic on WhatsApp. Your AI agent confirms availability,
 Stop answering the same questions. Start teaching.
 
 **Subheadline:**
-Enrollment inquiries, course details, schedules, and deadlines -- WAAIChat handles the administrative flood so your team can focus on education.
+Enrollment inquiries, course details, schedules, and deadlines -- waai handles the administrative flood so your team can focus on education.
 
 **Use Case:**
 A prospective student messages your institution on WhatsApp. Your AI agent answers questions about programs, admissions requirements, tuition, and deadlines. It walks them through the application process with a logic flow, collects required information, and even generates a summary document. Current students get instant answers about schedules, events, and policies.
@@ -640,7 +640,7 @@ A prospective student messages your institution on WhatsApp. Your AI agent answe
 Every listing inquiry is a potential commission. Do not let it go cold.
 
 **Subheadline:**
-Buyers message agents at all hours. WAAIChat qualifies them instantly, shares listing details, and books viewings on your calendar -- while you are busy closing deals.
+Buyers message agents at all hours. waai qualifies them instantly, shares listing details, and books viewings on your calendar -- while you are busy closing deals.
 
 **Use Case:**
 A buyer sees your listing on a property portal and messages your WhatsApp number. Your AI agent asks about their budget, preferred location, and timeline. It shares matching listings from your knowledge base, answers questions about each property, and books a viewing directly on your Google Calendar. Qualified leads land in your team inbox with full context. Window shoppers are handled politely without taking your time.
@@ -665,7 +665,7 @@ A buyer sees your listing on a property portal and messages your WhatsApp number
 Guest expectations do not check in at the front desk
 
 **Subheadline:**
-Room availability, check-in times, local recommendations, booking confirmations -- WAAIChat handles guest communication around the clock, in any language.
+Room availability, check-in times, local recommendations, booking confirmations -- waai handles guest communication around the clock, in any language.
 
 **Use Case:**
 A guest messages your hotel on WhatsApp asking about availability for next weekend. Your AI agent checks the details, shares room options with pricing, answers questions about amenities and policies, and confirms the booking. It sends a confirmation document and sets up a pre-arrival logic flow with check-in instructions and local tips. During the stay, guests message for recommendations, extra towels, or late checkout.
@@ -690,7 +690,7 @@ A guest messages your hotel on WhatsApp asking about availability for next weeke
 Hungry customers do not wait. Neither should your replies.
 
 **Subheadline:**
-Menu questions, reservation requests, takeout orders, and catering inquiries -- WAAIChat handles the conversation while your team handles the kitchen.
+Menu questions, reservation requests, takeout orders, and catering inquiries -- waai handles the conversation while your team handles the kitchen.
 
 **Use Case:**
 A customer messages your restaurant on WhatsApp. Your AI agent shares the daily menu, answers questions about ingredients and allergens, books a table, and sends a confirmation. For takeout, a logic flow walks them through the order, confirms items, and provides an estimated pickup time. Catering inquiries are qualified and routed to your team inbox.
@@ -715,7 +715,7 @@ A customer messages your restaurant on WhatsApp. Your AI agent shares the daily 
 Your members want to book at 6 AM or 11 PM. Let them.
 
 **Subheadline:**
-Class schedules, membership questions, booking, and cancellations -- WAAIChat handles member communication so you can focus on coaching.
+Class schedules, membership questions, booking, and cancellations -- waai handles member communication so you can focus on coaching.
 
 **Use Case:**
 A member messages your gym on WhatsApp to check the class schedule. Your AI agent shares the weekly timetable, books their spot, and sends a reminder the morning of. Prospective members get pricing information, membership options, and a guided tour booking through a logic flow. Cancellations and rescheduling happen instantly without a phone call.
@@ -740,7 +740,7 @@ A member messages your gym on WhatsApp to check the class schedule. Your AI agen
 Bill for expertise, not for answering "what are your rates?" for the hundredth time
 
 **Subheadline:**
-Consultations, proposals, appointment scheduling, and client intake -- WAAIChat automates the administrative side of your practice so you can focus on delivering value.
+Consultations, proposals, appointment scheduling, and client intake -- waai automates the administrative side of your practice so you can focus on delivering value.
 
 **Use Case:**
 A prospective client messages your firm on WhatsApp. Your AI agent explains your services, shares pricing tiers, and runs them through an intake logic flow that collects their name, industry, and project details. It books an initial consultation on your Google Calendar, sends a confirmation, and generates a summary document with the client's information for your review.
@@ -765,7 +765,7 @@ A prospective client messages your firm on WhatsApp. Your AI agent explains your
 Every unanswered message is a customer who drove to the competitor
 
 **Subheadline:**
-Service bookings, inventory inquiries, test drive scheduling, and quote requests -- WAAIChat keeps your showroom and service center running at full speed.
+Service bookings, inventory inquiries, test drive scheduling, and quote requests -- waai keeps your showroom and service center running at full speed.
 
 **Use Case:**
 A customer messages your dealership on WhatsApp asking about a specific model. Your AI agent shares specs, pricing, and available colors. It qualifies their interest, checks their trade-in details, and books a test drive on your sales team's calendar. For service customers, the AI books appointments, shares estimated costs, and sends preparation instructions. Documents like quotes and service estimates generate automatically.
@@ -801,11 +801,11 @@ Simple pricing. No surprises. Start free.
 **Headline:** Try before you commit
 
 **Body:**
-Get full access to WAAIChat for 14 days. Build your knowledge base, design logic flows, connect your AI provider, and see how an always-on WhatsApp AI agent transforms your customer communication. No credit card required. No auto-charges.
+Get full access to waai for 14 days. Build your knowledge base, design logic flows, connect your AI provider, and see how an always-on WhatsApp AI agent transforms your customer communication. No credit card required. No auto-charges.
 
 **Limits:** 50 Q&A pairs, 3 logic flows, 500 messages
 
-**Best for:** Testing WAAIChat with your business before committing to a paid plan.
+**Best for:** Testing waai with your business before committing to a paid plan.
 
 #### Starter -- $29/month
 
@@ -823,18 +823,18 @@ Everything you need to run an intelligent WhatsApp auto-responder. Knowledge bas
 **Headline:** No limits. Full power.
 
 **Body:**
-Unlimited Q&A pairs, unlimited logic flows, unlimited messages. Plus Super Powers (Vision, Web Search, Web Reader, Zread), Google Workspace integrations (Calendar, Drive, Docs, Sheets), document generation (Excel, Word, PDF, Google Docs/Sheets), and priority support. This is WAAIChat at full strength.
+Unlimited Q&A pairs, unlimited logic flows, unlimited messages. Plus Super Powers (Vision, Web Search, Web Reader, Zread), Google Workspace integrations (Calendar, Drive, Docs, Sheets), document generation (Excel, Word, PDF, Google Docs/Sheets), and priority support. This is waai at full strength.
 
 **Limits:** Unlimited everything
 
-**Best for:** Growing businesses that want every capability WAAIChat offers, with no ceilings on customer communication.
+**Best for:** Growing businesses that want every capability waai offers, with no ceilings on customer communication.
 
 #### Custom -- Contact Us
 
 **Headline:** Built for your enterprise
 
 **Body:**
-Custom integrations, dedicated support, SLA guarantees, volume pricing, and tailored onboarding. If you need WAAIChat deployed across multiple business units, integrated with your existing systems, or configured for specific compliance requirements, this plan is for you.
+Custom integrations, dedicated support, SLA guarantees, volume pricing, and tailored onboarding. If you need waai deployed across multiple business units, integrated with your existing systems, or configured for specific compliance requirements, this plan is for you.
 
 **Best for:** Enterprises and multi-location businesses with custom requirements.
 
@@ -852,13 +852,13 @@ Your trial gives you full access for 14 days. When it ends, you can choose a pai
 For the Starter and Pro plans, you can bring your own API key from OpenAI, Anthropic, z.ai, or another supported provider. This gives you full control over costs and model selection. We also provide guidance on choosing the right provider for your use case and budget.
 
 **Q4: What counts as a "message"?**
-Every message processed by WAAIChat counts toward your monthly limit -- both incoming customer messages and outgoing AI responses. Internal team inbox messages are not counted. You can monitor your usage in real time from your dashboard.
+Every message processed by waai counts toward your monthly limit -- both incoming customer messages and outgoing AI responses. Internal team inbox messages are not counted. You can monitor your usage in real time from your dashboard.
 
 **Q5: Is there a setup fee?**
 No. Setup is free and takes about 10 minutes. You connect your existing WhatsApp Business number, upload your knowledge base, configure your AI provider, and go live. No technical expertise required. We provide step-by-step guides and support.
 
-**Q6: Can I use WAAIChat with my existing WhatsApp Business number?**
-Yes. WAAIChat connects to your existing WhatsApp Business number via the Meta Cloud API. If you do not have a WhatsApp Business account yet, we guide you through setting one up. Your number stays yours.
+**Q6: Can I use waai with my existing WhatsApp Business number?**
+Yes. waai connects to your existing WhatsApp Business number via the Meta Cloud API. If you do not have a WhatsApp Business account yet, we guide you through setting one up. Your number stays yours.
 
 **Q7: What kind of support do you offer?**
 Starter plans get email support with a 24-hour response time. Pro plans get priority email and chat support. Custom plans get a dedicated account manager, phone support, and guaranteed response times. All plans include access to our documentation and knowledge base.
@@ -873,7 +873,7 @@ Starter plans get email support with a 24-hour response time. Pro plans get prio
 Your WhatsApp AI agent does not live in a silo
 
 **Subheadline:**
-WAAIChat connects to the tools your business already uses. Google Calendar, Drive, Docs, and Sheets integrations turn conversations into actions -- booking appointments, managing files, and creating documents without leaving WhatsApp.
+waai connects to the tools your business already uses. Google Calendar, Drive, Docs, and Sheets integrations turn conversations into actions -- booking appointments, managing files, and creating documents without leaving WhatsApp.
 
 ---
 
@@ -884,12 +884,12 @@ WAAIChat connects to the tools your business already uses. Google Calendar, Driv
 #### Google Calendar
 
 **Body:**
-Book appointments, check availability, and manage your schedule -- all through WhatsApp conversations. Your AI agent creates events on your WAAIChat calendar, finds open time slots, and sends calendar invitations. Customers book without ever visiting a booking page.
+Book appointments, check availability, and manage your schedule -- all through WhatsApp conversations. Your AI agent creates events on your waai calendar, finds open time slots, and sends calendar invitations. Customers book without ever visiting a booking page.
 
 #### Google Drive
 
 **Body:**
-Upload, manage, and share files from your Drive directly in WhatsApp conversations. Your AI agent can send documents to customers, save uploaded files to organized folders, and retrieve files on request. Your WAAIChat folder keeps everything tidy automatically.
+Upload, manage, and share files from your Drive directly in WhatsApp conversations. Your AI agent can send documents to customers, save uploaded files to organized folders, and retrieve files on request. Your waai folder keeps everything tidy automatically.
 
 #### Google Docs
 
@@ -910,7 +910,7 @@ Create and populate Google Sheets from your WhatsApp conversations. Order data, 
 ## 7. Contact Page
 
 **Headline:**
-Let us show you what WAAIChat can do for your business
+Let us show you what waai can do for your business
 
 **Subtitle:**
 Whether you are ready to start your free trial or want a personalized demo, we are here to help. Fill out the form below, and our team will get back to you within one business day.
@@ -968,33 +968,33 @@ Max 160 characters each.
 
 | Page | Meta Description |
 |------|-----------------|
-| Homepage | WAAIChat is an AI-powered WhatsApp auto-responder for business. Instant replies, 24/7. Knowledge base, logic flows, multi-provider AI. Start free. |
-| Auto-Responder | Automate your WhatsApp replies with AI. Instant response times, fuzzy matching, and smart fallback. Try WAAIChat free for 14 days. |
+| Homepage | waai is an AI-powered WhatsApp auto-responder for business. Instant replies, 24/7. Knowledge base, logic flows, multi-provider AI. Start free. |
+| Auto-Responder | Automate your WhatsApp replies with AI. Instant response times, fuzzy matching, and smart fallback. Try waai free for 14 days. |
 | Knowledge Base | Build a WhatsApp knowledge base that answers 90% of customer questions. Fuzzy matching, CSV import, priority ranking. Start free. |
-| Logic Flows | Design multi-step WhatsApp conversations with branching logic, conditions, and integrations. WAAIChat Logic Flows handle complex interactions. |
+| Logic Flows | Design multi-step WhatsApp conversations with branching logic, conditions, and integrations. waai Logic Flows handle complex interactions. |
 | AI Chatbot | Multi-provider AI chatbot for WhatsApp. OpenAI, Anthropic, z.ai. Custom system prompts, on-brand responses, graceful fallback. Start free. |
 | Team Inbox | AI handles routine WhatsApp messages. You step in when it matters. Shared team inbox with live conversations and manual replies. |
-| Campaigns | Run WhatsApp campaigns with 98% open rates. Personalized messages, targeted segments, trackable results. Start with WAAIChat. |
-| Analytics | Track WhatsApp message volumes, response sources, and trigger counts. Know what works. Optimize what doesn't. WAAIChat analytics. |
-| Document Generation | Generate Excel, Word, PDF, and Google Docs from WhatsApp conversations. Send documents directly in chat. Try WAAIChat free. |
+| Campaigns | Run WhatsApp campaigns with 98% open rates. Personalized messages, targeted segments, trackable results. Start with waai. |
+| Analytics | Track WhatsApp message volumes, response sources, and trigger counts. Know what works. Optimize what doesn't. waai analytics. |
+| Document Generation | Generate Excel, Word, PDF, and Google Docs from WhatsApp conversations. Send documents directly in chat. Try waai free. |
 | Super Powers | Vision, Web Search, Web Reader, and Zread for your WhatsApp AI. Analyze images, search the web, read articles. Pro plan feature. |
 | Features Overview | Complete WhatsApp AI platform: knowledge base, logic flows, AI chatbot, team inbox, analytics, document generation. All in one. |
-| Marketing Solution | WhatsApp marketing with 98% open rates. Capture leads, nurture prospects, run campaigns. WAAIChat marketing solution. |
-| Sales Solution | Close deals on WhatsApp. AI qualifies leads, books meetings, sends quotes. Instant replies, 24/7. WAAIChat sales solution. |
-| Support Solution | 24/7 WhatsApp support without the headcount. AI handles repetitive questions, escalates complex issues. WAAIChat support solution. |
-| E-commerce | WhatsApp AI for e-commerce. Answer product questions, process orders, handle returns automatically. WAAIChat for online stores. |
-| Healthcare | WhatsApp AI for healthcare. Schedule appointments, answer patient FAQs, automate intake. WAAIChat for clinics and hospitals. |
-| Education | WhatsApp AI for education. Admissions inquiries, course info, enrollment flows. WAAIChat for schools and universities. |
-| Real Estate | WhatsApp AI for real estate. Qualify leads, share listings, book viewings automatically. WAAIChat for agents and brokerages. |
-| Hospitality | WhatsApp AI for hospitality. Guest communication, booking confirmations, and local recommendations. WAAIChat for hotels. |
-| Restaurants | WhatsApp AI for restaurants. Menu inquiries, reservations, takeout orders. WAAIChat automates customer communication. |
-| Fitness | WhatsApp AI for fitness. Class bookings, membership inquiries, schedule updates. WAAIChat for gyms and studios. |
-| Professional Services | WhatsApp AI for professional services. Client intake, consultation booking, proposal generation. WAAIChat for firms. |
-| Automotive | WhatsApp AI for automotive. Service bookings, inventory inquiries, test drives. WAAIChat for dealerships and service centers. |
-| Pricing | WAAIChat pricing: Free trial, $29 Starter, $99 Pro, Custom enterprise. WhatsApp AI agent for every budget. Start free today. |
+| Marketing Solution | WhatsApp marketing with 98% open rates. Capture leads, nurture prospects, run campaigns. waai marketing solution. |
+| Sales Solution | Close deals on WhatsApp. AI qualifies leads, books meetings, sends quotes. Instant replies, 24/7. waai sales solution. |
+| Support Solution | 24/7 WhatsApp support without the headcount. AI handles repetitive questions, escalates complex issues. waai support solution. |
+| E-commerce | WhatsApp AI for e-commerce. Answer product questions, process orders, handle returns automatically. waai for online stores. |
+| Healthcare | WhatsApp AI for healthcare. Schedule appointments, answer patient FAQs, automate intake. waai for clinics and hospitals. |
+| Education | WhatsApp AI for education. Admissions inquiries, course info, enrollment flows. waai for schools and universities. |
+| Real Estate | WhatsApp AI for real estate. Qualify leads, share listings, book viewings automatically. waai for agents and brokerages. |
+| Hospitality | WhatsApp AI for hospitality. Guest communication, booking confirmations, and local recommendations. waai for hotels. |
+| Restaurants | WhatsApp AI for restaurants. Menu inquiries, reservations, takeout orders. waai automates customer communication. |
+| Fitness | WhatsApp AI for fitness. Class bookings, membership inquiries, schedule updates. waai for gyms and studios. |
+| Professional Services | WhatsApp AI for professional services. Client intake, consultation booking, proposal generation. waai for firms. |
+| Automotive | WhatsApp AI for automotive. Service bookings, inventory inquiries, test drives. waai for dealerships and service centers. |
+| Pricing | waai pricing: Free trial, $29 Starter, $99 Pro, Custom enterprise. WhatsApp AI agent for every budget. Start free today. |
 | Integrations | Google Workspace integrations for WhatsApp AI. Calendar, Drive, Docs, Sheets. Connect your tools, automate your conversations. |
-| Contact | Contact WAAIChat for a personalized demo or support. We respond within one business day. |
-| Signup | Start your free 14-day WAAIChat trial. No credit card required. Set up your WhatsApp AI agent in 10 minutes. |
+| Contact | Contact waai for a personalized demo or support. We respond within one business day. |
+| Signup | Start your free 14-day waai trial. No credit card required. Set up your WhatsApp AI agent in 10 minutes. |
 
 ---
 
@@ -1075,7 +1075,7 @@ Max 160 characters each.
 
 - Start Your Free 14-Day Trial
 - See How It Works
-- Try WAAIChat Free
+- Try waai Free
 - Get Started in 10 Minutes
 - Start Automating Now
 - Book a Demo
@@ -1087,7 +1087,7 @@ Max 160 characters each.
 
 ### Social Proof Blocks (placeholder -- replace with real data)
 
-- "WAAIChat responds to our customers in under a second. We used to lose leads overnight. Not anymore."
+- "waai responds to our customers in under a second. We used to lose leads overnight. Not anymore."
 - "Setting up the knowledge base took 20 minutes. Now 90% of questions are answered without us touching anything."
 - "Our support team used to dread Monday mornings. Now the AI handles the weekend flood and we start the week caught up."
 
