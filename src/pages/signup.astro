@@ -225,6 +225,42 @@ const signupPlans = dbPlans.length > 0
             <a href="/privacy" class="text-wa-teal hover:underline">Privacy Policy</a>.
           </p>
         </form>
+
+        <!-- Verification code step (shown after a successful signup) -->
+        <div id="verify-section" class="hidden space-y-5">
+          <div class="text-center">
+            <h2 class="text-xl font-bold text-gray-900">Verify your email</h2>
+            <p class="text-sm text-gray-500 mt-1">We sent a 6-digit code to <span id="verify-email" class="font-medium text-gray-700 break-all"></span></p>
+          </div>
+
+          <input
+            id="code-input"
+            type="text"
+            inputmode="numeric"
+            autocomplete="one-time-code"
+            maxlength="6"
+            placeholder="······"
+            class="w-full px-4 py-3 text-center tracking-[0.5em] font-mono text-2xl rounded-lg border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-wa-green focus:border-transparent transition"
+          />
+
+          <div id="verify-message" class="hidden text-sm font-medium rounded-lg px-4 py-3"></div>
+
+          <button
+            type="button"
+            id="verify-btn"
+            class="w-full px-6 py-3 bg-wa-green text-white font-semibold rounded-lg hover:bg-wa-green-dark transition-all shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Verify &amp; continue
+          </button>
+
+          <div class="text-center text-sm">
+            <span id="resend-area"></span>
+          </div>
+
+          <p class="text-center text-xs text-gray-400">
+            Wrong email? <a href="/signup" class="text-wa-teal hover:underline font-medium">Start over</a>
+          </p>
+        </div>
       </div>
 
       <p class="text-center text-sm text-gray-500 mt-6">
@@ -283,10 +319,7 @@ const signupPlans = dbPlans.length > 0
       });
 
       if (res.ok) {
-        showMessage('Account created! Redirecting to login...', 'success');
-        setTimeout(() => {
-          window.location.href = 'https://waaichat.hsi.asia/login?new_signup=true';
-        }, 1500);
+        enterVerifyStep(data.email);
       } else {
         const body = await res.json().catch(() => ({}));
         const detail = body.detail;
@@ -304,5 +337,120 @@ const signupPlans = dbPlans.length > 0
       submitBtn.disabled = false;
       submitBtn.textContent = 'Create Account';
     }
+  });
+
+  // ── Verification code step (shown after a successful signup) ──
+  // waai.me and the app are different origins, so we can't share localStorage.
+  // We verify the code here, then hand the auto-login tokens to the app via a
+  // URL fragment on /auth/callback (which stores them + scrubs the fragment).
+  const API = 'https://waaichat.hsi.asia/api';
+  const verifySection = document.getElementById('verify-section') as HTMLDivElement | null;
+  const verifyBtn = document.getElementById('verify-btn') as HTMLButtonElement | null;
+  const codeInput = document.getElementById('code-input') as HTMLInputElement | null;
+  const verifyMessage = document.getElementById('verify-message') as HTMLDivElement | null;
+  const verifyEmailEl = document.getElementById('verify-email') as HTMLElement | null;
+  const resendArea = document.getElementById('resend-area') as HTMLElement | null;
+  let verifyEmail = '';
+  let resendSeconds = 0;
+  let resendTimer: ReturnType<typeof setInterval> | undefined;
+
+  function showVerifyMessage(text: string, type: 'success' | 'error') {
+    if (!verifyMessage) return;
+    verifyMessage.textContent = text;
+    verifyMessage.className = type === 'success'
+      ? 'text-sm font-medium rounded-lg px-4 py-3 bg-green-50 text-green-800'
+      : 'text-sm font-medium rounded-lg px-4 py-3 bg-red-50 text-red-800';
+  }
+
+  function renderResend() {
+    if (!resendArea) return;
+    if (resendSeconds > 0) {
+      resendArea.innerHTML = `<span class="text-gray-400">Resend code in ${resendSeconds}s</span>`;
+    } else {
+      resendArea.innerHTML = `<button type="button" id="resend-btn" class="text-wa-green font-semibold hover:underline">Resend code</button>`;
+      document.getElementById('resend-btn')?.addEventListener('click', doResend);
+    }
+  }
+
+  function startResendCountdown() {
+    resendSeconds = 60;
+    renderResend();
+    if (resendTimer) clearInterval(resendTimer);
+    resendTimer = setInterval(() => {
+      resendSeconds -= 1;
+      if (resendSeconds <= 0) {
+        resendSeconds = 0;
+        if (resendTimer) clearInterval(resendTimer);
+      }
+      renderResend();
+    }, 1000);
+  }
+
+  async function doResend() {
+    if (!verifyEmail) return;
+    try {
+      const res = await fetch(`${API}/auth/resend-verification`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: verifyEmail }),
+      });
+      if (res.status === 429) {
+        showVerifyMessage('Please wait a moment before requesting a new code.', 'error');
+        return;
+      }
+      startResendCountdown();
+      showVerifyMessage('New code sent. Check your inbox.', 'success');
+    } catch {
+      showVerifyMessage('Network error. Please try again.', 'error');
+    }
+  }
+
+  async function submitVerify() {
+    if (!codeInput) return;
+    const code = codeInput.value.trim();
+    if (code.length !== 6) return;
+    if (verifyBtn) { verifyBtn.disabled = true; verifyBtn.textContent = 'Verifying…'; }
+    if (verifyMessage) verifyMessage.className = 'hidden text-sm font-medium rounded-lg px-4 py-3';
+    try {
+      const res = await fetch(`${API}/auth/verify-email`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: verifyEmail, code }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const params = new URLSearchParams();
+        if (data.access_token) params.set('access_token', data.access_token);
+        if (data.refresh_token) params.set('refresh_token', data.refresh_token);
+        window.location.href = 'https://waaichat.hsi.asia/auth/callback#' + params.toString();
+        return;
+      }
+      const body = await res.json().catch(() => ({}));
+      const detail = typeof body.detail === 'string' ? body.detail : 'Verification failed. Please try again.';
+      showVerifyMessage(detail, 'error');
+      codeInput.value = '';
+      codeInput.focus();
+    } catch {
+      showVerifyMessage('Network error. Please try again.', 'error');
+    } finally {
+      if (verifyBtn) { verifyBtn.disabled = false; verifyBtn.textContent = 'Verify & continue'; }
+    }
+  }
+
+  function enterVerifyStep(email: string) {
+    verifyEmail = (email || '').trim();
+    form?.classList.add('hidden');
+    verifySection?.classList.remove('hidden');
+    if (verifyEmailEl) verifyEmailEl.textContent = verifyEmail;
+    codeInput?.focus();
+    startResendCountdown();
+  }
+
+  verifyBtn?.addEventListener('click', submitVerify);
+  codeInput?.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key === 'Enter') { e.preventDefault(); submitVerify(); }
+  });
+  codeInput?.addEventListener('input', () => {
+    if (codeInput) codeInput.value = codeInput.value.replace(/\D/g, '').slice(0, 6);
   });
 </script>
