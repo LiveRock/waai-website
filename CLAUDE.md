@@ -34,10 +34,10 @@ waai-website/
 │   └── robots.txt
 ├── src/
 │   ├── components/
-│   │   ├── home/        # Homepage sections (Hero, FeaturesGrid, AICapabilities, Stats, etc.)
+│   │   ├── home/        # Homepage sections (Hero, LogoCarousel, VideoCarousel, AICapabilities, FeaturesGrid, Stats, etc.)
 │   │   ├── layout/      # Header, Footer
 │   │   └── shared/      # Accordion, Card, CTAButton, SectionHeading
-│   ├── data/            # Content data (features, industries, solutions, testimonials, navigation)
+│   ├── data/            # Content data (features, industries, solutions, testimonials, videos, navigation)
 │   ├── layouts/         # BaseLayout (head/meta), PageLayout (header + footer wrapper)
 │   ├── lib/             # api.ts — waai API client (NOTE: currently unused by pages; `fetchPlans()` path `/billing/public/plans` is stale — real route is `/public/plans`)
 │   ├── pages/           # index, pricing, signup, contact, blog, terms, privacy, features/[slug], industries/[slug], solutions/[slug], integrations/*
@@ -66,6 +66,7 @@ waai-website/
   - `GET /api/site-content/onboarding_service_settings` — Optional Onboarding Assistance one-time fees (`starter.fee_cents` / `pro.fee_cents`; default $99 / $299). `content` is a JSON string — parse it.
 - **Plan feature gating** (mirrors waaiChat): Google Workspace = Starter+; **Cal.com Integration & Language Translations = Pro+ only**; Optional Onboarding Assistance = Starter + Pro add-on. Static marketing labels live in `planFeatureMap` (pricing) / `signupFeatureMap` (signup); all quota numbers come from the API (no hardcoded numbers)
 - `src/lib/api.ts` is unused by the pages today — pricing/signup fetch inline. If consolidating, fix the stale `/billing/public/plans` path to `/public/plans` (router mounted at `/api` in waaiChat)
+- **Homepage video carousel** — `VideoCarousel.astro` (rendered after Hero + LogoCarousel) shows 4 waai YouTube clips in a scroll-snap carousel with prev/next arrows + dot indicators. Click-to-play facade: thumbnails swap to a lazy `youtube-nocookie.com` iframe on click (fast, privacy-friendly — no heavy iframes on page load). Video IDs + titles live in `src/data/videos.ts` (titles editable for marketing). Section heading is a single-line "why not?" in `wa-green-dark`; interactivity uses an `is:inline` script (same convention as the pricing toggle)
 
 ## Commands Reference
 
