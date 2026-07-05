@@ -55,6 +55,24 @@ Miss a message, lose a customer. Reply too late, lose their trust. Hire someone 
 
 ---
 
+### Video Carousel Section
+
+**Placement:** Directly below the Hero and the "Trusted by" logo strip; above the AI Capabilities section.
+
+**Section Heading:** why not? *(single line, dark green `#128C7E` — intentionally minimal/casual, echoing the "why me?" brand angle; no badge or subtitle)*
+
+**Videos (left to right):**
+1. Extra Pair of Hands
+2. Peace of Mind
+3. Language Conundrum?
+4. Lost Opportunities
+
+**Behavior:** Horizontal scroll-snap carousel. Users swipe or use the prev/next arrows (desktop/tablet) and dot indicators to move between videos. Each video loads as a thumbnail and plays on click (privacy-friendly `youtube-nocookie.com` embed — no iframes load until the user presses play).
+
+**Notes:** Video IDs and titles are editable in `src/data/videos.ts`. Component lives at `src/components/home/VideoCarousel.astro`.
+
+---
+
 ### AI Capabilities Section (3 Cards)
 
 **Section Headline:**
