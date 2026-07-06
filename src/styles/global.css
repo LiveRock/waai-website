@@ -33,6 +33,19 @@ html {
   --font-sans: 'Noto Sans Tamil', 'Inter', ui-sans-serif, system-ui, sans-serif;
 }
 
+/* Tamil vowel matras sit above/below the consonant line and get clipped by
+   Tailwind's tight line-heights (leading-tight = 1.25). Loosen headings and
+   tight-leading utilities so glyphs render fully. :lang(ta)/.x has higher
+   specificity than Tailwind's .leading-tight, so no !important needed.
+   CJK gets a gentler bump. English is unaffected. */
+:lang(ta) h1, :lang(ta) h2, :lang(ta) h3, :lang(ta) h4,
+:lang(ta) .leading-tight, :lang(ta) .leading-snug {
+  line-height: 1.5;
+}
+:lang(zh) .leading-tight, :lang(zh) .leading-snug {
+  line-height: 1.4;
+}
+
 @keyframes scroll {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
