@@ -1,9 +1,12 @@
 ---
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <section class="py-12 border-b border-gray-100 overflow-hidden">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-    <p class="text-center text-sm font-medium text-gray-500 uppercase tracking-wider">Trusted by businesses worldwide</p>
+    <p class="text-center text-sm font-medium text-gray-500 uppercase tracking-wider">{t('home.logo.title')}</p>
   </div>
   <div class="relative">
     <div class="flex animate-scroll">

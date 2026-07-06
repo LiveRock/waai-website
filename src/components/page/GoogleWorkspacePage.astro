@@ -1,0 +1,98 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import SectionHeading from '../shared/SectionHeading.astro';
+import CTAButton from '../shared/CTAButton.astro';
+import { getLangFromUrl, useTranslations, localizePath } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const integrations = [
+  { id: 'calendar', badgeKey: 'gw.badge.calendar', badgeColor: 'bg-blue-50 text-blue-700', title: 'Google Calendar', descKey: 'gw.detail.calendar.desc', ucKeys: ['gw.detail.calendar.uc1', 'gw.detail.calendar.uc2', 'gw.detail.calendar.uc3', 'gw.detail.calendar.uc4'], icon: `<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>`, iconColor: 'bg-blue-50 text-blue-600' },
+  { id: 'drive', badgeKey: 'gw.badge.drive', badgeColor: 'bg-yellow-50 text-yellow-700', title: 'Google Drive', descKey: 'gw.detail.drive.desc', ucKeys: ['gw.detail.drive.uc1', 'gw.detail.drive.uc2', 'gw.detail.drive.uc3', 'gw.detail.drive.uc4'], icon: `<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>`, iconColor: 'bg-yellow-50 text-yellow-600' },
+  { id: 'docs', badgeKey: 'gw.badge.docs', badgeColor: 'bg-blue-50 text-blue-700', title: 'Google Docs', descKey: 'gw.detail.docs.desc', ucKeys: ['gw.detail.docs.uc1', 'gw.detail.docs.uc2', 'gw.detail.docs.uc3', 'gw.detail.docs.uc4'], icon: `<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>`, iconColor: 'bg-blue-50 text-blue-600' },
+  { id: 'sheets', badgeKey: 'gw.badge.sheets', badgeColor: 'bg-green-50 text-green-700', title: 'Google Sheets', descKey: 'gw.detail.sheets.desc', ucKeys: ['gw.detail.sheets.uc1', 'gw.detail.sheets.uc2', 'gw.detail.sheets.uc3', 'gw.detail.sheets.uc4'], icon: `<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" /></svg>`, iconColor: 'bg-green-50 text-green-600' },
+];
+const steps = [
+  { n: '1', title: t('gw.step1Title'), body: t('gw.step1Body') },
+  { n: '2', title: t('gw.step2Title'), body: t('gw.step2Body') },
+  { n: '3', title: t('gw.step3Title'), body: t('gw.step3Body') },
+];
+---
+
+<PageLayout title={t('page.gw.title')} description={t('page.gw.description')} canonicalPath={Astro.url.pathname}>
+  <section class="py-20 sm:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mx-auto text-center">
+        <span class="inline-block px-3 py-1 text-xs font-semibold text-blue-700 bg-blue-50 rounded-full uppercase tracking-wider mb-4">{t('home.integrations.workspace')}</span>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4">{t('gw.heroTitle')}</h1>
+        <p class="text-lg text-gray-600 leading-relaxed">{t('gw.heroBody')}</p>
+      </div>
+    </div>
+  </section>
+
+  {integrations.map((item, index) => (
+    <section class:list={['py-16', index % 2 === 0 ? 'bg-gray-50' : 'bg-white']}>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+          <div class={index % 2 !== 0 ? 'lg:order-2' : ''}>
+            <span class={`inline-block px-3 py-1 text-xs font-semibold ${item.badgeColor} rounded-full uppercase tracking-wider mb-3`}>{t(item.badgeKey)}</span>
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">{item.title}</h2>
+            <p class="text-lg text-gray-600 leading-relaxed mb-6">{t(item.descKey)}</p>
+            <ul class="space-y-3">
+              {item.ucKeys.map((k) => (
+                <li class="flex items-start gap-3">
+                  <svg class="w-5 h-5 text-wa-green shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                  <span class="text-gray-700">{t(k)}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div class={index % 2 !== 0 ? 'lg:order-1' : ''}>
+            <div class="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
+              <div class={`w-16 h-16 rounded-2xl ${item.iconColor} flex items-center justify-center mb-6`} set:html={item.icon} />
+              <div class="space-y-4">
+                <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-wa-green"></div><div class="h-2 bg-gray-100 rounded-full flex-1"></div></div>
+                <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-wa-green"></div><div class="h-2 bg-gray-100 rounded-full w-3/4"></div></div>
+                <div class="flex items-center gap-3"><div class="w-2 h-2 rounded-full bg-wa-green"></div><div class="h-2 bg-gray-100 rounded-full w-5/6"></div></div>
+              </div>
+              <div class="mt-6 p-4 bg-green-50 rounded-xl">
+                <div class="flex items-center gap-2 mb-2">
+                  <svg class="w-4 h-4 text-wa-green" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                  <span class="text-sm font-semibold text-green-800">{t('gw.connected')}</span>
+                </div>
+                <p class="text-xs text-green-700">{t('gw.connectedBody')}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <SectionHeading title={t('feature.howTitle')} subtitle={t('gw.howSub')} />
+      <div class="grid sm:grid-cols-3 gap-8 max-w-4xl mx-auto">
+        {steps.map((s) => (
+          <div class="text-center">
+            <div class="w-12 h-12 rounded-full bg-wa-green text-white text-lg font-bold flex items-center justify-center mx-auto mb-4">{s.n}</div>
+            <h3 class="font-bold text-gray-900 mb-2">{s.title}</h3>
+            <p class="text-sm text-gray-600">{s.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 bg-white">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">{t('gw.unlockTitle')}</h2>
+      <p class="text-lg text-gray-600 mb-8">{t('gw.unlockBody')}</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <CTAButton href={localizePath('/signup', lang)} size="lg">{t('cta.startTrial')}</CTAButton>
+        <CTAButton href={localizePath('/pricing', lang)} variant="secondary" size="lg">{t('integ.comparePlans')}</CTAButton>
+      </div>
+    </div>
+  </section>
+</PageLayout>

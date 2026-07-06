@@ -1,0 +1,10 @@
+---
+import GoogleWorkspacePage from '../../../components/page/GoogleWorkspacePage.astro';
+import { NON_DEFAULT_LANGS } from '../../../i18n/config';
+
+export function getStaticPaths() {
+  return NON_DEFAULT_LANGS.map((lang) => ({ params: { lang } }));
+}
+---
+
+<GoogleWorkspacePage />

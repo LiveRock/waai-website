@@ -1,0 +1,153 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import SectionHeading from '../shared/SectionHeading.astro';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const messages = {
+  sending: t('contact.sending'),
+  send: t('contact.send'),
+  success: t('contact.success'),
+  errorDefault: t('contact.errorDefault'),
+  errorNetwork: t('contact.errorNetwork'),
+};
+---
+
+<PageLayout title={t('page.contact.title')} description={t('page.contact.description')} canonicalPath={Astro.url.pathname}>
+  <section class="py-20 sm:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-16">
+        <!-- Left Column: Info -->
+        <div>
+          <SectionHeading title={t('contact.heading')} subtitle={t('contact.sub')} align="left" />
+
+          <div class="space-y-6 mt-8">
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center shrink-0">
+                <svg class="w-5 h-5 text-wa-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+              </div>
+              <div>
+                <h4 class="text-sm font-semibold text-gray-900">{t('contact.email')}</h4>
+                <p class="text-sm text-gray-600">hello@waai.me</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center shrink-0">
+                <svg class="w-5 h-5 text-wa-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              </div>
+              <div>
+                <h4 class="text-sm font-semibold text-gray-900">{t('contact.responseTitle')}</h4>
+                <p class="text-sm text-gray-600">{t('contact.responseBody')}</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center shrink-0">
+                <svg class="w-5 h-5 text-wa-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+              </div>
+              <div>
+                <h4 class="text-sm font-semibold text-gray-900">{t('contact.salesTitle')}</h4>
+                <p class="text-sm text-gray-600">{t('contact.salesBody')}</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <div class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center shrink-0">
+                <svg class="w-5 h-5 text-wa-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+              </div>
+              <div>
+                <h4 class="text-sm font-semibold text-gray-900">{t('contact.productOf')}</h4>
+                <p class="text-sm text-gray-600"><a href="https://hsi.asia" target="_blank" rel="noopener" class="text-gray-600 hover:text-wa-green transition-colors">Hotsource Intelligence</a> &amp; <a href="https://hotsource.net" target="_blank" rel="noopener" class="text-gray-600 hover:text-wa-green transition-colors">Hotsource ESD</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Form -->
+        <div class="bg-gray-50 rounded-2xl p-8 sm:p-10">
+          <form id="contact-form" class="space-y-5">
+            <div>
+              <label for="name" class="block text-sm font-medium text-gray-700 mb-1.5">{t('contact.fullName')}</label>
+              <input type="text" id="name" name="name" required placeholder={t('contact.fullNamePh')} class="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-wa-green focus:border-transparent transition" />
+            </div>
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-700 mb-1.5">{t('contact.emailLabel')}</label>
+              <input type="email" id="email" name="email" required placeholder={t('contact.emailPh')} class="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-wa-green focus:border-transparent transition" />
+            </div>
+            <div>
+              <label for="subject" class="block text-sm font-medium text-gray-700 mb-1.5">{t('contact.subject')}</label>
+              <select id="subject" name="subject" required class="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-wa-green focus:border-transparent transition">
+                <option value="">{t('contact.subjectSelect')}</option>
+                <option value="general">{t('contact.subjectGeneral')}</option>
+                <option value="sales">{t('contact.subjectSales')}</option>
+                <option value="support">{t('contact.subjectSupport')}</option>
+                <option value="partnership">{t('contact.subjectPartnership')}</option>
+                <option value="feedback">{t('contact.subjectFeedback')}</option>
+              </select>
+            </div>
+            <div>
+              <label for="message" class="block text-sm font-medium text-gray-700 mb-1.5">{t('contact.message')}</label>
+              <textarea id="message" name="message" required rows="5" placeholder={t('contact.messagePh')} class="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-wa-green focus:border-transparent transition resize-y"></textarea>
+            </div>
+            <div id="form-message" class="hidden text-sm font-medium rounded-lg px-4 py-3"></div>
+            <button type="submit" id="submit-btn" class="w-full px-6 py-3 bg-wa-green text-white font-semibold rounded-lg hover:bg-wa-green-dark transition-all shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed">
+              {t('contact.send')}
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script type="application/json" id="contact-i18n" set:html={JSON.stringify(messages)} />
+  <script>
+    const M = JSON.parse(document.getElementById('contact-i18n')!.textContent!);
+    const form = document.getElementById('contact-form') as HTMLFormElement;
+    const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+    const formMessage = document.getElementById('form-message') as HTMLDivElement;
+
+    function showMessage(text: string, type: 'success' | 'error') {
+      formMessage.textContent = text;
+      formMessage.className = type === 'success'
+        ? 'text-sm font-medium rounded-lg px-4 py-3 bg-green-50 text-green-800'
+        : 'text-sm font-medium rounded-lg px-4 py-3 bg-red-50 text-red-800';
+    }
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      submitBtn.disabled = true;
+      submitBtn.textContent = M.sending;
+      formMessage.className = 'hidden text-sm font-medium rounded-lg px-4 py-3';
+
+      const data = {
+        name: (document.getElementById('name') as HTMLInputElement).value,
+        email: (document.getElementById('email') as HTMLInputElement).value,
+        subject: (document.getElementById('subject') as HTMLSelectElement).value,
+        message: (document.getElementById('message') as HTMLTextAreaElement).value,
+      };
+
+      try {
+        const res = await fetch('https://waaichat.hsi.asia/api/auth/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (res.ok) {
+          showMessage(M.success, 'success');
+          form.reset();
+        } else {
+          const body = await res.json().catch(() => ({}));
+          showMessage(body.detail || M.errorDefault, 'error');
+        }
+      } catch {
+        showMessage(M.errorNetwork, 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = M.send;
+      }
+    });
+  </script>
+</PageLayout>

@@ -1,5 +1,9 @@
 ---
 import CTAButton from '../shared/CTAButton.astro';
+import { getLangFromUrl, useTranslations, localizePath } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <section class="relative overflow-hidden bg-gradient-to-br from-wa-teal via-wa-teal-light to-wa-green-dark">
@@ -9,23 +13,23 @@ import CTAButton from '../shared/CTAButton.astro';
       <div class="text-center lg:text-left">
         <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-sm rounded-full text-sm text-green-100 mb-6">
           <span class="w-2 h-2 bg-wa-green rounded-full animate-pulse"></span>
-          Your WhatsApp AI Agent
+          {t('home.hero.badge')}
         </div>
         <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6">
-          Why am I losing customers to slow responses?
+          {t('home.hero.headline')}
         </h1>
         <p class="text-lg sm:text-xl text-green-100/90 leading-relaxed mb-8 max-w-xl mx-auto lg:mx-0">
-          Turn every WhatsApp message into an opportunity. AI-powered auto-responses, smart flows, and seamless human handoff — your customers never wait again.
+          {t('home.hero.subhead')}
         </p>
         <div class="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
-          <CTAButton href="/signup" variant="primary" size="lg">
-            Start Free Trial
+          <CTAButton href={localizePath('/signup', lang)} variant="primary" size="lg">
+            {t('cta.startTrial')}
           </CTAButton>
-          <CTAButton href="/contact" variant="secondary" size="lg" class="!border-white/30 !text-white hover:!bg-white/10">
-            Talk to Sales
+          <CTAButton href={localizePath('/contact', lang)} variant="secondary" size="lg" class="!border-white/30 !text-white hover:!bg-white/10">
+            {t('cta.talkToSales')}
           </CTAButton>
         </div>
-        <p class="mt-6 text-sm text-green-100/70">No credit card required. Free trial.</p>
+        <p class="mt-6 text-sm text-green-100/70">{t('home.hero.trialNote')}</p>
       </div>
       <div class="hidden lg:flex justify-center">
         <div class="relative">
@@ -36,40 +40,40 @@ import CTAButton from '../shared/CTAButton.astro';
               <div class="bg-wa-teal px-4 py-3 flex items-center gap-3">
                 <div class="w-8 h-8 bg-wa-green rounded-full"></div>
                 <div>
-                  <div class="text-white text-sm font-semibold">Your Business</div>
-                  <div class="text-green-100 text-xs">online</div>
+                  <div class="text-white text-sm font-semibold">{t('home.hero.chat.business')}</div>
+                  <div class="text-green-100 text-xs">{t('home.hero.chat.online')}</div>
                 </div>
               </div>
               <!-- Chat messages -->
               <div class="flex-1 bg-[#e5ddd5] p-3 space-y-2 text-xs">
                 <div class="flex justify-start">
                   <div class="bg-white rounded-lg rounded-tl-none px-3 py-2 max-w-[80%] shadow-sm">
-                    <p>Hi! What are your business hours?</p>
-                    <span class="text-[10px] text-gray-400 mt-1 block">10:30 AM</span>
+                    <p>{t('home.hero.chat.m1')}</p>
+                    <span class="text-[10px] text-gray-400 mt-1 block">10:30</span>
                   </div>
                 </div>
                 <div class="flex justify-end">
                   <div class="bg-[#dcf8c6] rounded-lg rounded-tr-none px-3 py-2 max-w-[80%] shadow-sm">
-                    <p>We're open Mon-Fri 9am-6pm and Sat 10am-2pm. How can I help you today?</p>
-                    <span class="text-[10px] text-gray-400 mt-1 block">10:30 AM</span>
+                    <p>{t('home.hero.chat.m2')}</p>
+                    <span class="text-[10px] text-gray-400 mt-1 block">10:30</span>
                   </div>
                 </div>
                 <div class="flex justify-start">
                   <div class="bg-white rounded-lg rounded-tl-none px-3 py-2 max-w-[80%] shadow-sm">
-                    <p>Can I schedule an appointment for tomorrow?</p>
-                    <span class="text-[10px] text-gray-400 mt-1 block">10:31 AM</span>
+                    <p>{t('home.hero.chat.m3')}</p>
+                    <span class="text-[10px] text-gray-400 mt-1 block">10:31</span>
                   </div>
                 </div>
                 <div class="flex justify-end">
                   <div class="bg-[#dcf8c6] rounded-lg rounded-tr-none px-3 py-2 max-w-[80%] shadow-sm">
-                    <p>Absolutely! I have slots at 10am, 2pm, and 4pm. Which works best?</p>
-                    <span class="text-[10px] text-gray-400 mt-1 block">10:31 AM</span>
+                    <p>{t('home.hero.chat.m4')}</p>
+                    <span class="text-[10px] text-gray-400 mt-1 block">10:31</span>
                   </div>
                 </div>
                 <div class="flex justify-end">
                   <div class="bg-ai-purple/10 rounded-lg rounded-tr-none px-3 py-2 max-w-[80%] shadow-sm border border-ai-purple/20">
-                    <p class="text-ai-purple text-[10px] font-semibold mb-1">AI Auto-Response</p>
-                    <p>Context-aware, instant, and accurate.</p>
+                    <p class="text-ai-purple text-[10px] font-semibold mb-1">{t('home.hero.chat.aiLabel')}</p>
+                    <p>{t('home.hero.chat.aiMsg')}</p>
                   </div>
                 </div>
               </div>
@@ -81,8 +85,8 @@ import CTAButton from '../shared/CTAButton.astro';
               <svg class="w-5 h-5 text-wa-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             </div>
             <div>
-              <div class="text-xs text-gray-500">Response Time</div>
-              <div class="text-sm font-bold text-gray-900">&lt; 1 second</div>
+              <div class="text-xs text-gray-500">{t('home.hero.badge.responseTime')}</div>
+              <div class="text-sm font-bold text-gray-900">{t('home.hero.badge.responseValue')}</div>
             </div>
           </div>
           <div class="absolute -right-12 bottom-32 bg-white rounded-xl shadow-lg px-4 py-3 flex items-center gap-3">
@@ -90,8 +94,8 @@ import CTAButton from '../shared/CTAButton.astro';
               <svg class="w-5 h-5 text-ai-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
             </div>
             <div>
-              <div class="text-xs text-gray-500">AI Powered</div>
-              <div class="text-sm font-bold text-gray-900">24/7 Active</div>
+              <div class="text-xs text-gray-500">{t('home.hero.badge.aiPowered')}</div>
+              <div class="text-sm font-bold text-gray-900">{t('home.hero.badge.aiValue')}</div>
             </div>
           </div>
         </div>

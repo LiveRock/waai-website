@@ -1,0 +1,383 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import SectionHeading from '../shared/SectionHeading.astro';
+import { getLangFromUrl, useTranslations, localizePath } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const API_URLS = [
+  'http://127.0.0.1:8000/api/public/plans',
+  'https://waaichat.hsi.asia/api/public/plans',
+];
+
+let dbPlans: { name: string; display_name: string; description: string | null; price_monthly: number; price_yearly: number; max_qa_pairs: number | null; max_flows: number | null; max_messages_monthly: number | null; max_respondents: number | null; max_web_pages: number | null; max_drive_sends_monthly: number | null; max_qa_translations_per_lang_monthly: number | null; max_flow_translations_per_lang_monthly: number | null; trial_days: number | null }[] = [];
+for (const url of API_URLS) {
+  try {
+    const res = await fetch(url);
+    if (res.ok) { dbPlans = await res.json(); break; }
+  } catch {}
+}
+
+const SITE_CONTENT_URLS = [
+  'http://127.0.0.1:8000/api/site-content/onboarding_service_settings',
+  'https://waaichat.hsi.asia/api/site-content/onboarding_service_settings',
+];
+const onboardingFee: Record<string, number> = { starter: 9900, pro: 29900 };
+for (const url of SITE_CONTENT_URLS) {
+  try {
+    const res = await fetch(url);
+    if (res.ok) {
+      const data = await res.json();
+      const cfg = typeof data.content === 'string' ? JSON.parse(data.content) : data.content;
+      if (cfg?.starter?.fee_cents) onboardingFee.starter = cfg.starter.fee_cents;
+      if (cfg?.pro?.fee_cents) onboardingFee.pro = cfg.pro.fee_cents;
+      break;
+    }
+  } catch {}
+}
+
+function formatPrice(cents: number | null | undefined): string {
+  if (cents === null || cents === undefined) return 'Custom';
+  if (cents === 0) return 'Free';
+  const dollars = cents / 100;
+  return dollars % 1 === 0 ? `$${dollars.toLocaleString()}` : `$${dollars.toFixed(2)}`;
+}
+function formatLimit(val: number | null | undefined): string {
+  if (val === null || val === undefined) return 'Unlimited';
+  return val.toLocaleString();
+}
+
+const signupFeatureMap: Record<string, string[]> = {
+  starter: ['pf.googlePlugins'],
+  pro: ['pf.calIntegration', 'pf.languageTranslations'],
+};
+
+const trialDays = dbPlans.find((p) => p.name === 'trial')?.trial_days || 7;
+
+const qaLine = (p: typeof dbPlans[number]) => p.max_qa_pairs
+  ? t('pricing.nQa').replace('{n}', formatLimit(p.max_qa_pairs))
+  : t('pricing.unlimitedQa');
+const flowsLine = (p: typeof dbPlans[number]) => p.max_flows
+  ? t('pricing.nFlows').replace('{n}', formatLimit(p.max_flows))
+  : t('pricing.unlimitedFlows');
+const msgLine = (p: typeof dbPlans[number]) => p.max_messages_monthly
+  ? t('pricing.nMessages').replace('{n}', formatLimit(p.max_messages_monthly))
+  : t('pricing.unlimitedMessages');
+
+const signupPlans = dbPlans.length > 0
+  ? dbPlans.filter((p) => p.name !== 'custom').map((p) => ({
+      name: p.name,
+      display_name: p.display_name,
+      price: formatPrice(p.price_monthly),
+      period: p.price_monthly === 0 ? t('pricing.daysPeriod').replace('{n}', String(p.trial_days || 7)) : t('pricing.perMonth'),
+      description: t(`plan.${p.name}.desc`),
+      highlights: [
+        qaLine(p), flowsLine(p), msgLine(p),
+        ...(signupFeatureMap[p.name] || []).map((k) => t(k)),
+        ...(onboardingFee[p.name] ? [t('pf.onboardingAssistance')] : []),
+      ],
+    }))
+  : [
+      { name: 'trial', display_name: 'Trial', price: t('pricing.free'), period: t('pricing.daysPeriod').replace('{n}', String(trialDays)), description: t('plan.trial.desc'), highlights: [t('pricing.nQa').replace('{n}', '5'), t('pricing.nFlows').replace('{n}', '3'), t('pricing.nMessages').replace('{n}', '10')] },
+      { name: 'starter', display_name: 'Starter', price: '$20', period: t('pricing.perMonth'), description: t('plan.starter.desc'), highlights: [t('pricing.nQa').replace('{n}', '50'), t('pricing.nFlows').replace('{n}', '10'), t('pricing.nMessages').replace('{n}', '1,500'), t('pf.googlePlugins'), t('pf.onboardingAssistance')] },
+      { name: 'pro', display_name: 'Pro', price: '$99', period: t('pricing.perMonth'), description: t('plan.pro.desc'), highlights: [t('pricing.nQa').replace('{n}', '500'), t('pricing.nFlows').replace('{n}', '200'), t('pricing.nMessages').replace('{n}', '5,000'), t('pf.calIntegration'), t('pf.languageTranslations'), t('pf.onboardingAssistance')] },
+    ];
+
+const messages = {
+  create: t('signup.create'),
+  creating: t('signup.creating'),
+  verifyContinue: t('signup.verifyContinue'),
+  verifying: t('signup.verifying'),
+  errPwdShort: t('signup.errPwdShort'),
+  errPwdMismatch: t('signup.errPwdMismatch'),
+  errDefault: t('signup.errDefault'),
+  errNetwork: t('signup.errNetwork'),
+  verifyDefault: t('signup.verifyDefault'),
+  verifyNetwork: t('signup.verifyNetwork'),
+  resendWait: t('signup.resendWait'),
+  resent: t('signup.resent'),
+};
+---
+
+<PageLayout title={t('page.signup.title')} description={t('page.signup.description')} canonicalPath={Astro.url.pathname}>
+  <section class="py-16 sm:py-20 bg-gray-50">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <SectionHeading title={t('signup.heading')} subtitle={t('signup.sub')} />
+
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 sm:p-10">
+        <form id="signup-form" class="space-y-5">
+
+          <!-- Prerequisites -->
+          <div class="rounded-lg border border-gray-200 bg-gray-50 p-4">
+            <p class="text-sm font-semibold text-gray-800 mb-2">{t('signup.prereqTitle')}</p>
+            <ul class="text-sm text-gray-600 space-y-1.5">
+              <li class="flex items-start gap-2"><svg class="w-4 h-4 text-wa-green mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg><span>{t('signup.prereq1')}</span></li>
+              <li class="flex items-start gap-2"><svg class="w-4 h-4 text-wa-green mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg><span>{t('signup.prereq2')}</span></li>
+            </ul>
+          </div>
+
+          <!-- Plan Selection -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-3">{t('signup.choosePlan')}</label>
+            <div class="grid sm:grid-cols-3 gap-3">
+              {signupPlans.map((plan, i) => (
+                <label class="relative cursor-pointer">
+                  <input type="radio" name="plan_name" value={plan.name} class="peer sr-only" checked={i === 0} />
+                  <div class="rounded-xl border-2 border-gray-200 p-4 peer-checked:border-wa-green peer-checked:bg-green-50 transition-all h-full">
+                    <div class="flex items-center justify-between mb-2">
+                      <span class="text-sm font-bold text-gray-900">{plan.display_name}</span>
+                      <span class={`text-xs font-semibold px-2 py-0.5 rounded-full ${plan.name === 'pro' ? 'text-ai-purple bg-purple-100' : plan.price === 'Free' ? 'text-wa-green bg-green-100' : 'text-gray-700 bg-gray-100'}`}>{plan.price}</span>
+                    </div>
+                    <p class="text-xs text-gray-400 mb-2">{plan.period}</p>
+                    <ul class="text-xs text-gray-500 space-y-0.5">
+                      {plan.highlights.map((h) => (<li>{h}</li>))}
+                    </ul>
+                  </div>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <p class="text-xs text-gray-500 mt-3">
+            {t('signup.onboardingPre')} <span class="font-medium text-gray-700">{t('signup.onboardingStrong')}</span> {t('signup.onboardingPost').replace('{starter}', formatPrice(onboardingFee.starter)).replace('{pro}', formatPrice(onboardingFee.pro))} <a href={localizePath('/pricing', lang)} class="text-wa-teal hover:underline">{t('signup.seePricing')}</a>.
+          </p>
+
+          <hr class="border-gray-100" />
+
+          <div>
+            <label for="company_name" class="block text-sm font-medium text-gray-700 mb-1.5">{t('signup.companyName')}</label>
+            <input type="text" id="company_name" name="company_name" required placeholder={t('signup.companyPh')} class="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-wa-green focus:border-transparent transition" />
+          </div>
+          <div>
+            <label for="contact_person" class="block text-sm font-medium text-gray-700 mb-1.5">{t('signup.contactPerson')}</label>
+            <input type="text" id="contact_person" name="contact_person" required placeholder={t('signup.contactPh')} class="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-wa-green focus:border-transparent transition" />
+          </div>
+
+          <div class="grid sm:grid-cols-2 gap-5">
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-700 mb-1.5">{t('signup.emailLabel')}</label>
+              <input type="email" id="email" name="email" required placeholder={t('signup.emailPh')} class="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-wa-green focus:border-transparent transition" />
+            </div>
+            <div>
+              <label for="phone" class="block text-sm font-medium text-gray-700 mb-1.5">{t('signup.phone')} <span class="text-gray-400 font-normal">{t('signup.phoneOptional')}</span></label>
+              <input type="tel" id="phone" name="phone" placeholder={t('signup.phonePh')} class="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-wa-green focus:border-transparent transition" />
+            </div>
+          </div>
+
+          <div class="grid sm:grid-cols-2 gap-5">
+            <div>
+              <label for="password" class="block text-sm font-medium text-gray-700 mb-1.5">{t('signup.password')}</label>
+              <input type="password" id="password" name="password" required minlength="6" placeholder={t('signup.passwordPh')} class="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-wa-green focus:border-transparent transition" />
+            </div>
+            <div>
+              <label for="confirm_password" class="block text-sm font-medium text-gray-700 mb-1.5">{t('signup.confirmPassword')}</label>
+              <input type="password" id="confirm_password" name="confirm_password" required minlength="6" placeholder={t('signup.confirmPh')} class="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-wa-green focus:border-transparent transition" />
+            </div>
+          </div>
+
+          <div id="form-message" class="hidden text-sm font-medium rounded-lg px-4 py-3"></div>
+
+          <button type="submit" id="submit-btn" class="w-full px-6 py-3 bg-wa-green text-white font-semibold rounded-lg hover:bg-wa-green-dark transition-all shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed">
+            {t('signup.create')}
+          </button>
+
+          <p class="text-center text-sm text-gray-500">
+            {t('signup.termsPre')}
+            <a href={localizePath('/terms', lang)} class="text-wa-teal hover:underline">{t('signup.termsOfService')}</a>
+            {t('signup.and')}
+            <a href={localizePath('/privacy', lang)} class="text-wa-teal hover:underline">{t('signup.privacyPolicy')}</a>.
+          </p>
+        </form>
+
+        <!-- Verification code step -->
+        <div id="verify-section" class="hidden space-y-5">
+          <div class="text-center">
+            <h2 class="text-xl font-bold text-gray-900">{t('signup.verifyTitle')}</h2>
+            <p class="text-sm text-gray-500 mt-1">{t('signup.verifySent')} <span id="verify-email" class="font-medium text-gray-700 break-all"></span></p>
+          </div>
+          <input id="code-input" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="······" class="w-full px-4 py-3 text-center tracking-[0.5em] font-mono text-2xl rounded-lg border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-wa-green focus:border-transparent transition" />
+          <div id="verify-message" class="hidden text-sm font-medium rounded-lg px-4 py-3"></div>
+          <button type="button" id="verify-btn" class="w-full px-6 py-3 bg-wa-green text-white font-semibold rounded-lg hover:bg-wa-green-dark transition-all shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed">
+            {t('signup.verifyContinue')}
+          </button>
+          <div class="text-center text-sm"><span id="resend-area"></span></div>
+          <p class="text-center text-xs text-gray-400">{t('signup.wrongEmail')} <a href={localizePath('/signup', lang)} class="text-wa-teal hover:underline font-medium">{t('signup.startOver')}</a></p>
+        </div>
+      </div>
+
+      <p class="text-center text-sm text-gray-500 mt-6">
+        {t('signup.alreadyHave')}
+        <a href="https://waaichat.hsi.asia/login" class="text-wa-green font-semibold hover:underline">{t('signup.signIn')}</a>
+      </p>
+    </div>
+  </section>
+
+  <script type="application/json" id="signup-i18n" set:html={JSON.stringify(messages)} />
+  <script>
+    const M = JSON.parse(document.getElementById('signup-i18n')!.textContent!);
+    const form = document.getElementById('signup-form') as HTMLFormElement;
+    const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+    const formMessage = document.getElementById('form-message') as HTMLDivElement;
+
+    function showMessage(text: string, type: 'success' | 'error') {
+      formMessage.textContent = text;
+      formMessage.className = type === 'success'
+        ? 'text-sm font-medium rounded-lg px-4 py-3 bg-green-50 text-green-800'
+        : 'text-sm font-medium rounded-lg px-4 py-3 bg-red-50 text-red-800';
+    }
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const password = (document.getElementById('password') as HTMLInputElement).value;
+      const confirmPassword = (document.getElementById('confirm_password') as HTMLInputElement).value;
+
+      if (password.length < 6) { showMessage(M.errPwdShort, 'error'); return; }
+      if (password !== confirmPassword) { showMessage(M.errPwdMismatch, 'error'); return; }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = M.creating;
+      formMessage.className = 'hidden text-sm font-medium rounded-lg px-4 py-3';
+
+      const data = {
+        company_name: (document.getElementById('company_name') as HTMLInputElement).value,
+        contact_person: (document.getElementById('contact_person') as HTMLInputElement).value,
+        email: (document.getElementById('email') as HTMLInputElement).value,
+        phone: (document.getElementById('phone') as HTMLInputElement).value || undefined,
+        password: password,
+        plan_name: (document.querySelector('input[name="plan_name"]:checked') as HTMLInputElement).value,
+      };
+
+      try {
+        const res = await fetch('https://waaichat.hsi.asia/api/auth/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (res.ok) {
+          enterVerifyStep(data.email);
+        } else {
+          const body = await res.json().catch(() => ({}));
+          const detail = body.detail;
+          if (typeof detail === 'string') {
+            showMessage(detail, 'error');
+          } else if (Array.isArray(detail)) {
+            showMessage(detail.map((d: any) => d.msg).join('. '), 'error');
+          } else {
+            showMessage(M.errDefault, 'error');
+          }
+        }
+      } catch {
+        showMessage(M.errNetwork, 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = M.create;
+      }
+    });
+
+    const API = 'https://waaichat.hsi.asia/api';
+    const verifySection = document.getElementById('verify-section') as HTMLDivElement | null;
+    const verifyBtn = document.getElementById('verify-btn') as HTMLButtonElement | null;
+    const codeInput = document.getElementById('code-input') as HTMLInputElement | null;
+    const verifyMessage = document.getElementById('verify-message') as HTMLDivElement | null;
+    const verifyEmailEl = document.getElementById('verify-email') as HTMLElement | null;
+    const resendArea = document.getElementById('resend-area') as HTMLElement | null;
+    let verifyEmail = '';
+    let resendSeconds = 0;
+    let resendTimer: ReturnType<typeof setInterval> | undefined;
+
+    function showVerifyMessage(text: string, type: 'success' | 'error') {
+      if (!verifyMessage) return;
+      verifyMessage.textContent = text;
+      verifyMessage.className = type === 'success'
+        ? 'text-sm font-medium rounded-lg px-4 py-3 bg-green-50 text-green-800'
+        : 'text-sm font-medium rounded-lg px-4 py-3 bg-red-50 text-red-800';
+    }
+
+    function renderResend() {
+      if (!resendArea) return;
+      if (resendSeconds > 0) {
+        resendArea.innerHTML = `<span class="text-gray-400">Resend code in ${resendSeconds}s</span>`;
+      } else {
+        resendArea.innerHTML = `<button type="button" id="resend-btn" class="text-wa-green font-semibold hover:underline">Resend code</button>`;
+        document.getElementById('resend-btn')?.addEventListener('click', doResend);
+      }
+    }
+
+    function startResendCountdown() {
+      resendSeconds = 60;
+      renderResend();
+      if (resendTimer) clearInterval(resendTimer);
+      resendTimer = setInterval(() => {
+        resendSeconds -= 1;
+        if (resendSeconds <= 0) { resendSeconds = 0; if (resendTimer) clearInterval(resendTimer); }
+        renderResend();
+      }, 1000);
+    }
+
+    async function doResend() {
+      if (!verifyEmail) return;
+      try {
+        const res = await fetch(`${API}/auth/resend-verification`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: verifyEmail }),
+        });
+        if (res.status === 429) { showVerifyMessage(M.resendWait, 'error'); return; }
+        startResendCountdown();
+        showVerifyMessage(M.resent, 'success');
+      } catch {
+        showVerifyMessage(M.verifyNetwork, 'error');
+      }
+    }
+
+    async function submitVerify() {
+      if (!codeInput) return;
+      const code = codeInput.value.trim();
+      if (code.length !== 6) return;
+      if (verifyBtn) { verifyBtn.disabled = true; verifyBtn.textContent = M.verifying; }
+      if (verifyMessage) verifyMessage.className = 'hidden text-sm font-medium rounded-lg px-4 py-3';
+      try {
+        const res = await fetch(`${API}/auth/verify-email`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: verifyEmail, code }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          const params = new URLSearchParams();
+          if (data.access_token) params.set('access_token', data.access_token);
+          if (data.refresh_token) params.set('refresh_token', data.refresh_token);
+          window.location.href = 'https://waaichat.hsi.asia/auth/callback#' + params.toString();
+          return;
+        }
+        const body = await res.json().catch(() => ({}));
+        const detail = typeof body.detail === 'string' ? body.detail : M.verifyDefault;
+        showVerifyMessage(detail, 'error');
+        codeInput.value = '';
+        codeInput.focus();
+      } catch {
+        showVerifyMessage(M.verifyNetwork, 'error');
+      } finally {
+        if (verifyBtn) { verifyBtn.disabled = false; verifyBtn.textContent = M.verifyContinue; }
+      }
+    }
+
+    function enterVerifyStep(email: string) {
+      verifyEmail = (email || '').trim();
+      form?.classList.add('hidden');
+      verifySection?.classList.remove('hidden');
+      if (verifyEmailEl) verifyEmailEl.textContent = verifyEmail;
+      codeInput?.focus();
+      startResendCountdown();
+    }
+
+    verifyBtn?.addEventListener('click', submitVerify);
+    codeInput?.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Enter') { e.preventDefault(); submitVerify(); }
+    });
+    codeInput?.addEventListener('input', () => {
+      if (codeInput) codeInput.value = codeInput.value.replace(/\D/g, '').slice(0, 6);
+    });
+  </script>
+</PageLayout>

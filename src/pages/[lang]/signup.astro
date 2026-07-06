@@ -1,0 +1,10 @@
+---
+import SignupPage from '../../components/page/SignupPage.astro';
+import { NON_DEFAULT_LANGS } from '../../i18n/config';
+
+export function getStaticPaths() {
+  return NON_DEFAULT_LANGS.map((lang) => ({ params: { lang } }));
+}
+---
+
+<SignupPage />

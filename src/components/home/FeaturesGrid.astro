@@ -1,41 +1,44 @@
 ---
 import SectionHeading from '../shared/SectionHeading.astro';
+import { getLangFromUrl, useTranslations, localizePath } from '../../i18n/utils';
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
-const features = [
+const cards = [
   {
     icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>',
-    title: 'Auto-Responder',
-    description: 'Instant AI replies to every WhatsApp message. Rule-based matching first, smart LLM fallback second.',
+    titleKey: 'nav.feature.autoResponder',
+    descKey: 'home.features.card.autoResponder.desc',
     href: '/features/auto-responder',
   },
   {
     icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>',
-    title: 'Knowledge Base',
-    description: 'Comprehensive Q&A with fuzzy matching, CSV import, and priority control. Your expertise, always available.',
+    titleKey: 'nav.feature.knowledgeBase',
+    descKey: 'home.features.card.knowledgeBase.desc',
     href: '/features/knowledge-base',
   },
   {
     icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>',
-    title: 'Logic Flows',
-    description: 'Multi-step conversation flows with branching, conditions, and variables. No code needed.',
+    titleKey: 'nav.feature.logicFlows',
+    descKey: 'home.features.card.logicFlows.desc',
     href: '/features/logic-flows',
   },
   {
     icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>',
-    title: 'AI Chatbot',
-    description: 'Multi-provider AI with customizable brand voice. OpenAI, Anthropic, z.ai — choose your engine.',
+    titleKey: 'nav.feature.aiChatbot',
+    descKey: 'home.features.card.aiChatbot.desc',
     href: '/features/ai-chatbot',
   },
   {
     icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>',
-    title: 'Team Inbox',
-    description: 'Live conversation monitoring with human handoff. AI handles the routine, you handle the rest.',
+    titleKey: 'nav.feature.teamInbox',
+    descKey: 'home.features.card.teamInbox.desc',
     href: '/features/team-inbox',
   },
   {
     icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>',
-    title: 'Analytics',
-    description: 'Track message volumes, AI performance, and popular topics. Know what\'s working, fix what\'s not.',
+    titleKey: 'nav.feature.analytics',
+    descKey: 'home.features.card.analytics.desc',
     href: '/features/analytics',
   },
 ];
@@ -44,21 +47,21 @@ const features = [
 <section class="py-20 sm:py-24 bg-white">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <SectionHeading
-      title="Everything You Need to Win on WhatsApp"
-      subtitle="From auto-responses to document generation — your AI agent handles the entire customer journey."
-      badge="Features"
+      title={t('home.features.title')}
+      subtitle={t('home.features.subtitle')}
+      badge={t('home.features.badge')}
     />
 
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {features.map((feature) => (
-        <a href={feature.href} class="group block bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg">
+      {cards.map((card) => (
+        <a href={localizePath(card.href, lang)} class="group block bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg">
           <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center mb-4 text-wa-green group-hover:bg-wa-green group-hover:text-white transition-colors">
-            <Fragment set:html={feature.icon} />
+            <Fragment set:html={card.icon} />
           </div>
-          <h3 class="text-lg font-semibold text-gray-900 mb-2">{feature.title}</h3>
-          <p class="text-gray-600 text-sm leading-relaxed">{feature.description}</p>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">{t(card.titleKey)}</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">{t(card.descKey)}</p>
           <div class="mt-4 text-sm font-medium text-wa-green flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-            Learn more
+            {t('home.features.learnMore')}
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
           </div>
         </a>
@@ -66,8 +69,8 @@ const features = [
     </div>
 
     <div class="text-center mt-10">
-      <a href="/features" class="inline-flex items-center gap-2 text-sm font-semibold text-wa-green hover:text-wa-green-dark transition-colors">
-        View all features
+      <a href={localizePath('/features', lang)} class="inline-flex items-center gap-2 text-sm font-semibold text-wa-green hover:text-wa-green-dark transition-colors">
+        {t('home.features.viewAll')}
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
       </a>
     </div>

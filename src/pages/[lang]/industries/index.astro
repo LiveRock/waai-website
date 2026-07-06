@@ -1,0 +1,10 @@
+---
+import IndustriesIndex from '../../../components/page/IndustriesIndex.astro';
+import { NON_DEFAULT_LANGS } from '../../../i18n/config';
+
+export function getStaticPaths() {
+  return NON_DEFAULT_LANGS.map((lang) => ({ params: { lang } }));
+}
+---
+
+<IndustriesIndex />

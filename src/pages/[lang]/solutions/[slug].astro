@@ -1,0 +1,15 @@
+---
+import SolutionDetail from '../../../components/page/SolutionDetail.astro';
+import { solutions } from '../../../data/solutions';
+import { NON_DEFAULT_LANGS } from '../../../i18n/config';
+
+export function getStaticPaths() {
+  return NON_DEFAULT_LANGS.flatMap((lang) =>
+    solutions.map((s) => ({ params: { lang, slug: s.slug } }))
+  );
+}
+
+const { slug } = Astro.params;
+---
+
+<SolutionDetail slug={slug!} />

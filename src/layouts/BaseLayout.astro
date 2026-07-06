@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css';
+import { getLangFromUrl, getAlternates, stripLang } from '../i18n/utils';
+import { LOCALES } from '../i18n/config';
 
 interface Props {
   title: string;
@@ -17,11 +19,23 @@ const {
   ogType = 'website',
 } = Astro.props;
 
+const lang = getLangFromUrl(Astro.url);
+const locale = LOCALES[lang];
 const canonicalUrl = `https://waai.me${canonicalPath}`;
+const alternates = getAlternates(Astro.url.pathname);
+const xDefaultUrl = `https://waai.me${stripLang(Astro.url.pathname)}`;
+
+// Load an extra webfont only when the locale's script needs it.
+const fontHref =
+  locale.font === 'noto-sc'
+    ? 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap'
+    : locale.font === 'noto-tamil'
+      ? 'https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;500;600;700&display=swap'
+      : null;
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang={locale.htmlLang}>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -29,12 +43,18 @@ const canonicalUrl = `https://waai.me${canonicalPath}`;
   <meta name="description" content={description} />
   <link rel="canonical" href={canonicalUrl} />
 
+  {alternates.map((alt) => (
+    <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
+  ))}
+  <link rel="alternate" hreflang="x-default" href={xDefaultUrl} />
+
   <meta property="og:type" content={ogType} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:url" content={canonicalUrl} />
   <meta property="og:image" content={`https://waai.me${ogImage}`} />
   <meta property="og:site_name" content="waai.me" />
+  <meta property="og:locale" content={locale.htmlLang.replace('-', '_')} />
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
@@ -48,6 +68,7 @@ const canonicalUrl = `https://waai.me${canonicalPath}`;
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  {fontHref && <link href={fontHref} rel="stylesheet" />}
 </head>
 <body class="font-sans text-gray-900 bg-white antialiased">
   <slot />

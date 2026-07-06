@@ -1,11 +1,15 @@
 ---
-import { videos } from '../../data/videos';
+import { getVideos } from '../../i18n/content';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const videos = getVideos(lang);
 ---
 
 <section class="py-16 sm:py-20 bg-gray-50">
   <!-- Heading (constrained to site width) -->
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <h2 class="text-3xl sm:text-4xl font-bold text-wa-green-dark text-center mb-10 sm:mb-12">why not?</h2>
+    <h2 class="text-3xl sm:text-4xl font-bold text-wa-green-dark text-center mb-10 sm:mb-12">{t('home.video.heading')}</h2>
   </div>
 
   <!-- Full-bleed carousel: the active video spans the browser width -->
@@ -27,7 +31,7 @@ import { videos } from '../../data/videos';
               />
               <!-- Click-to-play facade -->
               <button type="button" data-play data-video-id={v.id} data-title={v.title}
-                aria-label={`Play video: ${v.title}`}
+                aria-label={`${t('home.video.play')}: ${v.title}`}
                 class="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-black/20 transition-colors cursor-pointer">
                 <span class="flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-red-600 shadow-xl ring-4 ring-white/40 group-hover:scale-110 group-active:scale-95 transition-transform">
                   <svg class="w-7 h-7 sm:w-9 sm:h-9 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
@@ -40,11 +44,11 @@ import { videos } from '../../data/videos';
       </div>
 
       <!-- Prev / Next arrows (overlay the video edges; hidden on mobile where swipe is used) -->
-      <button type="button" data-carousel-prev aria-label="Previous video"
+      <button type="button" data-carousel-prev aria-label={t('home.video.prev')}
         class="hidden sm:flex absolute left-4 sm:left-6 lg:left-8 top-1/2 -translate-y-1/2 z-10 w-11 h-11 items-center justify-center rounded-full bg-white/95 backdrop-blur shadow-lg ring-1 ring-black/5 text-wa-teal hover:bg-white hover:scale-105 active:scale-95 transition">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
       </button>
-      <button type="button" data-carousel-next aria-label="Next video"
+      <button type="button" data-carousel-next aria-label={t('home.video.next')}
         class="hidden sm:flex absolute right-4 sm:right-6 lg:right-8 top-1/2 -translate-y-1/2 z-10 w-11 h-11 items-center justify-center rounded-full bg-white/95 backdrop-blur shadow-lg ring-1 ring-black/5 text-wa-teal hover:bg-white hover:scale-105 active:scale-95 transition">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
       </button>
@@ -53,7 +57,7 @@ import { videos } from '../../data/videos';
     <!-- Dot indicators -->
     <div class="mt-6 flex items-center justify-center gap-1">
       {videos.map((v, i) => (
-        <button type="button" data-dot={i} aria-label={`Go to video ${i + 1}: ${v.title}`}
+        <button type="button" data-dot={i} aria-label={`${i + 1} / ${videos.length}`}
           class="p-1.5 cursor-pointer rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-wa-teal/40">
           <span class="dot block rounded-full bg-gray-300 transition-all duration-200"></span>
         </button>

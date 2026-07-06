@@ -1,0 +1,112 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import CTAButton from '../shared/CTAButton.astro';
+import { getFeatures } from '../../i18n/content';
+import { getLangFromUrl, useTranslations, localizePath } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const features = getFeatures(lang);
+
+const iconMap: Record<string, string> = {
+  zap: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>',
+  book: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>',
+  'git-branch': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>',
+  bot: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>',
+  inbox: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>',
+  megaphone: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/></svg>',
+  'chart-bar': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>',
+  'file-text': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>',
+  sparkles: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>',
+};
+
+const planLabel = (plan: string) => (plan === 'All Plans' ? t('feature.planAll') : t('feature.planPro'));
+---
+
+<PageLayout
+  title={`${t('breadcrumb.features')} — waai`}
+  description={t('feature.indexSub')}
+  canonicalPath={Astro.url.pathname}
+>
+  <!-- Hero -->
+  <section class="py-20 sm:py-24 bg-gradient-to-br from-brand-50 via-white to-green-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <span class="inline-block px-3 py-1 text-xs font-semibold text-wa-green bg-green-50 rounded-full uppercase tracking-wider mb-4">
+        {t('breadcrumb.features')}
+      </span>
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 mb-6">
+        {t('feature.indexH1a')}
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-wa-green to-wa-teal">{t('feature.indexH1b')}</span>
+      </h1>
+      <p class="text-lg sm:text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto mb-10">
+        {t('feature.indexSub')}
+      </p>
+    </div>
+  </section>
+
+  <!-- Features Grid -->
+  <section class="py-16 sm:py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        {features.map((feature) => (
+          <a
+            href={localizePath(`/features/${feature.slug}`, lang)}
+            class="group block bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
+          >
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center text-wa-green group-hover:bg-wa-green group-hover:text-white transition-colors">
+                <Fragment set:html={iconMap[feature.icon] || iconMap.zap} />
+              </div>
+              {feature.plan !== 'All Plans' && (
+                <span class="inline-block px-2.5 py-0.5 text-xs font-medium text-ai-purple bg-purple-50 rounded-full">
+                  {planLabel(feature.plan)}
+                </span>
+              )}
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">{feature.shortTitle}</h3>
+            <p class="text-gray-600 text-sm leading-relaxed mb-4">{feature.description}</p>
+            <div class="flex items-center gap-3 mb-4 flex-wrap">
+              {feature.benefits.slice(0, 3).map((b) => (
+                <span class="inline-flex items-center gap-1 text-xs text-gray-500">
+                  <svg class="w-3.5 h-3.5 text-wa-green" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                  </svg>
+                  {b.title}
+                </span>
+              ))}
+            </div>
+            <div class="text-sm font-medium text-wa-green flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              {t('home.features.learnMore')}
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom CTA -->
+  <section class="py-20 sm:py-24 bg-gradient-to-br from-wa-teal via-wa-teal-light to-wa-green-dark relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute top-0 left-1/4 w-96 h-96 bg-wa-green rounded-full blur-3xl"></div>
+    </div>
+    <div class="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-6">
+        {t('feature.ctaTitle')}
+      </h2>
+      <p class="text-lg text-green-100/90 leading-relaxed mb-8 max-w-2xl mx-auto">
+        {t('feature.ctaSub')}
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <CTAButton href={localizePath('/signup', lang)} variant="primary" size="lg">
+          {t('home.finalCta.startTrial')}
+        </CTAButton>
+        <CTAButton href={localizePath('/pricing', lang)} variant="secondary" size="lg" class="!border-white/30 !text-white hover:!bg-white/10">
+          {t('cta.viewPricing')}
+        </CTAButton>
+      </div>
+    </div>
+  </section>
+</PageLayout>
