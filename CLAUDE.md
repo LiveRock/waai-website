@@ -68,6 +68,43 @@ waai-website/
 - `src/lib/api.ts` is unused by the pages today — pricing/signup fetch inline. If consolidating, fix the stale `/billing/public/plans` path to `/public/plans` (router mounted at `/api` in waaiChat)
 - **Homepage video carousel** — `VideoCarousel.astro` (rendered after Hero + LogoCarousel) shows 4 waai YouTube clips in a **full-bleed** scroll-snap carousel: each video spans the browser width, one per view (snap-scroll, prev/next arrows overlaid on the video edges, dot indicators below). The carousel breaks out of the `max-w-7xl` site container; only the heading is constrained. Click-to-play facade: thumbnails swap to a lazy `youtube-nocookie.com` iframe on click (fast, privacy-friendly — no heavy iframes on page load). Video IDs + titles live in `src/data/videos.ts` (titles editable for marketing). Section heading is a single-line "why not?" in `wa-green-dark`; interactivity uses an `is:inline` script (same convention as the pricing toggle)
 
+## Multilingual (i18n) — en / zh / ms / ta
+
+The site is fully localized to English (default, root) + Simplified Chinese (`zh`), Bahasa Malay (`ms`), Tamil (`ta`). English stays at `/`; others are prefixed (`/zh/`, `/ms/`, `/ta/`). A language switcher lives in the header.
+
+**Architecture:**
+- `astro.config.mjs` — Astro native `i18n` block (`prefixDefaultLocale: false`) + `@astrojs/sitemap` `i18n` option (emits hreflang alternates).
+- `src/i18n/config.ts` — locales, `ENGLISH_ONLY_PATHS` (legal pages kept English-only).
+- `src/i18n/utils.ts` — `getLangFromUrl`, `useTranslations(lang)→t`, `localizePath`, `getLocalizedPath` (switcher), `getAlternates` (hreflang), `normalizePath`, `stripLang`. Components self-derive `lang`/`t` from `Astro.url` — no prop drilling.
+- `src/i18n/ui/{en,zh,ms,ta}.ts` — UI/marketing string dictionaries (flat dot-keys; missing keys fall back EN→key).
+- `src/i18n/content/{zh,ms,ta}.ts` + `src/i18n/content/index.ts` — structured-content overlays (features/industries/solutions/testimonials/videos) keyed by slug, merged via `getFeatures(lang)` etc.
+- `src/layouts/BaseLayout.astro` — dynamic `<html lang>`, hreflang loop + `x-default`, `og:locale`, conditional Noto Sans SC (zh) / Noto Sans Tamil (ta) webfonts. `src/styles/global.css` scopes `--font-sans` via `:lang(zh)` / `:lang(ta)`.
+- DRY routing: page markup lives in `src/components/page/*Body.astro`; `src/pages/<x>.astro` renders the English body and `src/pages/[lang]/<x>.astro` (getStaticPaths over `NON_DEFAULT_LANGS`) renders the localized body. Dynamic routes fan out `langs × slugs`.
+- Client scripts (contact, signup) are localized via a `<script type="application/json" id="*-i18n" set:html=...>` blob the bundled script reads — **not** `define:vars` (the signup script has TypeScript casts that would break if inlined).
+- Legal pages (`terms`, `privacy`, `google-compliance`) + `404` are intentionally English-only; their hreflang shows only `en` + `x-default`, and the switcher sends other locales to the locale homepage.
+
+**Coverage:** homepage, features (index + 9), industries (index + 9), solutions (3), pricing, signup, contact, integrations (index + google-workspace), and blog chrome are localized. Only the blog's 3 placeholder post titles/excerpts (no real articles exist) remain English.
+
+⚠️ **Translations are AI-authored and unreviewed** (no native speaker available). Treat zh/ms/ta as draft, especially Tamil.
+
+### Reverting the multilingual deploy
+
+The i18n work is a single squashed commit on `main`:
+- **i18n commit:** `51bee18` — `feat(i18n): add multilingual support (en/zh/ms/ta) with language switcher`
+- **Pre-i18n (English-only) state:** `78416ce` (its parent)
+
+To roll the **live site** back to English-only, from the project root:
+
+```bash
+# Option A — safe, keeps history (creates a revert commit):
+git revert --no-edit 51bee18 && ./deploy.sh
+
+# Option B — rewrites local main to the pre-i18n commit (also fine; main isn't pushed):
+git reset --hard 78416ce && ./deploy.sh
+```
+
+`./deploy.sh` rebuilds and copies `dist/` to the docroot (`/home/waai/public_html`), so either command immediately republishes the English-only site. The localized code remains in git history / on the `feature/multilingual-i18n` branch for re-deployment later.
+
 ## Commands Reference
 
 | Command | Description |
