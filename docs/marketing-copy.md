@@ -67,7 +67,7 @@ Miss a message, lose a customer. Reply too late, lose their trust. Hire someone 
 3. Language Conundrum?
 4. Lost Opportunities
 
-**Behavior:** Horizontal scroll-snap carousel. Users swipe or use the prev/next arrows (desktop/tablet) and dot indicators to move between videos. Each video loads as a thumbnail and plays on click (privacy-friendly `youtube-nocookie.com` embed — no iframes load until the user presses play).
+**Behavior:** Full-bleed scroll-snap carousel — the active video spans the browser width, one video per view (the carousel breaks out of the site's `max-w-7xl` container; only the heading stays constrained). Users swipe or use the prev/next arrows (overlaid on the video edges, desktop/tablet) and dot indicators to move between videos. Each video loads as a thumbnail and plays on click (privacy-friendly `youtube-nocookie.com` embed — no iframes load until the user presses play).
 
 **Notes:** Video IDs and titles are editable in `src/data/videos.ts`. Component lives at `src/components/home/VideoCarousel.astro`.
 

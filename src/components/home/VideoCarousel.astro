@@ -2,31 +2,21 @@
 import { videos } from '../../data/videos';
 ---
 
-<section class="py-20 sm:py-24 bg-gray-50">
+<section class="py-16 sm:py-20 bg-gray-50">
+  <!-- Heading (constrained to site width) -->
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <h2 class="text-3xl sm:text-4xl font-bold text-wa-green-dark text-center mb-12">why not?</h2>
+    <h2 class="text-3xl sm:text-4xl font-bold text-wa-green-dark text-center mb-10 sm:mb-12">why not?</h2>
+  </div>
 
-    <div class="relative" data-video-carousel>
-      <!-- Prev / Next arrows (desktop & tablet; mobile uses swipe) -->
-      <button type="button" data-carousel-prev aria-label="Previous video"
-        class="hidden sm:flex absolute -left-3 lg:-left-6 top-1/2 -translate-y-1/2 z-10 w-11 h-11 items-center justify-center rounded-full bg-white shadow-lg ring-1 ring-gray-200 text-wa-teal hover:bg-gray-50 hover:scale-105 active:scale-95 transition">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
-      </button>
-      <button type="button" data-carousel-next aria-label="Next video"
-        class="hidden sm:flex absolute -right-3 lg:-right-6 top-1/2 -translate-y-1/2 z-10 w-11 h-11 items-center justify-center rounded-full bg-white shadow-lg ring-1 ring-gray-200 text-wa-teal hover:bg-gray-50 hover:scale-105 active:scale-95 transition">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
-      </button>
-
-      <!-- Scrollable track -->
+  <!-- Full-bleed carousel: the active video spans the browser width -->
+  <div data-video-carousel>
+    <div class="relative">
       <div data-carousel-track
-        class="no-scrollbar flex gap-5 sm:gap-7 overflow-x-auto overscroll-x-contain snap-x snap-mandatory scroll-smooth py-2">
+        class="no-scrollbar flex overflow-x-auto overscroll-x-contain snap-x snap-mandatory scroll-smooth">
         {videos.map((v, i) => (
-          <article
-            data-card
-            class="snap-start shrink-0 w-[85%] sm:w-[60%] lg:w-[40%]"
-            tabindex="-1"
-          >
-            <div class="group relative aspect-video rounded-2xl overflow-hidden shadow-md ring-1 ring-gray-200 bg-gray-900">
+          <article data-card tabindex="-1"
+            class="snap-start shrink-0 w-screen px-4 sm:px-6 lg:px-8">
+            <div class="group relative aspect-video w-full rounded-2xl overflow-hidden shadow-md ring-1 ring-gray-200 bg-gray-900">
               <img
                 src={`https://img.youtube.com/vi/${v.id}/maxresdefault.jpg`}
                 alt={v.title}
@@ -49,15 +39,25 @@ import { videos } from '../../data/videos';
         ))}
       </div>
 
-      <!-- Dot indicators -->
-      <div class="mt-6 flex items-center justify-center gap-1">
-        {videos.map((v, i) => (
-          <button type="button" data-dot={i} aria-label={`Go to video ${i + 1}: ${v.title}`}
-            class="p-1.5 cursor-pointer rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-wa-teal/40">
-            <span class="dot block rounded-full bg-gray-300 transition-all duration-200"></span>
-          </button>
-        ))}
-      </div>
+      <!-- Prev / Next arrows (overlay the video edges; hidden on mobile where swipe is used) -->
+      <button type="button" data-carousel-prev aria-label="Previous video"
+        class="hidden sm:flex absolute left-4 sm:left-6 lg:left-8 top-1/2 -translate-y-1/2 z-10 w-11 h-11 items-center justify-center rounded-full bg-white/95 backdrop-blur shadow-lg ring-1 ring-black/5 text-wa-teal hover:bg-white hover:scale-105 active:scale-95 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+      </button>
+      <button type="button" data-carousel-next aria-label="Next video"
+        class="hidden sm:flex absolute right-4 sm:right-6 lg:right-8 top-1/2 -translate-y-1/2 z-10 w-11 h-11 items-center justify-center rounded-full bg-white/95 backdrop-blur shadow-lg ring-1 ring-black/5 text-wa-teal hover:bg-white hover:scale-105 active:scale-95 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+
+    <!-- Dot indicators -->
+    <div class="mt-6 flex items-center justify-center gap-1">
+      {videos.map((v, i) => (
+        <button type="button" data-dot={i} aria-label={`Go to video ${i + 1}: ${v.title}`}
+          class="p-1.5 cursor-pointer rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-wa-teal/40">
+          <span class="dot block rounded-full bg-gray-300 transition-all duration-200"></span>
+        </button>
+      ))}
     </div>
   </div>
 </section>
@@ -83,10 +83,10 @@ import { videos } from '../../data/videos';
       var cards = Array.prototype.slice.call(track.querySelectorAll('[data-card]'));
       if (!track || cards.length === 0) return;
 
-      // Distance to scroll for one card (card width + gap), measured live.
+      // One full-width card fills the viewport, so advance by the track's visible width.
       function cardStep() {
-        if (cards.length < 2) return cards[0].getBoundingClientRect().width;
-        return cards[1].getBoundingClientRect().left - cards[0].getBoundingClientRect().left;
+        if (cards.length < 2) return track.clientWidth;
+        return cards[1].offsetLeft - cards[0].offsetLeft;
       }
       function step(dir) {
         track.scrollBy({ left: dir * Math.round(cardStep()), behavior: 'smooth' });
