@@ -34,15 +34,21 @@ html {
 }
 
 /* Tamil vowel matras sit above/below the consonant line and get clipped by
-   Tailwind's tight line-heights (leading-tight = 1.25). Loosen headings and
-   tight-leading utilities so glyphs render fully. :lang(ta)/.x has higher
-   specificity than Tailwind's .leading-tight, so no !important needed.
-   CJK gets a gentler bump. English is unaffected. */
-:lang(ta) h1, :lang(ta) h2, :lang(ta) h3, :lang(ta) h4,
-:lang(ta) .leading-tight, :lang(ta) .leading-snug {
-  line-height: 1.5;
+   tight line-heights. Tailwind's text-size utilities (text-2xl → 1.2, text-4xl
+   → 1.11, text-xs/sm → ~1.25-1.4) and leading-tight/snug/none all clip Tamil.
+   Give every common Tamil text size adequate line-height. :lang(ta)/.x beats
+   Tailwind's single-class specificity, so no !important needed. English is
+   unaffected (the :lang(ta) guard only matches lang="ta*" subtrees). */
+:lang(ta) .text-xs, :lang(ta) .text-sm, :lang(ta) .text-base,
+:lang(ta) .leading-tight, :lang(ta) .leading-snug, :lang(ta) .leading-none {
+  line-height: 1.6;
 }
-:lang(zh) .leading-tight, :lang(zh) .leading-snug {
+:lang(ta) h1, :lang(ta) h2, :lang(ta) h3, :lang(ta) h4,
+:lang(ta) .text-lg, :lang(ta) .text-xl, :lang(ta) .text-2xl,
+:lang(ta) .text-3xl, :lang(ta) .text-4xl, :lang(ta) .text-5xl, :lang(ta) .text-6xl {
+  line-height: 1.45;
+}
+:lang(zh) .leading-tight, :lang(zh) .leading-snug, :lang(zh) .leading-none {
   line-height: 1.4;
 }
 
