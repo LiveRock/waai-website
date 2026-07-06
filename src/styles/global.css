@@ -52,6 +52,16 @@ html {
   line-height: 1.4;
 }
 
+/* Tamil forms long unbroken words (no internal spaces). At large font sizes a
+   single word (e.g. வாடிக்கையாளர்களை) can exceed the line width and, since CSS
+   won't split it by default, overflow past the right edge and get clipped.
+   Allow such words to wrap. overflow-wrap is inherited, so this covers the
+   whole Tamil subtree. English is unaffected. */
+:lang(ta) {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
 @keyframes scroll {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
