@@ -11,10 +11,16 @@ import en from './ui/en';
 import zh from './ui/zh';
 import ms from './ui/ms';
 import ta from './ui/ta';
+import th from './ui/th';
+import ko from './ui/ko';
+import ja from './ui/ja';
+import fr from './ui/fr';
+import it from './ui/it';
+import es from './ui/es';
 
 const SITE = 'https://waai.me';
 
-const DICTS: Record<Lang, Record<string, string>> = { en, zh, ms, ta };
+const DICTS: Record<Lang, Record<string, string>> = { en, zh, ms, ta, th, ko, ja, fr, it, es };
 
 export type Translator = (key: string) => string;
 

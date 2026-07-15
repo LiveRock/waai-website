@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css';
 import { getLangFromUrl, getAlternates, stripLang } from '../i18n/utils';
-import { LOCALES } from '../i18n/config';
+import { LOCALES, type LocaleFont } from '../i18n/config';
 
 interface Props {
   title: string;
@@ -26,12 +26,14 @@ const alternates = getAlternates(Astro.url.pathname);
 const xDefaultUrl = `https://waai.me${stripLang(Astro.url.pathname)}`;
 
 // Load an extra webfont only when the locale's script needs it.
-const fontHref =
-  locale.font === 'noto-sc'
-    ? 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap'
-    : locale.font === 'noto-tamil'
-      ? 'https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;500;600;700&display=swap'
-      : null;
+const FONT_HREFS: Record<LocaleFont, string> = {
+  'noto-sc': 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap',
+  'noto-tamil': 'https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;500;600;700&display=swap',
+  'noto-thai': 'https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&display=swap',
+  'noto-kr': 'https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap',
+  'noto-jp': 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap',
+};
+const fontHref = locale.font ? FONT_HREFS[locale.font] : null;
 ---
 
 <!DOCTYPE html>

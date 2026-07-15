@@ -12,8 +12,14 @@ import type { LocaleContent } from './types';
 import zh from './zh';
 import ms from './ms';
 import ta from './ta';
+import th from './th';
+import ko from './ko';
+import ja from './ja';
+import fr from './fr';
+import it from './it';
+import es from './es';
 
-const CONTENT: Partial<Record<Lang, LocaleContent>> = { zh, ms, ta };
+const CONTENT: Partial<Record<Lang, LocaleContent>> = { zh, ms, ta, th, ko, ja, fr, it, es };
 
 export function getFeatures(lang: Lang): Feature[] {
   const ov = CONTENT[lang]?.features;
