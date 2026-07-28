@@ -419,15 +419,15 @@ const ms: LocaleContent = {
   },
 
   testimonials: {
-    'Sarah Chen': {
-      role: 'Pengurus Operasi',
-      company: 'TechStyle Retail',
-      quote: 'Kami beralih daripada membalas 200 pertanyaan pelanggan sehari secara manual kepada mengendalikan 500+ dengan AI. Pangkalan pengetahuan disediakan dalam kurang sejam dan ia berfungsi sahaja.',
+    'Nimrod Chuang': {
+      role: '',
+      company: 'BACE Engineering Pte Ltd',
+      quote: 'Prospek saya tidak lagi diabaikan kerana saya terlalu sibuk untuk mengendalikan pertanyaan mereka. Dengan waai, saya boleh mendapatkan bakal pelanggan dan menjana sebut harga lebih pantas daripada sebelumnya.',
     },
-    'Marcus Rodriguez': {
-      role: 'Pengasas',
-      company: 'FitZone Studios',
-      quote: 'Kadar tidak hadir kami menurun 60% selepas menetapkan tempahan kelas automatik dan peringatan di WhatsApp. Ahli suka keselesaannya.',
+    'Steven Lau': {
+      role: '',
+      company: 'OUTSOURCE2US',
+      quote: 'Saya sentiasa berada di jalan raya. Membalas mesej merupakan kerumitan dan gangguan. Akhirnya, saya menikmati ketenangan fikiran, pada bila-bila masa dan di mana sahaja saya berada.',
     },
     'Priya Sharma': {
       role: 'Ketua Kejayaan Pelanggan',

@@ -376,7 +376,7 @@ const zh: Record<string, string> = {
   'home.hero.chat.aiLabel': 'AI 自动回复',
   'home.hero.chat.aiMsg': '懂上下文、即时、准确。',
   'home.hero.badge.responseTime': '响应时间',
-  'home.hero.badge.responseValue': '< 1 秒',
+  'home.hero.badge.responseValue': '< 3 秒',
   'home.hero.badge.aiPowered': 'AI 驱动',
   'home.hero.badge.aiValue': '全天候在线',
 
@@ -437,7 +437,7 @@ const zh: Record<string, string> = {
 
   // ---- 首页：客户评价 ----
   'home.testimonials.badge': '客户评价',
-  'home.testimonials.title': '企业都爱他们的 AI 客服',
+  'home.testimonials.title': '企业都爱他们的智能商务助手',
   'home.testimonials.subtitle': '了解企业为何选择 waai.me 来自动化 WhatsApp 客户对话。',
 
   // ---- 首页：结尾号召 ----

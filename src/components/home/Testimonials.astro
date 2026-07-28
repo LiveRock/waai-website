@@ -31,7 +31,7 @@ const testimonials = getTestimonials(lang);
             </div>
             <div>
               <div class="font-medium text-gray-900 text-sm">{tm.name}</div>
-              <div class="text-xs text-gray-500">{tm.role}, {tm.company}</div>
+              <div class="text-xs text-gray-500">{tm.role ? `${tm.role}, ${tm.company}` : tm.company}</div>
             </div>
           </div>
         </div>

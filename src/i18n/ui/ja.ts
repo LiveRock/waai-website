@@ -382,7 +382,7 @@ const ja: Record<string, string> = {
   'home.hero.chat.aiLabel': 'AI自動応答',
   'home.hero.chat.aiMsg': '文脈を理解し、即座に、正確に。',
   'home.hero.badge.responseTime': '応答時間',
-  'home.hero.badge.responseValue': '< 1秒',
+  'home.hero.badge.responseValue': '< 3秒',
   'home.hero.badge.aiPowered': 'AI搭載',
   'home.hero.badge.aiValue': '24時間稼働',
 
@@ -448,7 +448,7 @@ const ja: Record<string, string> = {
 
   // ---- Homepage: Testimonials ----
   'home.testimonials.badge': 'お客様の声',
-  'home.testimonials.title': 'ビジネスがAIエージェントを愛用中',
+  'home.testimonials.title': 'ビジネスがスマートビジネスアシスタントを愛用中',
   'home.testimonials.subtitle':
     '企業がwaai.meを選んでWhatsAppでの顧客対応を自動化する理由をご覧ください。',
 

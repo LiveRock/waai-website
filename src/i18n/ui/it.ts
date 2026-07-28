@@ -382,7 +382,7 @@ const it: Record<string, string> = {
   'home.hero.chat.aiLabel': 'Risposta Automatica AI',
   'home.hero.chat.aiMsg': 'Consapevole del contesto, istantanea e accurata.',
   'home.hero.badge.responseTime': 'Tempo di Risposta',
-  'home.hero.badge.responseValue': '< 1 secondo',
+  'home.hero.badge.responseValue': '< 3 secondi',
   'home.hero.badge.aiPowered': 'Powered by AI',
   'home.hero.badge.aiValue': 'Attivo 24/7',
 
@@ -448,7 +448,7 @@ const it: Record<string, string> = {
 
   // ---- Homepage: Testimonials ----
   'home.testimonials.badge': 'Testimonianze',
-  'home.testimonials.title': 'Le Aziende Amano il Loro Agente AI',
+  'home.testimonials.title': 'Le Aziende Amano il Loro Assistente Aziendale Intelligente',
   'home.testimonials.subtitle':
     'Scopri perché le aziende scelgono waai.me per automatizzare le conversazioni con i clienti su WhatsApp.',
 

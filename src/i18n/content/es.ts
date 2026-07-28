@@ -419,15 +419,15 @@ const es: LocaleContent = {
   },
 
   testimonials: {
-    'Sarah Chen': {
-      role: 'Directora de Operaciones',
-      company: 'TechStyle Retail',
-      quote: 'Pasamos de responder manualmente a 200 consultas de clientes al día a gestionar más de 500 con IA. La base de conocimiento estuvo lista en menos de una hora y simplemente funciona.',
+    'Nimrod Chuang': {
+      role: '',
+      company: 'BACE Engineering Pte Ltd',
+      quote: 'Mis prospectos ya no son ignorados porque estaba demasiado ocupado para atender sus consultas. Con waai, puedo captar clientes potenciales y generar cotizaciones más rápido que nunca.',
     },
-    'Marcus Rodriguez': {
-      role: 'Fundador',
-      company: 'FitZone Studios',
-      quote: 'Nuestra tasa de ausencias bajó un 60% tras configurar la reserva de clases y los recordatorios automáticos en WhatsApp. A los miembros les encanta lo cómodo que es.',
+    'Steven Lau': {
+      role: '',
+      company: 'OUTSOURCE2US',
+      quote: 'Siempre estoy en la carretera. Responder mensajes era una molestia y una distracción. Por fin tengo tranquilidad, en cualquier momento y dondequiera que esté.',
     },
     'Priya Sharma': {
       role: 'Responsable de Éxito del Cliente',

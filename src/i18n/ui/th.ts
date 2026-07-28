@@ -382,7 +382,7 @@ const th: Record<string, string> = {
   'home.hero.chat.aiLabel': 'การตอบกลับอัตโนมัติด้วย AI',
   'home.hero.chat.aiMsg': 'เข้าใจบริบท ทันใจ และแม่นยำ',
   'home.hero.badge.responseTime': 'เวลาตอบกลับ',
-  'home.hero.badge.responseValue': '< 1 วินาที',
+  'home.hero.badge.responseValue': '< 3 วินาที',
   'home.hero.badge.aiPowered': 'ขับเคลื่อนด้วย AI',
   'home.hero.badge.aiValue': 'ทำงาน 24/7',
 
@@ -448,7 +448,7 @@ const th: Record<string, string> = {
 
   // ---- Homepage: Testimonials ----
   'home.testimonials.badge': 'รับรองจากผู้ใช้',
-  'home.testimonials.title': 'ธุรกิจต่างๆ รัก AI Agent ของพวกเขา',
+  'home.testimonials.title': 'ธุรกิจต่างๆ รักผู้ช่วยธุรกิจอัจฉริยะของพวกเขา',
   'home.testimonials.subtitle':
     'ดูว่าทำไมบริษัทต่างๆ เลือก waai.me เพื่อทำงานอัตโนมัติด้านการสนทนากับลูกค้าบน WhatsApp',
 

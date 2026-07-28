@@ -419,15 +419,15 @@ const zh: LocaleContent = {
   },
 
   testimonials: {
-    'Sarah Chen': {
-      role: '运营经理',
-      company: 'TechStyle Retail',
-      quote: '我们从每天手动回复 200 条客户咨询，变成用 AI 处理 500+ 条。知识库不到一小时就搭建好了，而且确实好用。',
+    'Nimrod Chuang': {
+      role: '',
+      company: 'BACE Engineering Pte Ltd',
+      quote: '因为太忙而无暇处理，我的潜在客户再也不会被忽略了。借助 waai，我能比以往更快地获取线索并生成报价。',
     },
-    'Marcus Rodriguez': {
-      role: '创始人',
-      company: 'FitZone Studios',
-      quote: '在 WhatsApp 上设置自动课程预订和提醒后，爽约率下降了 60%。会员都很喜欢这种便利。',
+    'Steven Lau': {
+      role: '',
+      company: 'OUTSOURCE2US',
+      quote: '我总是奔波在路上。回复消息既麻烦又分心。如今无论何时何地，我都能安心无忧。',
     },
     'Priya Sharma': {
       role: '客户成功负责人',

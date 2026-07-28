@@ -382,7 +382,7 @@ const ko: Record<string, string> = {
   'home.hero.chat.aiLabel': 'AI 자동 응답',
   'home.hero.chat.aiMsg': '맥락 인식, 즉각적, 정확한 응답.',
   'home.hero.badge.responseTime': '응답 시간',
-  'home.hero.badge.responseValue': '< 1초',
+  'home.hero.badge.responseValue': '< 3초',
   'home.hero.badge.aiPowered': 'AI 구동',
   'home.hero.badge.aiValue': '24/7 활동',
 
@@ -448,7 +448,7 @@ const ko: Record<string, string> = {
 
   // ---- Homepage: Testimonials ----
   'home.testimonials.badge': '고객 후기',
-  'home.testimonials.title': '기업들이 AI 에이전트를 사랑하는 이유',
+  'home.testimonials.title': '기업들은 스마트 비즈니스 어시스턴트를 사랑합니다',
   'home.testimonials.subtitle':
     '기업들이 WhatsApp 고객 대화를 자동화하기 위해 waai.me를 선택하는 이유를 확인하세요.',
 

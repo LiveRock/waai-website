@@ -382,7 +382,7 @@ const en: Record<string, string> = {
   'home.hero.chat.aiLabel': 'AI Auto-Response',
   'home.hero.chat.aiMsg': 'Context-aware, instant, and accurate.',
   'home.hero.badge.responseTime': 'Response Time',
-  'home.hero.badge.responseValue': '< 1 second',
+  'home.hero.badge.responseValue': '< 3 seconds',
   'home.hero.badge.aiPowered': 'AI Powered',
   'home.hero.badge.aiValue': '24/7 Active',
 
@@ -448,7 +448,7 @@ const en: Record<string, string> = {
 
   // ---- Homepage: Testimonials ----
   'home.testimonials.badge': 'Testimonials',
-  'home.testimonials.title': 'Businesses Love Their AI Agent',
+  'home.testimonials.title': 'Businesses Love Their Smart Business Assistant',
   'home.testimonials.subtitle':
     'See why companies choose waai.me to automate their WhatsApp customer conversations.',
 

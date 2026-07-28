@@ -382,7 +382,7 @@ const ta: Record<string, string> = {
   'home.hero.chat.aiLabel': 'AI தானியக்க பதில்',
   'home.hero.chat.aiMsg': 'சூழல்-விழிப்பு, உடனடி மற்றும் துல்லியமான.',
   'home.hero.badge.responseTime': 'பதில் நேரம்',
-  'home.hero.badge.responseValue': '< 1 வினாடி',
+  'home.hero.badge.responseValue': '< 3 வினாடிகள்',
   'home.hero.badge.aiPowered': 'AI இயக்கப்பட்ட',
   'home.hero.badge.aiValue': '24/7 செயலில்',
 
@@ -446,7 +446,7 @@ const ta: Record<string, string> = {
 
   // ---- முகப்பு: சான்றுகள் ----
   'home.testimonials.badge': 'சான்றுகள்',
-  'home.testimonials.title': 'வணிகங்கள் தங்கள் AI முகவரை விரும்புகின்றன',
+  'home.testimonials.title': 'வணிகங்கள் தங்கள் ஸ்மார்ட் வணிக உதவியாளரை விரும்புகின்றன',
   'home.testimonials.subtitle':
     'WhatsApp வாடிக்கையாளர் உரையாடல்களை தானியக்கமாக்க waai.me-ஐ ஏன் நிறுவனங்கள் தேர்ந்தெடுக்கின்றன என்பதைப் பாருங்கள்.',
 

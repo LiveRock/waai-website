@@ -419,15 +419,15 @@ const ko: LocaleContent = {
   },
 
   testimonials: {
-    'Sarah Chen': {
-      role: '운영 매니저',
-      company: 'TechStyle Retail',
-      quote: '하루 200건의 고객 문의에 수동으로 응답하던 것에서 AI로 500건 이상을 처리하게 되었습니다. 지식 베이스는 1시간 만에 설정됐고 그냥 작동합니다.',
+    'Nimrod Chuang': {
+      role: '',
+      company: 'BACE Engineering Pte Ltd',
+      quote: '바빠서 문의를 처리하지 못해 잠재 고객이 더 이상 방치되지 않습니다. waai 덕분에 이전보다 훨씬 빠르게 리드를 확보하고 견적을 생성할 수 있습니다!',
     },
-    'Marcus Rodriguez': {
-      role: '창립자',
-      company: 'FitZone Studios',
-      quote: 'WhatsApp에서 자동 클래스 예약과 알림을 설정한 후 노쇼율이 60% 감소했습니다. 회원들이 편리함을 좋아합니다.',
+    'Steven Lau': {
+      role: '',
+      company: 'OUTSOURCE2US',
+      quote: '저는 항상 이동 중입니다. 메시지에 답장하는 것은 번거롭고 산만하게 만들었습니다. 드디어 언제 어디서든 마음의 평화를 얻었습니다.',
     },
     'Priya Sharma': {
       role: '고객 성공 리드',

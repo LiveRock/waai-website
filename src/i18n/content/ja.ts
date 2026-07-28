@@ -419,15 +419,15 @@ const ja: LocaleContent = {
   },
 
   testimonials: {
-    'Sarah Chen': {
-      role: 'オペレーションマネージャー',
-      company: 'TechStyle Retail',
-      quote: '1日200件の顧客問い合わせに手動で応答していたのが、AIで500件以上を処理できるようになりました。ナレッジベースは1時間以内にセットアップ完了し、そのまま機能しています。',
+    'Nimrod Chuang': {
+      role: '',
+      company: 'BACE Engineering Pte Ltd',
+      quote: '忙しすぎて対応できないせいで、見込み客が放置されることはもうありません。waaiのおかげで、これまで以上に素早くリードを獲得し見積もりを作成できます！',
     },
-    'Marcus Rodriguez': {
-      role: '創業者',
-      company: 'FitZone Studios',
-      quote: 'WhatsAppでクラス予約とリマインダーの自動化を設定した後、無断キャンセル率が60%低下しました。会員はその手軽さを気に入っています。',
+    'Steven Lau': {
+      role: '',
+      company: 'OUTSOURCE2US',
+      quote: '私はいつも外出ばかりしています。メッセージに返信するのは手間で気が散る原因でした。ついに、いつでもどこでも安心できるようになりました。',
     },
     'Priya Sharma': {
       role: 'カスタマーサクセスリード',

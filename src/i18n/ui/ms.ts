@@ -382,7 +382,7 @@ const ms: Record<string, string> = {
   'home.hero.chat.aiLabel': 'Auto-Respons AI',
   'home.hero.chat.aiMsg': 'Sedar konteks, serta-merta dan tepat.',
   'home.hero.badge.responseTime': 'Masa Respons',
-  'home.hero.badge.responseValue': '< 1 saat',
+  'home.hero.badge.responseValue': '< 3 saat',
   'home.hero.badge.aiPowered': 'Dikuasakan AI',
   'home.hero.badge.aiValue': 'Aktif 24/7',
 
@@ -446,7 +446,7 @@ const ms: Record<string, string> = {
 
   // ---- Laman utama: Testimoni ----
   'home.testimonials.badge': 'Testimoni',
-  'home.testimonials.title': 'Perniagaan Sayangi Ejen AI Mereka',
+  'home.testimonials.title': 'Perniagaan Sayangi Pembantu Perniagaan Pintar Mereka',
   'home.testimonials.subtitle':
     'Lihat mengapa syarikat memilih waai.me untuk mengautomasikan perbualan pelanggan WhatsApp mereka.',
 
