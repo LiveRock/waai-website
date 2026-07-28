@@ -2,6 +2,18 @@
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+
+// Real customer logos shown as a seamless marquee. The list is duplicated so
+// the first half equals the second half — the scroll keyframe translates
+// exactly -50%, which makes the loop seamless. Each half is wider than the
+// viewport, so the two logos are repeated to fill the strip. Logos are
+// pre-flattened to a single dark gray with transparent backgrounds.
+const logos = [
+  { src: '/images/logos/bace.png', alt: 'BACE Engineering', w: 221, h: 125 },
+  { src: '/images/logos/outsource2us.png', alt: 'OUTSOURCE2US', w: 800, h: 263 },
+];
+const half = Array.from({ length: 12 }, (_, i) => logos[i % logos.length]);
+const strip = [...half, ...half];
 ---
 
 <section class="py-12 border-b border-gray-100 overflow-hidden">
@@ -10,13 +22,18 @@ const t = useTranslations(lang);
   </div>
   <div class="relative">
     <div class="flex animate-scroll">
-      {[1,2,3,4,5,6,7,8].map(() => (
-        <div class="flex items-center gap-16 px-8 shrink-0">
-          {[1,2,3,4].map((i) => (
-            <div class="flex items-center justify-center h-8 px-6 opacity-40 hover:opacity-100 transition-opacity grayscale hover:grayscale-0">
-              <div class="w-24 h-6 bg-gray-300 rounded"></div>
-            </div>
-          ))}
+      {strip.map((logo) => (
+        <div class="flex items-center justify-center shrink-0 px-8 opacity-50 hover:opacity-100 transition-opacity">
+          <img
+            src={logo.src}
+            alt={logo.alt}
+            width={logo.w}
+            height={logo.h}
+            loading="lazy"
+            decoding="async"
+            draggable="false"
+            class="h-9 w-auto select-none"
+          />
         </div>
       ))}
     </div>
