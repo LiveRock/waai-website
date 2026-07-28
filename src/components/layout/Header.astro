@@ -17,6 +17,9 @@ const here = stripLang(currentPath);
 const isActive = (href?: string) => !!href && here === normalizePath(href);
 const label = (item: NavItem) => (item.key ? t(item.key) : item.label ?? '');
 const link = (href?: string) => (href ? localizePath(href, lang) : '#');
+const isExternal = (href?: string) => !!href && /^https?:\/\//i.test(href);
+/** External links render raw (localizePath mangles them); internal links get localized. */
+const itemHref = (href?: string) => (isExternal(href) ? href : link(href));
 ---
 
 <header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100" id="main-header">
@@ -38,7 +41,7 @@ const link = (href?: string) => (href ? localizePath(href, lang) : '#');
                 <svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
               </button>
             ) : (
-              <a href={link(item.href)} class:list={['px-3 py-2 text-sm font-medium transition-colors rounded-lg', isActive(item.href) ? 'text-wa-green bg-green-50' : 'text-gray-700 hover:text-wa-green hover:bg-gray-50']}>
+              <a href={itemHref(item.href)} target={isExternal(item.href) ? '_blank' : undefined} rel={isExternal(item.href) ? 'noopener noreferrer' : undefined} class:list={['px-3 py-2 text-sm font-medium transition-colors rounded-lg', isActive(item.href) ? 'text-wa-green bg-green-50' : 'text-gray-700 hover:text-wa-green hover:bg-gray-50']}>
                 {label(item)}
               </a>
             )}
@@ -100,7 +103,7 @@ const link = (href?: string) => (href ? localizePath(href, lang) : '#');
               </div>
             </div>
           ) : (
-            <a href={link(item.href)} class="block px-3 py-2.5 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50">
+            <a href={itemHref(item.href)} target={isExternal(item.href) ? '_blank' : undefined} rel={isExternal(item.href) ? 'noopener noreferrer' : undefined} class="block px-3 py-2.5 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50">
               {label(item)}
             </a>
           )}
