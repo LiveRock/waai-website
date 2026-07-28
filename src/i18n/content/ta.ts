@@ -437,10 +437,10 @@ const ta: LocaleContent = {
   },
 
   videoTitles: {
-    dBVjaErhWaY: 'உதவிக்கரம்',
-    '5KMPyUHWv5Q': 'மன அமைதி',
-    zE9qm2tiUdA: 'மொழி புதிர்?',
-    NtqHXkjI_uk: 'தவறவிட்ட வாய்ப்புகள்',
+    'FYWVnfP-EEo': 'உதவிக்கரம்',
+    PWM3RanP8rQ: 'மன அமைதி',
+    '--8IlCVWsNI': 'தவறவிட்ட வாய்ப்புகள்',
+    '14lt0wRuMw4': 'மொழி புதிர்?',
   },
 };
 

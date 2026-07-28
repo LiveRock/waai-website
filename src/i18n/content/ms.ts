@@ -437,10 +437,10 @@ const ms: LocaleContent = {
   },
 
   videoTitles: {
-    dBVjaErhWaY: 'Sepasang Tangan Bantuan',
-    '5KMPyUHWv5Q': 'Ketenteraman Fikiran',
-    zE9qm2tiUdA: 'Teka Bahasa?',
-    NtqHXkjI_uk: 'Peluang Hilang',
+    'FYWVnfP-EEo': 'Sepasang Tangan Bantuan',
+    PWM3RanP8rQ: 'Ketenteraman Fikiran',
+    '--8IlCVWsNI': 'Peluang Hilang',
+    '14lt0wRuMw4': 'Teka Bahasa?',
   },
 };
 

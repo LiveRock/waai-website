@@ -437,10 +437,10 @@ const zh: LocaleContent = {
   },
 
   videoTitles: {
-    dBVjaErhWaY: '多一双助手',
-    '5KMPyUHWv5Q': '安心无忧',
-    zE9qm2tiUdA: '语言难题？',
-    NtqHXkjI_uk: '错失的机会',
+    'FYWVnfP-EEo': '多一双助手',
+    PWM3RanP8rQ: '安心无忧',
+    '--8IlCVWsNI': '错失的机会',
+    '14lt0wRuMw4': '语言难题？',
   },
 };
 
