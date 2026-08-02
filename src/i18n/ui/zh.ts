@@ -270,6 +270,9 @@ const zh: Record<string, string> = {
   'pf.aiMultiProvider': '多 AI 供应商',
   'pf.prioritySupport': '优先支持',
   'pf.onboardingAssistance': '可选上线协助',
+  'pf.booking': '预约预订',
+  'pf.bookingSelfService': '自助预约与定金',
+  'pf.bookingReminders': '提醒、改期与 PDF 收据',
 
   // 方案描述
   'plan.trial.desc': '从免费试用开始',

@@ -276,6 +276,9 @@ const ms: Record<string, string> = {
   'pf.aiMultiProvider': 'AI Berbilang Pembekal',
   'pf.prioritySupport': 'Sokongan Keutamaan',
   'pf.onboardingAssistance': 'Bantuan Onboarding Pilihan',
+  'pf.booking': 'Temujanji',
+  'pf.bookingSelfService': 'Tempahan Kendiri & Deposit',
+  'pf.bookingReminders': 'Peringatan, Jadual Semula & Resit PDF',
 
   // Penerangan pelan
   'plan.trial.desc': 'Bermula dengan percubaan percuma',

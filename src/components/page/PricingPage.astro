@@ -55,7 +55,7 @@ const fmtCount = (val: number | null | undefined): string => {
 const planFeatureMap: Record<string, string[]> = {
   trial: ['pf.aiAutoResponder', 'pf.knowledgeBase', 'pf.testChat'],
   starter: ['pf.aiAutoResponder', 'pf.knowledgeBase', 'pf.logicFlows', 'pf.analytics', 'pf.businessTemplates', 'pf.csvImport', 'pf.googlePlugins'],
-  pro: ['pf.everythingStarter', 'pf.calIntegration', 'pf.languageTranslations', 'pf.superPowers', 'pf.documentGeneration', 'pf.aiMultiProvider', 'pf.prioritySupport'],
+  pro: ['pf.everythingStarter', 'pf.calIntegration', 'pf.languageTranslations', 'pf.superPowers', 'pf.documentGeneration', 'pf.aiMultiProvider', 'pf.prioritySupport', 'pf.booking', 'pf.bookingSelfService', 'pf.bookingReminders'],
 };
 
 const onboardingLabel = (name: string): string | null =>
@@ -131,6 +131,7 @@ const comparisonFeatureRows = [
   { label: t('pf.languageTranslations'), plans: ['pro'] },
   { label: t('pf.superPowersShort'), plans: ['pro'] },
   { label: t('pf.documentGeneration'), plans: ['pro'] },
+  { label: t('pf.booking'), plans: ['pro'] },
   { label: t('pf.onboardingAssistance'), plans: ['starter', 'pro'] },
 ];
 ---

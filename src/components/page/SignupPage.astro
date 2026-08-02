@@ -50,7 +50,7 @@ function formatLimit(val: number | null | undefined): string {
 
 const signupFeatureMap: Record<string, string[]> = {
   starter: ['pf.googlePlugins'],
-  pro: ['pf.calIntegration', 'pf.languageTranslations'],
+  pro: ['pf.calIntegration', 'pf.languageTranslations', 'pf.booking'],
 };
 
 const trialDays = dbPlans.find((p) => p.name === 'trial')?.trial_days || 7;

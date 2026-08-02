@@ -276,6 +276,9 @@ const ja: Record<string, string> = {
   'pf.aiMultiProvider': 'AI マルチプロバイダー',
   'pf.prioritySupport': '優先サポート',
   'pf.onboardingAssistance': 'オプションのオンボーディング支援',
+  'pf.booking': '予約管理',
+  'pf.bookingSelfService': 'セルフサービス予約・デポジット',
+  'pf.bookingReminders': 'リマインダー・変更・PDFレシート',
 
   // Plan descriptions
   'plan.trial.desc': '無料トライアルで始める',

@@ -276,6 +276,9 @@ const fr: Record<string, string> = {
   'pf.aiMultiProvider': 'IA Multi-Fournisseur',
   'pf.prioritySupport': 'Support prioritaire',
   'pf.onboardingAssistance': 'Assistance d’onboarding en option',
+  'pf.booking': 'Réservation de Rendez-vous',
+  'pf.bookingSelfService': 'Réservation Libre et Dépôts',
+  'pf.bookingReminders': 'Rappels, Report et Reçus PDF',
 
   // Plan descriptions
   'plan.trial.desc': 'Commencez avec un essai gratuit',

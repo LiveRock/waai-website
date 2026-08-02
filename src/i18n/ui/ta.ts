@@ -276,6 +276,9 @@ const ta: Record<string, string> = {
   'pf.aiMultiProvider': 'பல-வழங்குநர் AI',
   'pf.prioritySupport': 'முன்னுரிமை ஆதரவு',
   'pf.onboardingAssistance': 'விருப்ப ஆன்போர்டிங் உதவி',
+  'pf.booking': 'சந்திப்பு பதிவு',
+  'pf.bookingSelfService': 'சுய பதிவு & வைப்புத்தொகை',
+  'pf.bookingReminders': 'நினைவூட்டல்கள், மறுதிட்டமிடல் & PDF ரசீது',
 
   // திட்ட விளக்கங்கள்
   'plan.trial.desc': 'இலவச சோதனையுடன் தொடங்கவும்',

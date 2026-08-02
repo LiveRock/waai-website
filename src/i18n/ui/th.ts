@@ -276,6 +276,9 @@ const th: Record<string, string> = {
   'pf.aiMultiProvider': 'AI หลายผู้ให้บริการ',
   'pf.prioritySupport': 'การสนับสนุนลำดับความสำคัญ',
   'pf.onboardingAssistance': 'บริการตั้งค่าเบื้องต้นเพิ่มเติม',
+  'pf.booking': 'การจองนัดหมาย',
+  'pf.bookingSelfService': 'จองด้วยตัวเองและมัดจำ',
+  'pf.bookingReminders': 'แจ้งเตือน เปลี่ยนนัดและใบเสร็จ PDF',
 
   // Plan descriptions
   'plan.trial.desc': 'เริ่มต้นด้วยการทดลองใช้ฟรี',

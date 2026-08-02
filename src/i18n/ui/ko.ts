@@ -276,6 +276,9 @@ const ko: Record<string, string> = {
   'pf.aiMultiProvider': '다중 AI 제공자',
   'pf.prioritySupport': '우선 지원',
   'pf.onboardingAssistance': '옵션 온보딩 지원',
+  'pf.booking': '예약 관리',
+  'pf.bookingSelfService': '셀프 서비스 예약 및 예약금',
+  'pf.bookingReminders': '알림, 일정 변경 및 PDF 영수증',
 
   // Plan descriptions
   'plan.trial.desc': '무료 체험으로 시작',
