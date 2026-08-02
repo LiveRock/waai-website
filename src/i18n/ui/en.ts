@@ -358,6 +358,8 @@ const en: Record<string, string> = {
   'signup.phone': 'Phone',
   'signup.phoneOptional': '(optional)',
   'signup.phonePh': '+1 234 567 8900',
+  'signup.referralLabel': 'Referral code',
+  'signup.referralPlaceholder': 'Optional — have a code?',
   'signup.password': 'Password',
   'signup.passwordPh': 'Minimum 6 characters',
   'signup.confirmPassword': 'Confirm Password',
