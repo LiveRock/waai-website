@@ -24,6 +24,62 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Per-locale font stacks — :lang() matches the <html lang> subtag hierarchy
+   (e.g. lang="zh-SG" matches :lang(zh)), so the whole subtree picks this up. */
+:lang(zh) {
+  --font-sans: 'Noto Sans SC', 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+:lang(ta) {
+  --font-sans: 'Noto Sans Tamil', 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+:lang(th) {
+  --font-sans: 'Noto Sans Thai', 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+:lang(ko) {
+  --font-sans: 'Noto Sans KR', 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+:lang(ja) {
+  --font-sans: 'Noto Sans JP', 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Tamil & Thai vowel/tone marks sit above/below the consonant line and get
+   clipped by tight line-heights. Tailwind's text-size utilities (text-2xl →
+   1.2, text-4xl → 1.11, text-xs/sm → ~1.25-1.4) and leading-tight/snug/none
+   all clip these scripts. Give every common text size adequate line-height.
+   :lang(xx)/.x beats Tailwind's single-class specificity, so no !important
+   needed. English is unaffected (the :lang() guards only match their subtrees). */
+:lang(ta) .text-xs, :lang(ta) .text-sm, :lang(ta) .text-base,
+:lang(ta) .leading-tight, :lang(ta) .leading-snug, :lang(ta) .leading-none,
+:lang(th) .text-xs, :lang(th) .text-sm, :lang(th) .text-base,
+:lang(th) .leading-tight, :lang(th) .leading-snug, :lang(th) .leading-none {
+  line-height: 1.6;
+}
+:lang(ta) h1, :lang(ta) h2, :lang(ta) h3, :lang(ta) h4,
+:lang(ta) .text-lg, :lang(ta) .text-xl, :lang(ta) .text-2xl,
+:lang(ta) .text-3xl, :lang(ta) .text-4xl, :lang(ta) .text-5xl, :lang(ta) .text-6xl,
+:lang(th) h1, :lang(th) h2, :lang(th) h3, :lang(th) h4,
+:lang(th) .text-lg, :lang(th) .text-xl, :lang(th) .text-2xl,
+:lang(th) .text-3xl, :lang(th) .text-4xl, :lang(th) .text-5xl, :lang(th) .text-6xl {
+  line-height: 1.45;
+}
+/* CJK scripts (zh/ko/ja) read fine with slightly looser line-height. */
+:lang(zh) .leading-tight, :lang(zh) .leading-snug, :lang(zh) .leading-none,
+:lang(ko) .leading-tight, :lang(ko) .leading-snug, :lang(ko) .leading-none,
+:lang(ja) .leading-tight, :lang(ja) .leading-snug, :lang(ja) .leading-none {
+  line-height: 1.4;
+}
+
+/* Tamil & Thai form long unbroken words (no internal spaces, or spaces only at
+   phrase boundaries). At large font sizes a single word (e.g. வாடிக்கையாளர்களை,
+   การสื่อสารอัตโนมัติ) can exceed the line width and, since CSS won't split it
+   by default, overflow past the right edge and get clipped. Allow such words
+   to wrap. overflow-wrap is inherited, so this covers the whole subtree.
+   English is unaffected. */
+:lang(ta), :lang(th) {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
 @keyframes scroll {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }

@@ -8,17 +8,17 @@ export interface Testimonial {
 
 export const testimonials: Testimonial[] = [
   {
-    name: 'Sarah Chen',
-    role: 'Operations Manager',
-    company: 'TechStyle Retail',
-    quote: 'We went from responding to 200 customer queries a day manually to handling 500+ with AI. The knowledge base was set up in under an hour and it just works.',
+    name: 'Nimrod Chuang',
+    role: '',
+    company: 'BACE Engineering Pte Ltd',
+    quote: 'My prospects are no longer ignored because I was too busy to handle their inquires. With waai, I can capture leads and generate quotations faster than ever!',
     avatar: '/images/testimonials/placeholder-1.svg',
   },
   {
-    name: 'Marcus Rodriguez',
-    role: 'Founder',
-    company: 'FitZone Studios',
-    quote: 'Our no-show rate dropped by 60% after setting up automated class booking and reminders on WhatsApp. Members love the convenience.',
+    name: 'Steven Lau',
+    role: '',
+    company: 'OUTSOURCE2US',
+    quote: 'I am always on the road. Answering messages has been hassle and distraction. Finally, I have peace of mind, whenever and wherever I am.',
     avatar: '/images/testimonials/placeholder-2.svg',
   },
   {

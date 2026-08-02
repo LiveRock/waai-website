@@ -1,14 +1,32 @@
 ---
-import { navigation } from '../../data/navigation';
+import { navigation, type NavItem } from '../../data/navigation';
+import { getLangFromUrl, useTranslations, localizePath, stripLang, normalizePath } from '../../i18n/utils';
+import type { Lang } from '../../i18n/config';
+import type { Translator } from '../../i18n/utils';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+
+interface Props {
+  lang?: Lang;
+  t?: Translator;
+}
+const lang = Astro.props.lang ?? getLangFromUrl(Astro.url);
+const t = Astro.props.t ?? useTranslations(lang);
 
 const currentPath = Astro.url.pathname;
+const here = stripLang(currentPath);
+const isActive = (href?: string) => !!href && here === normalizePath(href);
+const label = (item: NavItem) => (item.key ? t(item.key) : item.label ?? '');
+const link = (href?: string) => (href ? localizePath(href, lang) : '#');
+const isExternal = (href?: string) => !!href && /^https?:\/\//i.test(href);
+/** External links render raw (localizePath mangles them); internal links get localized. */
+const itemHref = (href?: string) => (isExternal(href) ? href : link(href));
 ---
 
 <header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100" id="main-header">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16 lg:h-18">
       <!-- Logo -->
-      <a href="/" class="flex items-center gap-2 shrink-0">
+      <a href={localizePath('/', lang)} class="flex items-center gap-2 shrink-0">
         <img src="/images/logos/logo.jpg" alt="waai.me" class="w-8 h-8 rounded-lg" />
         <span class="text-xl font-bold text-gray-900">waai<span class="text-wa-green">.me</span></span>
       </a>
@@ -19,20 +37,20 @@ const currentPath = Astro.url.pathname;
           <div class="relative group">
             {item.children ? (
               <button class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-wa-green transition-colors rounded-lg hover:bg-gray-50 flex items-center gap-1">
-                {item.label}
+                {label(item)}
                 <svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
               </button>
             ) : (
-              <a href={item.href} class:list={['px-3 py-2 text-sm font-medium transition-colors rounded-lg', currentPath === item.href ? 'text-wa-green bg-green-50' : 'text-gray-700 hover:text-wa-green hover:bg-gray-50']}>
-                {item.label}
+              <a href={itemHref(item.href)} target={isExternal(item.href) ? '_blank' : undefined} rel={isExternal(item.href) ? 'noopener noreferrer' : undefined} class:list={['px-3 py-2 text-sm font-medium transition-colors rounded-lg', isActive(item.href) ? 'text-wa-green bg-green-50' : 'text-gray-700 hover:text-wa-green hover:bg-gray-50']}>
+                {label(item)}
               </a>
             )}
             {item.children && (
               <div class="absolute left-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                 <div class="bg-white rounded-xl shadow-lg border border-gray-100 py-2 min-w-56">
                   {item.children.map((child) => (
-                    <a href={child.href} class="block px-4 py-2 text-sm text-gray-700 hover:text-wa-green hover:bg-green-50 transition-colors">
-                      {child.label}
+                    <a href={link(child.href)} class="block px-4 py-2 text-sm text-gray-700 hover:text-wa-green hover:bg-green-50 transition-colors">
+                      {label(child)}
                     </a>
                   ))}
                 </div>
@@ -42,18 +60,19 @@ const currentPath = Astro.url.pathname;
         ))}
       </nav>
 
-      <!-- Desktop CTAs -->
-      <div class="hidden lg:flex items-center gap-3">
-        <a href="/contact" class="px-4 py-2 text-sm font-medium text-gray-700 hover:text-wa-green transition-colors">
-          Contact
+      <!-- Desktop CTAs + language switcher -->
+      <div class="hidden lg:flex items-center gap-2">
+        <LanguageSwitcher lang={lang} t={t} />
+        <a href={localizePath('/contact', lang)} class="px-4 py-2 text-sm font-medium text-gray-700 hover:text-wa-green transition-colors">
+          {t('cta.contact')}
         </a>
-        <a href="/signup" class="px-5 py-2.5 text-sm font-semibold text-white bg-wa-green hover:bg-wa-green-dark rounded-lg transition-colors shadow-sm">
-          Start Free Trial
+        <a href={localizePath('/signup', lang)} class="px-5 py-2.5 text-sm font-semibold text-white bg-wa-green hover:bg-wa-green-dark rounded-lg transition-colors shadow-sm">
+          {t('cta.startTrial')}
         </a>
       </div>
 
       <!-- Mobile Menu Button -->
-      <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors" aria-label="Toggle menu">
+      <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors" aria-label={t('common.toggleMenu')}>
         <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" id="menu-icon-open">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
         </svg>
@@ -72,28 +91,31 @@ const currentPath = Astro.url.pathname;
           {item.children ? (
             <div class="mobile-dropdown">
               <button class="mobile-dropdown-btn w-full flex items-center justify-between px-3 py-2.5 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50">
-                {item.label}
+                {label(item)}
                 <svg class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
               </button>
               <div class="mobile-dropdown-content hidden pl-4">
                 {item.children.map((child) => (
-                  <a href={child.href} class="block px-3 py-2 text-sm text-gray-600 hover:text-wa-green rounded-lg">
-                    {child.label}
+                  <a href={link(child.href)} class="block px-3 py-2 text-sm text-gray-600 hover:text-wa-green rounded-lg">
+                    {label(child)}
                   </a>
                 ))}
               </div>
             </div>
           ) : (
-            <a href={item.href} class="block px-3 py-2.5 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50">
-              {item.label}
+            <a href={itemHref(item.href)} target={isExternal(item.href) ? '_blank' : undefined} rel={isExternal(item.href) ? 'noopener noreferrer' : undefined} class="block px-3 py-2.5 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50">
+              {label(item)}
             </a>
           )}
         </div>
       ))}
-      <div class="pt-4 border-t border-gray-100 space-y-2">
-        <a href="/contact" class="block px-3 py-2.5 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50">Contact</a>
-        <a href="/signup" class="block w-full text-center px-5 py-2.5 text-sm font-semibold text-white bg-wa-green hover:bg-wa-green-dark rounded-lg transition-colors">
-          Start Free Trial
+      <div class="pt-3 mt-2 border-t border-gray-100">
+        <LanguageSwitcher lang={lang} t={t} variant="mobile" />
+      </div>
+      <div class="pt-3 border-t border-gray-100 space-y-2">
+        <a href={localizePath('/contact', lang)} class="block px-3 py-2.5 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50">{t('cta.contact')}</a>
+        <a href={localizePath('/signup', lang)} class="block w-full text-center px-5 py-2.5 text-sm font-semibold text-white bg-wa-green hover:bg-wa-green-dark rounded-lg transition-colors">
+          {t('cta.startTrial')}
         </a>
       </div>
     </div>
@@ -109,7 +131,6 @@ const currentPath = Astro.url.pathname;
   const iconClose = document.getElementById('menu-icon-close');
 
   btn?.addEventListener('click', () => {
-    const isOpen = !menu?.classList.contains('hidden');
     menu?.classList.toggle('hidden');
     iconOpen?.classList.toggle('hidden');
     iconClose?.classList.toggle('hidden');

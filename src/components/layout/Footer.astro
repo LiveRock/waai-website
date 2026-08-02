@@ -1,5 +1,25 @@
 ---
-import { footerLinks } from '../../data/navigation';
+import { footerLinks, type NavItem } from '../../data/navigation';
+import { getLangFromUrl, useTranslations, localizePath } from '../../i18n/utils';
+import type { Lang } from '../../i18n/config';
+import type { Translator } from '../../i18n/utils';
+
+interface Props {
+  lang?: Lang;
+  t?: Translator;
+}
+const lang = Astro.props.lang ?? getLangFromUrl(Astro.url);
+const t = Astro.props.t ?? useTranslations(lang);
+
+const label = (item: NavItem) => (item.key ? t(item.key) : item.label ?? '');
+const link = (href?: string) => (href ? localizePath(href, lang) : '#');
+const columns: { heading: string; items: NavItem[] }[] = [
+  { heading: t('footer.col.product'), items: footerLinks.product },
+  { heading: t('footer.col.solutions'), items: footerLinks.solutions },
+  { heading: t('footer.col.integrations'), items: footerLinks.integrations },
+  { heading: t('footer.col.resources'), items: footerLinks.resources },
+];
+const year = new Date().getFullYear();
 ---
 
 <footer class="bg-gray-900 text-gray-300">
@@ -7,61 +27,32 @@ import { footerLinks } from '../../data/navigation';
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 lg:gap-12">
       <!-- Brand -->
       <div class="col-span-2 md:col-span-3 lg:col-span-1">
-        <a href="/" class="flex items-center gap-2 mb-4">
+        <a href={localizePath('/', lang)} class="flex items-center gap-2 mb-4">
           <img src="/images/logos/logo.jpg" alt="waai.me" class="w-8 h-8 rounded-lg" />
           <span class="text-xl font-bold text-white">waai<span class="text-wa-green">.me</span></span>
         </a>
-        <p class="text-sm text-gray-400 mb-4">Your WhatsApp AI agent that never sleeps. Why handle messages manually when AI does it better?</p>
-        <p class="text-sm text-gray-500">A product of <a href="https://hsi.asia" target="_blank" rel="noopener" class="text-gray-400 hover:text-wa-green transition-colors">Hotsource Intelligence</a> &amp; <a href="https://hotsource.net" target="_blank" rel="noopener" class="text-gray-400 hover:text-wa-green transition-colors">Hotsource ESD</a></p>
+        <p class="text-sm text-gray-400 mb-4">{t('footer.tagline')}</p>
+        <p class="text-sm text-gray-500">{t('footer.productOf')}</p>
       </div>
 
-      <!-- Product -->
-      <div>
-        <h4 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Product</h4>
-        <ul class="space-y-2.5">
-          {footerLinks.product.map((link) => (
-            <li><a href={link.href} class="text-sm text-gray-400 hover:text-wa-green transition-colors">{link.label}</a></li>
-          ))}
-        </ul>
-      </div>
-
-      <!-- Solutions -->
-      <div>
-        <h4 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Solutions</h4>
-        <ul class="space-y-2.5">
-          {footerLinks.solutions.map((link) => (
-            <li><a href={link.href} class="text-sm text-gray-400 hover:text-wa-green transition-colors">{link.label}</a></li>
-          ))}
-        </ul>
-      </div>
-
-      <!-- Integrations -->
-      <div>
-        <h4 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Integrations</h4>
-        <ul class="space-y-2.5">
-          {footerLinks.integrations.map((link) => (
-            <li><a href={link.href} class="text-sm text-gray-400 hover:text-wa-green transition-colors">{link.label}</a></li>
-          ))}
-        </ul>
-      </div>
-
-      <!-- Resources -->
-      <div>
-        <h4 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Resources</h4>
-        <ul class="space-y-2.5">
-          {footerLinks.resources.map((link) => (
-            <li><a href={link.href} class="text-sm text-gray-400 hover:text-wa-green transition-colors">{link.label}</a></li>
-          ))}
-        </ul>
-      </div>
+      {columns.map((col) => (
+        <div>
+          <h4 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">{col.heading}</h4>
+          <ul class="space-y-2.5">
+            {col.items.map((item) => (
+              <li><a href={link(item.href)} class="text-sm text-gray-400 hover:text-wa-green transition-colors">{label(item)}</a></li>
+            ))}
+          </ul>
+        </div>
+      ))}
     </div>
 
     <!-- Bottom Bar -->
     <div class="mt-12 pt-8 border-t border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <p class="text-sm text-gray-500">&copy; {new Date().getFullYear()} waai.me. All rights reserved.</p>
+      <p class="text-sm text-gray-500">&copy; {year} waai.me. {t('footer.rights')}</p>
       <div class="flex items-center gap-6">
-        {footerLinks.legal.map((link) => (
-          <a href={link.href} class="text-sm text-gray-500 hover:text-gray-300 transition-colors">{link.label}</a>
+        {footerLinks.legal.map((item) => (
+          <a href={link(item.href)} class="text-sm text-gray-500 hover:text-gray-300 transition-colors">{label(item)}</a>
         ))}
       </div>
     </div>

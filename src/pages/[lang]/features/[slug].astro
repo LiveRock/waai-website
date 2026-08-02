@@ -1,0 +1,15 @@
+---
+import FeatureDetail from '../../../components/page/FeatureDetail.astro';
+import { features } from '../../../data/features';
+import { NON_DEFAULT_LANGS } from '../../../i18n/config';
+
+export function getStaticPaths() {
+  return NON_DEFAULT_LANGS.flatMap((lang) =>
+    features.map((f) => ({ params: { lang, slug: f.slug } }))
+  );
+}
+
+const { slug } = Astro.params;
+---
+
+<FeatureDetail slug={slug!} />

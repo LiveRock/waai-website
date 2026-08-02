@@ -1,87 +1,95 @@
 export interface NavItem {
-  label: string;
+  /** i18n dictionary key for the label (preferred for translatable labels). */
+  key?: string;
+  /** Literal label, used as-is (for brand/product names that aren't translated). */
+  label?: string;
+  /** Canonical English href (locale-agnostic). Localized at render time. */
   href?: string;
   children?: NavItem[];
 }
 
 export const navigation: NavItem[] = [
   {
-    label: 'Features',
+    key: 'nav.features',
     href: '/features',
     children: [
-      { label: 'Auto-Responder', href: '/features/auto-responder' },
-      { label: 'Knowledge Base', href: '/features/knowledge-base' },
-      { label: 'Logic Flows', href: '/features/logic-flows' },
-      { label: 'AI Chatbot', href: '/features/ai-chatbot' },
-      { label: 'Team Inbox', href: '/features/team-inbox' },
-      { label: 'Campaigns', href: '/features/campaigns' },
-      { label: 'Analytics', href: '/features/analytics' },
-      { label: 'Document Generation', href: '/features/document-generation' },
-      { label: 'Super Powers', href: '/features/super-powers' },
+      { key: 'nav.feature.autoResponder', href: '/features/auto-responder' },
+      { key: 'nav.feature.knowledgeBase', href: '/features/knowledge-base' },
+      { key: 'nav.feature.logicFlows', href: '/features/logic-flows' },
+      { key: 'nav.feature.aiChatbot', href: '/features/ai-chatbot' },
+      { key: 'nav.feature.teamInbox', href: '/features/team-inbox' },
+      { key: 'nav.feature.campaigns', href: '/features/campaigns' },
+      { key: 'nav.feature.analytics', href: '/features/analytics' },
+      { key: 'nav.feature.documentGeneration', href: '/features/document-generation' },
+      { key: 'nav.feature.superPowers', href: '/features/super-powers' },
     ],
   },
   {
-    label: 'Solutions',
+    key: 'nav.solutions',
     children: [
-      { label: 'For Marketing', href: '/solutions/marketing' },
-      { label: 'For Sales', href: '/solutions/sales' },
-      { label: 'For Support', href: '/solutions/support' },
+      { key: 'nav.solution.marketing', href: '/solutions/marketing' },
+      { key: 'nav.solution.sales', href: '/solutions/sales' },
+      { key: 'nav.solution.support', href: '/solutions/support' },
     ],
   },
   {
-    label: 'Industries',
+    key: 'nav.industries',
     href: '/industries',
     children: [
-      { label: 'E-commerce', href: '/industries/ecommerce' },
-      { label: 'Healthcare', href: '/industries/healthcare' },
-      { label: 'Education', href: '/industries/education' },
-      { label: 'Real Estate', href: '/industries/real-estate' },
-      { label: 'Hospitality', href: '/industries/hospitality' },
-      { label: 'Restaurants', href: '/industries/restaurants' },
-      { label: 'Fitness', href: '/industries/fitness' },
-      { label: 'Professional Services', href: '/industries/professional-services' },
-      { label: 'Automotive', href: '/industries/automotive' },
+      { key: 'nav.industry.ecommerce', href: '/industries/ecommerce' },
+      { key: 'nav.industry.healthcare', href: '/industries/healthcare' },
+      { key: 'nav.industry.education', href: '/industries/education' },
+      { key: 'nav.industry.realEstate', href: '/industries/real-estate' },
+      { key: 'nav.industry.hospitality', href: '/industries/hospitality' },
+      { key: 'nav.industry.restaurants', href: '/industries/restaurants' },
+      { key: 'nav.industry.fitness', href: '/industries/fitness' },
+      { key: 'nav.industry.professionalServices', href: '/industries/professional-services' },
+      { key: 'nav.industry.automotive', href: '/industries/automotive' },
     ],
   },
-  { label: 'Integrations', href: '/integrations' },
-  { label: 'Pricing', href: '/pricing' },
+  { key: 'nav.integrations', href: '/integrations' },
+  { key: 'nav.pricing', href: '/pricing' },
+  {
+    label: 'WhatsApp',
+    href: 'https://api.whatsapp.com/send?phone=6581773301&text=Hi%20Hotsource!%20I%27d%20like%20to%20know%20more',
+  },
 ];
 
 export const footerLinks = {
   product: [
-    { label: 'Features', href: '/features' },
-    { label: 'Auto-Responder', href: '/features/auto-responder' },
-    { label: 'Knowledge Base', href: '/features/knowledge-base' },
-    { label: 'Logic Flows', href: '/features/logic-flows' },
-    { label: 'AI Chatbot', href: '/features/ai-chatbot' },
-    { label: 'Team Inbox', href: '/features/team-inbox' },
-    { label: 'Super Powers', href: '/features/super-powers' },
-    { label: 'Pricing', href: '/pricing' },
+    { key: 'nav.features', href: '/features' },
+    { key: 'nav.feature.autoResponder', href: '/features/auto-responder' },
+    { key: 'nav.feature.knowledgeBase', href: '/features/knowledge-base' },
+    { key: 'nav.feature.logicFlows', href: '/features/logic-flows' },
+    { key: 'nav.feature.aiChatbot', href: '/features/ai-chatbot' },
+    { key: 'nav.feature.teamInbox', href: '/features/team-inbox' },
+    { key: 'nav.feature.superPowers', href: '/features/super-powers' },
+    { key: 'nav.pricing', href: '/pricing' },
   ],
   solutions: [
-    { label: 'For Marketing', href: '/solutions/marketing' },
-    { label: 'For Sales', href: '/solutions/sales' },
-    { label: 'For Support', href: '/solutions/support' },
-    { label: 'E-commerce', href: '/industries/ecommerce' },
-    { label: 'Healthcare', href: '/industries/healthcare' },
-    { label: 'Education', href: '/industries/education' },
-    { label: 'Real Estate', href: '/industries/real-estate' },
+    { key: 'nav.solution.marketing', href: '/solutions/marketing' },
+    { key: 'nav.solution.sales', href: '/solutions/sales' },
+    { key: 'nav.solution.support', href: '/solutions/support' },
+    { key: 'nav.industry.ecommerce', href: '/industries/ecommerce' },
+    { key: 'nav.industry.healthcare', href: '/industries/healthcare' },
+    { key: 'nav.industry.education', href: '/industries/education' },
+    { key: 'nav.industry.realEstate', href: '/industries/real-estate' },
   ],
   integrations: [
-    { label: 'All Integrations', href: '/integrations' },
+    { key: 'footer.allIntegrations', href: '/integrations' },
     { label: 'Google Calendar', href: '/integrations/google-workspace' },
     { label: 'Google Drive', href: '/integrations/google-workspace' },
     { label: 'Google Docs', href: '/integrations/google-workspace' },
     { label: 'Google Sheets', href: '/integrations/google-workspace' },
   ],
   resources: [
-    { label: 'Blog', href: '/blog' },
-    { label: 'Contact', href: '/contact' },
-    { label: 'Sign Up', href: '/signup' },
+    { key: 'footer.blog', href: '/blog' },
+    { key: 'cta.contact', href: '/contact' },
+    { key: 'cta.signup', href: '/signup' },
   ],
   legal: [
-    { label: 'Terms & Conditions', href: '/terms' },
-    { label: 'Privacy Policy', href: '/privacy' },
-    { label: 'Google Compliance', href: '/google-compliance' },
+    { key: 'footer.terms', href: '/terms' },
+    { key: 'footer.privacy', href: '/privacy' },
+    { key: 'footer.googleCompliance', href: '/google-compliance' },
   ],
 };

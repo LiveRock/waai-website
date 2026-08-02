@@ -1,0 +1,282 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import SectionHeading from '../shared/SectionHeading.astro';
+import Accordion from '../shared/Accordion.astro';
+import { getLangFromUrl, useTranslations, localizePath } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const API_URLS = [
+  'http://127.0.0.1:8000/api/public/plans',
+  'https://waaichat.hsi.asia/api/public/plans',
+];
+
+let dbPlans: { name: string; display_name: string; description: string | null; price_monthly: number; price_yearly: number; max_qa_pairs: number | null; max_flows: number | null; max_messages_monthly: number | null; max_respondents: number | null; max_web_pages: number | null; max_drive_sends_monthly: number | null; max_qa_translations_per_lang_monthly: number | null; max_flow_translations_per_lang_monthly: number | null; trial_days: number | null }[] = [];
+for (const url of API_URLS) {
+  try {
+    const res = await fetch(url);
+    if (res.ok) { dbPlans = await res.json(); break; }
+  } catch {}
+}
+
+const SITE_CONTENT_URLS = [
+  'http://127.0.0.1:8000/api/site-content/onboarding_service_settings',
+  'https://waaichat.hsi.asia/api/site-content/onboarding_service_settings',
+];
+const onboardingFee: Record<string, number> = { starter: 9900, pro: 29900 };
+for (const url of SITE_CONTENT_URLS) {
+  try {
+    const res = await fetch(url);
+    if (res.ok) {
+      const data = await res.json();
+      const cfg = typeof data.content === 'string' ? JSON.parse(data.content) : data.content;
+      if (cfg?.starter?.fee_cents) onboardingFee.starter = cfg.starter.fee_cents;
+      if (cfg?.pro?.fee_cents) onboardingFee.pro = cfg.pro.fee_cents;
+      break;
+    }
+  } catch {}
+}
+
+const formatPrice = (cents: number | null | undefined): string => {
+  if (cents === null || cents === undefined) return t('pricing.contactPrice');
+  if (cents === 0) return t('pricing.free');
+  const dollars = cents / 100;
+  return dollars % 1 === 0 ? `$${dollars.toLocaleString()}` : `$${dollars.toFixed(2)}`;
+};
+const formatLimit = (val: number | null | undefined): string =>
+  (val === null || val === undefined) ? t('pricing.unlimited') : val.toLocaleString();
+const fmtCount = (val: number | null | undefined): string => {
+  if (val === null || val === undefined) return t('pricing.unlimited');
+  return val > 0 ? val.toLocaleString() : '—';
+};
+
+// Plan feature bullet keys (translated at render).
+const planFeatureMap: Record<string, string[]> = {
+  trial: ['pf.aiAutoResponder', 'pf.knowledgeBase', 'pf.testChat'],
+  starter: ['pf.aiAutoResponder', 'pf.knowledgeBase', 'pf.logicFlows', 'pf.analytics', 'pf.businessTemplates', 'pf.csvImport', 'pf.googlePlugins'],
+  pro: ['pf.everythingStarter', 'pf.calIntegration', 'pf.languageTranslations', 'pf.superPowers', 'pf.documentGeneration', 'pf.aiMultiProvider', 'pf.prioritySupport', 'pf.booking', 'pf.bookingSelfService', 'pf.bookingReminders'],
+};
+
+const onboardingLabel = (name: string): string | null =>
+  onboardingFee[name] ? t('pricing.onboardingOpt').replace('{price}', formatPrice(onboardingFee[name])) : null;
+
+const ctaKey = (name: string): string =>
+  name === 'custom' ? 'pricing.ctaContactSales' : (name === 'starter' ? 'pricing.ctaGetStarted' : 'cta.startTrial');
+const ctaHref = (name: string): string => localizePath(name === 'custom' ? '/contact' : '/signup', lang);
+
+const qaLine = (p: typeof dbPlans[number]) => p.max_qa_pairs
+  ? t('pricing.nQa').replace('{n}', formatLimit(p.max_qa_pairs))
+  : t('pricing.unlimitedQa');
+const flowsLine = (p: typeof dbPlans[number]) => p.max_flows
+  ? t('pricing.nFlows').replace('{n}', formatLimit(p.max_flows))
+  : t('pricing.unlimitedFlows');
+const msgLine = (p: typeof dbPlans[number]) => p.max_messages_monthly
+  ? t('pricing.nMessages').replace('{n}', formatLimit(p.max_messages_monthly))
+  : t('pricing.unlimitedMessages');
+
+const plans = dbPlans.length > 0
+  ? dbPlans.map((p) => ({
+      name: p.name,
+      display_name: p.display_name,
+      key: p.name,
+      price: formatPrice(p.price_monthly),
+      period: p.price_monthly === 0 ? t('pricing.daysPeriod').replace('{n}', String(p.trial_days || 14)) : t('pricing.perMonth'),
+      yearlyPrice: p.price_yearly > 0 ? formatPrice(p.price_yearly) : '',
+      description: t(`plan.${p.name}.desc`),
+      highlighted: p.name === 'pro',
+      cta: ctaKey(p.name),
+      ctaHref: ctaHref(p.name),
+      features: [
+        qaLine(p), flowsLine(p), msgLine(p),
+        ...(planFeatureMap[p.name] || []).map((k) => t(k)),
+        ...(onboardingLabel(p.name) ? [onboardingLabel(p.name) as string] : []),
+      ],
+    }))
+  : [
+      { name: 'trial', display_name: 'Trial', key: 'trial', price: t('pricing.free'), period: t('pricing.daysPeriod').replace('{n}', '7'), yearlyPrice: '', description: t('plan.trial.desc'), highlighted: false, cta: ctaKey('trial'), ctaHref: ctaHref('trial'), features: planFeatureMap.trial.map((k) => t(k)) },
+      { name: 'starter', display_name: 'Starter', key: 'starter', price: '$20', period: t('pricing.perMonth'), yearlyPrice: '$220', description: t('plan.starter.desc'), highlighted: false, cta: ctaKey('starter'), ctaHref: ctaHref('starter'), features: [...planFeatureMap.starter.map((k) => t(k)), ...(onboardingLabel('starter') ? [onboardingLabel('starter') as string] : [])] },
+      { name: 'pro', display_name: 'Pro', key: 'pro', price: '$99', period: t('pricing.perMonth'), yearlyPrice: '$1,099', description: t('plan.pro.desc'), highlighted: true, cta: ctaKey('pro'), ctaHref: ctaHref('pro'), features: [...planFeatureMap.pro.map((k) => t(k)), ...(onboardingLabel('pro') ? [onboardingLabel('pro') as string] : [])] },
+      { name: 'custom', display_name: 'Custom', key: 'custom', price: t('pricing.contactPrice'), period: '', yearlyPrice: '', description: t('plan.custom.desc'), highlighted: false, cta: ctaKey('custom'), ctaHref: ctaHref('custom'), features: [] },
+    ];
+
+const tablePlans = dbPlans.length > 0 ? dbPlans.filter((p) => p.name !== 'custom') : [];
+const trialDays = dbPlans.find((p) => p.name === 'trial')?.trial_days || 7;
+
+const faqItems = [
+  { question: t('pricing.faq1.q'), answer: t('pricing.faq1.a').replace('{days}', String(trialDays)) },
+  { question: t('pricing.faq2.q'), answer: t('pricing.faq2.a') },
+  { question: t('pricing.faq3.q'), answer: t('pricing.faq3.a').replace('{starter}', formatPrice(onboardingFee.starter)).replace('{pro}', formatPrice(onboardingFee.pro)) },
+  { question: t('pricing.faq4.q'), answer: t('pricing.faq4.a') },
+  { question: t('pricing.faq5.q'), answer: t('pricing.faq5.a') },
+  { question: t('pricing.faq6.q'), answer: t('pricing.faq6.a') },
+  { question: t('pricing.faq7.q'), answer: t('pricing.faq7.a') },
+  { question: t('pricing.faq8.q'), answer: t('pricing.faq8.a') },
+];
+
+const comparisonQuotaRows = [
+  { label: t('pricing.row.trialPeriod'), key: 'trial_days', format: (v: number | null) => v ? t('pricing.daysPeriod').replace('{n}', String(v)) : '—' },
+  { label: t('pricing.row.qaPairs'), key: 'max_qa_pairs' },
+  { label: t('pricing.row.logicFlows'), key: 'max_flows' },
+  { label: t('pricing.row.messagesMonth'), key: 'max_messages_monthly' },
+  { label: t('pricing.row.surveyRespondents'), key: 'max_respondents', format: fmtCount },
+  { label: t('pricing.row.webPages'), key: 'max_web_pages', format: fmtCount },
+  { label: t('pricing.row.workspaceSends'), key: 'max_drive_sends_monthly', format: fmtCount },
+  { label: t('pricing.row.translations'), key: 'max_qa_translations_per_lang_monthly', format: fmtCount },
+];
+const comparisonFeatureRows = [
+  { label: t('pf.aiAutoResponder'), plans: ['trial', 'starter', 'pro'] },
+  { label: t('pf.googlePlugins'), plans: ['starter', 'pro'] },
+  { label: t('pf.calIntegration'), plans: ['pro'] },
+  { label: t('pf.languageTranslations'), plans: ['pro'] },
+  { label: t('pf.superPowersShort'), plans: ['pro'] },
+  { label: t('pf.documentGeneration'), plans: ['pro'] },
+  { label: t('pf.booking'), plans: ['pro'] },
+  { label: t('pf.onboardingAssistance'), plans: ['starter', 'pro'] },
+];
+---
+
+<PageLayout title={t('page.pricing.title')} description={t('page.pricing.description')} canonicalPath={Astro.url.pathname}>
+  <section class="py-20 sm:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <SectionHeading title={t('pricing.title')} subtitle={t('pricing.sub')} />
+
+      <!-- Pricing Toggle -->
+      <div class="flex justify-center mb-12">
+        <div class="inline-flex items-center gap-3 bg-gray-100 rounded-full px-1.5 py-1.5">
+          <button id="toggle-monthly" onclick="togglePricing('monthly')" class="px-5 py-2 text-sm font-semibold rounded-full bg-wa-green text-white transition-all cursor-pointer">{t('pricing.monthly')}</button>
+          <button id="toggle-yearly" onclick="togglePricing('yearly')" class="px-5 py-2 text-sm font-semibold rounded-full text-gray-600 hover:text-gray-800 transition-all cursor-pointer">{t('pricing.yearly')} <span class="text-xs text-wa-green font-normal">{t('pricing.yearlySave')}</span></button>
+        </div>
+      </div>
+
+      <!-- Plan Cards -->
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4">
+        {plans.map((plan) => (
+          plan.key === 'custom' ? (
+            <div class="relative rounded-2xl border border-gray-200 hover:border-gray-300 hover:shadow-md p-6 sm:p-8 flex flex-col items-center justify-center text-center transition-all duration-200">
+              <h3 class="text-xl font-bold text-gray-900 mb-1">{plan.display_name}</h3>
+              <p class="text-sm text-gray-500 mb-8">{t('pricing.customTailored')}</p>
+              <a href={plan.ctaHref} class="block w-full text-center px-5 py-3 rounded-lg font-semibold text-sm border-2 border-wa-green text-wa-green hover:bg-wa-green hover:text-white transition-all">{t('pricing.contactUs')}</a>
+            </div>
+          ) : (
+          <div class:list={['relative rounded-2xl border p-6 sm:p-8 flex flex-col transition-all duration-200', plan.highlighted ? 'border-wa-green shadow-lg shadow-green-500/10 scale-[1.02]' : 'border-gray-200 hover:border-gray-300 hover:shadow-md']}>
+            {plan.highlighted && (<div class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-wa-green text-white text-xs font-semibold rounded-full">{t('pricing.mostPopular')}</div>)}
+            <div class="mb-6">
+              <h3 class="text-xl font-bold text-gray-900 mb-1">{plan.display_name}</h3>
+              <p class="text-sm text-gray-500">{plan.description}</p>
+            </div>
+            <div class="mb-6">
+              <div class="flex items-baseline gap-1 monthly-price" data-monthly={plan.key}>
+                <span class="text-4xl font-extrabold text-gray-900">{plan.price}</span>
+                <span class="text-gray-500">{plan.period}</span>
+              </div>
+              {plan.yearlyPrice && (
+                <div class="flex items-baseline gap-1 yearly-price hidden" data-yearly={plan.key}>
+                  <span class="text-4xl font-extrabold text-gray-900">{plan.yearlyPrice}</span>
+                  <span class="text-gray-500">{t('pricing.yearSuffix')}</span>
+                </div>
+              )}
+            </div>
+            <ul class="space-y-3 mb-8 flex-1">
+              {plan.features.map((feature) => (
+                <li class="flex items-start gap-2 text-sm text-gray-600">
+                  <svg class="w-5 h-5 text-wa-green shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                  {feature}
+                </li>
+              ))}
+            </ul>
+            <a href={plan.ctaHref} class:list={['block w-full text-center px-5 py-3 rounded-lg font-semibold text-sm transition-all', plan.highlighted ? 'bg-wa-green text-white hover:bg-wa-green-dark shadow-sm' : 'border-2 border-wa-green text-wa-green hover:bg-wa-green hover:text-white']}>{t(plan.cta)}</a>
+          </div>
+          )
+        ))}
+      </div>
+
+      <!-- Optional Onboarding Assistance -->
+      <div class="mt-12 rounded-2xl border border-wa-green/30 bg-green-50/40 p-6 sm:p-8">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div class="max-w-2xl">
+            <h3 class="text-xl font-bold text-gray-900 mb-2">{t('pricing.onboardingTitle')}</h3>
+            <p class="text-sm text-gray-600 mb-4">{t('pricing.onboardingBody')}</p>
+            <ul class="space-y-2 text-sm text-gray-600">
+              <li class="flex items-start gap-2"><svg class="w-5 h-5 text-wa-green shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg><span>{t('pricing.onboardingB1')}</span></li>
+              <li class="flex items-start gap-2"><svg class="w-5 h-5 text-wa-green shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg><span>{t('pricing.onboardingB2')}</span></li>
+              <li class="flex items-start gap-2"><svg class="w-5 h-5 text-wa-green shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg><span>{t('pricing.onboardingB3')}</span></li>
+            </ul>
+          </div>
+          <div class="flex flex-col items-center md:items-end gap-4 shrink-0">
+            <div class="flex gap-8 text-center">
+              <div><div class="text-3xl font-extrabold text-gray-900">{formatPrice(onboardingFee.starter)}</div><div class="text-xs text-gray-500 mt-1">{t('pricing.onboardingStarter')}</div></div>
+              <div><div class="text-3xl font-extrabold text-gray-900">{formatPrice(onboardingFee.pro)}</div><div class="text-xs text-gray-500 mt-1">{t('pricing.onboardingPro')}</div></div>
+            </div>
+            <a href={localizePath('/signup', lang)} class="inline-block px-5 py-3 rounded-lg font-semibold text-sm bg-wa-green text-white hover:bg-wa-green-dark transition-all">{t('pricing.addDuringSignup')}</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature Comparison -->
+      <div class="mt-20">
+        <h3 class="text-2xl font-bold text-gray-900 text-center mb-8">{t('pricing.compareTitle')}</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full min-w-[480px]">
+            <thead>
+              <tr class="border-b border-gray-200">
+                <th class="py-4 px-4 text-left text-sm font-semibold text-gray-900">{t('pricing.featureCol')}</th>
+                {tablePlans.map((p) => (<th class:list={['py-4 px-4 text-center text-sm font-semibold', p.name === 'pro' ? 'text-wa-green' : 'text-gray-900']}>{p.display_name}</th>))}
+              </tr>
+            </thead>
+            <tbody>
+              {comparisonQuotaRows.map((row) => (
+                <tr class="border-b border-gray-100">
+                  <td class="py-3 px-4 text-sm text-gray-600">{row.label}</td>
+                  {tablePlans.map((p) => {
+                    const val = (p as any)[row.key];
+                    const display = row.format ? row.format(val) : ((val === null || val === undefined) ? t('pricing.unlimited') : val.toLocaleString());
+                    return <td class:list={['py-3 px-4 text-sm text-center', (val === null || val === undefined) ? 'text-gray-900 font-medium' : 'text-gray-600']}>{display}</td>;
+                  })}
+                </tr>
+              ))}
+              {comparisonFeatureRows.map((row) => (
+                <tr class="border-b border-gray-100">
+                  <td class="py-3 px-4 text-sm text-gray-600">{row.label}</td>
+                  {tablePlans.map((p) => (
+                    <td class="py-3 px-4 text-center">
+                      {row.plans.includes(p.name) ? (<svg class="w-5 h-5 text-wa-green mx-auto" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>) : (<span class="text-gray-400">—</span>)}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="mt-20 max-w-3xl mx-auto">
+        <h3 class="text-2xl font-bold text-gray-900 text-center mb-8">{t('pricing.faqTitle')}</h3>
+        <Accordion items={faqItems} />
+      </div>
+    </div>
+  </section>
+</PageLayout>
+
+<script is:inline>
+  function togglePricing(mode) {
+    var monthlyBtn = document.getElementById('toggle-monthly');
+    var yearlyBtn = document.getElementById('toggle-yearly');
+    if (mode === 'monthly') {
+      monthlyBtn.classList.add('bg-wa-green', 'text-white');
+      monthlyBtn.classList.remove('text-gray-600');
+      yearlyBtn.classList.remove('bg-wa-green', 'text-white');
+      yearlyBtn.classList.add('text-gray-600');
+      document.querySelectorAll('.monthly-price').forEach(function(el) { el.classList.remove('hidden'); });
+      document.querySelectorAll('.yearly-price').forEach(function(el) { el.classList.add('hidden'); });
+    } else {
+      yearlyBtn.classList.add('bg-wa-green', 'text-white');
+      yearlyBtn.classList.remove('text-gray-600');
+      monthlyBtn.classList.remove('bg-wa-green', 'text-white');
+      monthlyBtn.classList.add('text-gray-600');
+      document.querySelectorAll('.monthly-price').forEach(function(el) { el.classList.add('hidden'); });
+      document.querySelectorAll('.yearly-price').forEach(function(el) { el.classList.remove('hidden'); });
+    }
+  }
+</script>

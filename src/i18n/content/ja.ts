@@ -1,0 +1,447 @@
+import type { LocaleContent } from './types';
+
+const ja: LocaleContent = {
+  features: {
+    'auto-responder': {
+      title: 'WhatsApp 自動応答',
+      shortTitle: '自動応答',
+      headline: 'お客様を待たせない',
+      description:
+        'すべてのWhatsAppメッセージにAIを活用した即時応答。ルールベースの照合がよくある質問をミリ秒単位で処理し、残りはスマートなLLMがフォローします。',
+      metaDescription: 'すべてのWhatsAppメッセージにAIの精度で自動応答。ルールベースの照合にスマートなLLMフォールバックを組み合わせ。',
+      benefits: [
+        { title: 'サブ秒の応答', description: 'あいまい一致が、お客様が次のメッセージを打ち終える前に正しい回答を見つけます。' },
+        { title: 'スマートフォールバック', description: 'ルールに一致しない場合、AIが文脈に沿った役立つ応答でサポート — 「理解できません」という定型文ではありません。' },
+        { title: '24時間365日稼働', description: 'あなたのAIエージェントは眠らず、休まず、機嫌を崩しません。' },
+      ],
+      howItWorks: [
+        { title: 'Q&Aを準備', description: 'よくある質問と回答を追加 — CSVからインポートするか、直接入力。' },
+        { title: 'AIを設定', description: 'AIプロバイダーを選び、ブランドのトーンに合わせてシステムプロンプトを調整。' },
+        { title: '運用開始', description: '受信するすべてのWhatsAppメッセージに即座かつ正確な応答が自動で返されます。' },
+      ],
+      useCases: [
+        { title: 'FAQの自動化', description: '「営業時間は？」「住所はどこ？」を手間なく処理。' },
+        { title: '製品のお問い合わせ', description: '価格、在庫、仕様に関する質問に即座に自動応答。' },
+        { title: '時間外サポート', description: '担当チームがオフラインの時も顧客対応を継続。' },
+      ],
+    },
+    'knowledge-base': {
+      title: 'ナレッジベース',
+      shortTitle: 'ナレッジベース',
+      headline: 'ビジネスの専門知識を、いつでも利用可能',
+      description:
+        'AIエージェントが参照する包括的なQ&Aナレッジベースを構築。CSVで何百ものエントリをインポートし、優先度で整理すれば、あいまい一致が毎回最適な回答を見つけます。',
+      metaDescription: 'CSVインポート、あいまい一致、優先度制御を備えたスマートなQ&Aナレッジベースを構築。あなたの専門知識をいつでも利用可能に。',
+      benefits: [
+        { title: '一括インポート', description: 'CSVまたはJSONで何百ものQ&Aペアをアップロード。ナレッジベースが数週間ではなく数分で拡張します。' },
+        { title: 'スマートな照合', description: 'あいまい一致が誤字、表記ゆれ、部分一致を処理 — お客様が完璧な言葉を使う必要はありません。' },
+        { title: '優先度システム', description: '複数の一致が見つかった場合、どの回答を優先するかを制御。' },
+      ],
+      howItWorks: [
+        { title: 'ナレッジを追加', description: 'Q&Aペアを個別に入力、またはスプレッドシートから一括インポート。' },
+        { title: '整理・優先付け', description: '各エントリにカテゴリ、優先度、トリガーフレーズを設定。' },
+        { title: 'テスト・デプロイ', description: '内蔵のテストチャットで回答を検証し、自信を持って運用開始。' },
+      ],
+      useCases: [
+        { title: '製品カタログ', description: 'お客様が任意の製品について質問し、即座に正確な詳細を取得。' },
+        { title: 'ポリシーFAQ', description: '配送、返品、保証 — ポリシーに関する質問を人の介入なしに回答。' },
+        { title: 'オンボーディングガイド', description: '新規顧客がセットアップや利用開始の質問に即座に回答を得られます。' },
+      ],
+    },
+    'logic-flows': {
+      title: 'ロジックフロー',
+      shortTitle: 'ロジックフロー',
+      headline: 'コンバージョンにつなぐ会話を作る',
+      description:
+        '分岐ロジック、条件、アクションを備えた複数ステップの会話フローを作成。予約、審査、注文へお客様を誘導 — すべてコードを1行も書かずに。',
+      metaDescription: '分岐ロジック、条件、変数を備えた複数ステップのWhatsApp会話を構築。コード不要。',
+      benefits: [
+        { title: 'ビジュアルフロービルダー', description: '直感的なステップバイステップエディタで複雑な会話を設計。コーディング不要。' },
+        { title: 'スマートな分岐', description: 'お客様の回答、時間帯、任意の変数に基づいて異なるルートに振り分け。' },
+        { title: '変数システム', description: '会話全体で情報を取得・再利用 — 名前、選択、計算結果。' },
+      ],
+      howItWorks: [
+        { title: 'フローを設計', description: 'メッセージ、質問、条件のステップを追加して会話を構築。' },
+        { title: 'トリガーを設定', description: 'フローを自動的に起動するキーワードやフレーズを定義。' },
+        { title: 'テスト・有効化', description: 'テストモードでフローを walkthrough し、実際の会話を処理するようデプロイ。' },
+      ],
+      useCases: [
+        { title: 'リード審査', description: '審査質問をして、有望なリードを営業チームに自動的に振り分け。' },
+        { title: 'アポ予約', description: '空き枠を案内し、Google Calendarで予約を確定。' },
+        { title: '注文処理', description: '製品の選択、カスタマイズ、注文の確定までお客様を誘導。' },
+      ],
+    },
+    'ai-chatbot': {
+      title: 'AIチャットボット',
+      shortTitle: 'AIチャットボット',
+      headline: 'あなたのブランドを、どんなAIでも強化',
+      description:
+        'OpenAI、Anthropic、z.aiからお好みのモデルまで選択可能。ビジネスに完璧に合うよう性格、トーン、専門性を設定。マルチプロバイダー対応でロックインされることはありません。',
+      metaDescription: 'WhatsApp向けマルチプロバイダーAIチャットボット。OpenAI、Anthropic、z.ai、または独自モデルを選択。あなたのブランド、あなたのAI。',
+      benefits: [
+        { title: 'マルチプロバイダー', description: 'OpenAI、Anthropic、z.ai、llama.cpp、OpenRouter間を設定を変えずに切り替え。' },
+        { title: 'ブランドボイス', description: 'システムプロンプトをカスタマイズして、AIにブランドのトーンとスタイルで話させます。' },
+        { title: '文脈対応', description: 'AIが会話の履歴を理解し、ナレッジベースを活用して正確な回答を提供。' },
+      ],
+      howItWorks: [
+        { title: 'プロバイダーを選択', description: 'OpenAI、Anthropic、z.ai、またはOpenAI互換のエンドポイントを選択。' },
+        { title: 'プロンプトをカスタマイズ', description: 'ブランドの声と専門性を反映したシステムプロンプトを作成。' },
+        { title: 'モデルを設定', description: 'ニーズと予算に合うモデルを選択 — 高速・低コストから高性能・高精度まで。' },
+      ],
+      useCases: [
+        { title: 'カスタマーサポート', description: '製品とポリシーを理解するAIで複雑なサポート問い合わせを処理。' },
+        { title: '営業アシスタント', description: '製品を提案し、技術的な質問に答え、購買の決断を後押し。' },
+        { title: 'コンサルテーションボット', description: 'あなたの専門知識に基づき初回コンサルティングや評価を提供。' },
+      ],
+    },
+    'team-inbox': {
+      title: 'チーム受信箱',
+      shortTitle: 'チーム受信箱',
+      headline: 'AIが定型的な対応を。あなたは残りを。',
+      description:
+        'すべてのWhatsApp会話をリアルタイムにモニタリング。AIだけでは足りない時に人的な返信で介入。お客様に気付かれることなく、AIと人の担当者間をシームレスに引き継ぎ。',
+      metaDescription: 'WhatsApp会話をリアルタイムにモニタリング。AIだけでは足りない時に人的返信で介入。シームレスな引き継ぎ。',
+      benefits: [
+        { title: 'ライブモニタリング', description: '自動更新されるメッセージリストで会話の展開をリアルタイムに確認。' },
+        { title: 'ヒューマンハンドオフ', description: '手動返信で任意の会話を引き継ぎ。あなたが完了するまでAIは控えめに。' },
+        { title: '完全な履歴', description: 'すべてのメッセージが記録 — いつでも会話を検索、フィルタ、確認可能。' },
+      ],
+      howItWorks: [
+        { title: 'AIが処理', description: '受信メッセージにナレッジベースとフローに基づき即座にAI応答。' },
+        { title: 'あなたがモニタリング', description: 'ダッシュボードからすべての会話を確認。リアルタイム更新、更新ボタン不要。' },
+        { title: '必要時に介入', description: '手動返信で引き継ぎ。あなたが完了するまでAIは一時停止し、再開します。' },
+      ],
+      useCases: [
+        { title: 'エスカレーション管理', description: '複雑な問題は担当者にエスカレーションし、AIは簡単なものを処理。' },
+        { title: 'VIP対応', description: '重要顧客の会話に介入し、パーソナルな対応を提供。' },
+        { title: '品質保証', description: 'AIの会話をレビューし、応答を修正して精度を継続的に向上。' },
+      ],
+    },
+    campaigns: {
+      title: 'WhatsAppキャンペーン',
+      shortTitle: 'キャンペーン',
+      headline: 'お客様が実際に読む場所でリーチ',
+      description:
+        'WhatsAppメッセージは開封率98％。ターゲットを絞ったキャンペーン、プロモーション、最新情報をお客様のスマホに直接送信。WhatsAppポリシーに準拠したテンプレートベースのメッセージング。',
+      metaDescription: '開封率98%のWhatsAppキャンペーンを送信。テンプレートベースのメッセージング、ターゲット配信、ポリシー準拠。',
+      benefits: [
+        { title: '開封率98%', description: 'WhatsAppメッセージは開封されます。メールではこの注目度に太刀打ちできません。' },
+        { title: 'テンプレートベース', description: '事前承認されたメッセージテンプレートでキャンペーンがWhatsAppポリシーに準拠。' },
+        { title: 'ターゲット配信', description: 'オーディエンスをセグメント化し、適切な人に適切なメッセージを送信。' },
+      ],
+      howItWorks: [
+        { title: 'テンプレートを作成', description: '動的変数を使ってパーソナライズされたメッセージテンプレートを設計。' },
+        { title: '承認を取得', description: 'テンプレートをWhatsAppに承認申請 — 通常24時間以内に承認。' },
+        { title: 'キャンペーンを送信', description: '選択した連絡先にワンクリックでメッセージを配信。' },
+      ],
+      useCases: [
+        { title: 'フラッシュセール', description: 'お客様が実際に見て行動する、時間限定のプロモーションを送信。' },
+        { title: '予約リマインダー', description: 'WhatsAppでの自動予約リマインダーで無断キャンセルを削減。' },
+        { title: '製品ローンチ', description: '新製品やサービスを顧客ベースに直接アナウンス。' },
+      ],
+    },
+    analytics: {
+      title: '分析ダッシュボード',
+      shortTitle: '分析',
+      headline: '何が効いているかを把握。良くないものを改善。',
+      description:
+        'メッセージ量、応答ソース、トリガーの人気度、会話パターンを追跡。AIエージェントのパフォーマンスと改善すべき点を正確に把握。',
+      metaDescription: 'WhatsAppのメッセージ量、AIパフォーマンス、人気トピック、会話パターンを追跡。データ主導の最適化。',
+      benefits: [
+        { title: 'メッセージインサイト', description: '受信/送信の量、応答時間、会話の傾向を時系列で追跡。' },
+        { title: 'ソース内訳', description: 'ルール、AI、フロー、人的担当者間で応答がどう分かれるかを確認。' },
+        { title: '人気トピック', description: '最もよく聞かれる質問と最もよく使われるフローを見つけて設定を最適化。' },
+      ],
+      howItWorks: [
+        { title: 'メッセージが流入', description: 'すべてのWhatsAppインタラクションが自動的に追跡・分類。' },
+        { title: 'ダッシュボードが更新', description: 'チャートと指標が毎日最新データで更新。' },
+        { title: 'インサイトを活用', description: 'データを使って抜けているQ&Aを追加し、フローを改善し、AIプロンプトを最適化。' },
+      ],
+      useCases: [
+        { title: 'パフォーマンス追跡', description: 'AIが処理した会話数と人的担当者の処理数を監視。' },
+        { title: 'ギャップ分析', description: 'AIが答えられない質問を見つけ、ナレッジベースに追加。' },
+        { title: 'ROI測定', description: 'メッセージ量を追跡して時間とコストの削減を定量化。' },
+      ],
+    },
+    'document-generation': {
+      title: 'ドキュメント生成',
+      shortTitle: 'ドキュメント生成',
+      headline: '会話からドキュメントまで数秒で',
+      description:
+        'チャットデータからExcelスプレッドシート、Wordドキュメント、PDF、Google Docs、Google Sheetsを直接生成。請求書、レポート、見積書 — 自動で作成・送信。',
+      metaDescription: 'WhatsAppの会話からExcel、Word、PDF、Google Docs、Sheetsを生成。請求書、見積書、レポートを自動で。',
+      benefits: [
+        { title: '複数フォーマット', description: 'Excel、Word、PDF、ネイティブのGoogle DocsとSheetsを生成 — ワークフローに必要なもの何でも。' },
+        { title: 'データ駆動', description: '会話の変数と文脈を使ってドキュメントに実際の顧客データを入力。' },
+        { title: '自動配信', description: 'ドキュメントが自動的に生成され、WhatsApp経由でお客様に送信。' },
+      ],
+      howItWorks: [
+        { title: 'ドキュメントを定義', description: 'フローの生成ステップで列、データソース、フォーマットを設定。' },
+        { title: 'データを収集', description: 'ロジックフローが会話を通じて情報を収集。' },
+        { title: '生成・送信', description: 'ドキュメントが作成されお客様に配信 — 手作業のステップなし。' },
+      ],
+      useCases: [
+        { title: '請求書生成', description: '注文の詳細を収集し、プロフェッショナルな請求書を自動生成。' },
+        { title: '見積書ビルダー', description: '要件を案内し、整形された見積書ドキュメントを作成。' },
+        { title: 'レポート作成', description: 'チャットでデータポイントを収集し、構造化されたレポートにまとめ上げ。' },
+      ],
+    },
+    'super-powers': {
+      title: 'スーパーパワー',
+      shortTitle: 'スーパーパワー',
+      headline: 'あなたのAIエージェントにはスーパーパワーがある',
+      description:
+        '画像認識、ウェブ検索、ウェブ読み取り、GitHubドキュメントへのアクセス — すべて会話中にAIエージェントが使える機能として利用可能。',
+      metaDescription: 'WhatsApp AIエージェントに画像認識、ウェブ検索、ウェブ読み取り、GitHubドキュメントアクセスを。ビジネスにスーパーパワーを。',
+      benefits: [
+        { title: '画像認識', description: 'お客様が写真を送ると、AIが理解 — 製品、ドキュメント、スクリーンショット、何でも。' },
+        { title: 'ウェブ検索', description: 'AIがウェブを検索してリアルタイム情報を取得し、正確に質問に回答。' },
+        { title: 'ウェブリーダー', description: 'お客様が共有した任意のURLからコンテンツを抽出・要約。' },
+      ],
+      howItWorks: [
+        { title: 'スーパーパワーを有効化', description: '設定で画像認識、ウェブ検索、ウェブリーダー、Zreadを有効化。' },
+        { title: 'フローを構築', description: '画像を分析する画像認識ステップや、リアルタイムデータを取得するウェブ検索ステップを追加。' },
+        { title: '回答を提供', description: 'AIが会話中にこれらの機能を使って、より良い回答を提供。' },
+      ],
+      useCases: [
+        { title: '製品識別', description: 'お客様が製品の写真を送ると、即座に識別と価格を取得。' },
+        { title: 'ドキュメント処理', description: '請求書、レシート、契約書の写真からテキストを抽出。' },
+        { title: 'リアルタイム検索', description: '現在の価格、在庫、ニュースをウェブで検索して質問に回答。' },
+      ],
+    },
+  },
+
+  industries: {
+    ecommerce: {
+      title: 'Eコマース',
+      headline: 'WhatsAppをトップの販売チャネルに',
+      description: '製品のお問い合わせ、注文の最新情報、返品リクエスト、カゴ落ち回復を自動化。AIエージェントがWhatsAppで顧客ジャーニー全体を処理します。',
+      metaDescription: 'Eコマース向けWhatsApp AI。製品のお問い合わせ、注文追跡、返品、カスタマーサポートを自動化。',
+      painPoints: [
+        'すばやい回答が得られずカートを放棄する顧客',
+        '「私の注文はどこ？」という問い合わせで対応チームが逼迫',
+        '顧客の好むチャネルでリーチする方法がない',
+      ],
+      useCases: [
+        { title: '製品カタログアシスタント', description: 'お客様が必要なものを描写すると、AIが価格と在庫付きで適切な製品を提案。' },
+        { title: '注文追跡', description: 'お客様が「私の注文はどこ？」と聞くと即座に注文ステータスを更新。' },
+        { title: '返品処理', description: '自動フローとドキュメント生成で返品プロセスをご案内。' },
+      ],
+    },
+    healthcare: {
+      title: 'ヘルスケア',
+      headline: 'より良い患者コミュニケーション、より少ない管理業務',
+      description: '予約のスケジューリング、処方箋のお問い合わせ、患者のフォローアップを自動化。HIPAAを考慮した設計で安全・暗号化されたコミュニケーション。',
+      metaDescription: 'ヘルスケア向けWhatsApp AI。予約のスケジューリング、患者フォローアップ、処方箋のお問い合わせを自動化。',
+      painPoints: [
+        '予約リクエストで電話回線がパンク',
+        'スタッフが繰り返しのスケジュール調整に何時間も費やす',
+        '患者が営業時間外に連絡を取るのに苦労',
+      ],
+      useCases: [
+        { title: '予約スケジューリング', description: '患者がGoogle Calendar連携でWhatsApp経由で予約、変更、キャンセル可能。' },
+        { title: '処方箋のお問い合わせ', description: '処方箋の再調剤、用法用量、薬局の営業時間について自動応答。' },
+        { title: '患者トリアージ', description: 'ロジックフローが症状チェックを案内し、適切な診療科へ誘導。' },
+      ],
+    },
+    education: {
+      title: '教育',
+      headline: '学生と保護者のすべての質問に即座に回答',
+      description: '入学のお問い合わせ、コース情報、スケジュール検索、授料支払いのリマインダーを自動化。AIが何千人もの学生を余裕で処理します。',
+      metaDescription: '教育向けWhatsApp AI。入学のお問い合わせ、コース情報、学生とのコミュニケーションを自動化。',
+      painPoints: [
+        '繰り返しの入学質問でスタッフが逼迫',
+        'ピーク時に保護者が入試課に連絡できない',
+        '学生が営業時間外に回答を必要とする',
+      ],
+      useCases: [
+        { title: '入試アシスタント', description: 'プログラムの詳細、応募要件、出願状況のお問い合わせに自動で回答。' },
+        { title: 'コース情報', description: '学生がスケジュール、シラバス、講師情報の詳細を即座に取得。' },
+        { title: '授料リマインダー', description: 'WhatsAppでの自動支払いリマインダーと分割払いプランの案内。' },
+      ],
+    },
+    'real-estate': {
+      title: '不動産',
+      headline: 'リード審査と内見予約を自動で',
+      description: '物件のお問い合わせを獲得し、買い手を審査し、内見を予約し、物件ドキュメントを送信 — すべてWhatsAppで自動化。',
+      metaDescription: '不動産向けWhatsApp AI。リード審査、内見予約、物件ドキュメントの送信を自動化。',
+      painPoints: [
+        '何百もの物件のお問い合わせがあるが審査済みリードは少ない',
+        '内見の調整がたらい回しの悪夢',
+        '見込み客が離れる前に十分な速さで応答できない',
+      ],
+      useCases: [
+        { title: '物件マッチング', description: '買い手が理想の物件を描写すると、AIが写真と詳細付きで一致する物件を提案。' },
+        { title: '内見スケジューラー', description: '物件内見の自動カレンダー予約と、リマインダー・確認。' },
+        { title: 'ドキュメント配信', description: '物件パンフレット、間取り図、価格表をPDFドキュメントとして自動生成・送信。' },
+      ],
+    },
+    hospitality: {
+      title: 'ホスピタリティ',
+      headline: '到着前からゲストを魅了',
+      description: '予約確認、ルームサービスリクエスト、コンシェルジュの推奨、ゲストフィードバックを自動化。WhatsAppが新しいフロントデスクに。',
+      metaDescription: 'ホスピタリティ向けWhatsApp AI。予約、コンシェルジュサービス、ゲストコミュニケーションを自動化。',
+      painPoints: [
+        'ゲストはいつでも即時の応答を期待',
+        'コンシェルジュリクエストがシフト間で迷子に',
+        '宿泊後のフィードバック収集が一貫しない',
+      ],
+      useCases: [
+        { title: '予約アシスタント', description: 'ゲストが空き状況を確認し、部屋を予約し、WhatsAppで即座に確認を受領。' },
+        { title: 'コンシェルジュサービス', description: 'レストラン、アクティビティ、交通手段についてAIを活用した推奨を提供。' },
+        { title: 'ゲストフィードバック', description: '宿泊後の自動調査とレビュー依頼でオンライン評価を向上。' },
+      ],
+    },
+    restaurants: {
+      title: 'レストラン',
+      headline: '電話に出ることなく注文と予約を受付',
+      description: 'WhatsApp注文、予約管理、メニューのお問い合わせ、配信の最新情報 — すべて自動処理され、スタッフは料理に集中。',
+      metaDescription: 'レストラン向けWhatsApp AI。注文受付、予約管理、顧客への最新情報を自動化。',
+      painPoints: [
+        'ピーク時に電話が鳴り止まない',
+        'スタッフが注文と予約を同時に処理できない',
+        '顧客は注文前にメニューを見たい',
+      ],
+      useCases: [
+        { title: 'メニューアシスタント', description: '顧客がメニューを閲覧し、材料について質問し、栄養情報を即座に取得。' },
+        { title: '予約受付', description: '日付、時間、人数、特別リクエスト付きで自動テーブル予約。' },
+        { title: '注文の最新情報', description: 'リアルタイムの配信・受取ステータスをWhatsAppでプロアクティブに送信。' },
+      ],
+    },
+    fitness: {
+      title: 'フィットネス',
+      headline: '会員をエンゲージさせ、いつでもクラスを予約',
+      description: 'クラス予約、会員のお問い合わせ、スケジュール検索、ワークアウトのヒントを自動化。あなたのAIパーソナルトレーナーは休みません。',
+      metaDescription: 'フィットネススタジオ向けWhatsApp AI。クラス予約、会員のお問い合わせ、会員エンゲージメントを自動化。',
+      painPoints: [
+        'クラス予約リクエストで受付スタッフが逼迫',
+        '会員がスケジュールと価格について同じ質問を繰り返す',
+        'リマインダーシステムなしで無断キャンセルが収益を圧迫',
+      ],
+      useCases: [
+        { title: 'クラス予約', description: '会員がスケジュールを表示し、空きを確認し、WhatsAppで直接クラスを予約。' },
+        { title: '会員情報', description: 'プラン、価格、設備、会員特典について即座に回答。' },
+        { title: 'ワークアウトのヒント', description: '会員の目標に基づいたAIを活用したフィットネスのアドバイスと運動の提案。' },
+      ],
+    },
+    'professional-services': {
+      title: 'プロフェッショナルサービス',
+      headline: '管理業務の時間を減らし、顧客により多くの時間を',
+      description: '顧客インテーク、予約のスケジューリング、ドキュメント収集、進捗の最新情報を自動化。AIの効率性で支えられたプロフェッショナルサービス。',
+      metaDescription: 'プロフェッショナルサービス向けWhatsApp AI。顧客インテーク、スケジューリング、コミュニケーションを自動化。',
+      painPoints: [
+        '顧客インテークにたらい回しが多すぎる',
+        'スケジュールの競合がみんなの時間を無駄に',
+        '顧客があなたが提供できるより早いコミュニケーションを期待',
+      ],
+      useCases: [
+        { title: '顧客インテーク', description: '自動フローが顧客情報、案件の詳細、必要なドキュメントを収集。' },
+        { title: '予約管理', description: 'Google Calendar経由で顧客との打ち合わせをスケジュール、変更、リマインダー送信。' },
+        { title: 'ステータスの最新情報', description: '自動進捗更新とマイルストーン通知で顧客を常に把握させます。' },
+      ],
+    },
+    automotive: {
+      title: '自動車',
+      headline: '試乗からサービスリマインダーまで — すべてWhatsAppで',
+      description: '車両のお問い合わせ、試乗予約、サービス予約、メンテナンスリマインダーを自動化。ショールームは閉まりません。',
+      metaDescription: '自動車向けWhatsApp AI。車両のお問い合わせ、試乗予約、サービスリマインダーを自動化。',
+      painPoints: [
+        '何百もの車両のお問い合わせがあるが全部に応答する時間がない',
+        'サービス予約のスケジュールが手作業で間違いやすい',
+        '顧客がメンテナンススケジュールを忘れ収益を失う',
+      ],
+      useCases: [
+        { title: '車両お問い合わせボット', description: '顧客がモデル、仕様、価格、在庫について質問 — すべて即座に回答。' },
+        { title: '試乗予約', description: 'カレンダー連携とリマインダー付きで試乗のスケジュールを自動化。' },
+        { title: 'サービスリマインダー', description: '走行距離と期間に基づいたプロアクティブなメンテナンスリマインダー。' },
+      ],
+    },
+  },
+
+  solutions: {
+    marketing: {
+      title: 'マーケティング向け',
+      headline: 'WhatsAppを最高のマーケティングチャネルに',
+      description:
+        'WhatsAppでリードを獲得し、見込み客を育成し、コンバージョンを後押し — お客様が実際に注意を払う場所で。キャンペーンを自動化し、成果を追跡し、オーディエンスを成長させます。',
+      metaDescription: 'WhatsAppを最も効果的なマーケティングチャネルに。リードを獲得し、キャンペーンを自動化し、コンバージョンを後押し。',
+      painPoints: [
+        { title: '実際に注意を払う顧客にリーチできますか？', description: 'メールマーケティングの平均開封率は20%。WhatsAppは98% — メッセージが実際に見られます。' },
+        { title: '見込み客が離れる前に応答できますか？', description: '1分の遅延がリードのコンバージョンを10%低下させます。あなたのAIは24時間365日即座に応答。' },
+        { title: 'より多くの人を雇わずに各メッセージをパーソナライズできますか？', description: '全員に同じ定型メッセージを送っていませんか？AIがすべてのインタラクションをパーソナルに。' },
+      ],
+      features: [
+        { title: 'WhatsAppキャンペーン', description: 'テンプレートベースのキャンペーンでターゲットを絞ったメッセージを配信。' },
+        { title: 'リード獲得フロー', description: '見込み客を審査・情報を取得する自動フロー。' },
+        { title: 'ナレッジベースマーケティング', description: 'Q&Aに製品の推奨とプロモーションの回答を追加。' },
+        { title: '分析', description: 'キャンペーンの成果、メッセージ量、コンバージョン率を追跡。' },
+      ],
+      stats: [{ label: 'WhatsApp開封率' }, { label: 'より高いエンゲージメント' }, { label: 'より良いクリック率' }],
+    },
+    sales: {
+      title: '営業向け',
+      headline: 'WhatsAppでより早く成約',
+      description:
+        'リードを自動審査し、予約をスケジュールし、見積書と提案書を送信し、成約 — すべてWhatsAppで。AI営業エージェントが24時間365日稼働。',
+      metaDescription: 'WhatsAppでより早く成約。リード審査、予約、見積書生成、24時間365日のコンバージョン。',
+      painPoints: [
+        { title: '時間外のリードを獲得できますか？', description: '時間外に入ってきたリードは朝までに冷えます。AIが即座に、いつでも対応。' },
+        { title: '未審査のリードで時間を無駄するのをやめられますか？', description: '未審査リードに何時間も無駄に。ロジックフローが自動審査し、有望な見込み客に集中。' },
+        { title: '見積書と提案書を数秒で送れますか？', description: '会話から直接、プロフェッショナルな見積書、提案書、請求書を生成・送信。' },
+      ],
+      features: [
+        { title: 'リード審査フロー', description: '担当チームが関与する前にリードをスコアリング・審査する自動複数ステップフロー。' },
+        { title: '予約予約', description: 'Google Calendar連携で顧客がチャット内で直接打ち合わせを予約可能。' },
+        { title: 'ドキュメント生成', description: '会話データから見積書、請求書、提案書を自動生成。' },
+        { title: 'ヒューマンハンドオフ', description: 'リードが成約準備完了時に営業担当へシームレスに引き継ぎ。' },
+      ],
+      stats: [{ label: 'より短い営業サイクル' }, { label: 'より早い対応' }, { label: 'リード獲得' }],
+    },
+    support: {
+      title: 'サポート向け',
+      headline: '24時間眠らないAIを活用したサポート',
+      description:
+        'あなたのビジネスを熟知したAIで、80%のサポート問い合わせを自動解決。複雑な問題は担当者にシームレスにエスカレーション。お客様はいつでも即座にサポートを得られます。',
+      metaDescription: '24時間眠らないAIを活用したWhatsAppサポート。即座で正確な応答で80%の問い合わせを自動解決。',
+      painPoints: [
+        { title: '同じ質問に繰り返し答えるのをやめられますか？', description: '繰り返しの質問が担当者の時間を消費。AIが定型業務を処理し、人が複雑なものを。' },
+        { title: '24時間365日のサポートを提供できますか？', description: '顧客は夜11時に助けを必要とします。AIエージェントは常に正確な回答で利用可能。' },
+        { title: '問題を時間ではなく数秒で解決できますか？', description: '顧客はメールの返信を何時間も待ちます。WhatsAppサポートは数秒で回答。' },
+      ],
+      features: [
+        { title: 'ナレッジベース', description: 'よくある質問を即座に処理する包括的なQ&Aシステム。' },
+        { title: 'スマートエスカレーション', description: 'AIは人への引き継ぎタイミングを把握。シームレスな移行、コンテキストの喪失なし。' },
+        { title: 'チーム受信箱', description: 'すべての会話をモニタリングし、必要時に介入し、応答指標を追跡。' },
+        { title: 'スーパーパワー', description: '写真ベースのサポートに画像認識、リアルタイム回答にウェブ検索。' },
+      ],
+      stats: [{ label: '問い合わせ自動解決' }, { label: 'より少ない担当者の負担' }, { label: '対応時間' }],
+    },
+  },
+
+  testimonials: {
+    'Nimrod Chuang': {
+      role: '',
+      company: 'BACE Engineering Pte Ltd',
+      quote: '忙しすぎて対応できないせいで、見込み客が放置されることはもうありません。waaiのおかげで、これまで以上に素早くリードを獲得し見積もりを作成できます！',
+    },
+    'Steven Lau': {
+      role: '',
+      company: 'OUTSOURCE2US',
+      quote: '私はいつも外出ばかりしています。メッセージに返信するのは手間で気が散る原因でした。ついに、いつでもどこでも安心できるようになりました。',
+    },
+    'Priya Sharma': {
+      role: 'カスタマーサクセスリード',
+      company: 'CloudServe Solutions',
+      quote: 'ロジックフローは素晴らしいです。1日で完全なリード審査システムを構築できました。以前は営業チームがリード1件につき30分かかっていたのが、今は30秒です。',
+    },
+  },
+
+  videoTitles: {
+    'FYWVnfP-EEo': '頼れる助っ人',
+    PWM3RanP8rQ: '安心感',
+    '--8IlCVWsNI': '失われた機会',
+    '14lt0wRuMw4': '言葉のジレンマ？',
+  },
+};
+
+export default ja;

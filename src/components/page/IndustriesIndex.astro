@@ -1,0 +1,86 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import SectionHeading from '../shared/SectionHeading.astro';
+import CTAButton from '../shared/CTAButton.astro';
+import { getIndustries } from '../../i18n/content';
+import { getLangFromUrl, useTranslations, localizePath } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const industries = getIndustries(lang);
+
+const industryIcons: Record<string, string> = {
+  'ecommerce': '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>',
+  'healthcare': '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>',
+  'education': '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>',
+  'real-estate': '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>',
+  'hospitality': '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>',
+  'restaurants': '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>',
+  'fitness': '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>',
+  'professional-services': '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>',
+  'automotive': '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 17h.01M16 17h.01M3 11l1.5-5A2 2 0 016.4 4h11.2a2 2 0 011.9 1.36L21 11M3 11h18M3 11v6a1 1 0 001 1h1a1 1 0 001-1v-1h12v1a1 1 0 001 1h1a1 1 0 001-1v-6"/></svg>',
+};
+---
+
+<PageLayout
+  title={`${t('breadcrumb.industries')} — waai`}
+  description={t('industry.heroSub')}
+  canonicalPath={Astro.url.pathname}
+>
+  <!-- Hero -->
+  <section class="relative py-20 sm:py-28 bg-gradient-to-b from-green-50 to-white overflow-hidden">
+    <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle, #25D366 1px, transparent 1px); background-size: 24px 24px;"></div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mx-auto text-center">
+        <span class="inline-block px-3 py-1 text-xs font-semibold text-wa-green bg-green-50 rounded-full uppercase tracking-wider mb-4">
+          {t('breadcrumb.industries')}
+        </span>
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight mb-6">
+          {t('industry.heroTitle')}
+        </h1>
+        <p class="text-lg sm:text-xl text-gray-600 leading-relaxed mb-8">
+          {t('industry.heroSub')}
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <CTAButton href={localizePath('/signup', lang)} size="lg">{t('cta.startTrial')}</CTAButton>
+          <CTAButton href={localizePath('/pricing', lang)} variant="secondary" size="lg">{t('cta.viewPricing')}</CTAButton>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Industry Grid -->
+  <section class="py-20 sm:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <SectionHeading title={t('industry.chooseTitle')} subtitle={t('industry.chooseSub')} align="center" />
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {industries.map((industry) => (
+          <a href={localizePath(`/industries/${industry.slug}`, lang)} class="group block bg-white rounded-2xl border border-gray-100 p-8 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:border-wa-green/20">
+            <div class="w-14 h-14 bg-green-50 rounded-xl flex items-center justify-center mb-5 text-wa-green group-hover:bg-wa-green group-hover:text-white transition-colors duration-200">
+              <Fragment set:html={industryIcons[industry.slug] || industryIcons['ecommerce']} />
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2 group-hover:text-wa-green transition-colors">{industry.title}</h3>
+            <p class="text-gray-600 text-sm leading-relaxed mb-4">{industry.description}</p>
+            <div class="flex items-center gap-1 text-sm font-medium text-wa-green">
+              {t('home.features.learnMore')}
+              <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-20 sm:py-24 bg-gray-50">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">{t('industry.notSeeTitle')}</h2>
+      <p class="text-lg text-gray-600 mb-8">{t('industry.notSeeBody')}</p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <CTAButton href={localizePath('/signup', lang)} size="lg">{t('cta.startTrial')}</CTAButton>
+        <CTAButton href={localizePath('/contact', lang)} variant="secondary" size="lg">{t('industry.talkToUs')}</CTAButton>
+      </div>
+    </div>
+  </section>
+</PageLayout>

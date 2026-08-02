@@ -1,5 +1,8 @@
 ---
 import SectionHeading from '../shared/SectionHeading.astro';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <section class="py-20 sm:py-24 bg-wa-teal relative overflow-hidden">
@@ -9,30 +12,26 @@ import SectionHeading from '../shared/SectionHeading.astro';
   </div>
   <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <SectionHeading
-      title="Built for Reliability. Designed for Growth."
-      subtitle="Enterprise-grade infrastructure powering businesses around the clock."
-      badge="Infrastructure"
-    >
-      <Fragment slot="subtitle">
-        <p class="text-lg text-green-100/80 leading-relaxed">Enterprise-grade infrastructure powering businesses around the clock.</p>
-      </Fragment>
-    </SectionHeading>
+      title={t('home.stats.title')}
+      subtitle={t('home.stats.subtitle')}
+      badge={t('home.stats.badge')}
+    />
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 mt-12">
       <div class="text-center">
         <div class="text-4xl sm:text-5xl font-extrabold text-white mb-2">99.9%</div>
-        <div class="text-green-200 text-sm font-medium">Uptime SLA</div>
+        <div class="text-green-200 text-sm font-medium">{t('home.stats.uptime')}</div>
       </div>
       <div class="text-center">
         <div class="text-4xl sm:text-5xl font-extrabold text-wa-green mb-2">&lt;1s</div>
-        <div class="text-green-200 text-sm font-medium">Response Time</div>
+        <div class="text-green-200 text-sm font-medium">{t('home.stats.response')}</div>
       </div>
       <div class="text-center">
         <div class="text-4xl sm:text-5xl font-extrabold text-white mb-2">24/7</div>
-        <div class="text-green-200 text-sm font-medium">AI Availability</div>
+        <div class="text-green-200 text-sm font-medium">{t('home.stats.availability')}</div>
       </div>
       <div class="text-center">
         <div class="text-4xl sm:text-5xl font-extrabold text-wa-green mb-2">AES</div>
-        <div class="text-green-200 text-sm font-medium">Encrypted at Rest</div>
+        <div class="text-green-200 text-sm font-medium">{t('home.stats.encrypted')}</div>
       </div>
     </div>
   </div>
