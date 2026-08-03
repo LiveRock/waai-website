@@ -2,17 +2,35 @@
 import PageLayout from '../../layouts/PageLayout.astro';
 import SectionHeading from '../shared/SectionHeading.astro';
 import CTAButton from '../shared/CTAButton.astro';
+import { getCollection } from 'astro:content';
 import { getLangFromUrl, useTranslations, localizePath } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-// Placeholder posts (content collection is empty). Copy stays in English for now.
-const posts = [
-  { slug: 'whatsapp-ai-agent-guide', title: 'The Complete Guide to WhatsApp AI Agents for Business', excerpt: 'Learn how AI-powered WhatsApp agents transform customer service, automate responses, and drive sales — without adding headcount. Covers setup, best practices, and ROI expectations.', date: '2026-04-28', readTime: '8 min read', category: 'Guides', categoryColor: 'bg-green-50 text-green-700' },
-  { slug: 'logic-flows-vs-knowledge-base', title: 'Logic Flows vs Knowledge Base: When to Use Each', excerpt: 'Not every customer question needs an AI response. Discover how rule-based logic flows and AI-powered knowledge base work together to deliver faster, more accurate answers at lower cost.', date: '2026-04-15', readTime: '6 min read', category: 'Product', categoryColor: 'bg-blue-50 text-blue-700' },
-  { slug: 'google-workspace-automation', title: '5 Ways Google Workspace Integration Saves Your Team Hours', excerpt: "From automated appointment booking to generating invoices as Google Docs, see how businesses are using waai's Google integration to eliminate manual tasks and delight customers.", date: '2026-04-02', readTime: '5 min read', category: 'Integrations', categoryColor: 'bg-yellow-50 text-yellow-700' },
-];
+const categoryColor: Record<string, string> = {
+  Guides: 'bg-green-50 text-green-700',
+  Product: 'bg-blue-50 text-blue-700',
+  Comparisons: 'bg-purple-50 text-ai-purple',
+  Integrations: 'bg-yellow-50 text-yellow-700',
+  Industry: 'bg-teal-50 text-wa-teal',
+  News: 'bg-gray-100 text-gray-700',
+};
+
+// Published posts, newest first. Drafts (draft: true) are hidden.
+const all = (await getCollection('blog'))
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+const readTime = (body: string | undefined) => {
+  const words = (body ?? '').trim().split(/\s+/).filter(Boolean).length;
+  return `${Math.max(1, Math.round(words / 200))} min read`;
+};
+
+const featured = all[0];
+const rest = all.slice(1);
 ---
 
 <PageLayout title={t('page.blog.title')} description={t('page.blog.description')} canonicalPath={Astro.url.pathname}>
@@ -20,37 +38,43 @@ const posts = [
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <SectionHeading title={t('blog.heading')} subtitle={t('blog.sub')} />
 
-      <!-- Featured Post -->
-      <a href={localizePath(`/blog/${posts[0].slug}`, lang)} class="block mb-12 group">
-        <div class="bg-gray-50 rounded-2xl border border-gray-200 p-8 sm:p-10 hover:border-gray-300 hover:shadow-md transition-all">
-          <div class="flex items-center gap-3 mb-4">
-            <span class={`px-3 py-1 text-xs font-semibold rounded-full ${posts[0].categoryColor}`}>{posts[0].category}</span>
-            <span class="text-sm text-gray-400">{posts[0].date}</span>
-            <span class="text-sm text-gray-400">{posts[0].readTime}</span>
-          </div>
-          <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 group-hover:text-wa-teal transition-colors">{posts[0].title}</h2>
-          <p class="text-lg text-gray-600 leading-relaxed mb-4">{posts[0].excerpt}</p>
-          <span class="text-wa-green font-semibold text-sm group-hover:underline">{t('blog.readArticle')} &rarr;</span>
-        </div>
-      </a>
+      {all.length === 0 ? (
+        <p class="text-center text-gray-500 py-16">{t('blog.empty')}</p>
+      ) : (
+        <>
+          {featured && (
+            <a href={localizePath(`/blog/${featured.id}`, lang)} class="block mb-12 group">
+              <div class="bg-gray-50 rounded-2xl border border-gray-200 p-8 sm:p-10 hover:border-gray-300 hover:shadow-md transition-all">
+                <div class="flex items-center gap-3 mb-4">
+                  <span class={`px-3 py-1 text-xs font-semibold rounded-full ${categoryColor[featured.data.category] ?? 'bg-gray-100 text-gray-700'}`}>{featured.data.category}</span>
+                  <span class="text-sm text-gray-400">{fmt(featured.data.pubDate)}</span>
+                  <span class="text-sm text-gray-400">{readTime(featured.body)}</span>
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 group-hover:text-wa-teal transition-colors">{featured.data.title}</h2>
+                <p class="text-lg text-gray-600 leading-relaxed mb-4">{featured.data.description}</p>
+                <span class="text-wa-green font-semibold text-sm group-hover:underline">{t('blog.readArticle')} &rarr;</span>
+              </div>
+            </a>
+          )}
 
-      <!-- Post Grid -->
-      <div class="grid sm:grid-cols-2 gap-8">
-        {posts.slice(1).map((post) => (
-          <a href={localizePath(`/blog/${post.slug}`, lang)} class="group bg-white rounded-2xl border border-gray-200 p-8 hover:border-gray-300 hover:shadow-md transition-all">
-            <div class="flex items-center gap-3 mb-4">
-              <span class={`px-3 py-1 text-xs font-semibold rounded-full ${post.categoryColor}`}>{post.category}</span>
-              <span class="text-sm text-gray-400">{post.date}</span>
-            </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-wa-teal transition-colors">{post.title}</h3>
-            <p class="text-gray-600 text-sm leading-relaxed mb-4">{post.excerpt}</p>
-            <div class="flex items-center justify-between">
-              <span class="text-sm text-gray-400">{post.readTime}</span>
-              <span class="text-wa-green font-semibold text-sm group-hover:underline">{t('blog.readMore')} &rarr;</span>
-            </div>
-          </a>
-        ))}
-      </div>
+          <div class="grid sm:grid-cols-2 gap-8">
+            {rest.map((post) => (
+              <a href={localizePath(`/blog/${post.id}`, lang)} class="group bg-white rounded-2xl border border-gray-200 p-8 hover:border-gray-300 hover:shadow-md transition-all">
+                <div class="flex items-center gap-3 mb-4">
+                  <span class={`px-3 py-1 text-xs font-semibold rounded-full ${categoryColor[post.data.category] ?? 'bg-gray-100 text-gray-700'}`}>{post.data.category}</span>
+                  <span class="text-sm text-gray-400">{fmt(post.data.pubDate)}</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-wa-teal transition-colors">{post.data.title}</h3>
+                <p class="text-gray-600 text-sm leading-relaxed mb-4">{post.data.description}</p>
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-400">{readTime(post.body)}</span>
+                  <span class="text-wa-green font-semibold text-sm group-hover:underline">{t('blog.readMore')} &rarr;</span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </>
+      )}
 
       <!-- Newsletter CTA -->
       <div class="mt-16 bg-gray-50 rounded-2xl border border-gray-200 p-8 sm:p-10 text-center">

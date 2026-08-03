@@ -1,0 +1,24 @@
+name: Deploy waai.me
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Never run two deploys at once — the docroot copy is destructive.
+concurrency:
+  group: deploy-waai-me
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          # Reuses the existing deploy script: git pull → npm ci → build → copy to docroot.
+          script: cd /home/ubuntu/projects/waai-website && ./deploy.sh

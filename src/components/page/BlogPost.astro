@@ -1,0 +1,190 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getCollection, render } from 'astro:content';
+import PageLayout from '../../layouts/PageLayout.astro';
+import CTAButton from '../shared/CTAButton.astro';
+import { getLangFromUrl, useTranslations, localizePath } from '../../i18n/utils';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+const { post } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const { Content } = await render(post);
+const { title, description, pubDate, updatedDate, author, category, heroImage, tags } = post.data;
+
+// Rough reading time from raw body (≈200 wpm). post.body is the raw markdown.
+const words = (post.body ?? '').trim().split(/\s+/).filter(Boolean).length;
+const readTime = `${Math.max(1, Math.round(words / 200))} min read`;
+
+// Up to 2 other published posts for the "keep reading" strip.
+const related = (await getCollection('blog'))
+  .filter((p) => !p.data.draft && p.id !== post.id)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 2);
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+
+const categoryColor: Record<string, string> = {
+  Guides: 'bg-green-50 text-green-700',
+  Product: 'bg-blue-50 text-blue-700',
+  Comparisons: 'bg-purple-50 text-ai-purple',
+  Integrations: 'bg-yellow-50 text-yellow-700',
+  Industry: 'bg-teal-50 text-wa-teal',
+  News: 'bg-gray-100 text-gray-700',
+};
+---
+
+<PageLayout title={title} description={description} canonicalPath={Astro.url.pathname} ogImage={heroImage} ogType="article">
+  <!-- Breadcrumb -->
+  <div class="bg-gray-50 border-b border-gray-100">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+      <nav class="flex items-center gap-2 text-sm text-gray-500">
+        <a href={localizePath('/', lang)} class="hover:text-gray-700 transition-colors">{t('breadcrumb.home')}</a>
+        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        <a href={localizePath('/blog', lang)} class="hover:text-gray-700 transition-colors">{t('breadcrumb.blog')}</a>
+        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        <span class="text-gray-900 font-medium line-clamp-1">{title}</span>
+      </nav>
+    </div>
+  </div>
+
+  <article>
+    <!-- Header -->
+    <header class="py-12 sm:py-16 bg-white">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center gap-3 mb-4">
+          <span class={`px-3 py-1 text-xs font-semibold rounded-full ${categoryColor[category] ?? 'bg-gray-100 text-gray-700'}`}>{category}</span>
+          <span class="text-sm text-gray-400">{fmt(pubDate)}</span>
+          <span class="text-sm text-gray-400">·</span>
+          <span class="text-sm text-gray-400">{readTime}</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 leading-tight mb-4">{title}</h1>
+        <p class="text-lg sm:text-xl text-gray-600 leading-relaxed">{description}</p>
+        <div class="mt-6 flex items-center gap-2 text-sm text-gray-500">
+          <span class="font-medium text-gray-700">{author}</span>
+          {updatedDate && (
+            <span class="text-gray-400">· updated {fmt(updatedDate)}</span>
+          )}
+        </div>
+      </div>
+    </header>
+
+    {heroImage && (
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-2 mb-8">
+        <img src={heroImage} alt={title} class="w-full rounded-2xl border border-gray-100" loading="lazy" />
+      </div>
+    )}
+
+    <!-- Body -->
+    <section class="pb-16 bg-white">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="prose-waai">
+          <Content />
+        </div>
+
+        {tags && tags.length > 0 && (
+          <div class="mt-10 flex flex-wrap gap-2">
+            {tags.map((tag) => (
+              <span class="px-3 py-1 text-xs font-medium text-gray-600 bg-gray-100 rounded-full">#{tag}</span>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+
+    <!-- Keep reading -->
+    {related.length > 0 && (
+      <section class="py-12 bg-gray-50 border-t border-gray-100">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 class="text-xl font-bold text-gray-900 mb-6">{t('blog.keepReading')}</h2>
+          <div class="grid sm:grid-cols-2 gap-6">
+            {related.map((p) => (
+              <a href={localizePath(`/blog/${p.id}`, lang)} class="group bg-white rounded-2xl border border-gray-200 p-6 hover:border-gray-300 hover:shadow-md transition-all">
+                <span class={`inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full mb-3 ${categoryColor[p.data.category] ?? 'bg-gray-100 text-gray-700'}`}>{p.data.category}</span>
+                <h3 class="text-base font-bold text-gray-900 mb-2 group-hover:text-wa-teal transition-colors">{p.data.title}</h3>
+                <p class="text-gray-600 text-sm leading-relaxed line-clamp-2">{p.data.description}</p>
+                <span class="mt-3 inline-block text-sm font-semibold text-wa-green group-hover:underline">{t('blog.readMore')} &rarr;</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- CTA -->
+    <section class="py-16 bg-gradient-to-br from-wa-teal via-wa-teal-light to-wa-green-dark">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white mb-4">{t('blog.postCtaTitle')}</h2>
+        <p class="text-green-100/90 mb-8">{t('blog.postCtaBody')}</p>
+        <CTAButton href={localizePath('/signup', lang)} variant="primary" size="lg">{t('blog.cta')}</CTAButton>
+      </div>
+    </section>
+  </article>
+</PageLayout>
+
+<style is:global>
+  /* Long-form markdown styles (no @tailwindcss/typography in the project). */
+  .prose-waai {
+    color: #374151;
+    font-size: 1.075rem;
+    line-height: 1.75;
+  }
+  .prose-waai > * + * { margin-top: 1.25rem; }
+  .prose-waai h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #111827;
+    margin-top: 2.5rem;
+    margin-bottom: 0.25rem;
+    line-height: 1.25;
+  }
+  .prose-waai h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #111827;
+    margin-top: 2rem;
+    margin-bottom: 0.25rem;
+  }
+  .prose-waai p { margin-top: 1.1rem; }
+  .prose-waai a { color: #075E54; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+  .prose-waai a:hover { color: #0A7B6E; }
+  .prose-waai strong { color: #111827; font-weight: 700; }
+  .prose-waai ul, .prose-waai ol { padding-left: 1.4rem; }
+  .prose-waai ul { list-style: disc; }
+  .prose-waai ol { list-style: decimal; }
+  .prose-waai li { margin-top: 0.4rem; }
+  .prose-waai li::marker { color: #25D366; }
+  .prose-waai blockquote {
+    border-left: 4px solid #25D366;
+    background: #f0fdf4;
+    padding: 0.75rem 1.1rem;
+    border-radius: 0.5rem;
+    color: #14532d;
+    font-style: normal;
+  }
+  .prose-waai blockquote p { margin: 0; }
+  .prose-waai code {
+    background: #f3f4f6;
+    padding: 0.15rem 0.4rem;
+    border-radius: 0.35rem;
+    font-size: 0.9em;
+  }
+  .prose-waai pre {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 1rem 1.25rem;
+    border-radius: 0.75rem;
+    overflow-x: auto;
+    font-size: 0.9rem;
+  }
+  .prose-waai pre code { background: none; padding: 0; color: inherit; }
+  .prose-waai hr { border: 0; border-top: 1px solid #e5e7eb; margin: 2.5rem 0; }
+  .prose-waai table { width: 100%; border-collapse: collapse; font-size: 0.95rem; display: block; overflow-x: auto; }
+  .prose-waai th, .prose-waai td { border: 1px solid #e5e7eb; padding: 0.6rem 0.75rem; text-align: left; vertical-align: top; }
+  .prose-waai thead th { background: #f9fafb; font-weight: 700; color: #111827; }
+  .prose-waai img { border-radius: 0.75rem; border: 1px solid #f3f4f6; }
+</style>

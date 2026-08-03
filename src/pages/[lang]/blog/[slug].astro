@@ -1,0 +1,16 @@
+---
+import { getCollection } from 'astro:content';
+import { NON_DEFAULT_LANGS } from '../../../i18n/config';
+import BlogPost from '../../../components/page/BlogPost.astro';
+
+export async function getStaticPaths() {
+  const posts = (await getCollection('blog')).filter((p) => !p.data.draft);
+  return NON_DEFAULT_LANGS.flatMap((lang) =>
+    posts.map((p) => ({ params: { lang, slug: p.id }, props: { post: p } })),
+  );
+}
+
+const { post } = Astro.props;
+---
+
+<BlogPost post={post} />

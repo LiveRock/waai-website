@@ -109,6 +109,19 @@ git reset --hard 78416ce && ./deploy.sh
 
 `./deploy.sh` rebuilds and copies `dist/` to the docroot (`/home/waai/public_html`), so either command immediately republishes the English-only site. The localized code remains in git history / on the `feature/multilingual-i18n` branch for re-deployment later.
 
+## Blog + CMS (Sveltia)
+
+The blog is a real content collection — not the old 3-placeholder stub. Posts are markdown in `src/content/blog/`, defined by `src/content.config.ts` (`blog` collection, glob loader `**/*.md`; schema: `title`, `description`, `pubDate`, `updatedDate?`, `author`, `category` enum `[Guides|Product|Comparisons|Integrations|Industry|News]`, `tags?`, `heroImage?`, `draft`). The `entry.id` (filename sans `.md`) is the URL slug.
+
+- **Routes** mirror the features pattern: `src/components/page/BlogPost.astro` (self-localizing) rendered by `src/pages/blog/[slug].astro` (English) + `src/pages/[lang]/blog/[slug].astro` (× `NON_DEFAULT_LANGS`). `src/components/page/BlogIndex.astro` reads `getCollection('blog')`, excludes drafts, sorts newest-first. Posts are **English-only for v1** (localized chrome only) — every locale still gets a URL for sitemap/hreflang. Long-form markdown is styled by scoped `.prose-waai` rules in `BlogPost.astro` (there is **no** `@tailwindcss/typography` in the project).
+- **CMS = Sveltia** (`public/admin/index.html` loads `@sveltia/cms` from CDN; `public/admin/config.yml` defines the `blog` collection — its fields MUST stay in sync with `src/content.config.ts`). Admin at `/admin/`. `content.config.ts` is the read-side contract, `config.yml` the write-side — change both together. `media_folder: public/images/blog` (served at `/images/blog/`). To pin/upgrade: change the script `src` in `admin/index.html` (or vendor the bundle).
+- **Keystatic was ruled out** — it needs SSR/Node for its admin API routes; this site is static-only. Sveltia's admin is a static SPA that talks to GitHub from the browser.
+- **OAuth** (`oauth-worker/worker.js`): GitHub's token exchange needs a server, so a free Cloudflare Worker brokers it (Decap "external OAuth" contract: `/auth` → GitHub, `/callback` → `postMessage` token to `/admin/`, with a CSRF state cookie). `config.yml` `backend.base_url` points at the Worker. One-time setup in `oauth-worker/README.md` (GitHub OAuth App + `wrangler deploy` + `wrangler secret put OAUTH_CLIENT_ID` / `OAUTH_CLIENT_SECRET`); set `SITE_ORIGIN` in `worker.js` to the origin serving `/admin/`.
+- **Auto-deploy** (`.github/workflows/deploy.yml`): on push to `main`, SSHes into the box (secrets `SSH_HOST`, `SSH_USER`, `SSH_PRIVATE_KEY`) and runs `./deploy.sh`. Loop: edit in `/admin/` → save (commit) → Action rebuilds → live. No SSH to publish. Until those 3 secrets exist the Action fails on first run — set them once. The `concurrency: deploy-waai-me` group prevents overlapping (destructive) deploys.
+- **RSS** at `/blog/rss.xml` (`src/pages/blog/rss.xml.ts`, `@astrojs/rss`). Sitemap auto-includes `[slug]` routes — no sitemap change needed.
+- **i18n keys** added to `en.ts` only: `nav.blog`, `breadcrumb.blog`, `blog.empty`/`keepReading`/`postCtaTitle`/`postCtaBody` (the universal "Blog" label falls back to EN for other locales via the standard translator fallback).
+- **Top nav**: Blog added to `src/data/navigation.ts` (the footer link already existed).
+
 ## Commands Reference
 
 | Command | Description |

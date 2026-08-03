@@ -10,6 +10,7 @@ const en: Record<string, string> = {
   'nav.industries': 'Industries',
   'nav.integrations': 'Integrations',
   'nav.pricing': 'Pricing',
+  'nav.blog': 'Blog',
   'nav.feature.autoResponder': 'Auto-Responder',
   'nav.feature.knowledgeBase': 'Knowledge Base',
   'nav.feature.logicFlows': 'Logic Flows',
@@ -68,6 +69,7 @@ const en: Record<string, string> = {
 
   // ---- Breadcrumbs ----
   'breadcrumb.home': 'Home',
+  'breadcrumb.blog': 'Blog',
   'breadcrumb.features': 'Features',
   'breadcrumb.industries': 'Industries',
   'breadcrumb.solutions': 'Solutions',
@@ -163,6 +165,10 @@ const en: Record<string, string> = {
   'blog.newsletterTitle': 'Stay in the Loop',
   'blog.newsletterBody': 'Get the latest guides, product updates, and WhatsApp business tips delivered to your inbox.',
   'blog.cta': 'Get Started for Free',
+  'blog.empty': 'No posts yet — check back soon.',
+  'blog.keepReading': 'Keep reading',
+  'blog.postCtaTitle': 'Ready for WhatsApp AI that actually runs your business?',
+  'blog.postCtaBody': 'Start your free trial and see what waai can do.',
 
   // ---- Integrations pages (chrome) ----
   'page.integrations.title': 'Integrations',

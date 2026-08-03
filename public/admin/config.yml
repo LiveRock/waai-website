@@ -1,0 +1,45 @@
+# Sveltia CMS config (Decap-compatible). Fields mirror src/content.config.ts blog schema —
+# keep them in sync when changing the collection.
+backend:
+  name: github
+  repo: LiveRock/waai-website
+  branch: main
+  # OAuth proxy (see oauth-worker/README.md). Replace with your deployed Worker URL:
+  base_url: https://waai-cms-oauth.workers.dev
+  auth_endpoint: /auth
+
+locale: en
+site_url: https://waai.me
+display_url: https://waai.me
+logo_url: /images/logos/logo.jpg
+
+# Images uploaded via the editor land here (served at /images/blog/).
+media_folder: "public/images/blog"
+public_folder: "/images/blog"
+
+collections:
+  - name: "blog"
+    label: "Blog Posts"
+    label_singular: "Post"
+    folder: "src/content/blog"
+    create: true
+    delete: true
+    extension: "md"
+    format: "frontmatter"
+    slug: "{{slug}}"
+    summary: "{{title}} · {{category}} · {{pubDate}}"
+    fields:
+      - { name: "title", label: "Title", widget: "string" }
+      - { name: "description", label: "Excerpt / SEO meta description", widget: "text" }
+      - { name: "pubDate", label: "Publish date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD" }
+      - { name: "updatedDate", label: "Updated date (optional)", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD", required: false }
+      - { name: "author", label: "Author", widget: "string", default: "waai" }
+      - name: "category"
+        label: "Category"
+        widget: "select"
+        default: "Guides"
+        options: ["Guides", "Product", "Comparisons", "Integrations", "Industry", "News"]
+      - { name: "tags", label: "Tags", widget: "list", required: false, hint: "One tag per line" }
+      - { name: "heroImage", label: "Hero image (optional)", widget: "image", required: false }
+      - { name: "draft", label: "Draft (hide from the live site)", widget: "boolean", default: false }
+      - { name: "body", label: "Content (Markdown)", widget: "markdown" }
