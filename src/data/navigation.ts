@@ -49,6 +49,7 @@ export const navigation: NavItem[] = [
   },
   { key: 'nav.integrations', href: '/integrations' },
   { key: 'nav.pricing', href: '/pricing' },
+  { key: 'nav.blog', href: '/blog' },
   {
     label: 'WhatsApp',
     href: 'https://api.whatsapp.com/send?phone=6581773301&text=Hi%20Hotsource!%20I%27d%20like%20to%20know%20more',
