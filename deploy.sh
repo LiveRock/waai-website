@@ -1,6 +1,13 @@
 #!/bin/bash
 set -e
 
+# Load nvm so we run a modern Node (>=22) even in non-interactive shells
+# (SSH forced-command from the GitHub Action, cron, CI). Without this the
+# shell resolves /usr/bin/node (v12) and `astro build` aborts with
+# "Node.js v12 is not supported by Astro!".
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
 DOCROOT="/home/waai/public_html"
 PROJECT="/home/ubuntu/projects/waai-website"
 
