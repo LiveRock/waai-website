@@ -1,0 +1,100 @@
+[
+  {
+    "pillar": "Buyer's guides",
+    "category": "Comparisons",
+    "title": "How to Choose a WhatsApp AI Agent in 2026",
+    "brief": "A practical buyer's guide: what to look for in a WhatsApp AI agent — automation depth, integrations, booking, data ownership, pricing model, reseller option. Help the reader decide, with waai positioned as the category-leading choice (not salesy).",
+    "tags": ["buyer's guide", "WhatsApp AI", "how to choose"]
+  },
+  {
+    "pillar": "Use-case",
+    "category": "Industry",
+    "title": "WhatsApp AI for Salons, Spas & Barbershops",
+    "brief": "How beauty/hair businesses use WhatsApp AI for 24/7 booking, branch/staff scheduling, deposits to cut no-shows, reminders, and rebooking. Lead with the pain (no-shows, after-hours booking) and waai's multi-branch booking engine as the fix.",
+    "tags": ["salon", "booking", "service business"]
+  },
+  {
+    "pillar": "Product deep-dive",
+    "category": "Product",
+    "title": "Logic Flows vs Knowledge Base: When to Use Each",
+    "brief": "Explain the difference between rule-based Q&A (knowledge base) and multi-step logic flows, and when each is the right tool. Cover cost, predictability, and how waai combines both (rule match first, AI fallback second).",
+    "tags": ["logic flows", "knowledge base", "automation"]
+  },
+  {
+    "pillar": "Reseller/agency",
+    "category": "Guides",
+    "title": "How Agencies Can Resell WhatsApp AI Under Their Own Brand",
+    "brief": "A guide for agencies/MSPs: how to white-label and resell WhatsApp AI with recurring commission. Meta has no reseller program — waai is built for it. Cover the economics, onboarding speed, and the onboarder marketplace.",
+    "tags": ["reseller", "white-label", "agencies"]
+  },
+  {
+    "pillar": "News & policy",
+    "category": "News",
+    "title": "WhatsApp's October 2026 Per-Message Pricing: What Businesses Should Know",
+    "brief": "Explain Meta's shift from per-conversation to per-message billing on Oct 1 2026 (service replies in the 24h window now chargeable). What it means for costs and why automating the routine (to reduce human-initiated service messages) matters more than ever.",
+    "tags": ["pricing", "WhatsApp API", "policy"]
+  },
+  {
+    "pillar": "Use-case",
+    "category": "Industry",
+    "title": "WhatsApp AI for Clinics and Healthcare Practices",
+    "brief": "How clinics/dental/medical practices use WhatsApp AI for appointment booking, reminders (cutting no-shows), triage questions, and privacy-respecting automation. Note data ownership as a plus for regulated industries.",
+    "tags": ["healthcare", "clinics", "booking"]
+  },
+  {
+    "pillar": "Product deep-dive",
+    "category": "Product",
+    "title": "WhatsApp Broadcast Campaigns: A 2026 Guide",
+    "brief": "How to run broadcast/marketing campaigns on WhatsApp — contacts/segmentation, message templates, personalization, 24h window rules. Position waai's contacts CRM + broadcast + templates as the toolkit.",
+    "tags": ["broadcast", "campaigns", "marketing"]
+  },
+  {
+    "pillar": "Buyer's guides",
+    "category": "Comparisons",
+    "title": "WhatsApp Chatbot Builders Compared: What to Look For",
+    "brief": "A comparison framework for evaluating WhatsApp chatbot/AI platforms: no-code builder depth, integrations, booking, AI model choice, data ownership, pricing transparency, reseller option. Educate the buyer; waai as the benchmark.",
+    "tags": ["comparison", "chatbot builders", "evaluation"]
+  },
+  {
+    "pillar": "Use-case",
+    "category": "Industry",
+    "title": "WhatsApp AI for Tutoring and Education Centres",
+    "brief": "How tuition centres, trainers, and edtech use WhatsApp AI for enrolment enquiries, class scheduling, FAQ automation, and multilingual parent comms. Booking + multilingual as the differentiators.",
+    "tags": ["education", "tutoring", "scheduling"]
+  },
+  {
+    "pillar": "Product deep-dive",
+    "category": "Product",
+    "title": "Self-Service Booking on WhatsApp: Deposits, Reminders & PDFs",
+    "brief": "Deep-dive on waai's booking lifecycle: self-service slot booking in chat, deposits to reduce no-shows, automated reminders, reschedule/cancel, and booking PDFs + Google Calendar sync. Show the flow.",
+    "tags": ["booking", "deposits", "reminders"]
+  },
+  {
+    "pillar": "Reseller/agency",
+    "category": "Guides",
+    "title": "Multilingual WhatsApp Bots: Serving Customers in Their Language",
+    "brief": "Why multilingual matters in diverse markets (SG/SEA), how auto-translation works, detected-language routing, and how waai handles 5 locales. Practical guidance for businesses serving multi-language customers.",
+    "tags": ["multilingual", "translation", "localization"]
+  },
+  {
+    "pillar": "Use-case",
+    "category": "Industry",
+    "title": "WhatsApp AI for Real Estate Agents",
+    "brief": "How property agents use WhatsApp AI for lead qualification, listing enquiries, viewings booking, and document generation (quotes, LOIs). Logic flows + booking + Google Drive document generation as the toolkit.",
+    "tags": ["real estate", "property", "lead qualification"]
+  },
+  {
+    "pillar": "Product deep-dive",
+    "category": "Product",
+    "title": "Why Rule-Based Matching + AI Fallback Beats AI-Only Chatbots",
+    "brief": "Make the case for the hybrid model: deterministic rule-based answers (cheap, predictable, accurate) for known questions + LLM fallback only when no match. Compare cost/reliability/quality vs pure-LLM bots.",
+    "tags": ["rule engine", "AI fallback", "architecture"]
+  },
+  {
+    "pillar": "Use-case",
+    "category": "Integrations",
+    "title": "Connecting WhatsApp to Google Workspace: Calendar, Drive, Sheets",
+    "brief": "How a WhatsApp AI agent integrates with Google Calendar (booking/availability), Drive (file send/store), Sheets (data capture), Docs (document generation) via a single OAuth. Concrete examples per industry.",
+    "tags": ["Google Workspace", "integrations", "automation"]
+  }
+]

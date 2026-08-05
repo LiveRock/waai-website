@@ -124,6 +124,18 @@ The blog is a real content collection — not the old 3-placeholder stub. Posts 
 - **i18n keys** added to `en.ts` only: `nav.blog`, `breadcrumb.blog`, `blog.empty`/`keepReading`/`postCtaTitle`/`postCtaBody` (the universal "Blog" label falls back to EN for other locales via the standard translator fallback).
 - **Top nav**: Blog added to `src/data/navigation.ts` (the footer link already existed).
 
+## Weekly blog automation
+
+A scheduled GitHub Action drafts a new post each week and opens a **PR for review** (Peter eyeballs → merges → auto-deploys). Meta is reviewed before publish, never auto-published.
+
+- **Workflow:** `.github/workflows/weekly-blog.yml` — `cron "7 1 * * 2"` (Tue ~09:07 SGT, English) + `cron "13 0 1 * *"` (1st of month, alternating **Chinese / Malay** by month parity). Also `workflow_dispatch` with a `lang` input to generate on demand.
+- **Generator:** `scripts/generate-blog-post.mjs` — picks the next topic from `scripts/blog-topics.json` deterministically by week (or by month for multilingual), calls the **z.ai GLM API** (OpenAI-compatible; defaults to the **coding endpoint** `https://api.z.ai/api/coding/paas/v4` with `thinking:{type:disabled}` for speed — switch `ZAI_BASE_URL` to `…/paas/v4` for a non-coding key), writes a markdown file to `src/content/blog/` with frontmatter matching the collection schema, and emits `title`/`slug`/`category`/`pillar`/`lang` to `GITHUB_OUTPUT`.
+- **Topic queue:** `scripts/blog-topics.json` — 14 curated briefs across 5 pillars (buyer's guides, use-cases/verticals, product deep-dives, reseller/agency, news/policy). Edit/extend this file to steer the editorial calendar; rotation is deterministic so no state file.
+- **PR step:** `peter-evans/create-pull-request@v6` commits the new file on a `blog/auto-<run_id>` branch and opens a PR titled `blog: <title>` with a `automated-blog` label. Merge → `deploy.yml` fires → live.
+- **Required secret:** `ZAI_API_KEY` (z.ai GLM key) on the repo. Set with `gh secret set ZAI_API_KEY` (prompts hidden) or the dashboard.
+- **Multilingual posts:** written as standalone localized posts in `src/content/blog/` (title/description/body in zh/ms; slug/category/tags stay English). They appear on `/blog/` alongside English ones. (Per-locale body serving for the localized chrome routes is a future enhancement; v1 = standalone localized posts.)
+- **Brand prompt:** embedded in `generate-blog-post.mjs` (`SYSTEM`) — waai positioning, features, the Meta competitive context, voice, and a hard "strict JSON only" instruction. Keep it in sync with product changes so posts stay accurate.
+
 ## Commands Reference
 
 | Command | Description |
