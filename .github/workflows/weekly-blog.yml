@@ -48,13 +48,7 @@ jobs:
           ZAI_API_KEY: ${{ secrets.ZAI_API_KEY }}
           BLOG_LANG: ${{ steps.lang.outputs.lang }}
 
-      - name: Skip if nothing changed
-        id: changed
-        run: |
-          if git diff --quiet -- src/content/blog; then echo "changed=false" >> "$GITHUB_OUTPUT"; else echo "changed=true" >> "$GITHUB_OUTPUT"; fi
-
       - name: Open pull request
-        if: steps.changed.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v6
         with:
           commit-message: "blog: automated post (${{ steps.lang.outputs.lang }}) — ${{ steps.gen.outputs.slug }}"
