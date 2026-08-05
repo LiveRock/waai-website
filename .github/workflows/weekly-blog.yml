@@ -1,0 +1,74 @@
+name: Weekly blog post
+
+# Generates a waai blog post via the z.ai GLM API and opens a PR for review.
+# - Weekly (Tue ~09:07 SGT): English post.
+# - 1st of month (~08:13 SGT): a multilingual post, alternating Chinese / Malay.
+# Manual: workflow_dispatch with a lang input to generate on demand.
+on:
+  schedule:
+    - cron: "7 1 * * 2"    # Tue 01:07 UTC = ~09:07 SGT (English weekly)
+    - cron: "13 0 1 * *"   # 1st of month 00:13 UTC = ~08:13 SGT (multilingual)
+  workflow_dispatch:
+    inputs:
+      lang:
+        description: "Language (en / zh / ms)"
+        default: "en"
+
+concurrency:
+  group: weekly-blog
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Determine language
+        id: lang
+        run: |
+          if [ -n "${{ inputs.lang }}" ]; then
+            echo "lang=${{ inputs.lang }}" >> "$GITHUB_OUTPUT"
+          elif [ "$(date -u +%d)" = "01" ]; then
+            # 1st of month: alternate zh / ms by month number
+            M=$(date -u +%m)
+            if [ $((10#$M % 2)) -eq 0 ]; then echo "lang=zh" >> "$GITHUB_OUTPUT"; else echo "lang=ms" >> "$GITHUB_OUTPUT"; fi
+          else
+            echo "lang=en" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Generate post
+        id: gen
+        run: node scripts/generate-blog-post.mjs
+        env:
+          ZAI_API_KEY: ${{ secrets.ZAI_API_KEY }}
+          BLOG_LANG: ${{ steps.lang.outputs.lang }}
+
+      - name: Skip if nothing changed
+        id: changed
+        run: |
+          if git diff --quiet -- src/content/blog; then echo "changed=false" >> "$GITHUB_OUTPUT"; else echo "changed=true" >> "$GITHUB_OUTPUT"; fi
+
+      - name: Open pull request
+        if: steps.changed.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "blog: automated post (${{ steps.lang.outputs.lang }}) — ${{ steps.gen.outputs.slug }}"
+          branch: blog/auto-${{ github.run_id }}
+          title: "blog: ${{ steps.gen.outputs.title }}"
+          body: |
+            **Automated blog post — eyeball before merging.**
+
+            - **Language:** ${{ steps.lang.outputs.lang }}
+            - **Pillar:** ${{ steps.gen.outputs.pillar }}
+            - **Category:** ${{ steps.gen.outputs.category }}
+
+            Edit the markdown directly in this PR to tweak it. **Merge to publish** (auto-deploys via `deploy.yml`).
+
+            Live after merge: https://waai.me/blog/${{ steps.gen.outputs.slug }}/
+          labels: automated-blog
+          delete-branch: true
