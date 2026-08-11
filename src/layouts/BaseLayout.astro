@@ -34,6 +34,11 @@ const FONT_HREFS: Record<LocaleFont, string> = {
   'noto-jp': 'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap',
 };
 const fontHref = locale.font ? FONT_HREFS[locale.font] : null;
+
+// Google Analytics 4 — emitted on every page. Measurement IDs are public
+// (visible in every GA4 site's source), so the ID is hardcoded here. Override
+// at build time with the GA_MEASUREMENT_ID env var if ever needed.
+const gaId = (import.meta.env.GA_MEASUREMENT_ID as string | undefined) || 'G-F7QSVZPEX8';
 ---
 
 <!DOCTYPE html>
@@ -71,6 +76,13 @@ const fontHref = locale.font ? FONT_HREFS[locale.font] : null;
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   {fontHref && <link href={fontHref} rel="stylesheet" />}
+
+  {gaId && (
+    <Fragment>
+      <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />
+      <script is:inline set:html={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${gaId}');`} />
+    </Fragment>
+  )}
 </head>
 <body class="font-sans text-gray-900 bg-white antialiased">
   <slot />
