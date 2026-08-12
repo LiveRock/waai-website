@@ -61,6 +61,7 @@ waai-website/
 - Custom plan card is simplified: just name + "Contact Us" button (no features list)
 - Comparison table excludes Custom plan; data-driven from DB
 - Signup page posts to `POST /api/auth/signup` with `plan_name` field; filters out Custom plan
+- **Referral code is mandatory** at signup: field is `required`, pre-fills `888888` (overridable via `?ref=` URL param); submit handler posts `888888` if cleared. Helper line under the field via `signup.referralHint` (`en.ts`); placeholder → `888888`
 - **Build-time data sources** — both `/pricing` and `/signup` fetch inline in frontmatter (try `http://127.0.0.1:8000` then `https://waaichat.hsi.asia`; hardcoded fallback if unreachable):
   - `GET /api/public/plans` — plan prices + every quota (`max_qa_pairs`, `max_flows`, `max_messages_monthly`, `max_respondents`, `max_web_pages`, `max_drive_sends_monthly`, `max_qa_translations_per_lang_monthly`, `max_flow_translations_per_lang_monthly`, `trial_days`)
   - `GET /api/site-content/onboarding_service_settings` — Optional Onboarding Assistance one-time fees (`starter.fee_cents` / `pro.fee_cents`; default $99 / $299). `content` is a JSON string — parse it.
@@ -135,6 +136,28 @@ A scheduled GitHub Action drafts a new post each week and opens a **PR for revie
 - **Required secret:** `ZAI_API_KEY` (z.ai GLM key) on the repo. Set with `gh secret set ZAI_API_KEY` (prompts hidden) or the dashboard.
 - **Multilingual posts:** written as standalone localized posts in `src/content/blog/` (title/description/body in zh/ms; slug/category/tags stay English). They appear on `/blog/` alongside English ones. (Per-locale body serving for the localized chrome routes is a future enhancement; v1 = standalone localized posts.)
 - **Brand prompt:** embedded in `generate-blog-post.mjs` (`SYSTEM`) — waai positioning, features, the Meta competitive context, voice, and a hard "strict JSON only" instruction. Keep it in sync with product changes so posts stay accurate.
+
+## Analytics (GA4 + AWStats)
+
+Two layers: a client-side **GA4** tag (events/engagement/conversions) and a server-side **AWStats** portal (raw visit/host/bandwidth/referrer log analysis).
+
+### GA4 (client-side, in-repo)
+- Snippet in `src/layouts/BaseLayout.astro` (frontmatter `gaId`, conditional render). **ID `G-F7QSVZPEX8`** hardcoded (override via `GA_MEASUREMENT_ID` env var). Measurement IDs are public.
+- Fires on every page across all 10 locales (paths carry the locale prefix). Enhanced measurement on by default.
+- No consent/cookie banner yet — fine for SG under PDPA; add one + Google Consent Mode v2 before targeting EU/UK/CA.
+
+### AWStats (server-side, NOT in-repo)
+- Portal: `https://waai.me/awstats/awstats.pl?config=waai.me` — HTTP Basic auth, user `waai`, password in `/home/waai/.awstats-htpasswd` (hash; reset: `sudo htpasswd -iB /home/waai/.awstats-htpasswd waai`). Reads Apache logs `/var/log/virtualmin/waai.me_access_log`; data in `/home/waai/awstats/` (owned by `waai`).
+- **Cron:** `/etc/cron.d/awstats-waai` runs hourly as **root** (`awstats.pl -config=waai.me -update`). Root because `/var/log/virtualmin` is `drwx--x--x` (only root can glob rotations). The system `/etc/cron.d/awstats` jobs are commented out.
+- **LogFile merge:** `/etc/awstats/awstats.waai.me.conf` `LogFile=` uses `logresolvemerge.pl …/waai.me_access_log* |` so logrotate rotations are never lost.
+- **Icon-alias gotcha:** `DirIcons="/awstats-icon"`. The vhost `ScriptAlias /awstats → awstats.pl` prefix-matches every `/awstats*` URL incl. `/awstats-icon/…`, so without an explicit alias all icons hit the CGI and return HTML → broken images. Fix (in both `:80`+`:443` vhosts of `/etc/apache2/sites-available/waai.me.conf`, placed **before** the `ScriptAlias`):
+  ```
+  Alias /awstats-icon /usr/share/awstats/icon
+  <Directory "/usr/share/awstats/icon">
+      Require all granted
+  </Directory>
+  ```
+  Icon dir is `/usr/share/awstats/icon` (NOT `wwwroot/icon`). ⚠️ Re-saving the waai.me virtual server in Virtualmin may rewrite the vhost and drop this alias — re-add if icons break again.
 
 ## Commands Reference
 

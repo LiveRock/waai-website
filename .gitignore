@@ -26,3 +26,7 @@ pnpm-debug.log*
 # local session logs / build scratch
 .remember/
 rebuild.log
+
+# Claude Code local settings (per-user) + transient temp writes
+.claude/settings.local.json
+.claude/*.tmp.*
