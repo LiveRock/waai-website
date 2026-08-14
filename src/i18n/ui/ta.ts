@@ -53,6 +53,7 @@ const ta: Record<string, string> = {
   'footer.blog': 'வலைப்பதிவு',
   'footer.terms': 'விதிகள் & நிபந்தனைகள்',
   'footer.privacy': 'தனியுரிமைக் கொள்கை',
+  'footer.getTheApp': 'waai செயலியைப் பெறுங்கள்',
   'footer.googleCompliance': 'Google இணக்கம்',
   'footer.tagline':
     'உங்கள் WhatsApp AI முகவர் ஒருபோதும் தூங்காது. AI சிறப்பாகச் செய்யும்போது செய்திகளைக் கைமுறையாக ஏன் கையாள வேண்டும்?',

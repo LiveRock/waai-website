@@ -53,6 +53,7 @@ const ms: Record<string, string> = {
   'footer.blog': 'Blog',
   'footer.terms': 'Terma & Syarat',
   'footer.privacy': 'Polisi Privasi',
+  'footer.getTheApp': 'Dapatkan app waai',
   'footer.googleCompliance': 'Pematuhan Google',
   'footer.tagline':
     'Ejen AI WhatsApp anda yang tidak pernah tidur. Mengendalikan mesej secara manual apabila AI melakukannya dengan lebih baik?',

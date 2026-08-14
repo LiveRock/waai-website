@@ -32,7 +32,16 @@ const year = new Date().getFullYear();
           <span class="text-xl font-bold text-white">waai<span class="text-wa-green">.me</span></span>
         </a>
         <p class="text-sm text-gray-400 mb-4">{t('footer.tagline')}</p>
-        <p class="text-sm text-gray-500">{t('footer.productOf')}</p>
+        <p class="text-sm text-gray-500 mb-3">{t('footer.productOf')}</p>
+        <p class="text-xs text-gray-500 mb-2">{t('footer.getTheApp')}</p>
+        <div class="flex items-center gap-2">
+          <a href="https://apps.apple.com/sg/app/waai-assistant/id6766452095" target="_blank" rel="noopener noreferrer" aria-label="Download on the App Store">
+            <img src="/images/icons/app-store.jpg" alt="Download on the App Store" class="h-8 w-auto rounded" loading="lazy" />
+          </a>
+          <a href="https://play.google.com/store/apps/details?id=net.hotsource.waai" target="_blank" rel="noopener noreferrer" aria-label="Get it on Google Play">
+            <img src="/images/icons/google-play.jpg" alt="Get it on Google Play" class="h-8 w-auto rounded" loading="lazy" />
+          </a>
+        </div>
       </div>
 
       {columns.map((col) => (

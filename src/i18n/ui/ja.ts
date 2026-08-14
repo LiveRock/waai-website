@@ -53,6 +53,7 @@ const ja: Record<string, string> = {
   'footer.blog': 'ブログ',
   'footer.terms': '利用規約',
   'footer.privacy': 'プライバシーポリシー',
+  'footer.getTheApp': 'waaiアプリを入手',
   'footer.googleCompliance': 'Google コンプライアンス',
   'footer.tagline':
     '24時間眠らないあなたのWhatsApp AIエージェント。AIがより上手くこなせるのに、なぜ手動でメッセージを処理しますか？',

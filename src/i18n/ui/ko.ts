@@ -53,6 +53,7 @@ const ko: Record<string, string> = {
   'footer.blog': '블로그',
   'footer.terms': '이용약관',
   'footer.privacy': '개인정보처리방침',
+  'footer.getTheApp': 'waai 앱 받기',
   'footer.googleCompliance': 'Google 컴플라이언스',
   'footer.tagline':
     '절대 멈추지 않는 WhatsApp AI 에이전트. AI가 더 잘한다면, 왜 메시지를 직접 처리하시나요?',
