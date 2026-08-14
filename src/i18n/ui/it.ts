@@ -53,6 +53,7 @@ const it: Record<string, string> = {
   'footer.blog': 'Blog',
   'footer.terms': 'Termini e Condizioni',
   'footer.privacy': 'Informativa sulla Privacy',
+  'footer.getTheApp': 'Scarica l\'app waai',
   'footer.googleCompliance': 'Conformità Google',
   'footer.tagline':
     'Il tuo agente AI per WhatsApp che non dorme mai. Perché gestire i messaggi manualmente quando l\'AI lo fa meglio?',
