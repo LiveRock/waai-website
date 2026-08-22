@@ -127,7 +127,7 @@ The blog is a real content collection — not the old 3-placeholder stub. Posts 
 
 ## Weekly blog automation
 
-A scheduled GitHub Action drafts a new post each week and opens a **PR for review** (Peter eyeballs → merges → auto-deploys). Meta is reviewed before publish, never auto-published.
+A scheduled GitHub Action drafts a new post each week and opens a **PR for review**. The PR is emailed to Peter as a full draft — he replies **YES** to publish (merges the PR → auto-deploys) or **NO** to reject. See *Blog review-by-email* below. A human still reviews every post before it goes live.
 
 - **Workflow:** `.github/workflows/weekly-blog.yml` — `cron "7 1 * * 2"` (Tue ~09:07 SGT, English) + `cron "13 0 1 * *"` (1st of month, alternating **Chinese / Malay** by month parity). Also `workflow_dispatch` with a `lang` input to generate on demand.
 - **Generator:** `scripts/generate-blog-post.mjs` — picks the next topic from `scripts/blog-topics.json` deterministically by week (or by month for multilingual), calls the **z.ai GLM API** (OpenAI-compatible; defaults to the **coding endpoint** `https://api.z.ai/api/coding/paas/v4` with `thinking:{type:disabled}` for speed — switch `ZAI_BASE_URL` to `…/paas/v4` for a non-coding key), writes a markdown file to `src/content/blog/` with frontmatter matching the collection schema, and emits `title`/`slug`/`category`/`pillar`/`lang` to `GITHUB_OUTPUT`.
@@ -135,6 +135,27 @@ A scheduled GitHub Action drafts a new post each week and opens a **PR for revie
 - **PR step:** `peter-evans/create-pull-request@v6` commits the new file on a `blog/auto-<run_id>` branch and opens a PR titled `blog: <title>` with a `automated-blog` label. Merge → `deploy.yml` fires → live.
 - **Required secret:** `ZAI_API_KEY` (z.ai GLM key) on the repo. Set with `gh secret set ZAI_API_KEY` (prompts hidden) or the dashboard.
 - **Multilingual posts:** written as standalone localized posts in `src/content/blog/` (title/description/body in zh/ms; slug/category/tags stay English). They appear on `/blog/` alongside English ones. (Per-locale body serving for the localized chrome routes is a future enhancement; v1 = standalone localized posts.)
+- **Topic rotation:** English = week-of-epoch index (one distinct topic per week); zh/ms monthly runs = month index. The generator's old ternary treated *any* non-empty `BLOG_LANG` (incl. `'en'`) as multilingual, so every English run in a month picked the same topic — fixed 2026-08-22 (PR #24); only `zh`/`ms` now take the monthly path.
+
+## Blog review-by-email (auto-publish on Peter's YES)
+
+The weekly PR doesn't sit in GitHub waiting — it's emailed as a full draft, and Peter's email reply publishes it. `scripts/review-approval.py` runs on this box every 10 min (cron `/etc/cron.d/waai-blog-review`, **root**, log `/var/log/waai-blog-review.log`):
+
+1. Polls open PRs labeled `automated-blog`. For each new one: fetches the post markdown from the PR branch, emails the full draft to `peter@hotsource.net`.
+2. Watches the `blog-review@waai.me` mailbox for replies (Virtualmin user; Maildir `/home/waai/homes/blog-review/Maildir`; mailbox password at `~/.config/waai-website/blog-review-mailbox-pass`).
+3. A reply from Peter whose subject references `PR #N`:
+   - **YES / publish / approve / merge / lgtm / ok** → `gh pr merge N --merge --delete-branch` → `deploy.yml` puts it live on waai.me
+   - **NO / reject / decline** → `gh pr close N`
+   - Only the **unquoted** part of the reply is keyword-scanned (quote markers split it off); a reply matching both yes and no is ignored as ambiguous.
+
+State: `~/.local/state/waai-blog-review/state.json` (notified PRs + seen message-IDs). Anti-spoof: only `peter@hotsource.net` is honoured, and only PRs the daemon itself notified are actionable.
+
+Gotchas baked into the design (each cost a live bounce/bug):
+- **Outbound mail** relays through the box's postfix → **SMTP2GO smarthost** (same account waaichat uses). SMTP2GO has only `hsi.asia` as a verified sender domain, so review emails go out `From: waai Blog Review <noreply@hsi.asia>` with **`Reply-To: blog-review@waai.me`** — replies land in the mailbox via the box's own MX. Verify `waai.me` under SMTP2GO's Verified Senders to unify the addresses later.
+- **7-bit ASCII on the wire**: GLM drafts contain em-dashes/curly quotes; raw UTF-8 piped to sendmail triggers SMTPUTF8, which the relay rejects (5.6.7 bounce). The script builds a proper MIME `EmailMessage` (RFC2047 headers + quoted-printable body) before handing it to `/usr/sbin/sendmail`.
+- Cron runs as **root** (Maildir under `/home/waai` needs root) with `HOME=/home/ubuntu` so state stays in ubuntu's home, and the script sets `GH_CONFIG_DIR=/home/ubuntu/.config/gh` so `gh pr merge` uses the LiveRock auth.
+- `gh api` does **not** accept `--repo` (put the repo in the endpoint); `gh --jq` prints string results **unquoted** (`.content` comes back as raw base64, not JSON).
+- To re-send a review email while testing: `sudo python3 -c "import json;p='/home/ubuntu/.local/state/waai-blog-review/state.json';s=json.load(open(p));s['prs'].pop('<N>',None);json.dump(s,open(p,'w'))"` then rerun the script. The state file ends up root-owned (cron is root) — that's expected.
 - **Brand prompt:** embedded in `generate-blog-post.mjs` (`SYSTEM`) — waai positioning, features, the Meta competitive context, voice, and a hard "strict JSON only" instruction. Keep it in sync with product changes so posts stay accurate.
 
 ## Analytics (GA4 + AWStats)
