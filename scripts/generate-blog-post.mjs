@@ -28,7 +28,8 @@ const OUT_DIR = 'src/content/blog';
 // ---- pick topic deterministically by week (or month for multilingual) ----
 const topics = JSON.parse(readFileSync(TOPICS_PATH, 'utf8'));
 const now = new Date();
-const idx = LANG
+const isMulti = LANG === 'zh' || LANG === 'ms'; // workflow sends 'en' for English runs — must NOT take the monthly path
+const idx = isMulti
   ? now.getMonth() % topics.length            // monthly multilingual: rotate by month
   : Math.floor(now.getTime() / (7 * 24 * 3600 * 1000)) % topics.length; // weekly: by week-of-epoch
 const topic = topics[idx];
