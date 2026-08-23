@@ -94,6 +94,75 @@ const fr: LocaleContent = {
         { title: 'Bot de consultation', description: 'Fournissez des consultations et des évaluations initiales basées sur votre expertise.' },
       ],
     },
+    booking: {
+      title: 'Système de Réservation WhatsApp',
+      shortTitle: 'Réservations',
+      headline: 'Des réservations qui se remplissent toutes seules',
+      description:
+        'Un moteur de réservation complet dans WhatsApp. Vos clients réservent, reportent et annulent dans le chat — selon vos disponibilités réelles — tandis que dépôts, confirmations et rappels partent automatiquement.',
+      metaDescription: 'Système de réservation WhatsApp : disponibilités réelles, réservation par IA en un message, dépôts, rappels automatiques et check-in par QR code. Zéro double réservation.',
+      benefits: [
+        { title: 'Zéro double réservation', description: 'Chaque créneau proposé est réellement libre : le temps disponible est calculé à partir des horaires du personnel, des jours fériés, des réservations existantes et des blocs occupés du Google Calendar de votre équipe — en temps réel.' },
+        { title: 'Une réservation en deux messages', description: 'L’IA de réservation intelligente comprend « soin du visage avec Mary mardi vers 16h » — elle associe le service et le coiffeur, trouve le créneau libre le plus proche et réserve dès que votre client dit OUI.' },
+        { title: 'Dépôts, rappels et check-in par QR code', description: 'Demandez des dépôts dans le chat, envoyez des rappels automatiques avant chaque rendez-vous et enregistrez les clients par un scan QR — les absences n’ont nulle part où se cacher.' },
+      ],
+      howItWorks: [
+        { title: 'Configurez services et personnel', description: 'Ajoutez des services avec photos, durées et tarifs. Définissez succursales, personnel et horaires de travail — ou travaillez seul avec les horaires par défaut. Importez les jours fériés de votre pays en un clic.' },
+        { title: 'Laissez les clients réserver dans le chat', description: 'Importez un flux de réservation prêt à l’emploi ou activez l’IA de réservation intelligente. Les clients ne voient que de vrais créneaux libres et peuvent reporter ou annuler eux-mêmes à tout moment.' },
+        { title: 'Laissez tout tourner en pilote automatique', description: 'Confirmations, rappels et reçus PDF à votre marque partent automatiquement. Les statistiques de réservation montrent le chiffre d’affaires, le taux d’absence et vos heures de pointe.' },
+      ],
+      useCases: [
+        { title: 'Salons et spas', description: 'Les clients choisissent le service, le coiffeur et l’heure en un seul chat — les dépôts sécurisent vos créneaux de pointe.' },
+        { title: 'Cliniques et cabinets', description: 'Les patients réservent eux-mêmes et reçoivent des rappels ; votre réception voit le calendrier se remplir au lieu de répondre au téléphone.' },
+        { title: 'Entreprises multi-sites', description: 'Horaires par succursale, calendriers par employé et import de jours fériés empêchent vos différents sites de jamais créer une double réservation.' },
+      ],
+    },
+    catalog: {
+      title: 'Catalogue Produit & Commandes',
+      shortTitle: 'Catalogue',
+      headline: 'Votre boutique, dans le chat',
+      description:
+        'Présentez vos produits avec photos et prix directement dans WhatsApp. Les clients parcourent, choisissent des variantes et passent commande — tandis que les stocks en temps réel garantissent que vous ne vendez jamais ce que vous n’avez pas.',
+      metaDescription: 'Vendez dans WhatsApp avec un catalogue produit : photos, variantes, stock en temps réel qui empêche toute survente, alertes de stock faible et suivi des commandes de Nouvelle à Livrée.',
+      benefits: [
+        { title: 'Parcourez et commandez dans le chat', description: 'Les produits s’affichent avec photos, descriptions et prix. Les clients choisissent une variante de taille ou de couleur et passent commande sans jamais quitter WhatsApp.' },
+        { title: 'Un stock à l’épreuve de la survente', description: 'Dès qu’une commande est passée, le stock est réservé pour ce client. Les alertes de stock faible vous parviennent par e-mail et notification push avant la rupture.' },
+        { title: 'Suivi des commandes intégré', description: 'Suivez d’un coup d’œil les commandes de Nouvelle à Confirmée à Livrée. Les annulations remettent le stock en réserve d’elles-mêmes, et chaque mouvement de stock est consigné dans un registre consultable.' },
+      ],
+      howItWorks: [
+        { title: 'Ajoutez vos produits', description: 'Photos, prix, catégories et variantes avec leurs propres niveaux de stock. Les noms de produits se traduisent automatiquement dans la langue de votre client.' },
+        { title: 'Ajoutez le flux de commande', description: 'Importez le modèle de commande de produit prêt à l’emploi — parcourir, choisir une variante, commander — ou construisez le vôtre avec les étapes de flux catalogue.' },
+        { title: 'Confirmez et livrez', description: 'Les commandes arrivent avec le stock déjà réservé. Confirmez et livrez en un clic ; votre client peut consulter « Mes commandes » dans le chat à tout moment.' },
+      ],
+      useCases: [
+        { title: 'Précommandes en restauration', description: 'Les habitués commandent le déjeuner de demain depuis le chat qu’ils utilisent déjà — avec le stock en direct sur les plats du jour.' },
+        { title: 'Retail avec variantes', description: 'Tailles, couleurs et SKU ont chacune leur propre stock : « en avez-vous en grand ? » reçoit une réponse exacte.' },
+        { title: 'Une urgence réelle', description: '« Plus que 3 en stock » provient des comptes de stock réels — les clients passent à l’action, et vous ne ferez plus jamais de survente.' },
+      ],
+    },
+    crm: {
+      title: 'CRM & Attribution Publicitaire',
+      shortTitle: 'CRM',
+      headline: 'Sachez quelles conversations deviennent des revenus',
+      description:
+        'Chaque personne qui vous écrit devient un contact — tagué, classé en liste et relié à ses réservations et commandes. Connectez vos publicités Facebook pour voir quelles campagnes apportent des prospects et des revenus WhatsApp, et automatisez le suivi. Les contacts sont inclus dans chaque forfait, essai gratuit compris.',
+      metaDescription: 'CRM WhatsApp : contacts capturés automatiquement de chaque conversation, attribution des publicités Facebook avec ROAS et coût par prospect, et automatisations façon Zapier.',
+      benefits: [
+        { title: 'Un CRM qui se remplit tout seul', description: 'Chaque conversation entrante crée automatiquement un contact avec son historique de conversation, ses réservations et ses commandes rattachés. Tags, listes et champs personnalisés gardent tout organisé.' },
+        { title: 'Attribution publicitaire et ROAS', description: 'Les clics sur les publicités click-to-WhatsApp sont capturés dès le premier message de chaque contact. Comparez dépenses publicitaires et revenus WhatsApp attribués, ROAS et coût par prospect — par campagne.' },
+        { title: 'Des automatisations qui font le suivi', description: 'Des règles façon Zapier : quand une réservation est confirmée ou une commande passée, waai peut notifier votre équipe, taguer le contact, signaler la conversion à Facebook ou appeler un webhook.' },
+      ],
+      howItWorks: [
+        { title: 'Les conversations deviennent des contacts', description: 'Chaque nouveau numéro est capturé automatiquement, avec l’historique complet des conversations, réservations et commandes sur un seul profil.' },
+        { title: 'Connectez vos publicités', description: 'Une connexion Meta unique remonte les prospects et les achats à Facebook, pour que vos campagnes s’optimisent sur les revenus WhatsApp réels.' },
+        { title: 'Automatisez le suivi', description: 'Choisissez un déclencheur et des actions — waai notifie votre équipe, met à jour tags et listes et publie vers vos webhooks automatiquement.' },
+      ],
+      useCases: [
+        { title: 'Publicités click-to-WhatsApp', description: 'Voyez quelles campagnes lancent des conversations et quelles conversations convertissent — puis placez le budget là où se trouve le ROAS.' },
+        { title: 'Alertes pour l’équipe', description: 'Une réservation confirmée ou une grosse commande passée ? La bonne personne reçoit un e-mail et une notification mobile instantanément.' },
+        { title: 'Diffusions plus intelligentes', description: 'Taguez et regroupez les contacts selon leur comportement, puis ciblez vos campagnes WhatsApp avec précision.' },
+      ],
+    },
     'team-inbox': {
       title: 'Boîte de Réception d’Équipe',
       shortTitle: 'Boîte de Réception d’Équipe',
@@ -375,6 +444,7 @@ const fr: LocaleContent = {
         { title: 'Flux de capture de prospects', description: 'Des flux automatiques qui qualifient et capturent les informations des prospects.' },
         { title: 'Marketing par base de connaissances', description: 'Recommandations produit et réponses promotionnelles dans vos Q&A.' },
         { title: 'Analyses', description: 'Suivez les performances des campagnes, les volumes de messages et les taux de conversion.' },
+        { title: 'Attribution Publicitaire & ROAS', description: 'Connectez vos publicités click-to-WhatsApp et voyez exactement quelles campagnes transforment les conversations en revenus.' },
       ],
       stats: [{ label: 'Taux d’ouverture WhatsApp' }, { label: 'Engagement supérieur' }, { label: 'Meilleur taux de clics' }],
     },
@@ -391,9 +461,11 @@ const fr: LocaleContent = {
       ],
       features: [
         { title: 'Flux de qualification de prospects', description: 'Des flux automatiques multi-étapes qui notent et qualifient les prospects avant l’implication de votre équipe.' },
-        { title: 'Prise de rendez-vous', description: 'L’intégration Google Calendar permet aux clients de réserver des réunions directement dans le chat.' },
+        { title: 'Prise de rendez-vous', description: 'Un moteur de réservation basé sur la disponibilité réelle — vos clients réservent, reportent et laissent des dépôts directement dans le chat.' },
         { title: 'Génération de documents', description: 'Générez automatiquement devis, factures et propositions à partir des données de conversation.' },
         { title: 'Transfert à un humain', description: 'Transférez fluidement à un commercial quand le prospect est prêt à conclure.' },
+        { title: 'Commandes via Catalogue', description: 'Présentez vos produits avec photos et stock en temps réel. Les clients commandent dans le chat ; le stock se réserve instantanément.' },
+        { title: 'CRM & Attribution Publicitaire', description: 'Chaque conversation devient un contact. Voyez quelles publicités Facebook apportent des prospects et des revenus WhatsApp — avec le ROAS par campagne.' },
       ],
       stats: [{ label: 'Cycle de vente plus court' }, { label: 'Réponse plus rapide' }, { label: 'Capture de prospects' }],
     },

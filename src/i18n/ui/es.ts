@@ -3,7 +3,7 @@ const es: Record<string, string> = {
   // ---- Page metadata ----
   'page.home.title': 'waai — Plataforma de Agente de IA para WhatsApp',
   'page.home.description':
-    'Convierte cada mensaje de WhatsApp en una oportunidad. Respuestas automáticas con IA, flujos inteligentes y derivación fluida a humanos. Pruébalo gratis.',
+    'Convierte cada mensaje de WhatsApp en una oportunidad. Respuestas automáticas con IA, reservas, pedidos y derivación fluida a humanos. Pruébalo gratis.',
   // ---- Navigation (header) ----
   'nav.features': 'Funciones',
   'nav.solutions': 'Soluciones',
@@ -14,6 +14,9 @@ const es: Record<string, string> = {
   'nav.feature.knowledgeBase': 'Base de Conocimiento',
   'nav.feature.logicFlows': 'Flujos Lógicos',
   'nav.feature.aiChatbot': 'Chatbot IA',
+  'nav.feature.booking': 'Reservas',
+  'nav.feature.catalog': 'Catálogo',
+  'nav.feature.crm': 'CRM',
   'nav.feature.teamInbox': 'Bandeja de Equipo',
   'nav.feature.campaigns': 'Campañas',
   'nav.feature.analytics': 'Analítica',
@@ -280,6 +283,10 @@ const es: Record<string, string> = {
   'pf.booking': 'Reserva de Citas',
   'pf.bookingSelfService': 'Reserva Self-Service y Depósitos',
   'pf.bookingReminders': 'Recordatorios, Reprogramar y PDF',
+  'pf.catalog': 'Catálogo de Productos y Pedidos',
+  'pf.crm': 'CRM, Atribución de Anuncios y ROAS',
+  'pf.crmAutomations': 'Automatizaciones (Disparadores → Acciones)',
+  'pf.contactsCrm': 'CRM de Contactos (Cada Chat, Captura Automática)',
 
   // Plan descriptions
   'plan.trial.desc': 'Empieza con una prueba gratis',
@@ -296,6 +303,10 @@ const es: Record<string, string> = {
   'pricing.row.webPages': 'Páginas web',
   'pricing.row.workspaceSends': 'Envíos Workspace / mes',
   'pricing.row.translations': 'Traducciones / idioma / mes',
+  'pricing.row.bookingsMonth': 'Reservas / mes',
+  'pricing.row.catalogProducts': 'Productos del Catálogo',
+  'pricing.row.contacts': 'Contactos',
+  'pricing.row.broadcastsMonth': 'Difusiones / mes',
 
   // Onboarding section
   'pricing.onboardingTitle': 'Asistencia de Onboarding Opcional',
@@ -375,7 +386,7 @@ const es: Record<string, string> = {
   'signup.signIn': 'Iniciar sesión',
   'home.hero.headline': '¿Por qué pierdo clientes por respuestas lentas?',
   'home.hero.subhead':
-    'Convierte cada mensaje de WhatsApp en una oportunidad. Respuestas automáticas con IA, flujos inteligentes y derivación fluida a humanos: tus clientes ya no vuelven a esperar.',
+    'Convierte cada mensaje de WhatsApp en una oportunidad. Respuestas automáticas con IA, reservas, pedidos y derivación fluida a humanos: tus clientes ya no vuelven a esperar.',
   'home.hero.trialNote': 'Sin tarjeta de crédito. Prueba gratis.',
   'home.hero.chat.business': 'Tu Negocio',
   'home.hero.chat.online': 'en línea',
@@ -415,13 +426,13 @@ const es: Record<string, string> = {
     'Cuando ninguna regla coincide, tu IA interviene con respuestas basadas en LLM. Elige OpenAI, Anthropic o cualquier proveedor. La voz de tu marca, amplificada.',
   'home.ai.c3.title': 'Actúa en tu nombre',
   'home.ai.c3.body':
-    'Los flujos lógicos guían a los clientes en reservas, pedidos y cualificación. Genera documentos, consulta calendarios y cierra ventas, automáticamente.',
+    'Tu agente reserva citas según la disponibilidad real, toma pedidos con stock en vivo y archiva cada chat en tu CRM, automáticamente.',
 
   // ---- Homepage: Features grid ----
   'home.features.badge': 'Funciones',
   'home.features.title': 'Todo lo que necesitas para triunfar en WhatsApp',
   'home.features.subtitle':
-    'Desde respuestas automáticas hasta generación de documentos: tu agente de IA gestiona todo el recorrido del cliente.',
+    'Desde respuestas automáticas hasta reservas, pedidos y CRM: tu agente de IA gestiona todo el recorrido del cliente.',
   'home.features.viewAll': 'Ver todas las funciones',
   'home.features.learnMore': 'Saber más',
   'home.features.card.autoResponder.desc':
@@ -432,6 +443,9 @@ const es: Record<string, string> = {
   'home.features.card.aiChatbot.desc': 'IA multiproveedor con voz de marca personalizable. OpenAI, Anthropic, z.ai: elige tu motor.',
   'home.features.card.teamInbox.desc': 'Supervisión de conversaciones en vivo con derivación a humanos. La IA gestiona la rutina, tú te encargas del resto.',
   'home.features.card.analytics.desc': 'Controla volúmenes de mensajes, el rendimiento de la IA y los temas populares. Saber lo que funciona y arreglar lo que no.',
+  'home.features.card.booking.desc': 'Disponibilidad en tiempo real, reserva con IA en un mensaje, depósitos y recordatorios automáticos. Cero reservas duplicadas.',
+  'home.features.card.catalog.desc': 'Fotos, variantes y stock en vivo directamente en el chat. Los pedidos reservan el stock al instante: nunca vendas de más.',
+  'home.features.card.crm.desc': 'Cada chat se convierte en un contacto. Mide la atribución de anuncios y el ROAS, y automatiza el seguimiento.',
 
   // ---- Homepage: Integrations ----
   'home.integrations.badge': 'Integraciones',

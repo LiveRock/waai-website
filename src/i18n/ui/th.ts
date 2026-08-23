@@ -3,7 +3,7 @@ const th: Record<string, string> = {
   // ---- Page metadata ----
   'page.home.title': 'waai — แพลตฟอร์ม AI Agent สำหรับ WhatsApp',
   'page.home.description':
-    'เปลี่ยนทุกข้อความ WhatsApp ให้เป็นโอกาสทางธุรกิจ ตอบกลับอัตโนมัติด้วย AI, ฟลูแบบชาญฉลาด และส่งต่อให้พนักงานได้อย่างราบรื่น ทดลองใช้ฟรี',
+    'เปลี่ยนทุกข้อความ WhatsApp ให้เป็นโอกาส ตอบกลับอัตโนมัติด้วย AI การจองนัดหมาย คำสั่งซื้อ และการส่งต่อให้พนักงานอย่างราบรื่น ทดลองใช้ฟรี',
   // ---- Navigation (header) ----
   'nav.features': 'ฟีเจอร์',
   'nav.solutions': 'โซลูชัน',
@@ -14,6 +14,9 @@ const th: Record<string, string> = {
   'nav.feature.knowledgeBase': 'ฐานความรู้',
   'nav.feature.logicFlows': 'ฟลูตรรกะ',
   'nav.feature.aiChatbot': 'แชทบอท AI',
+  'nav.feature.booking': 'การจองนัดหมาย',
+  'nav.feature.catalog': 'แคตตาล็อกสินค้า',
+  'nav.feature.crm': 'CRM',
   'nav.feature.teamInbox': 'กล่องข้อความทีม',
   'nav.feature.campaigns': 'แคมเปญ',
   'nav.feature.analytics': 'การวิเคราะห์',
@@ -280,6 +283,10 @@ const th: Record<string, string> = {
   'pf.booking': 'การจองนัดหมาย',
   'pf.bookingSelfService': 'จองด้วยตัวเองและมัดจำ',
   'pf.bookingReminders': 'แจ้งเตือน เปลี่ยนนัดและใบเสร็จ PDF',
+  'pf.catalog': 'แคตตาล็อกสินค้าและคำสั่งซื้อ',
+  'pf.crm': 'CRM, การระบุที่มาโฆษณาและ ROAS',
+  'pf.crmAutomations': 'ระบบอัตโนมัติ (ทริกเกอร์ → การดำเนินการ)',
+  'pf.contactsCrm': 'CRM ผู้ติดต่อ (ดักจับอัตโนมัติจากทุกแชท)',
 
   // Plan descriptions
   'plan.trial.desc': 'เริ่มต้นด้วยการทดลองใช้ฟรี',
@@ -296,6 +303,10 @@ const th: Record<string, string> = {
   'pricing.row.webPages': 'หน้าเว็บ',
   'pricing.row.workspaceSends': 'การส่ง Workspace / เดือน',
   'pricing.row.translations': 'การแปล / ภาษา / เดือน',
+  'pricing.row.bookingsMonth': 'การจอง / เดือน',
+  'pricing.row.catalogProducts': 'สินค้าในแคตตาล็อก',
+  'pricing.row.contacts': 'ผู้ติดต่อ',
+  'pricing.row.broadcastsMonth': 'การส่งบรอดแคสต์ / เดือน',
 
   // Onboarding section
   'pricing.onboardingTitle': 'บริการตั้งค่าเบื้องต้นเพิ่มเติม',
@@ -375,7 +386,7 @@ const th: Record<string, string> = {
   'signup.signIn': 'เข้าสู่ระบบ',
   'home.hero.headline': 'ทำไมฉันถึงเสียลูกค้าเพราะการตอบกลับช้า?',
   'home.hero.subhead':
-    'เปลี่ยนทุกข้อความ WhatsApp ให้เป็นโอกาส ตอบกลับอัตโนมัติด้วย AI, ฟลูแบบชาญฉลาด และส่งต่อให้พนักงานได้อย่างราบรื่น — ลูกค้าของคุณจะไม่ต้องรออีกต่อไป',
+    'เปลี่ยนทุกข้อความ WhatsApp ให้เป็นโอกาส ตอบกลับอัตโนมัติด้วย AI การจองนัดหมาย คำสั่งซื้อ และการส่งต่อให้พนักงานอย่างราบรื่น — ลูกค้าของคุณจะไม่ต้องรออีกต่อไป',
   'home.hero.trialNote': 'ไม่ต้องใช้บัตรเครดิต ทดลองใช้ฟรี',
   'home.hero.chat.business': 'ธุรกิจของคุณ',
   'home.hero.chat.online': 'ออนไลน์',
@@ -415,13 +426,13 @@ const th: Record<string, string> = {
     'เมื่อไม่มีกฎที่ตรง AI ของคุณจะเข้ามาตอบด้วยพลังของ LLM เลือก OpenAI, Anthropic หรือผู้ให้บริการใดก็ได้ เสียงแบรนด์ของคุณ ถูกขยายให้เด่น',
   'home.ai.c3.title': 'ลงมือเพื่อคุณ',
   'home.ai.c3.body':
-    'ฟลูตรรกะนำทางลูกค้าผ่านการจอง การสั่งซื้อ และการคัดกรอง สร้างเอกสาร ตรวจสอบปฏิทิน และปิดการขาย — โดยอัตโนมัติ',
+    'Agent ของคุณจองนัดหมายตามช่วงเวลาว่างจริง รับคำสั่งซื้อพร้อมสต็อกแบบเรียลไทม์ และบันทึกทุกแชทเข้าสู่ CRM ของคุณ — โดยอัตโนมัติ',
 
   // ---- Homepage: Features grid ----
   'home.features.badge': 'ฟีเจอร์',
   'home.features.title': 'ทุกสิ่งที่คุณต้องการเพื่อชนะบน WhatsApp',
   'home.features.subtitle':
-    'ตั้งแต่การตอบกลับอัตโนมัติไปจนถึงการสร้างเอกสาร — AI Agent ของคุณดูแลเส้นทางลูกค้าทั้งหมด',
+    'ตั้งแต่การตอบกลับอัตโนมัติไปจนถึงการจองนัดหมาย คำสั่งซื้อ และ CRM — AI Agent ของคุณดูแลเส้นทางลูกค้าทั้งหมด',
   'home.features.viewAll': 'ดูฟีเจอร์ทั้งหมด',
   'home.features.learnMore': 'เรียนรู้เพิ่มเติม',
   'home.features.card.autoResponder.desc':
@@ -432,6 +443,12 @@ const th: Record<string, string> = {
   'home.features.card.aiChatbot.desc': 'AI หลายผู้ให้บริการพร้อมเสียงแบรนด์ที่ปรับแต่งได้ OpenAI, Anthropic, z.ai — เลือกเอนจินของคุณ',
   'home.features.card.teamInbox.desc': 'ติดตามการสนทนาสดพร้อมการส่งต่อให้พนักงาน AI ดูเรื่องปกติ คุณดูส่วนที่เหลือ',
   'home.features.card.analytics.desc': 'ติดตามปริมาณข้อความ ประสิทธิภาพ AI และหัวข้อยอดนิยม รู้ว่าอะไรได้ผล แก้สิ่งที่ไม่ได้ผล',
+  'home.features.card.booking.desc':
+    'ช่วงเวลาว่างแบบเรียลไทม์ การจองด้วย AI ในข้อความเดียว มัดจำ และการแจ้งเตือนอัตโนมัติ ไม่มีการจองซ้ำ',
+  'home.features.card.catalog.desc':
+    'รูปภาพ ตัวเลือกสินค้า และสต็อกแบบเรียลไทม์ในแชท คำสั่งซื้อจองสต็อกไว้ทันที — ไม่มีการขายเกินสต็อก',
+  'home.features.card.crm.desc':
+    'ทุกแชทกลายเป็นผู้ติดต่อ ติดตามการระบุที่มาโฆษณาและ ROAS พร้อมทำการติดตามต่อโดยอัตโนมัติ',
 
   // ---- Homepage: Integrations ----
   'home.integrations.badge': 'การเชื่อมต่อ',

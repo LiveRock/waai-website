@@ -50,11 +50,11 @@ function formatLimit(val: number | null | undefined): string {
 }
 
 const signupFeatureMap: Record<string, string[]> = {
-  starter: ['pf.googlePlugins'],
-  pro: ['pf.calIntegration', 'pf.languageTranslations', 'pf.booking'],
+  starter: ['pf.contactsCrm', 'pf.googlePlugins'],
+  pro: ['pf.calIntegration', 'pf.languageTranslations', 'pf.booking', 'pf.catalog', 'pf.crm'],
 };
 
-const trialDays = dbPlans.find((p) => p.name === 'trial')?.trial_days || 7;
+const trialDays = dbPlans.find((p) => p.name === 'trial')?.trial_days || 30;
 
 const qaLine = (p: typeof dbPlans[number]) => p.max_qa_pairs
   ? t('pricing.nQa').replace('{n}', formatLimit(p.max_qa_pairs))
@@ -71,7 +71,7 @@ const signupPlans = dbPlans.length > 0
       name: p.name,
       display_name: p.display_name,
       price: formatPrice(p.price_monthly),
-      period: p.price_monthly === 0 ? t('pricing.daysPeriod').replace('{n}', String(p.trial_days || 7)) : t('pricing.perMonth'),
+      period: p.price_monthly === 0 ? t('pricing.daysPeriod').replace('{n}', String(p.trial_days || 30)) : t('pricing.perMonth'),
       description: t(`plan.${p.name}.desc`),
       highlights: [
         qaLine(p), flowsLine(p), msgLine(p),

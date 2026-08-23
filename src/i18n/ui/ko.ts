@@ -3,7 +3,7 @@ const ko: Record<string, string> = {
   // ---- Page metadata ----
   'page.home.title': 'waai — WhatsApp AI 에이전트 플랫폼',
   'page.home.description':
-    '모든 WhatsApp 메시지를 기회로 바꾸세요. AI 기반 자동 응답, 스마트 플로우, 매끄러운 상담원 연결로 고객을 기다리게 하지 마세요. 무료로 체험해 보세요.',
+    '모든 WhatsApp 메시지를 기회로 바꾸세요. AI 기반 자동 응답, 예약, 주문, 매끄러운 상담원 연결. 무료로 체험해 보세요.',
   // ---- Navigation (header) ----
   'nav.features': '기능',
   'nav.solutions': '솔루션',
@@ -14,6 +14,9 @@ const ko: Record<string, string> = {
   'nav.feature.knowledgeBase': '지식 베이스',
   'nav.feature.logicFlows': '로직 플로우',
   'nav.feature.aiChatbot': 'AI 챗봇',
+  'nav.feature.booking': '예약',
+  'nav.feature.catalog': '카탈로그',
+  'nav.feature.crm': 'CRM',
   'nav.feature.teamInbox': '팀 인박스',
   'nav.feature.campaigns': '캠페인',
   'nav.feature.analytics': '분석',
@@ -280,6 +283,10 @@ const ko: Record<string, string> = {
   'pf.booking': '예약 관리',
   'pf.bookingSelfService': '셀프 서비스 예약 및 예약금',
   'pf.bookingReminders': '알림, 일정 변경 및 PDF 영수증',
+  'pf.catalog': '제품 카탈로그 및 주문',
+  'pf.crm': 'CRM, 광고 어트리뷰션 및 ROAS',
+  'pf.crmAutomations': '자동화 (트리거 → 액션)',
+  'pf.contactsCrm': '연락처 CRM (모든 채팅에서 자동 캡처)',
 
   // Plan descriptions
   'plan.trial.desc': '무료 체험으로 시작',
@@ -296,6 +303,10 @@ const ko: Record<string, string> = {
   'pricing.row.webPages': '웹 페이지',
   'pricing.row.workspaceSends': '월별 Workspace 전송',
   'pricing.row.translations': '월별 언어당 번역',
+  'pricing.row.bookingsMonth': '월별 예약',
+  'pricing.row.catalogProducts': '카탈로그 제품',
+  'pricing.row.contacts': '연락처',
+  'pricing.row.broadcastsMonth': '월별 브로드캐스트',
 
   // Onboarding section
   'pricing.onboardingTitle': '옵션 온보딩 지원',
@@ -375,7 +386,7 @@ const ko: Record<string, string> = {
   'signup.signIn': '로그인',
   'home.hero.headline': '느린 응답 때문에 고객을 왜 잃고 있을까요?',
   'home.hero.subhead':
-    '모든 WhatsApp 메시지를 기회로 바꾸세요. AI 기반 자동 응답, 스마트 플로우, 매끄러운 상담원 연결 — 고객은 더 이상 기다리지 않습니다.',
+    '모든 WhatsApp 메시지를 기회로 바꾸세요. AI 기반 자동 응답, 예약, 주문, 매끄러운 상담원 연결 — 고객은 더 이상 기다리지 않습니다.',
   'home.hero.trialNote': '신용카드 불필요. 무료 체험.',
   'home.hero.chat.business': '비즈니스',
   'home.hero.chat.online': '온라인',
@@ -415,13 +426,13 @@ const ko: Record<string, string> = {
     '규칙이 맞지 않을 때 AI가 LLM 기반 응답으로 개입합니다. OpenAI, Anthropic 또는 다른 제공자를 선택하세요. 브랜드 목소리를 증폭합니다.',
   'home.ai.c3.title': '귀하를 대신해 행동합니다',
   'home.ai.c3.body':
-    '로직 플로우가 고객을 예약, 주문, 자격 확인으로 안내합니다. 문서 생성, 캘린더 확인, 거래 성사 — 모두 자동으로.',
+    '에이전트가 실제 가능 시간에 맞춰 약속을 예약하고, 실시간 재고로 주문을 받으며, 모든 채팅을 CRM에 기록합니다 — 모두 자동으로.',
 
   // ---- Homepage: Features grid ----
   'home.features.badge': '기능',
   'home.features.title': 'WhatsApp에서 이기기 위한 모든 것',
   'home.features.subtitle':
-    '자동 응답부터 문서 생성까지 — AI 에이전트가 전체 고객 여정을 처리합니다.',
+    '자동 응답부터 예약, 주문, CRM까지 — AI 에이전트가 전체 고객 여정을 처리합니다.',
   'home.features.viewAll': '모든 기능 보기',
   'home.features.learnMore': '자세히 보기',
   'home.features.card.autoResponder.desc':
@@ -432,6 +443,12 @@ const ko: Record<string, string> = {
   'home.features.card.aiChatbot.desc': '맞춤 가능한 브랜드 목소리의 다중 제공자 AI. OpenAI, Anthropic, z.ai — 엔진을 선택하세요.',
   'home.features.card.teamInbox.desc': '상담원 연결 기능의 실시간 대화 모니터링. AI는 루틴을, 나머지는 귀하가 처리합니다.',
   'home.features.card.analytics.desc': '메시지 볼륨, AI 성능, 인기 주제를 추적하세요. 잘 되는 것은 파악하고, 안 되는 것은 수정하세요.',
+  'home.features.card.booking.desc':
+    '실시간 가능 시간, 메시지 한 번으로 끝내는 AI 예약, 예약금, 자동 알림. 이중 예약은 없습니다.',
+  'home.features.card.catalog.desc':
+    '사진, 옵션, 실시간 재고를 채팅에서 바로 보여줍니다. 주문 시 재고가 즉시 예약 — 초과 판매 없음.',
+  'home.features.card.crm.desc':
+    '모든 채팅이 연락처가 됩니다. 광고 어트리뷰션과 ROAS를 추적하고 후속 조치를 자동화하세요.',
 
   // ---- Homepage: Integrations ----
   'home.integrations.badge': '연동',

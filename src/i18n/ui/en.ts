@@ -3,7 +3,7 @@ const en: Record<string, string> = {
   // ---- Page metadata ----
   'page.home.title': 'waai — WhatsApp AI Agent Platform',
   'page.home.description':
-    'Turn every WhatsApp message into an opportunity. AI-powered auto-responses, smart flows, and seamless human handoff. Try it free.',
+    'Turn every WhatsApp message into an opportunity. AI auto-responses, bookings, orders, and seamless human handoff. Try it free.',
   // ---- Navigation (header) ----
   'nav.features': 'Features',
   'nav.solutions': 'Solutions',
@@ -15,6 +15,9 @@ const en: Record<string, string> = {
   'nav.feature.knowledgeBase': 'Knowledge Base',
   'nav.feature.logicFlows': 'Logic Flows',
   'nav.feature.aiChatbot': 'AI Chatbot',
+  'nav.feature.booking': 'Bookings',
+  'nav.feature.catalog': 'Catalog',
+  'nav.feature.crm': 'CRM',
   'nav.feature.teamInbox': 'Team Inbox',
   'nav.feature.campaigns': 'Campaigns',
   'nav.feature.analytics': 'Analytics',
@@ -286,6 +289,10 @@ const en: Record<string, string> = {
   'pf.booking': 'Appointment Booking',
   'pf.bookingSelfService': 'Self-Service Booking & Deposits',
   'pf.bookingReminders': 'Reminders, Reschedule & PDF Receipts',
+  'pf.catalog': 'Product Catalog & Orders',
+  'pf.crm': 'CRM, Ads Attribution & ROAS',
+  'pf.crmAutomations': 'Automations (Triggers → Actions)',
+  'pf.contactsCrm': 'Contacts CRM (Every Chat, Auto-Captured)',
 
   // Plan descriptions
   'plan.trial.desc': 'Get started with a free trial',
@@ -302,6 +309,10 @@ const en: Record<string, string> = {
   'pricing.row.webPages': 'Web Pages',
   'pricing.row.workspaceSends': 'Workspace Sends / month',
   'pricing.row.translations': 'Translations / language / month',
+  'pricing.row.bookingsMonth': 'Bookings / month',
+  'pricing.row.catalogProducts': 'Catalog Products',
+  'pricing.row.contacts': 'Contacts',
+  'pricing.row.broadcastsMonth': 'Broadcasts / month',
 
   // Onboarding section
   'pricing.onboardingTitle': 'Optional Onboarding Assistance',
@@ -325,7 +336,7 @@ const en: Record<string, string> = {
   'pricing.faq5.q': 'Do I need my own WhatsApp Business number?',
   'pricing.faq5.a': 'Yes, you need a WhatsApp Business API account through Meta. We guide you through the setup process, which typically takes under an hour.',
   'pricing.faq6.q': 'Which AI providers do you support?',
-  'pricing.faq6.a': 'We support OpenAI (GPT-4, GPT-3.5), Anthropic (Claude), z.ai, llama.cpp (local), and OpenRouter. Each customer can configure their preferred provider and model.',
+  'pricing.faq6.a': 'We support OpenAI (GPT-4, GPT-3.5), Anthropic (Claude), z.ai, OpenRouter, and any OpenAI-compatible endpoint. Each customer can configure their preferred provider and model.',
   'pricing.faq7.q': 'Is my data secure?',
   'pricing.faq7.a': 'All API keys and tokens are encrypted at rest using AES (Fernet). We use secure HTTPS connections for all API calls. Your data is never shared with third parties.',
   'pricing.faq8.q': 'What payment methods do you accept?',
@@ -384,7 +395,7 @@ const en: Record<string, string> = {
   'signup.signIn': 'Sign in',
   'home.hero.headline': 'Why am I losing customers to slow responses?',
   'home.hero.subhead':
-    'Turn every WhatsApp message into an opportunity. AI-powered auto-responses, smart flows, and seamless human handoff — your customers never wait again.',
+    'Turn every WhatsApp message into an opportunity. AI auto-responses, bookings, orders, and seamless human handoff — your customers never wait again.',
   'home.hero.trialNote': 'No credit card required. Free trial.',
   'home.hero.chat.business': 'Your Business',
   'home.hero.chat.online': 'online',
@@ -424,13 +435,13 @@ const en: Record<string, string> = {
     'When no rule matches, your AI steps in with LLM-powered responses. Choose OpenAI, Anthropic, or any provider. Your brand voice, amplified.',
   'home.ai.c3.title': 'Acts on Your Behalf',
   'home.ai.c3.body':
-    'Logic flows guide customers through booking, ordering, and qualifying. Generate documents, check calendars, and close deals — automatically.',
+    'Your agent books appointments against real availability, takes orders with live stock, and files every chat into your CRM — automatically.',
 
   // ---- Homepage: Features grid ----
   'home.features.badge': 'Features',
   'home.features.title': 'Everything You Need to Win on WhatsApp',
   'home.features.subtitle':
-    'From auto-responses to document generation — your AI agent handles the entire customer journey.',
+    'From auto-responses to bookings, orders, and CRM — your AI agent runs the entire customer journey.',
   'home.features.viewAll': 'View all features',
   'home.features.learnMore': 'Learn more',
   'home.features.card.autoResponder.desc':
@@ -441,6 +452,12 @@ const en: Record<string, string> = {
   'home.features.card.aiChatbot.desc': 'Multi-provider AI with customizable brand voice. OpenAI, Anthropic, z.ai — choose your engine.',
   'home.features.card.teamInbox.desc': 'Live conversation monitoring with human handoff. AI handles the routine, you handle the rest.',
   'home.features.card.analytics.desc': 'Track message volumes, AI performance, and popular topics. Know what’s working, fix what’s not.',
+  'home.features.card.booking.desc':
+    'Real-time availability, one-message AI booking, deposits, and automatic reminders. Zero double-bookings.',
+  'home.features.card.catalog.desc':
+    'Photos, variants, and live stock right in chat. Orders reserve stock instantly — never oversell.',
+  'home.features.card.crm.desc':
+    'Every chat becomes a contact. Track ad attribution and ROAS, and automate the follow-up.',
 
   // ---- Homepage: Integrations ----
   'home.integrations.badge': 'Integrations',

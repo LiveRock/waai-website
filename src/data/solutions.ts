@@ -25,6 +25,7 @@ export const solutions: Solution[] = [
       { title: 'Lead Capture Flows', description: 'Automated flows that qualify and capture lead information.' },
       { title: 'Knowledge Base Marketing', description: 'Product recommendations and promotional answers in your Q&A.' },
       { title: 'Analytics', description: 'Track campaign performance, message volumes, and conversion rates.' },
+      { title: 'Ads Attribution & ROAS', description: 'Connect click-to-WhatsApp ads and see exactly which campaigns turn chats into revenue.' },
     ],
     stats: [
       { value: '98%', label: 'WhatsApp Open Rate' },
@@ -45,9 +46,11 @@ export const solutions: Solution[] = [
     ],
     features: [
       { title: 'Lead Qualification Flows', description: 'Automated multi-step flows that score and qualify leads before your team gets involved.' },
-      { title: 'Appointment Booking', description: 'Google Calendar integration lets customers book meetings directly in the chat.' },
+      { title: 'Appointment Booking', description: 'A real-availability booking engine — customers book, reschedule, and leave deposits directly in the chat.' },
       { title: 'Document Generation', description: 'Auto-generate quotes, invoices, and proposals from conversation data.' },
       { title: 'Human Handoff', description: 'Seamlessly transfer to a sales rep when the lead is ready to close.' },
+      { title: 'Catalog Orders', description: 'Show products with photos and live stock. Customers order in chat; stock reserves itself instantly.' },
+      { title: 'CRM & Ad Attribution', description: 'Every chat becomes a contact. See which Facebook ads bring WhatsApp leads and revenue — with ROAS per campaign.' },
     ],
     stats: [
       { value: '30%', label: 'Shorter Sales Cycle' },

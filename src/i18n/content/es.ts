@@ -94,6 +94,75 @@ const es: LocaleContent = {
         { title: 'Bot de consultoría', description: 'Ofrece consultas y evaluaciones iniciales basadas en tu experiencia.' },
       ],
     },
+    booking: {
+      title: 'Sistema de Reservas de WhatsApp',
+      shortTitle: 'Reservas',
+      headline: 'Reservas que se llenan solas',
+      description:
+        'Un motor de reservas completo dentro de WhatsApp. Los clientes reservan, reprograman y cancelan en el chat, según tu disponibilidad real, mientras los depósitos, confirmaciones y recordatorios salen automáticamente.',
+      metaDescription: 'Sistema de reservas de WhatsApp con disponibilidad real, reserva con IA en un mensaje, depósitos, recordatorios automáticos y check-in con QR. Sin reservas duplicadas.',
+      benefits: [
+        { title: 'Cero reservas duplicadas', description: 'Cada hueco ofrecido está realmente libre: el tiempo disponible se calcula a partir de los horarios del personal, los festivos, las reservas existentes y los bloques ocupados del Google Calendar de tu equipo, en tiempo real.' },
+        { title: 'Una reserva en dos mensajes', description: 'La IA de reservas inteligente entiende "facial con Mary el martes sobre las 16:00": empareja el servicio y la estilista, encuentra el hueco libre más cercano y reserva en cuanto tu cliente dice SÍ.' },
+        { title: 'Depósitos, recordatorios y check-in con QR', description: 'Pide depósitos en el chat, envía recordatorios automáticos antes de cada cita y registra a los clientes con un escaneo QR: las ausencias no tienen dónde esconderse.' },
+      ],
+      howItWorks: [
+        { title: 'Configura servicios y personal', description: 'Añade servicios con fotos, duraciones y precios. Define sucursales, personal y horarios de trabajo, o trabaja solo con los horarios por defecto. Importa los festivos de tu país en un clic.' },
+        { title: 'Deja que los clientes reserven en el chat', description: 'Importa un flujo de reservas listo para usar o activa la IA de reservas inteligente. Los clientes solo ven huecos realmente libres y pueden reprogramar o cancelar por sí mismos en cualquier momento.' },
+        { title: 'Déjalo en piloto automático', description: 'Las confirmaciones, recordatorios y recibos PDF con tu marca salen automáticamente. Las analíticas de reservas muestran ingresos, tasa de ausencias y tus horas punta.' },
+      ],
+      useCases: [
+        { title: 'Salones y spas', description: 'Los clientes eligen servicio, estilista y hora en un solo chat: los depósitos aseguran tus huecos en horas punta.' },
+        { title: 'Clínicas y consultas', description: 'Los pacientes reservan solos y reciben recordatorios; tu recepción ve cómo se llena la agenda en vez de contestar al teléfono.' },
+        { title: 'Negocios con varias sucursales', description: 'Horarios por sucursal, calendarios por empleado e importación de festivos evitan que varias ubicaciones dupliquen reservas.' },
+      ],
+    },
+    catalog: {
+      title: 'Catálogo de Productos y Pedidos',
+      shortTitle: 'Catálogo',
+      headline: 'Tu tienda, dentro del chat',
+      description:
+        'Muestra productos con fotos y precios directamente en WhatsApp. Los clientes exploran, eligen variantes y hacen pedidos, mientras el stock en tiempo real garantiza que nunca vendas lo que no tienes.',
+      metaDescription: 'Vende dentro de WhatsApp con un catálogo de productos: fotos, variantes, stock en vivo que evita sobreventas, alertas de stock bajo y un flujo de pedidos de Nuevo a Completado.',
+      benefits: [
+        { title: 'Explora y pide en el chat', description: 'Los productos aparecen con fotos, descripciones y precios. Los clientes eligen la variante de talla o color y hacen el pedido sin salir de WhatsApp.' },
+        { title: 'Un stock que no se sobrevende', description: 'En el momento en que se hace un pedido, el stock queda reservado para ese cliente. Las alertas de stock bajo te llegan por correo y notificación push antes de quedarte sin existencias.' },
+        { title: 'Flujo de pedidos integrado', description: 'Los pedidos pasan de Nuevo a Confirmado a Completado de un vistazo. Las cancelaciones reponen el stock solas y cada cambio de stock queda registrado en un historial consultable.' },
+      ],
+      howItWorks: [
+        { title: 'Añade tus productos', description: 'Fotos, precios, categorías y variantes con sus propios niveles de stock. Los nombres de los productos se traducen automáticamente al idioma de tu cliente.' },
+        { title: 'Incorpora el flujo de pedidos', description: 'Importa la plantilla lista para usar de pedido de productos (explorar, elegir variante, pedir) o construye la tuya con pasos de flujo de catálogo.' },
+        { title: 'Confirma y completa', description: 'Los pedidos llegan con el stock ya reservado. Confirma y completa en un clic; tu cliente puede consultar "Mis pedidos" en el chat cuando quiera.' },
+      ],
+      useCases: [
+        { title: 'Pedidos anticipados de comida', description: 'Los habituales piden la comida de mañana desde el chat que ya usan, con stock en vivo en los platos del día.' },
+        { title: 'Retail con variantes', description: 'Tallas, colores y SKU tienen cada uno su propio stock, así que "¿lo tienes en la talla L?" recibe una respuesta real.' },
+        { title: 'Urgencia real', description: '"Quedan solo 3" viene del recuento real de stock: los clientes actúan en consecuencia y tú nunca vendes de más.' },
+      ],
+    },
+    crm: {
+      title: 'CRM y Atribución de Anuncios',
+      shortTitle: 'CRM',
+      headline: 'Sabes qué chats se convierten en ingresos',
+      description:
+        'Cada persona que te escribe se convierte en un contacto: etiquetado, en listas y vinculado a sus reservas y pedidos. Conecta tus anuncios de Facebook para ver qué campañas traen leads e ingresos por WhatsApp, y automatiza el seguimiento. Los contactos están incluidos en todos los planes, incluida la prueba gratis.',
+      metaDescription: 'CRM de WhatsApp: contactos capturados automáticamente de cada chat, atribución de anuncios de Facebook con ROAS y coste por lead, y automatizaciones al estilo Zapier.',
+      benefits: [
+        { title: 'Un CRM que se llena solo', description: 'Cada chat entrante crea automáticamente un contacto con su historial de conversación, reservas y pedidos adjuntos. Etiquetas, listas y campos personalizados lo mantienen todo organizado.' },
+        { title: 'Atribución de anuncios y ROAS', description: 'Los clics de los anuncios de click-to-WhatsApp se capturan en el primer mensaje de cada contacto. Compara gasto publicitario con los ingresos de WhatsApp atribuidos, ROAS y coste por lead, por campaña.' },
+        { title: 'Automatizaciones que hacen seguimiento', description: 'Reglas al estilo Zapier: cuando se confirma una reserva o se hace un pedido, waai puede avisar a tu equipo, etiquetar el contacto, informar de la conversión a Facebook o llamar a un webhook.' },
+      ],
+      howItWorks: [
+        { title: 'Los chats se convierten en contactos', description: 'Cada nuevo número de teléfono se captura automáticamente, con todo su historial de conversaciones, reservas y pedidos en un solo perfil.' },
+        { title: 'Conecta tus anuncios', description: 'Una única conexión con Meta informa de leads y compras a Facebook, para que tus campañas se optimicen con los ingresos reales de WhatsApp.' },
+        { title: 'Automatiza el seguimiento', description: 'Elige un disparador y acciones: waai avisa a tu equipo, actualiza etiquetas y listas y envía datos a tus webhooks automáticamente.' },
+      ],
+      useCases: [
+        { title: 'Anuncios de click-to-WhatsApp', description: 'Ve qué campañas inician conversaciones y qué conversaciones convierten, y pon el presupuesto donde está el ROAS.' },
+        { title: 'Alertas para el equipo', description: '¿Una reserva confirmada o un pedido grande? La persona adecuada recibe un correo y una notificación push al instante.' },
+        { title: 'Difusiones más inteligentes', description: 'Etiqueta y agrupa contactos según su comportamiento y dirige tus campañas de WhatsApp con precisión.' },
+      ],
+    },
     'team-inbox': {
       title: 'Bandeja de Equipo',
       shortTitle: 'Bandeja de Equipo',
@@ -375,6 +444,7 @@ const es: LocaleContent = {
         { title: 'Flujo de captación de leads', description: 'Flujos automáticos que cualifican y capturan la información de los leads.' },
         { title: 'Base de Conocimiento de marketing', description: 'Recomendaciones de productos y respuestas promocionales en tus preguntas y respuestas.' },
         { title: 'Analítica', description: 'Mide el rendimiento de las campañas, los volúmenes de mensajes y las tasas de conversión.' },
+        { title: 'Atribución de Anuncios y ROAS', description: 'Conecta tus anuncios de click-to-WhatsApp y ve exactamente qué campañas convierten los chats en ingresos.' },
       ],
       stats: [{ label: 'Tasa de apertura en WhatsApp' }, { label: 'Mayor interacción' }, { label: 'Mejor tasa de clics' }],
     },
@@ -391,9 +461,11 @@ const es: LocaleContent = {
       ],
       features: [
         { title: 'Flujo de cualificación de leads', description: 'Flujos automáticos de varios pasos que capturan y cualifican a los leads antes de que intervenga tu equipo.' },
-        { title: 'Reserva de citas', description: 'La integración con Google Calendar permite a los clientes reservar reuniones directamente en el chat.' },
+        { title: 'Reserva de citas', description: 'Un motor de reservas con disponibilidad real: los clientes reservan, reprograman y dejan depósitos directamente en el chat.' },
         { title: 'Generación de documentos', description: 'Genera automáticamente presupuestos, facturas y propuestas a partir de los datos de la conversación.' },
         { title: 'Derivación humana', description: 'Transición fluida a un comercial cuando el lead está listo para cerrar.' },
+        { title: 'Pedidos desde el Catálogo', description: 'Muestra productos con fotos y stock en vivo. Los clientes piden en el chat; el stock se reserva al instante.' },
+        { title: 'CRM y Atribución de Anuncios', description: 'Cada chat se convierte en un contacto. Ve qué anuncios de Facebook traen leads e ingresos por WhatsApp, con el ROAS por campaña.' },
       ],
       stats: [{ label: 'Ciclo de ventas más corto' }, { label: 'Respuesta más rápida' }, { label: 'Captura de leads' }],
     },

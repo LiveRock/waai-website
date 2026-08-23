@@ -94,6 +94,75 @@ const ms: LocaleContent = {
         { title: 'Bot Perundingan', description: 'Sediakan perundingan dan penilaian awal berdasarkan kepakaran anda.' },
       ],
     },
+    booking: {
+      title: 'Sistem Tempahan WhatsApp',
+      shortTitle: 'Temujanji',
+      headline: 'Tempahan yang Datang Sendiri',
+      description:
+        'Enjin tempahan lengkap dalam WhatsApp. Pelanggan menempah, menjadualkan semula dan membatalkan dalam sembang — berdasarkan ketersediaan sebenar anda — sementara deposit, pengesahan dan peringatan dihantar secara automatik.',
+      metaDescription: 'Sistem tempahan WhatsApp dengan ketersediaan sebenar, tempahan AI satu-mesej, deposit, peringatan automatik dan daftar masuk QR. Tiada tempahan berganda.',
+      benefits: [
+        { title: 'Sifar Tempahan Berganda', description: 'Setiap slot yang ditawarkan benar-benar kosong: masa lapang dikira daripada jam kakitangan, cuti umum, tempahan sedia ada dan blok sibuk Google Kalendar pasukan anda — dalam masa nyata.' },
+        { title: 'Tempahan dalam Dua Mesej', description: 'AI Tempahan Pintar memahami "facial dengan Mary pada Selasa sekitar jam 4 petang" — ia memadankan servis dan penata rambut, mencari slot kosong terdekat, dan menempah sebaik sahaja pelanggan anda kata YA.' },
+        { title: 'Deposit, Peringatan & Daftar Masuk QR', description: 'Mohon deposit dalam sembang, hantar peringatan automatik sebelum setiap janji temu, dan daftar masuk pelanggan dengan imbasan QR — ketidakhadiran tiada tempat untuk bersembunyi.' },
+      ],
+      howItWorks: [
+        { title: 'Sediakan Servis & Kakitangan', description: 'Tambah servis dengan foto, tempoh dan harga. Takrifkan cawangan, kakitangan dan waktu bekerja — atau beroperasi seorangan dengan waktu lalai. Import cuti umum negara anda dalam satu klik.' },
+        { title: 'Biar Pelanggan Tempah dalam Sembang', description: 'Import aliran tempahan sedia ada atau dayakan AI Tempahan Pintar. Pelanggan hanya nampak slot kosong sebenar, dan boleh menjadualkan semula atau membatalkan sendiri pada bila-bila masa.' },
+        { title: 'Jalankan secara Autopilot', description: 'Pengesahan, peringatan dan resit PDF berjenama dihantar secara automatik. Analitik tempahan menunjukkan hasil, kadar ketidakhadiran dan waktu paling sibuk anda.' },
+      ],
+      useCases: [
+        { title: 'Salon & Spa', description: 'Pelanggan memilih servis, penata rambut dan masa dalam satu sembang — deposit mengunci slot waktu puncak anda.' },
+        { title: 'Klinik & Amalan Perubatan', description: 'Pesakit menempah sendiri dan menerima peringatan; kaunter hadapan anda memerhati kalendar terisi dan bukannya menjawab telefon.' },
+        { title: 'Perniagaan Berbilang Cawangan', description: 'Waktu setiap cawangan, kalendar setiap kakitangan dan import cuti memastikan berbilang lokasi tidak pernah menempah berganda.' },
+      ],
+    },
+    catalog: {
+      title: 'Katalog Produk & Pesanan',
+      shortTitle: 'Katalog',
+      headline: 'Kedai Anda, Dalam Sembang',
+      description:
+        'Paparkan produk dengan foto dan harga terus dalam WhatsApp. Pelanggan melayari, memilih varian dan membuat pesanan — sementara kiraan stok langsung memastikan anda tidak pernah menjual barang yang anda tidak ada.',
+      metaDescription: 'Jual dalam WhatsApp dengan katalog produk: foto, varian, stok langsung yang tidak boleh menjual berlebihan, amaran stok rendah dan saluran pesanan daripada Baharu hingga Selesai.',
+      benefits: [
+        { title: 'Layari & Pesan dalam Sembang', description: 'Produk dipaparkan dengan foto, penerangan dan harga. Pelanggan memilih varian saiz atau warna dan membuat pesanan tanpa perlu meninggalkan WhatsApp.' },
+        { title: 'Stok Yang Tidak Boleh Jual Berlebihan', description: 'Sebaik sahaja pesanan dibuat, stok ditempah untuk pelanggan tersebut. Amaran stok rendah sampai kepada anda melalui e-mel dan push sebelum kehabisan.' },
+        { title: 'Saluran Pesanan Terbina Dalam', description: 'Pesanan mengalir daripada Baharu kepada Disahkan kepada Selesai dalam satu pandangan. Pembatalan menambah semula stok secara automatik, dan setiap perubahan stok direkodkan dalam lejar yang boleh anda semak.' },
+      ],
+      howItWorks: [
+        { title: 'Tambah Produk Anda', description: 'Foto, harga, kategori dan varian dengan tahap stok masing-masing. Nama produk diterjemahkan secara automatik ke bahasa pelanggan anda.' },
+        { title: 'Masukkan Aliran Pesanan', description: 'Import templat Pesanan Produk sedia ada — layari, pilih varian, buat pesanan — atau bina sendiri dengan langkah aliran katalog.' },
+        { title: 'Sahkan & Laksanakan', description: 'Pesanan tiba dengan stok sudah ditempah. Sahkan dan laksanakan dalam satu klik; pelanggan anda boleh menyemak "Pesanan Saya" dalam sembang pada bila-bila masa.' },
+      ],
+      useCases: [
+        { title: 'Pra-Pesanan Makanan & Minuman', description: 'Pelanggan tetap memesan makan tengah hari esok daripada sembang yang sudah mereka gunakan — dengan stok langsung pada hidangan istimewa harian.' },
+        { title: 'Runcit dengan Varian', description: 'Saiz, warna dan SKU masing-masing mempunyai stok sendiri, jadi "ada stok saiz besar?" mendapat jawapan sebenar.' },
+        { title: 'Kegerunan Yang Sebenar', description: '"Tinggal 3 sahaja" datang daripada kiraan stok sebenar — pelanggan bertindak ke atasnya, dan anda tidak pernah menjual berlebihan.' },
+      ],
+    },
+    crm: {
+      title: 'CRM & Atribusi Iklan',
+      shortTitle: 'CRM',
+      headline: 'Ketahui Sembang Mana yang Menjadi Hasil',
+      description:
+        'Setiap orang yang menghantar mesej kepada anda menjadi kenalan — berlabel, tersenarai dan dipautkan kepada tempahan serta pesanan mereka. Sambungkan iklan Facebook anda untuk melihat kempen mana membawa bakal pelanggan WhatsApp dan hasil, dan automatikkan susulan. Kenalan disertakan dalam setiap pelan, termasuk percubaan percuma.',
+      metaDescription: 'CRM WhatsApp: kenalan ditangkap automatik daripada setiap sembang, atribusi iklan Facebook dengan ROAS dan kos setiap bakal pelanggan, serta automasi gaya Zapier.',
+      benefits: [
+        { title: 'CRM yang Mengisi Dirinya Sendiri', description: 'Setiap sembang masuk mencipta kenalan secara automatik dengan sejarah perbualan, tempahan dan pesanan dilampirkan. Tag, senarai dan medan tersuai memastikan semuanya tersusun.' },
+        { title: 'Atribusi Iklan & ROAS', description: 'Klik iklan klik-ke-WhatsApp ditangkap pada mesej pertama setiap kenalan. Lihat perbelanjaan iklan berbanding hasil WhatsApp yang diatribusikan, ROAS dan kos setiap bakal pelanggan — mengikut kempen.' },
+        { title: 'Automasi yang Membuat Susulan', description: 'Peraturan gaya Zapier: apabila tempahan disahkan atau pesanan dibuat, waai boleh memaklumkan pasukan anda, memberi tag kepada kenalan, melaporkan penukaran kepada Facebook, atau memanggil webhook.' },
+      ],
+      howItWorks: [
+        { title: 'Sembang Menjadi Kenalan', description: 'Setiap nombor telefon baharu ditangkap secara automatik, dengan perbualan penuh, sejarah tempahan dan pesanan mereka dalam satu profil.' },
+        { title: 'Sambungkan Iklan Anda', description: 'Sambungan Meta sekali sahaja melaporkan bakal pelanggan dan pembelian kembali kepada Facebook, supaya kempen anda dioptimumkan berdasarkan hasil WhatsApp sebenar.' },
+        { title: 'Automatikkan Susulan', description: 'Pilih pencetus dan tindakan — waai memaklumkan pasukan anda, mengemas kini tag dan senarai, dan menghantar ke webhook anda secara automatik.' },
+      ],
+      useCases: [
+        { title: 'Iklan Klik-ke-WhatsApp', description: 'Lihat kempen mana memulakan perbualan dan perbualan mana yang bertukar — kemudian letakkan belanjawan di mana ROAS berada.' },
+        { title: 'Makluman Pasukan', description: 'Tempahan disahkan atau pesanan besar dibuat? Orang yang betul menerima e-mel dan notifikasi push mudah alih serta-merta.' },
+        { title: 'Siaran Lebih Pintar', description: 'Tag dan kumpulkan kenalan mengikut tingkah laku mereka, kemudian sasarkan kempen WhatsApp anda dengan tepat.' },
+      ],
+    },
     'team-inbox': {
       title: 'Peti Masuk Pasukan',
       shortTitle: 'Peti Masuk Pasukan',
@@ -375,6 +444,7 @@ const ms: LocaleContent = {
         { title: 'Aliran Tangkapan Bakal Pelanggan', description: 'Aliran automatik yang melayakkan dan menangkap maklumat bakal pelanggan.' },
         { title: 'Pemasaran Pangkalan Pengetahuan', description: 'Syorkan produk dan jawapan promosi dalam Soal Jawab anda.' },
         { title: 'Analitik', description: 'Jejak prestasi kempen, volum mesej dan kadar penukaran.' },
+        { title: 'Atribusi Iklan & ROAS', description: 'Sambungkan iklan klik-ke-WhatsApp dan lihat dengan tepat kempen mana menukar sembang menjadi hasil.' },
       ],
       stats: [{ label: 'Kadar Pembukaan WhatsApp' }, { label: 'Penglibatan Lebih Tinggi' }, { label: 'Klik-Tertinggi Lebih Baik' }],
     },
@@ -391,9 +461,11 @@ const ms: LocaleContent = {
       ],
       features: [
         { title: 'Aliran Kelayakan Bakal Pelanggan', description: 'Aliran berbilang langkah automatik yang menjaring dan melayakkan bakal pelanggan sebelum pasukan anda terlibat.' },
-        { title: 'Tempahan Janji Temu', description: 'Integrasi Google Kalendar membolehkan pelanggan menempah mesyuarat terus dalam sembang.' },
+        { title: 'Tempahan Janji Temu', description: 'Enjin tempahan berdasarkan ketersediaan sebenar — pelanggan menempah, menjadualkan semula dan meninggalkan deposit terus dalam sembang.' },
         { title: 'Penjanaan Dokumen', description: 'Auto-jana sebut harga, invois dan cadangan daripada data perbualan.' },
         { title: 'Serah Manusia', description: 'Pindah lancar kepada wakil jualan apabila bakal pelanggan sedia untuk menutup.' },
+        { title: 'Pesanan Katalog', description: 'Paparkan produk dengan foto dan stok langsung. Pelanggan memesan dalam sembang; stok ditempah serta-merta secara automatik.' },
+        { title: 'CRM & Atribusi Iklan', description: 'Setiap sembang menjadi kenalan. Lihat iklan Facebook mana membawa bakal pelanggan dan hasil WhatsApp — dengan ROAS mengikut kempen.' },
       ],
       stats: [{ label: 'Kitaran Jualan Lebih Pendek' }, { label: 'Respons Lebih Pantas' }, { label: 'Tangkapan Bakal Pelanggan' }],
     },

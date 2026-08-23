@@ -3,7 +3,7 @@ const zh: Record<string, string> = {
   // ---- 页面元数据 ----
   'page.home.title': 'waai — WhatsApp AI 客服平台',
   'page.home.description':
-    '把每条 WhatsApp 消息变成商机。AI 自动回复、智能流程、无缝人工接管。立即免费试用。',
+    '把每条 WhatsApp 消息变成商机。AI 自动回复、预约、订单，以及无缝人工接管。立即免费试用。',
   // ---- 导航 (页头) ----
   'nav.features': '功能',
   'nav.solutions': '解决方案',
@@ -14,6 +14,9 @@ const zh: Record<string, string> = {
   'nav.feature.knowledgeBase': '知识库',
   'nav.feature.logicFlows': '逻辑流程',
   'nav.feature.aiChatbot': 'AI 聊天机器人',
+  'nav.feature.booking': '预约',
+  'nav.feature.catalog': '产品目录',
+  'nav.feature.crm': 'CRM',
   'nav.feature.teamInbox': '团队收件箱',
   'nav.feature.campaigns': '营销活动',
   'nav.feature.analytics': '数据分析',
@@ -274,6 +277,10 @@ const zh: Record<string, string> = {
   'pf.booking': '预约预订',
   'pf.bookingSelfService': '自助预约与定金',
   'pf.bookingReminders': '提醒、改期与 PDF 收据',
+  'pf.catalog': '产品目录与订单',
+  'pf.crm': 'CRM、广告归因与 ROAS',
+  'pf.crmAutomations': '自动化（触发器 → 动作）',
+  'pf.contactsCrm': '联系人 CRM（每场聊天自动捕获）',
 
   // 方案描述
   'plan.trial.desc': '从免费试用开始',
@@ -290,6 +297,10 @@ const zh: Record<string, string> = {
   'pricing.row.webPages': '网页数',
   'pricing.row.workspaceSends': 'Workspace 发送 / 月',
   'pricing.row.translations': '翻译 / 语言 / 月',
+  'pricing.row.bookingsMonth': '预约数 / 月',
+  'pricing.row.catalogProducts': '目录产品数',
+  'pricing.row.contacts': '联系人数',
+  'pricing.row.broadcastsMonth': '群发数 / 月',
 
   // 上线协助
   'pricing.onboardingTitle': '可选上线协助',
@@ -369,7 +380,7 @@ const zh: Record<string, string> = {
   'signup.signIn': '登录',
   'home.hero.headline': '为什么慢回复会让我流失客户？',
   'home.hero.subhead':
-    '把每条 WhatsApp 消息变成商机。AI 自动回复、智能流程、无缝人工接管——让客户不再等待。',
+    '把每条 WhatsApp 消息变成商机。AI 自动回复、预约、订单，加上无缝人工接管——让客户不再等待。',
   'home.hero.trialNote': '无需信用卡。免费试用。',
   'home.hero.chat.business': '您的企业',
   'home.hero.chat.online': '在线',
@@ -408,12 +419,12 @@ const zh: Record<string, string> = {
     '当没有规则匹配时，AI 会用 LLM 驱动的回复顶上。选择 OpenAI、Anthropic 或任意提供方。放大您的品牌声音。',
   'home.ai.c3.title': '代您行动',
   'home.ai.c3.body':
-    '逻辑流程引导客户完成预订、下单和筛选。自动生成文档、查看日历、达成交易。',
+    '您的 AI 客服基于真实可用时段接受预约、基于实时库存接单，并把每场聊天归档进 CRM——全自动。',
 
   // ---- 首页：功能网格 ----
   'home.features.badge': '功能',
   'home.features.title': '在 WhatsApp 上取胜所需的一切',
-  'home.features.subtitle': '从自动回复到文档生成——您的 AI 客服覆盖整个客户旅程。',
+  'home.features.subtitle': '从自动回复到预约、订单和 CRM——您的 AI 客服掌管整个客户旅程。',
   'home.features.viewAll': '查看全部功能',
   'home.features.learnMore': '了解更多',
   'home.features.card.autoResponder.desc': '为每条 WhatsApp 消息提供即时 AI 回复。先规则匹配，再智能 LLM 兜底。',
@@ -422,6 +433,9 @@ const zh: Record<string, string> = {
   'home.features.card.aiChatbot.desc': '可定制品牌语气的多供应商 AI。OpenAI、Anthropic、z.ai——任您选择。',
   'home.features.card.teamInbox.desc': '带人工接管的实时对话监控。AI 处理日常，您处理其余。',
   'home.features.card.analytics.desc': '追踪消息量、AI 表现和热门话题。了解哪些有效，修正哪些无效。',
+  'home.features.card.booking.desc': '实时可用时段、一句话 AI 预约、定金和自动提醒。绝无重复预订。',
+  'home.features.card.catalog.desc': '照片、规格和实时库存直接呈现在聊天中。下单即锁定库存——绝不超卖。',
+  'home.features.card.crm.desc': '每场聊天都变成联系人。追踪广告归因和 ROAS，并自动完成后续跟进。',
 
   // ---- 首页：集成 ----
   'home.integrations.badge': '集成',

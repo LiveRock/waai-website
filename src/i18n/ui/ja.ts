@@ -3,7 +3,7 @@ const ja: Record<string, string> = {
   // ---- Page metadata ----
   'page.home.title': 'waai — WhatsApp AIエージェントプラットフォーム',
   'page.home.description':
-    'すべてのWhatsAppメッセージをチャンスに変えましょう。AIを活用した自動応答、スマートなフロー、シームレスなヒューマンハンドオフ。今すぐ無料でお試しください。',
+    'すべてのWhatsAppメッセージをチャンスに変えましょう。AIを活用した自動応答、予約、注文、シームレスなヒューマンハンドオフ。今すぐ無料でお試しください。',
   // ---- Navigation (header) ----
   'nav.features': '機能',
   'nav.solutions': 'ソリューション',
@@ -14,6 +14,9 @@ const ja: Record<string, string> = {
   'nav.feature.knowledgeBase': 'ナレッジベース',
   'nav.feature.logicFlows': 'ロジックフロー',
   'nav.feature.aiChatbot': 'AIチャットボット',
+  'nav.feature.booking': '予約',
+  'nav.feature.catalog': 'カタログ',
+  'nav.feature.crm': 'CRM',
   'nav.feature.teamInbox': 'チーム受信箱',
   'nav.feature.campaigns': 'キャンペーン',
   'nav.feature.analytics': '分析',
@@ -280,6 +283,10 @@ const ja: Record<string, string> = {
   'pf.booking': '予約管理',
   'pf.bookingSelfService': 'セルフサービス予約・デポジット',
   'pf.bookingReminders': 'リマインダー・変更・PDFレシート',
+  'pf.catalog': '製品カタログと注文',
+  'pf.crm': 'CRM、広告アトリビューション、ROAS',
+  'pf.crmAutomations': 'オートメーション（トリガー → アクション）',
+  'pf.contactsCrm': '連絡先CRM（すべてのチャットを自動取得）',
 
   // Plan descriptions
   'plan.trial.desc': '無料トライアルで始める',
@@ -296,6 +303,10 @@ const ja: Record<string, string> = {
   'pricing.row.webPages': 'ウェブページ数',
   'pricing.row.workspaceSends': '月間 Workspace 送信数',
   'pricing.row.translations': '月間翻訳数 / 言語',
+  'pricing.row.bookingsMonth': '月間予約数',
+  'pricing.row.catalogProducts': 'カタログ製品数',
+  'pricing.row.contacts': '連絡先数',
+  'pricing.row.broadcastsMonth': '月間ブロードキャスト数',
 
   // Onboarding section
   'pricing.onboardingTitle': 'オプションのオンボーディング支援',
@@ -375,7 +386,7 @@ const ja: Record<string, string> = {
   'signup.signIn': 'サインイン',
   'home.hero.headline': '返信が遅くて顧客を失っていませんか？',
   'home.hero.subhead':
-    'すべてのWhatsAppメッセージをチャンスに変えましょう。AIを活用した自動応答、スマートなフロー、シームレスなヒューマンハンドオフ — もう二度とお客様をお待たせしません。',
+    'すべてのWhatsAppメッセージをチャンスに変えましょう。AIを活用した自動応答、予約、注文、シームレスなヒューマンハンドオフ — もう二度とお客様をお待たせしません。',
   'home.hero.trialNote': 'クレジットカード不要。無料トライアル。',
   'home.hero.chat.business': 'あなたのビジネス',
   'home.hero.chat.online': 'オンライン',
@@ -415,13 +426,13 @@ const ja: Record<string, string> = {
     'ルールに一致しない場合、AIがLLMを活用した応答でサポートします。OpenAI、Anthropicなどお好みのプロバイダーを選択。あなたのブランドの声を増幅。',
   'home.ai.c3.title': 'あなたに代わって行動',
   'home.ai.c3.body':
-    'ロジックフローが予約、注文、審査へお客様を誘導します。ドキュメントを生成し、カレンダーを確認し、成約へ — すべて自動で。',
+    'エージェントが実際の空き状況に合わせて予約を取り、リアルタイム在庫とともに注文を受け付け、すべてのチャットをCRMに記録します — すべて自動で。',
 
   // ---- Homepage: Features grid ----
   'home.features.badge': '機能',
   'home.features.title': 'WhatsAppで勝つために必要なすべて',
   'home.features.subtitle':
-    '自動応答からドキュメント生成まで — あなたのAIエージェントが顧客ジャーニー全体を処理します。',
+    '自動応答から予約、注文、CRMまで — あなたのAIエージェントが顧客ジャーニー全体を処理します。',
   'home.features.viewAll': 'すべての機能を見る',
   'home.features.learnMore': '詳しく見る',
   'home.features.card.autoResponder.desc':
@@ -432,6 +443,12 @@ const ja: Record<string, string> = {
   'home.features.card.aiChatbot.desc': 'カスタマイズ可能なブランドボイスを持つマルチプロバイダーAI。OpenAI、Anthropic、z.ai — エンジンをお選びください。',
   'home.features.card.teamInbox.desc': 'ヒューマンハンドオフ付きのライブ会話モニタリング。AIが定型業務を、あなたは残りを。',
   'home.features.card.analytics.desc': 'メッセージ量、AIパフォーマンス、人気トピックを追跡。機能しているものを把握し、していないものを改善。',
+  'home.features.card.booking.desc':
+    'リアルタイムの空き状況、メッセージ1通で完了するAI予約、デポジット、自動リマインダー。二重予約はゼロに。',
+  'home.features.card.catalog.desc':
+    '写真、バリエーション、リアルタイム在庫をチャット内で。注文と同時に在庫を確保 — 過剰販売はありません。',
+  'home.features.card.crm.desc':
+    'すべてのチャットが連絡先になります。広告アトリビューションとROASを追跡し、フォローアップを自動化。',
 
   // ---- Homepage: Integrations ----
   'home.integrations.badge': '連携',

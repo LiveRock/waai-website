@@ -2,6 +2,18 @@
 
 Running log of significant work sessions. Newest first.
 
+## 2026-08-23
+
+### New product features on the site: Booking, Catalog, CRM
+Mirrored the waaiChat product's August launches (Bookings engine, Catalogs, CRM/ads attribution) into the marketing site, benefits-first:
+- `src/data/features.ts`: 3 new features (`booking`, `catalog`, `crm`; Pro & Custom) inserted after `ai-chatbot` → 12 total. New icons (`calendar-check`, `package`, `users`) added to BOTH duplicated iconMaps (`FeatureDetail.astro`, `FeaturesIndex.astro`). Cross-linked `relatedFeatures` on ai-chatbot/campaigns/analytics/document-generation.
+- Homepage `FeaturesGrid.astro` 6 → 9 cards; hero subhead + `home.ai.c3.body` + `home.features.subtitle` copy updated to name bookings/orders/CRM.
+- Pricing: `planFeatureMap` trial/starter += Contacts CRM, pro += Catalog/CRM/Automations; comparison table += 2 feature rows + 4 API-driven quota rows (`max_bookings_monthly`, `max_catalog_products`, `max_contacts`, `max_broadcasts_monthly` — verified live on `/api/public/plans`); offline-fallback trial period corrected 7 → 30 days. Signup `signupFeatureMap` likewise.
+- Solutions: sales += Catalog Orders + CRM & Ad Attribution (and booking entry rewritten around the native engine); marketing += Ads Attribution & ROAS. NOTE: solution features merge **by index** — new entries appended at END so existing overlay translations stay aligned.
+- i18n: `nav.feature.*`, `pf.*`, `pricing.row.*`, `home.features.card.*` keys + full feature overlays translated in all 9 non-EN locales (AI-authored, unreviewed as usual).
+- Launch blog post `src/content/blog/whatsapp-booking-catalog-crm-launch.md` (Product, EN).
+- Copy guardrails honored: no cart/checkout/payment claims for Catalog v1; no buffer/lead-time/cancellation-window claims for Booking (not in product).
+
 ## 2026-08-11
 
 ### Referral code mandatory at signup

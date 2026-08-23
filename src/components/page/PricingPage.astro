@@ -12,7 +12,7 @@ const API_URLS = [
   'https://waaichat.hsi.asia/api/public/plans',
 ];
 
-let dbPlans: { name: string; display_name: string; description: string | null; price_monthly: number; price_yearly: number; max_qa_pairs: number | null; max_flows: number | null; max_messages_monthly: number | null; max_respondents: number | null; max_web_pages: number | null; max_drive_sends_monthly: number | null; max_qa_translations_per_lang_monthly: number | null; max_flow_translations_per_lang_monthly: number | null; trial_days: number | null }[] = [];
+let dbPlans: { name: string; display_name: string; description: string | null; price_monthly: number; price_yearly: number; max_qa_pairs: number | null; max_flows: number | null; max_messages_monthly: number | null; max_respondents: number | null; max_web_pages: number | null; max_drive_sends_monthly: number | null; max_qa_translations_per_lang_monthly: number | null; max_flow_translations_per_lang_monthly: number | null; max_bookings_monthly: number | null; max_booking_branches: number | null; max_booking_services: number | null; max_catalog_products: number | null; max_contacts: number | null; max_broadcasts_monthly: number | null; trial_days: number | null }[] = [];
 for (const url of API_URLS) {
   try {
     const res = await fetch(url);
@@ -53,9 +53,9 @@ const fmtCount = (val: number | null | undefined): string => {
 
 // Plan feature bullet keys (translated at render).
 const planFeatureMap: Record<string, string[]> = {
-  trial: ['pf.aiAutoResponder', 'pf.knowledgeBase', 'pf.testChat'],
-  starter: ['pf.aiAutoResponder', 'pf.knowledgeBase', 'pf.logicFlows', 'pf.analytics', 'pf.businessTemplates', 'pf.csvImport', 'pf.googlePlugins'],
-  pro: ['pf.everythingStarter', 'pf.calIntegration', 'pf.languageTranslations', 'pf.superPowers', 'pf.documentGeneration', 'pf.aiMultiProvider', 'pf.prioritySupport', 'pf.booking', 'pf.bookingSelfService', 'pf.bookingReminders'],
+  trial: ['pf.aiAutoResponder', 'pf.knowledgeBase', 'pf.contactsCrm', 'pf.testChat'],
+  starter: ['pf.aiAutoResponder', 'pf.knowledgeBase', 'pf.logicFlows', 'pf.analytics', 'pf.businessTemplates', 'pf.csvImport', 'pf.contactsCrm', 'pf.googlePlugins'],
+  pro: ['pf.everythingStarter', 'pf.calIntegration', 'pf.languageTranslations', 'pf.superPowers', 'pf.documentGeneration', 'pf.aiMultiProvider', 'pf.prioritySupport', 'pf.booking', 'pf.bookingSelfService', 'pf.bookingReminders', 'pf.catalog', 'pf.crm', 'pf.crmAutomations'],
 };
 
 const onboardingLabel = (name: string): string | null =>
@@ -94,14 +94,14 @@ const plans = dbPlans.length > 0
       ],
     }))
   : [
-      { name: 'trial', display_name: 'Trial', key: 'trial', price: t('pricing.free'), period: t('pricing.daysPeriod').replace('{n}', '7'), yearlyPrice: '', description: t('plan.trial.desc'), highlighted: false, cta: ctaKey('trial'), ctaHref: ctaHref('trial'), features: planFeatureMap.trial.map((k) => t(k)) },
+      { name: 'trial', display_name: 'Trial', key: 'trial', price: t('pricing.free'), period: t('pricing.daysPeriod').replace('{n}', '30'), yearlyPrice: '', description: t('plan.trial.desc'), highlighted: false, cta: ctaKey('trial'), ctaHref: ctaHref('trial'), features: planFeatureMap.trial.map((k) => t(k)) },
       { name: 'starter', display_name: 'Starter', key: 'starter', price: '$20', period: t('pricing.perMonth'), yearlyPrice: '$220', description: t('plan.starter.desc'), highlighted: false, cta: ctaKey('starter'), ctaHref: ctaHref('starter'), features: [...planFeatureMap.starter.map((k) => t(k)), ...(onboardingLabel('starter') ? [onboardingLabel('starter') as string] : [])] },
       { name: 'pro', display_name: 'Pro', key: 'pro', price: '$99', period: t('pricing.perMonth'), yearlyPrice: '$1,099', description: t('plan.pro.desc'), highlighted: true, cta: ctaKey('pro'), ctaHref: ctaHref('pro'), features: [...planFeatureMap.pro.map((k) => t(k)), ...(onboardingLabel('pro') ? [onboardingLabel('pro') as string] : [])] },
       { name: 'custom', display_name: 'Custom', key: 'custom', price: t('pricing.contactPrice'), period: '', yearlyPrice: '', description: t('plan.custom.desc'), highlighted: false, cta: ctaKey('custom'), ctaHref: ctaHref('custom'), features: [] },
     ];
 
 const tablePlans = dbPlans.length > 0 ? dbPlans.filter((p) => p.name !== 'custom') : [];
-const trialDays = dbPlans.find((p) => p.name === 'trial')?.trial_days || 7;
+const trialDays = dbPlans.find((p) => p.name === 'trial')?.trial_days || 30;
 
 const faqItems = [
   { question: t('pricing.faq1.q'), answer: t('pricing.faq1.a').replace('{days}', String(trialDays)) },
@@ -123,6 +123,10 @@ const comparisonQuotaRows = [
   { label: t('pricing.row.webPages'), key: 'max_web_pages', format: fmtCount },
   { label: t('pricing.row.workspaceSends'), key: 'max_drive_sends_monthly', format: fmtCount },
   { label: t('pricing.row.translations'), key: 'max_qa_translations_per_lang_monthly', format: fmtCount },
+  { label: t('pricing.row.bookingsMonth'), key: 'max_bookings_monthly', format: fmtCount },
+  { label: t('pricing.row.catalogProducts'), key: 'max_catalog_products', format: fmtCount },
+  { label: t('pricing.row.contacts'), key: 'max_contacts' },
+  { label: t('pricing.row.broadcastsMonth'), key: 'max_broadcasts_monthly', format: fmtCount },
 ];
 const comparisonFeatureRows = [
   { label: t('pf.aiAutoResponder'), plans: ['trial', 'starter', 'pro'] },
@@ -132,6 +136,8 @@ const comparisonFeatureRows = [
   { label: t('pf.superPowersShort'), plans: ['pro'] },
   { label: t('pf.documentGeneration'), plans: ['pro'] },
   { label: t('pf.booking'), plans: ['pro'] },
+  { label: t('pf.catalog'), plans: ['pro'] },
+  { label: t('pf.crm'), plans: ['pro'] },
   { label: t('pf.onboardingAssistance'), plans: ['starter', 'pro'] },
 ];
 ---

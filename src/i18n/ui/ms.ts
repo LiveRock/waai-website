@@ -3,7 +3,7 @@ const ms: Record<string, string> = {
   // ---- Metadata halaman ----
   'page.home.title': 'waai — Platform Ejen AI WhatsApp',
   'page.home.description':
-    'Tukarkan setiap mesej WhatsApp menjadi peluang. Auto-respons berkuasa AI, aliran pintar dan serah manusia yang lancar. Cuba percuma.',
+    'Tukarkan setiap mesej WhatsApp menjadi peluang. Auto-respons berkuasa AI, tempahan, pesanan dan serah manusia yang lancar. Cuba percuma.',
   // ---- Navigasi (pengepala) ----
   'nav.features': 'Ciri',
   'nav.solutions': 'Penyelesaian',
@@ -14,6 +14,9 @@ const ms: Record<string, string> = {
   'nav.feature.knowledgeBase': 'Pangkalan Pengetahuan',
   'nav.feature.logicFlows': 'Aliran Logik',
   'nav.feature.aiChatbot': 'Chatbot AI',
+  'nav.feature.booking': 'Temujanji',
+  'nav.feature.catalog': 'Katalog',
+  'nav.feature.crm': 'CRM',
   'nav.feature.teamInbox': 'Peti Masuk Pasukan',
   'nav.feature.campaigns': 'Kempen',
   'nav.feature.analytics': 'Analitik',
@@ -280,6 +283,10 @@ const ms: Record<string, string> = {
   'pf.booking': 'Temujanji',
   'pf.bookingSelfService': 'Tempahan Kendiri & Deposit',
   'pf.bookingReminders': 'Peringatan, Jadual Semula & Resit PDF',
+  'pf.catalog': 'Katalog Produk & Pesanan',
+  'pf.crm': 'CRM, Atribusi Iklan & ROAS',
+  'pf.crmAutomations': 'Automasi (Pencetus → Tindakan)',
+  'pf.contactsCrm': 'CRM Kenalan (Setiap Sembang, Ditangkap Automatik)',
 
   // Penerangan pelan
   'plan.trial.desc': 'Bermula dengan percubaan percuma',
@@ -296,6 +303,10 @@ const ms: Record<string, string> = {
   'pricing.row.webPages': 'Halaman Web',
   'pricing.row.workspaceSends': 'Penghantaran Workspace / bulan',
   'pricing.row.translations': 'Terjemahan / bahasa / bulan',
+  'pricing.row.bookingsMonth': 'Tempahan / bulan',
+  'pricing.row.catalogProducts': 'Produk Katalog',
+  'pricing.row.contacts': 'Kenalan',
+  'pricing.row.broadcastsMonth': 'Siaran / bulan',
 
   // Bahagian onboarding
   'pricing.onboardingTitle': 'Bantuan Onboarding Pilihan',
@@ -375,7 +386,7 @@ const ms: Record<string, string> = {
   'signup.signIn': 'Log masuk',
   'home.hero.headline': 'Mengapa saya kehilangan pelanggan kerana respons perlahan?',
   'home.hero.subhead':
-    'Tukarkan setiap mesej WhatsApp menjadi peluang. Auto-respons berkuasa AI, aliran pintar dan serah manusia yang lancar — pelanggan anda tidak perlu menunggu lagi.',
+    'Tukarkan setiap mesej WhatsApp menjadi peluang. Auto-respons berkuasa AI, tempahan, pesanan dan serah manusia yang lancar — pelanggan anda tidak perlu menunggu lagi.',
   'home.hero.trialNote': 'Tiada kad kredit diperlukan. Percubaan percuma.',
   'home.hero.chat.business': 'Perniagaan Anda',
   'home.hero.chat.online': 'dalam talian',
@@ -415,13 +426,13 @@ const ms: Record<string, string> = {
     'Apabila tiada peraturan sepadan, AI anda masuk dengan respons berkuasa LLM. Pilih OpenAI, Anthropic atau mana-mana pembekal. Suara jenama anda, diperkuat.',
   'home.ai.c3.title': 'Bertindak bagi Pihak Anda',
   'home.ai.c3.body':
-    'Aliran logik memandu pelanggan melalui tempahan, pesanan dan kelayakan. Jana dokumen, semak kalendar dan tutup perjanjian — secara automatik.',
+    'Ejen anda menempah janji temu berdasarkan ketersediaan sebenar, mengambil pesanan dengan stok langsung dan memfailkan setiap sembang ke dalam CRM anda — secara automatik.',
 
   // ---- Laman utama: Grid ciri ----
   'home.features.badge': 'Ciri',
   'home.features.title': 'Semua Yang Anda Perlukan untuk Menang di WhatsApp',
   'home.features.subtitle':
-    'Daripada auto-respons hingga penjanaan dokumen — ejen AI anda mengendalikan keseluruhan perjalanan pelanggan.',
+    'Daripada auto-respons hingga tempahan, pesanan dan CRM — ejen AI anda mengendalikan keseluruhan perjalanan pelanggan.',
   'home.features.viewAll': 'Lihat semua ciri',
   'home.features.learnMore': 'Ketahui lebih lanjut',
   'home.features.card.autoResponder.desc': 'Balasan AI serta-merta untuk setiap mesej WhatsApp. Padanan berasaskan peraturan dahulu, sandaran LLM pintar kemudian.',
@@ -430,6 +441,12 @@ const ms: Record<string, string> = {
   'home.features.card.aiChatbot.desc': 'AI berbilang pembekal dengan suara jenama boleh disesuaikan. OpenAI, Anthropic, z.ai — pilih enjin anda.',
   'home.features.card.teamInbox.desc': 'Pemantauan perbualan langsung dengan serah manusia. AI mengendalikan rutin, anda selebihnya.',
   'home.features.card.analytics.desc': 'Jejak volum mesej, prestasi AI dan topik popular. Tahu apa yang berkesan, baiki apa yang tidak.',
+  'home.features.card.booking.desc':
+    'Ketersediaan masa nyata, tempahan AI satu-mesej, deposit dan peringatan automatik. Sifar tempahan berganda.',
+  'home.features.card.catalog.desc':
+    'Foto, varian dan stok langsung terus dalam sembang. Pesanan menempah stok serta-merta — tidak pernah jual berlebihan.',
+  'home.features.card.crm.desc':
+    'Setiap sembang menjadi kenalan. Jejak atribusi iklan dan ROAS, dan automatikkan susulan.',
 
   // ---- Laman utama: Integrasi ----
   'home.integrations.badge': 'Integrasi',

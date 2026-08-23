@@ -94,6 +94,75 @@ const zh: LocaleContent = {
         { title: '咨询机器人', description: '基于您的专长提供初步咨询与评估。' },
       ],
     },
+    booking: {
+      title: 'WhatsApp 预约系统',
+      shortTitle: '预约',
+      headline: '预约自动上门',
+      description:
+        '完整的 WhatsApp 预约引擎。客户在聊天中完成预约、改期和取消——基于真实可用时段——同时定金、确认和提醒自动发送。',
+      metaDescription: 'WhatsApp 预约系统：真实可用时段、一句话 AI 预约、定金、自动提醒和二维码签到。绝无重复预订。',
+      benefits: [
+        { title: '零重复预订', description: '每个可约时段都真实可用：空闲时间由员工工时、节假日、已有预约和 Google 日历忙碌时段实时计算。' },
+        { title: '两条消息完成预约', description: '智能预约 AI 能理解"周二下午 4 点左右找 Mary 做面部护理"——匹配服务与技师，找到最近的空闲时段，客户一句"好的"即完成预约。' },
+        { title: '定金、提醒与二维码签到', description: '在聊天中收取定金，每次预约前自动发送提醒，客户到店扫码签到——爽约无处遁形。' },
+      ],
+      howItWorks: [
+        { title: '设置服务与员工', description: '添加带照片、时长和价格的服务。定义分店、员工和工作时间——或用默认时段单人运营。一键导入所在国家的公共假期。' },
+        { title: '让客户在聊天中预约', description: '导入现成的预约流程，或开启智能预约 AI。客户只会看到真实空闲时段，并可随时自助改期或取消。' },
+        { title: '自动运行', description: '确认、提醒和品牌 PDF 回执自动发送。预约分析展示收入、爽约率和高峰时段。' },
+      ],
+      useCases: [
+        { title: '美容院与水疗', description: '客户在一次聊天中选定服务、技师和时间——定金锁定黄金时段。' },
+        { title: '诊所与门诊', description: '患者自助预约并收到提醒；前台看着日历被填满，而不是不停接电话。' },
+        { title: '多分店经营', description: '分店专属工时、员工专属日历和假期导入，让多家门店绝不会重复预订。' },
+      ],
+    },
+    catalog: {
+      title: '产品目录与订单',
+      shortTitle: '产品目录',
+      headline: '把商店开进聊天里',
+      description:
+        '在 WhatsApp 中展示带照片和价格的产品。客户浏览、选择规格并下单——实时库存确保您永远不会卖出没有的货。',
+      metaDescription: '在 WhatsApp 内销售：产品目录、规格变体、绝不超卖的实时库存、低库存提醒，以及从新订单到已完成的订单流水线。',
+      benefits: [
+        { title: '聊天中浏览与下单', description: '产品带照片、描述和价格展示。客户选定尺码或颜色规格即可下单，全程无需离开 WhatsApp。' },
+        { title: '绝不超卖的库存', description: '订单一产生，库存即刻为该客户锁定。低库存提醒通过邮件和推送在断货前送达。' },
+        { title: '内置订单流水线', description: '订单状态一目了然：新订单 → 已确认 → 已完成。取消自动回补库存，每次库存变动都记录在可查的台账中。' },
+      ],
+      howItWorks: [
+        { title: '添加产品', description: '照片、价格、分类，以及各自独立库存的规格变体。产品名称自动翻译成客户的语言。' },
+        { title: '放入下单流程', description: '导入现成的产品订购模板——浏览、选规格、下单——或用目录流程步骤自建。' },
+        { title: '确认与履约', description: '订单到达时库存已预留。一键确认并完成履约；客户随时可在聊天中查看"我的订单"。' },
+      ],
+      useCases: [
+        { title: '餐饮预订', description: '老顾客在常用的聊天里预订明天的午餐——每日特色菜带实时库存。' },
+        { title: '带规格的零售', description: '尺码、颜色和 SKU 各有自己的库存，"有大码吗"得到的是真实答案。' },
+        { title: '真实稀缺感', description: '"只剩 3 件"来自真实库存——客户会立即行动，而您绝不超卖。' },
+      ],
+    },
+    crm: {
+      title: 'CRM 与广告归因',
+      shortTitle: 'CRM',
+      headline: '看清哪些聊天带来了收入',
+      description:
+        '每位给您发消息的人都自动成为联系人——打好标签、编入分组，并关联其预约和订单。连接 Facebook 广告，看清哪些广告系列带来 WhatsApp 线索和收入，并自动完成后续跟进。联系人功能包含于每个方案，免费试用也不例外。',
+      metaDescription: 'WhatsApp CRM：每场聊天自动生成联系人、Facebook 广告归因（ROAS 与单线索成本），以及 Zapier 式自动化。',
+      benefits: [
+        { title: '自动充实的 CRM', description: '每场进站聊天自动创建联系人，附带完整对话、预约和订单记录。标签、分组和自定义字段让一切井井有条。' },
+        { title: '广告归因与 ROAS', description: '点击 WhatsApp 广告的客户在首条消息时即被标记。按广告系列查看广告花费、WhatsApp 归因收入、ROAS 和单线索成本。' },
+        { title: '自动跟进', description: 'Zapier 式规则：预约确认或订单生成时，waai 可通知您的团队、为联系人打标签、向 Facebook 回报转化，或调用 webhook。' },
+      ],
+      howItWorks: [
+        { title: '聊天变联系人', description: '每个新号码自动捕获，完整对话、预约和订单历史汇集于一份档案。' },
+        { title: '连接广告', description: '一次性 Meta 连接即可将线索和购买回报给 Facebook，让广告系列基于真实 WhatsApp 收入优化。' },
+        { title: '自动化跟进', description: '选择触发器和动作——waai 自动通知团队、更新标签和分组，并向您的 webhook 推送数据。' },
+      ],
+      useCases: [
+        { title: '点击聊天广告', description: '看清哪些广告系列引发对话、哪些对话完成转化——把预算投到 ROAS 最高的地方。' },
+        { title: '团队提醒', description: '预约确认或大单生成？相关负责人立即收到邮件和手机推送。' },
+        { title: '更聪明的群发', description: '按行为为联系人打标签、建分组，精准投放 WhatsApp 营销活动。' },
+      ],
+    },
     'team-inbox': {
       title: '团队收件箱',
       shortTitle: '团队收件箱',
@@ -375,6 +444,7 @@ const zh: LocaleContent = {
         { title: '线索捕获流程', description: '筛选并捕获线索信息的自动化流程。' },
         { title: '知识库营销', description: '在问答中提供产品推荐和促销回答。' },
         { title: '数据分析', description: '追踪活动效果、消息量和转化率。' },
+        { title: '广告归因与 ROAS', description: '连接点击聊天广告，看清哪些广告系列真正把对话变成了收入。' },
       ],
       stats: [{ label: 'WhatsApp 打开率' }, { label: '更高互动率' }, { label: '更高点击率' }],
     },
@@ -391,9 +461,11 @@ const zh: LocaleContent = {
       ],
       features: [
         { title: '线索筛选流程', description: '自动多步流程，在团队介入前对线索评分和筛选。' },
-        { title: '预约预订', description: 'Google 日历集成，让客户直接在聊天中预订会议。' },
+        { title: '预约预订', description: '基于真实可用时段的预约引擎——客户在聊天中预约、改期并支付定金。' },
         { title: '文档生成', description: '从对话数据自动生成报价、发票和方案。' },
         { title: '人工交接', description: '线索准备成交时无缝转给销售代表。' },
+        { title: '目录订单', description: '展示带照片和实时库存的产品。客户在聊天中下单，库存即时自动锁定。' },
+        { title: 'CRM 与广告归因', description: '每场聊天都变成联系人。看清哪些 Facebook 广告带来 WhatsApp 线索和收入——按广告系列查看 ROAS。' },
       ],
       stats: [{ label: '更短销售周期' }, { label: '更快响应' }, { label: '线索捕获' }],
     },
