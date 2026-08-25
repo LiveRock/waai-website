@@ -70,7 +70,7 @@ No Conversions API (CAPI) yet — the pixel is browser-side only, which is fine 
 ## D. Ad URL cheat sheet
 
 ```
-https://waai.me/[locale/]trial/[industry]/?utm_source=meta&utm_medium=paid&utm_campaign=<campaign>&utm_content=<creative>&ref=<code>
+https://waai.me/[locale/]trial/[industry]/?utm_source=meta&utm_medium=paid&utm_campaign=<campaign>&utm_content=<creative>
 ```
 
 | Slot | Values |
@@ -79,15 +79,14 @@ https://waai.me/[locale/]trial/[industry]/?utm_source=meta&utm_medium=paid&utm_c
 | `[industry]` | `restaurants` `fitness` `professional-services` `healthcare` `education` `ecommerce` `real-estate` `hospitality` `automotive` — or omit `/trial` entirely for the generic page |
 | `utm_campaign` | e.g. `sg-restaurants-sep26` (keep per-ad-set, lowercase, no spaces) |
 | `utm_content` | e.g. `video-a` / `image-b` (per creative, for GA4 breakdowns) |
-| `ref` | e.g. `FBAD01` — ⚠️ see caveat below |
 
 **Examples:**
-- `https://waai.me/trial/restaurants/?utm_source=meta&utm_medium=paid&utm_campaign=sg-restaurants-sep26&utm_content=video-a&ref=FBAD01`
-- `https://waai.me/zh/trial/fitness/?utm_source=meta&utm_medium=paid&utm_campaign=sg-fitness-zh&ref=FBAD01`
+- `https://waai.me/trial/restaurants/?utm_source=meta&utm_medium=paid&utm_campaign=sg-restaurants-sep26&utm_content=video-a`
+- `https://waai.me/zh/trial/fitness/?utm_source=meta&utm_medium=paid&utm_campaign=sg-fitness-zh`
 
 **Optional pre-fill params** (useful if you ever email/link directly): `?name=`, `?email=`, `?company=`, `?phone=` pre-fill the signup form. Facebook cannot inject the user's details into a click URL — the form itself collects them.
 
-**⚠️ `ref` caveat:** the `ref` value lands in the signup form's mandatory **referral code** field and is posted to waaiChat. Default is `888888`. If waaiChat validates referral codes against its database, an unknown code like `FBAD01` could be rejected at signup. **Test one signup with `?ref=FBAD01` before launching ads.** If it fails, drop `ref` from the URLs — the `utm_*` params still carry full attribution through to waaiChat's redirect.
+**⚠️ Do NOT use `?ref=` in ad URLs.** The referral code is a real waaiChat feature — it identifies which actual customer referred a signup (mandatory field, default `888888`). Made-up ad codes like `FBAD01` would be posted to waaiChat as a referral code, polluting or failing its validation. **Ad attribution rides entirely on the `utm_*` params**, which the site captures and forwards to waaiChat automatically. The `?ref=` pre-fill mechanism exists for the genuine referral program: real referrers can share links like `waai.me/signup?ref=<THEIR-CODE>` and the field fills itself.
 
 Trailing slash matters (`/trial/restaurants/` not `/trial/restaurants`).
 
