@@ -119,3 +119,63 @@ Trailing slash matters (`/trial/restaurants/` not `/trial/restaurants`).
 | EU/UK targeting | The pixel fires without a consent banner — fine for SG/PDPA, **not** for EU/UK (needs consent mode). Keep targeting SG for now |
 
 **Consent note:** Singapore PDPA doesn't require an opt-in banner for analytics pixels. If you ever target EU/UK/CA, add a consent banner + Google Consent Mode v2 (and Meta's Limited Data Mode) first.
+
+---
+
+## G. First campaign recipe — broad SG test (lifetime S$200, 2 weeks)
+
+The concrete config for the launch test. Reuse §C for scaled/industry campaigns later.
+
+### Destination links (copy-paste; trailing slashes matter, no `ref`)
+
+```
+# English
+https://waai.me/trial/?utm_source=meta&utm_medium=paid&utm_campaign=sg-broad-test&utm_content=en-generic
+https://waai.me/trial/restaurants/?utm_source=meta&utm_medium=paid&utm_campaign=sg-broad-test&utm_content=en-restaurants
+https://waai.me/trial/fitness/?utm_source=meta&utm_medium=paid&utm_campaign=sg-broad-test&utm_content=en-fitness
+https://waai.me/trial/professional-services/?utm_source=meta&utm_medium=paid&utm_campaign=sg-broad-test&utm_content=en-profservices
+https://waai.me/trial/healthcare/?utm_source=meta&utm_medium=paid&utm_campaign=sg-broad-test&utm_content=en-healthcare
+https://waai.me/trial/education/?utm_source=meta&utm_medium=paid&utm_campaign=sg-broad-test&utm_content=en-education
+https://waai.me/trial/ecommerce/?utm_source=meta&utm_medium=paid&utm_campaign=sg-broad-test&utm_content=en-ecommerce
+https://waai.me/trial/real-estate/?utm_source=meta&utm_medium=paid&utm_campaign=sg-broad-test&utm_content=en-realestate
+https://waai.me/trial/hospitality/?utm_source=meta&utm_medium=paid&utm_campaign=sg-broad-test&utm_content=en-hospitality
+https://waai.me/trial/automotive/?utm_source=meta&utm_medium=paid&utm_campaign=sg-broad-test&utm_content=en-automotive
+
+# Chinese
+https://waai.me/zh/trial/?utm_source=meta&utm_medium=paid&utm_campaign=sg-broad-test&utm_content=zh-generic
+https://waai.me/zh/trial/restaurants/?utm_source=meta&utm_medium=paid&utm_campaign=sg-broad-test&utm_content=zh-restaurants
+https://waai.me/zh/trial/fitness/?utm_source=meta&utm_medium=paid&utm_campaign=sg-broad-test&utm_content=zh-fitness
+https://waai.me/zh/trial/professional-services/?utm_source=meta&utm_medium=paid&utm_campaign=sg-broad-test&utm_content=zh-profservices
+https://waai.me/zh/trial/healthcare/?utm_source=meta&utm_medium=paid&utm_campaign=sg-broad-test&utm_content=zh-healthcare
+https://waai.me/zh/trial/education/?utm_source=meta&utm_medium=paid&utm_campaign=sg-broad-test&utm_content=zh-education
+https://waai.me/zh/trial/ecommerce/?utm_source=meta&utm_medium=paid&utm_campaign=sg-broad-test&utm_content=zh-ecommerce
+https://waai.me/zh/trial/real-estate/?utm_source=meta&utm_medium=paid&utm_campaign=sg-broad-test&utm_content=zh-realestate
+https://waai.me/zh/trial/hospitality/?utm_source=meta&utm_medium=paid&utm_campaign=sg-broad-test&utm_content=zh-hospitality
+https://waai.me/zh/trial/automotive/?utm_source=meta&utm_medium=paid&utm_campaign=sg-broad-test&utm_content=zh-automotive
+```
+
+**For the broad test, use only 2–4 of these** (en-generic + zh-generic workhorses, optionally one industry angle with its matched link) — more fragments delivery across 14 days of thin budget. Change `utm_campaign` when you re-run.
+
+### Campaign
+
+- Objective **Leads** · Conversion location **Website** · Performance goal **Maximum number of leads**
+- Pixel **waai me pixel — `1885201075790694`** (the account has 7 datasets — verify the ID) · Event **Lead**
+- Budget **Lifetime S$200** · Schedule: start 00:00 tomorrow → end **+14 days, 23:59**
+
+### Ad set
+
+- Singapore · age **25–54** · everything else **empty** (broad; no interests, no language filter) · Advantage+ audience & placements on
+
+### Ads (2–4, same ad set)
+
+| Ad | Link | Headline | Primary text |
+|---|---|---|---|
+| EN | `en-generic` | Still answering WhatsApp at midnight? | AI agent on your WhatsApp Business number — answers, bookings, orders 24/7. 30-day free trial, no credit card. |
+| ZH | `zh-generic` | 还在半夜回复同样的 WhatsApp 问题？ | WhatsApp Business 号码上的 AI 智能客服 — 全天候自动答复、预约、接单。30 天免费试用，无需信用卡。 |
+| EN-2 (optional) | `en-restaurants` | Take orders without picking up the phone | Your WhatsApp AI handles orders, reservations and enquiries 24/7. Free 30-day trial. |
+
+- CTA button: **Sign Up** · Images: green/teal brand look · Video must be **uploaded natively** (YouTube links die in delivery)
+
+### Expectations (S$200 ≈ S$14.30/day)
+
+At SG CPCs ~S$1–3: **~65–200 clicks** → at 2–8% landing conversion: **~1–16 signups**. This is a funnel/creative smoke test — it will not exit the learning phase (~50 conversions/week needed). Read it as: which language/creative gets cheaper clicks and whether signups complete; scale the winner per §C.
