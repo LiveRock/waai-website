@@ -110,6 +110,9 @@ Trailing slash matters (`/trial/restaurants/` not `/trial/restaurants`).
 | Symptom | Check |
 |---|---|
 | Pixel not in page source | `.env.production` has the ID + a deploy ran after saving it |
+| **Events Manager shows "no activity"** | **Overview lags 30+ min (longer on a new pixel).** The live view is the **Test events** tab, not Overview. Quick sanity hit: open `https://www.facebook.com/tr/?id=<PIXEL_ID>&ev=ManualPing` — blank white page = Meta accepted an event; a "ManualPing" event appears in Events Manager soon after |
+| **Your own browser fires nothing** | **Edge "Tracking prevention" (Balanced) silently blocks the pixel** — turn it Off (edge://settings/privacy) and hard-reload. Also: ad-blocker extensions, antivirus HTTPS-scanning, router DNS filters. Phone-on-cellular bypasses all of it |
+| DevTools beacon check | Network tab filter: the **pixel ID** (not `/tr?` — the real URL is `/tr/?`, so that filter matches nothing). Expect `www.facebook.com/tr/…` 200 requests |
 | Ads Manager shows no Lead events | Test Events tab; confirm ads point at `/trial/...` (not /signup — that page has the pixel too, but industry attribution is lost) |
 | Signups failing with referral error | waaiChat validates `ref` — remove `ref` from URLs (see caveat in D) |
 | Want to change landing-page copy | `trial.*` keys in `src/i18n/ui/{en,zh,ms,ta}.ts` — rebuild + deploy |
