@@ -32,7 +32,7 @@ Why am I still answering the same questions at midnight?
 **Subheadline:**
 Your customers message you on WhatsApp. waai answers them instantly -- with the right information, the right tone, 24 hours a day. No hiring. No training. No sleep required.
 
-**Primary CTA:** Start Your Free 14-Day Trial
+**Primary CTA:** Start Your Free 30-Day Trial
 **Secondary CTA:** See How It Works
 
 **Supporting line beneath CTAs:**
@@ -195,7 +195,7 @@ Still asking "why me?"
 **Body:**
 Stop losing customers to slow replies. Stop spending evenings on messages that an AI agent can handle in under a second. Start your free trial today and see the difference an always-on WhatsApp AI agent makes -- for your customers, your team, and your bottom line.
 
-**CTA:** Start Your Free 14-Day Trial
+**CTA:** Start Your Free 30-Day Trial
 
 **Reassurance line:**
 14 days free. No credit card. Full access to every feature.
@@ -941,7 +941,7 @@ Whether you are ready to start your free trial or want a personalized demo, we a
 Your WhatsApp AI agent is 10 minutes away
 
 **Subtitle:**
-Start your free 14-day trial. No credit card required. Connect your WhatsApp Business number, upload your knowledge base, and watch your AI agent start answering customers.
+Start your free 30-day trial. No credit card required. Connect your WhatsApp Business number, upload your knowledge base, and watch your AI agent start answering customers.
 
 ---
 
@@ -1012,7 +1012,7 @@ Max 160 characters each.
 | Pricing | waai pricing: Free trial, $29 Starter, $99 Pro, Custom enterprise. WhatsApp AI agent for every budget. Start free today. |
 | Integrations | Google Workspace integrations for WhatsApp AI. Calendar, Drive, Docs, Sheets. Connect your tools, automate your conversations. |
 | Contact | Contact waai for a personalized demo or support. We respond within one business day. |
-| Signup | Start your free 14-day waai trial. No credit card required. Set up your WhatsApp AI agent in 10 minutes. |
+| Signup | Start your free 30-day waai trial. No credit card required. Set up your WhatsApp AI agent in 10 minutes. |
 
 ---
 
@@ -1091,7 +1091,7 @@ Max 160 characters each.
 
 ### CTAs (buttons, banners, overlays)
 
-- Start Your Free 14-Day Trial
+- Start Your Free 30-Day Trial
 - See How It Works
 - Try waai Free
 - Get Started in 10 Minutes

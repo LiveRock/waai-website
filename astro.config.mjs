@@ -15,6 +15,8 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
+      // /trial/* (all locales) are noindex ad landing pages — keep them out of the sitemap
+      filter: (page) => !new URL(page).pathname.split('/').includes('trial'),
       i18n: {
         defaultLocale: 'en',
         locales: {

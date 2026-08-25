@@ -1,0 +1,165 @@
+---
+/**
+ * Facebook-ads trial landing page. Renders at /trial/ (generic) and
+ * /trial/[industry]/ — industry pages pull localized copy from the industries
+ * data overlays, so the only per-locale strings are the trial.* UI keys.
+ *
+ * Uses BaseLayout directly (no site header/footer): paid traffic gets a
+ * focused page, the form above the fold, and the floating WhatsApp button
+ * from BaseLayout as the secondary conversion path.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CTAButton from '../shared/CTAButton.astro';
+import SectionHeading from '../shared/SectionHeading.astro';
+import Accordion from '../shared/Accordion.astro';
+import SignupForm from '../signup/SignupForm.astro';
+import VideoCarousel from '../home/VideoCarousel.astro';
+import Testimonials from '../home/Testimonials.astro';
+import AICapabilities from '../home/AICapabilities.astro';
+import { getIndustry } from '../../i18n/content';
+import { getLangFromUrl, useTranslations, localizePath } from '../../i18n/utils';
+import { getTrialDays } from '../../lib/trialDays';
+
+interface Props {
+  /** Industry slug; omit for the generic page. */
+  industry?: string;
+}
+const { industry: industrySlug } = Astro.props;
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const ind = industrySlug ? getIndustry(industrySlug, lang) : undefined;
+
+const days = await getTrialDays();
+const D = (s: string) => s.replace('{days}', String(days));
+
+const pageTitle = ind
+  ? D(t('page.trial.titleIndustry')).replace('{industry}', ind.title)
+  : D(t('page.trial.title'));
+const pageDescription = ind
+  ? D(t('page.trial.descriptionIndustry')).replace('{industry}', ind.title)
+  : D(t('page.trial.description'));
+
+const headline = ind ? ind.headline : t('trial.hero.headline');
+const subhead = ind ? ind.description : D(t('trial.hero.subhead'));
+
+const trustItems = ['trial.trust.noCard', 'trial.trust.cancel', 'trial.trust.official', 'trial.trust.secure'];
+
+const faqItems = [1, 2, 3, 4, 5, 6].map((n) => ({
+  question: D(t(`trial.faq${n}.q`)),
+  answer: D(t(`trial.faq${n}.a`)),
+}));
+---
+
+<BaseLayout title={pageTitle} description={pageDescription} canonicalPath={Astro.url.pathname} noindex>
+  <!-- Slim brand bar (no site header on landing pages) -->
+  <div class="bg-white/95 backdrop-blur-sm border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center">
+      <a href={localizePath('/', lang)} class="flex items-center gap-2" aria-label="waai.me">
+        <img src="/images/logos/logo.jpg" alt="waai.me" class="w-7 h-7 rounded-lg" />
+        <span class="text-lg font-bold text-gray-900">waai<span class="text-wa-green">.me</span></span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Hero + signup form (form above the fold on mobile AND desktop) -->
+  <section class="relative overflow-hidden bg-gradient-to-br from-wa-teal via-wa-teal-light to-wa-green-dark">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(37,211,102,0.15),transparent_60%)]"></div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
+      <!-- Mobile flow: hook → form → supporting copy. Desktop: 2 columns. -->
+      <div class="grid lg:grid-cols-2 lg:gap-12 items-start">
+        <!-- A: hook -->
+        <div class="lg:col-start-1 lg:row-start-1">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-sm rounded-full text-sm text-green-100 mb-4">
+            <span class="w-2 h-2 bg-wa-green rounded-full animate-pulse"></span>
+            {D(t('trial.hero.badge'))}
+          </div>
+          {ind && (
+            <p class="text-xs sm:text-sm font-semibold uppercase tracking-widest text-wa-green mb-2">{ind.title}</p>
+          )}
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight mb-4">
+            {headline}
+          </h1>
+        </div>
+
+        <!-- B: signup form card -->
+        <div id="trial-form" class="scroll-mt-4 bg-white rounded-2xl shadow-xl p-6 sm:p-8 lg:col-start-2 lg:row-start-1 lg:row-span-2">
+          <h2 class="text-xl sm:text-2xl font-bold text-gray-900">{t('trial.form.heading')}</h2>
+          <p class="text-sm text-gray-500 mt-1 mb-5">{t('trial.form.sub')}</p>
+          <SignupForm variant="landing" industry={ind?.slug} />
+        </div>
+
+        <!-- C: supporting copy + trust ticks -->
+        <div class="lg:col-start-1 lg:row-start-2 mt-4 lg:mt-0">
+          <p class="text-base sm:text-lg text-green-100/90 leading-relaxed max-w-xl">
+            {subhead}
+          </p>
+          <ul class="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
+            {trustItems.map((k) => (
+              <li class="flex items-center gap-2 text-sm text-green-100">
+                <svg class="w-4 h-4 text-wa-green flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
+                {t(k)}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Value props: industry use cases, or the generic AI capabilities -->
+  {ind ? (
+    <section class="py-16 sm:py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <SectionHeading
+          title={t('industry.howTitle').replace('{title}', ind.title)}
+          align="center"
+        />
+        <div class="mt-10 sm:mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {ind.useCases.map((u) => (
+            <div class="bg-gray-50 rounded-2xl border border-gray-100 p-6 sm:p-8 hover:shadow-lg hover:-translate-y-1 transition-all">
+              <div class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center mb-4">
+                <svg class="w-5 h-5 text-wa-green-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+              </div>
+              <h3 class="text-lg font-bold text-gray-900 mb-2">{u.title}</h3>
+              <p class="text-sm text-gray-600 leading-relaxed">{u.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  ) : (
+    <AICapabilities />
+  )}
+
+  <!-- Homepage videos -->
+  <VideoCarousel heading={t('trial.video.heading')} />
+
+  <!-- Social proof -->
+  <Testimonials />
+
+  <!-- FAQ -->
+  <section class="py-16 sm:py-20 bg-gray-50">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <SectionHeading title={t('pricing.faqTitle')} align="center" />
+      <div class="mt-10">
+        <Accordion items={faqItems} />
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="relative overflow-hidden bg-wa-teal py-16 sm:py-20">
+    <div class="absolute -top-24 -left-24 w-96 h-96 bg-wa-green opacity-10 blur-3xl rounded-full"></div>
+    <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-ai-purple opacity-10 blur-3xl rounded-full"></div>
+    <div class="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-4">{t('trial.finalCta.title')}</h2>
+      <p class="text-lg text-green-100/90 mb-8">{D(t('trial.finalCta.body'))}</p>
+      <div class="flex justify-center">
+        <CTAButton href="#trial-form" variant="primary" size="lg">
+          {t('cta.startTrial')}
+        </CTAButton>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

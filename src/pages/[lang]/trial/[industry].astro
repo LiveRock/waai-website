@@ -1,0 +1,15 @@
+---
+import TrialPage from '../../../components/page/TrialPage.astro';
+import { industries } from '../../../data/industries';
+import { NON_DEFAULT_LANGS } from '../../../i18n/config';
+
+export function getStaticPaths() {
+  return NON_DEFAULT_LANGS.flatMap((lang) =>
+    industries.map((i) => ({ params: { lang, industry: i.slug } }))
+  );
+}
+
+const { industry } = Astro.params;
+---
+
+<TrialPage industry={industry!} />

@@ -10,6 +10,8 @@ interface Props {
   canonicalPath?: string;
   ogImage?: string;
   ogType?: string;
+  /** Passed through to BaseLayout. */
+  noindex?: boolean;
 }
 
 const props = Astro.props;

@@ -81,7 +81,7 @@ const plans = dbPlans.length > 0
       display_name: p.display_name,
       key: p.name,
       price: formatPrice(p.price_monthly),
-      period: p.price_monthly === 0 ? t('pricing.daysPeriod').replace('{n}', String(p.trial_days || 14)) : t('pricing.perMonth'),
+      period: p.price_monthly === 0 ? t('pricing.daysPeriod').replace('{n}', String(p.trial_days || 30)) : t('pricing.perMonth'),
       yearlyPrice: p.price_yearly > 0 ? formatPrice(p.price_yearly) : '',
       description: t(`plan.${p.name}.desc`),
       highlighted: p.name === 'pro',

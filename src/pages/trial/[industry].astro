@@ -1,0 +1,12 @@
+---
+import TrialPage from '../../components/page/TrialPage.astro';
+import { industries } from '../../data/industries';
+
+export function getStaticPaths() {
+  return industries.map((i) => ({ params: { industry: i.slug } }));
+}
+
+const { industry } = Astro.params;
+---
+
+<TrialPage industry={industry!} />

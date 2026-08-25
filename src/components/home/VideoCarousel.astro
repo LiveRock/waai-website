@@ -1,15 +1,23 @@
 ---
 import { getVideos } from '../../i18n/content';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+
+interface Props {
+  /** Override the section heading (defaults to the homepage "why not?"). */
+  heading?: string;
+}
+const { heading } = Astro.props;
+
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const videos = getVideos(lang);
+const headingText = heading ?? t('home.video.heading');
 ---
 
 <section class="py-16 sm:py-20 bg-gray-50">
   <!-- Heading (constrained to site width) -->
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <h2 class="text-3xl sm:text-4xl font-bold text-wa-green-dark text-center mb-10 sm:mb-12">{t('home.video.heading')}</h2>
+    <h2 class="text-3xl sm:text-4xl font-bold text-wa-green-dark text-center mb-10 sm:mb-12">{headingText}</h2>
   </div>
 
   <!-- Full-bleed carousel: the active video spans the browser width -->

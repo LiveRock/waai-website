@@ -9,6 +9,8 @@ interface Props {
   canonicalPath?: string;
   ogImage?: string;
   ogType?: string;
+  /** Ads-only pages (e.g. /trial/*) — keeps them out of search indexes. */
+  noindex?: boolean;
 }
 
 const {
@@ -17,6 +19,7 @@ const {
   canonicalPath = Astro.url.pathname,
   ogImage = '/images/og-default.png',
   ogType = 'website',
+  noindex = false,
 } = Astro.props;
 
 const lang = getLangFromUrl(Astro.url);
@@ -39,6 +42,15 @@ const fontHref = locale.font ? FONT_HREFS[locale.font] : null;
 // (visible in every GA4 site's source), so the ID is hardcoded here. Override
 // at build time with the GA_MEASUREMENT_ID env var if ever needed.
 const gaId = (import.meta.env.GA_MEASUREMENT_ID as string | undefined) || 'G-F7QSVZPEX8';
+
+// Meta Pixel (Facebook ads) — emitted on every page ONLY when META_PIXEL_ID is
+// set at build time (deploy.sh / CI). Absent/empty → nothing is emitted and the
+// guarded fbq?.() calls in SignupForm are no-ops. Conversion events: Lead fires
+// on signup success, CompleteRegistration on email verification.
+const metaPixelId = ((import.meta.env.META_PIXEL_ID as string | undefined) || '').trim();
+const pixelInit = metaPixelId
+  ? `!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','${metaPixelId}');fbq('track','PageView');`
+  : '';
 ---
 
 <!DOCTYPE html>
@@ -48,6 +60,7 @@ const gaId = (import.meta.env.GA_MEASUREMENT_ID as string | undefined) || 'G-F7Q
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title} | waai.me</title>
   <meta name="description" content={description} />
+  {noindex && <meta name="robots" content="noindex, follow" />}
   <link rel="canonical" href={canonicalUrl} />
 
   {alternates.map((alt) => (
@@ -82,6 +95,10 @@ const gaId = (import.meta.env.GA_MEASUREMENT_ID as string | undefined) || 'G-F7Q
       <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />
       <script is:inline set:html={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${gaId}');`} />
     </Fragment>
+  )}
+
+  {metaPixelId && (
+    <script is:inline set:html={pixelInit} />
   )}
 </head>
 <body class="font-sans text-gray-900 bg-white antialiased">

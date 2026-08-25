@@ -61,7 +61,7 @@ waai-website/
 - Custom plan card is simplified: just name + "Contact Us" button (no features list)
 - Comparison table excludes Custom plan; data-driven from DB
 - Signup page posts to `POST /api/auth/signup` with `plan_name` field; filters out Custom plan
-- **Referral code is mandatory** at signup: field is `required`, pre-fills `888888` (overridable via `?ref=` URL param); submit handler posts `888888` if cleared. Helper line under the field via `signup.referralHint` (`en.ts`); placeholder → `888888`
+- **Referral code is mandatory** at signup: field is `required`, renders `888888`; the **client script** overrides it from `?ref=` at runtime (the old frontmatter `Astro.url.searchParams` read was dead — static build). Submit handler posts `888888` if cleared. Helper line under the field via `signup.referralHint` (`en.ts`); placeholder → `888888`
 - **Build-time data sources** — both `/pricing` and `/signup` fetch inline in frontmatter (try `http://127.0.0.1:8000` then `https://waaichat.hsi.asia`; hardcoded fallback if unreachable):
   - `GET /api/public/plans` — plan prices + every quota (`max_qa_pairs`, `max_flows`, `max_messages_monthly`, `max_respondents`, `max_web_pages`, `max_drive_sends_monthly`, `max_qa_translations_per_lang_monthly`, `max_flow_translations_per_lang_monthly`, `max_bookings_monthly`, `max_booking_branches`, `max_booking_services`, `max_catalog_products`, `max_contacts`, `max_broadcasts_monthly`, `trial_days`). The comparison table surfaces the last four `max_*` as quota rows; NULL renders as "Unlimited".
   - `GET /api/site-content/onboarding_service_settings` — Optional Onboarding Assistance one-time fees (`starter.fee_cents` / `pro.fee_cents`; default $99 / $299). `content` is a JSON string — parse it.
@@ -158,6 +158,17 @@ Gotchas baked into the design (each cost a live bounce/bug):
 - `gh api` does **not** accept `--repo` (put the repo in the endpoint); `gh --jq` prints string results **unquoted** (`.content` comes back as raw base64, not JSON).
 - To re-send a review email while testing: `sudo python3 -c "import json;p='/home/ubuntu/.local/state/waai-blog-review/state.json';s=json.load(open(p));s['prs'].pop('<N>',None);json.dump(s,open(p,'w'))"` then rerun the script. The state file ends up root-owned (cron is root) — that's expected.
 - **Brand prompt:** embedded in `generate-blog-post.mjs` (`SYSTEM`) — waai positioning, features, the Meta competitive context, voice, and a hard "strict JSON only" instruction. Keep it in sync with product changes so posts stay accurate.
+
+## Trial Landing Pages (/trial — Facebook ads)
+
+Ad landing pages with the real signup form embedded, live at `/trial/` (generic) and `/trial/[industry]/` (9 slugs from `src/data/industries.ts`) × all 10 locales = **100 pages**, built by `src/components/page/TrialPage.astro` + 4 thin route files (`pages/trial/index|​[industry].astro`, `pages/[lang]/trial/…`). Industry flavor comes from `getIndustry(slug, lang)` overlays (zero extra translation); `trial.*`/`page.trial.*` UI keys live in `en/zh/ms/ta` dictionaries (other locales fall back to EN). `{days}` interpolates from the live API via memoized `src/lib/trialDays.ts` (trial_days=30). Hook copy ("30-Day Free Trial · No Credit Card") is factual — trial plan is 30 days, signup takes no payment info.
+
+- **noindex + sitemap filter**: `BaseLayout` takes `noindex?: boolean` (renders `noindex, follow`); `astro.config.mjs` sitemap `filter` drops any path with a `trial` segment (ALL locales — a `startsWith('/trial/')` filter misses `/zh/trial/…`).
+- **Layout**: uses `BaseLayout` directly (no site header/footer — form above the fold); slim brand bar + floating WhatsApp button remain. Not in `navigation.ts` by design.
+- **SignupForm** (`src/components/signup/SignupForm.astro`) is shared by `/signup` (`variant="page"`) and LPs (`variant="landing"` — hides prereq box/plan grid/onboarding note, renders hidden trial radio). **Invariant: render at most once per page** (hard-coded DOM ids: `signup-form`, `verify-section`, `signup-i18n`). Now a shared external chunk (was inline on /signup) — same module semantics.
+- **Param contract (client-side JS, static site)**: `?name&email&phone&company&ref` pre-fill fields (ref beats the `888888` default); `ref, utm_*, fbclid` + build-time `data-industry` are captured and forwarded as query params on the verify-success redirect (`…/auth/callback?src=trial&industry=…&ref=…#access_token=…`). Signup POST payload unchanged; waaiChat must opt in to read the attribution params.
+- **Meta Pixel**: `BaseLayout` emits the fbevents snippet on every page **only when `META_PIXEL_ID` is set at build time** — the value lives in `.env.production` (gitignored, loaded by Vite only for production builds; dev server never sees it). `Lead` fires on signup POST success, `CompleteRegistration` on email verify (400 ms beacon-flush delay before redirect). GA4 mirrors: `generate_lead` / `sign_up`. Pixel off → all `fbq?.()` no-ops. ⚠️ `<noscript set:html={…}>` breaks the Astro compiler — don't re-add a noscript pixel img. Full ads setup/runbook: `docs/facebook-ads-guide.md`.
+- Ad final URLs must use trailing slashes (`/trial/restaurants/`) — site is `trailingSlash: 'always'`.
 
 ## Analytics (GA4 + AWStats)
 
