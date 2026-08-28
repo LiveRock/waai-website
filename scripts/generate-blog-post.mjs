@@ -209,6 +209,7 @@ EDITORIAL STANCE — "ride the validation"
 ORIGINALITY RULES — hard constraints, not preferences
 - Every sentence must be your own original expression. Do not reproduce, lightly edit, or closely paraphrase any sentence, heading, or passage from the article.
 - Quote the article AT MOST TWICE. Each quote must be under 25 words, in a markdown blockquote, attributed on the line immediately after, e.g. — IDC, via WhatsApp for Business, linked to ${source.url}.
+- When citing a statistic from the article, wrap the figure in your own sentence structure. Short verbatim fragments around a number are fine; copying the article's full clause around a figure is not.
 - Do not reuse the article's headings or section structure, and do not reproduce its lists or tables. If a list or comparison matters, rebuild it in your own words and your own framing.
 - Writing in Chinese does not loosen these rules. For the Chinese post, keep any quote in the original English inside the blockquote, optionally followed by a one-line Chinese gloss. Do not translate long passages.
 - Facts and ideas may be shared; expression may not. When in doubt, say it your way.
@@ -324,15 +325,23 @@ const sourceGrams = source
     })()
   : null;
 
-function findVerbatimRuns(bodyMarkdown) {
+// Runs are maximal sequences of >= n consecutive words shared with the source
+// (outside blockquotes). Two tiers: 8-12 words = warn (usually statistic citations
+// / common collocations — facts aren't copyrightable expression), >= 13 = hard fail
+// (virtually certain expressive copying).
+const VERBATIM_WARN_N = 8;
+const VERBATIM_HARD_N = 13;
+
+function findVerbatimRuns(bodyMarkdown, n) {
   if (!sourceGrams) return [];
   const genWords = normalizeWords(bodyMarkdown, { dropQuotes: true });
   const runs = [];
-  for (let i = 0; i + 8 <= genWords.length; ) {
+  for (let i = 0; i + n <= genWords.length; ) {
     if (sourceGrams.has(genWords.slice(i, i + 8).join(' '))) {
       let end = i + 8;
       while (end + 1 <= genWords.length && sourceGrams.has(genWords.slice(end - 7, end + 1).join(' '))) end++;
-      runs.push(genWords.slice(i, end));
+      const run = genWords.slice(i, end);
+      if (run.length >= n) runs.push(run);
       i = end;
     } else {
       i++;
@@ -359,15 +368,19 @@ function quoteStats(body) {
   return { count: blocks.length, longest };
 }
 
-// ---- generate; news mode resamples on verbatim overlap (fresh draw, same guardrails) ----
+// ---- generate; news mode resamples on long verbatim overlap (fresh draw, same guardrails) ----
 const MAX_GEN_ATTEMPTS = 3;
 let post;
+let shortOverlaps = [];
 for (let attempt = 1; ; attempt++) {
   post = await callModel();
-  const runs = findVerbatimRuns(post.bodyMarkdown || '');
-  if (!runs.length) break;
-  console.warn(`⚠ attempt ${attempt}/${MAX_GEN_ATTEMPTS}: verbatim overlap with the source (${runs.length} run(s) of >= 8 words outside quotes):`);
-  for (const run of runs) console.warn(`  "${run.slice(0, 12).join(' ')}…"`);
+  const hardRuns = findVerbatimRuns(post.bodyMarkdown || '', VERBATIM_HARD_N);
+  if (!hardRuns.length) {
+    shortOverlaps = findVerbatimRuns(post.bodyMarkdown || '', VERBATIM_WARN_N);
+    break;
+  }
+  console.warn(`⚠ attempt ${attempt}/${MAX_GEN_ATTEMPTS}: verbatim overlap with the source (${hardRuns.length} run(s) of >= ${VERBATIM_HARD_N} words outside quotes):`);
+  for (const run of hardRuns) console.warn(`  "${run.slice(0, 12).join(' ')}…"`);
   if (attempt >= MAX_GEN_ATTEMPTS) {
     console.error('✖ Verbatim overlap persisted after resampling — refusing to write. Tighten the originality rules in the prompt.');
     process.exit(1);
@@ -377,13 +390,22 @@ for (let attempt = 1; ; attempt++) {
 
 let sourceCheck = 'n/a';
 if (source) {
+  const parts = [];
+  if (shortOverlaps.length) {
+    console.warn(`⚠ ${shortOverlaps.length} short overlap(s) of ${VERBATIM_WARN_N}–${VERBATIM_HARD_N - 1} words (likely statistic citations / common phrases — review in the PR):`);
+    for (const run of shortOverlaps) console.warn(`  "${run.slice(0, 12).join(' ')}…"`);
+    parts.push(`review: ${shortOverlaps.length} short overlap${shortOverlaps.length === 1 ? '' : 's'} (8–12 words)`);
+  } else {
+    parts.push('0 verbatim runs');
+  }
   const qs = quoteStats(post.bodyMarkdown || '');
   if (qs.count > 2 || qs.longest > 30) {
     console.warn(`⚠ quote guardrail: ${qs.count} quotes, longest ${qs.longest} words (target: <= 2 quotes, < 25 words each)`);
-    sourceCheck = `warn: ${qs.count} quotes, longest ${qs.longest} words`;
+    parts.push(`quotes: ${qs.count}, longest ${qs.longest}w`);
   } else {
-    sourceCheck = `ok (0 verbatim runs, ${qs.count} quote${qs.count === 1 ? '' : 's'})`;
+    parts.push(`${qs.count} quote${qs.count === 1 ? '' : 's'}`);
   }
+  sourceCheck = parts.join(', ');
 }
 
 // ---- slug + uniqueness ----
