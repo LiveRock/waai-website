@@ -16,6 +16,8 @@ const blog = defineCollection({
       .default('Guides'),
     tags: z.array(z.string()).optional(),
     heroImage: z.string().optional(),
+    sourceUrl: z.string().optional(), // news-commentary posts: the article this post reacts to
+    sourceName: z.string().optional(), // display name for the attribution box, e.g. "IDC via WhatsApp for Business"
     draft: z.boolean().default(false),
   }),
 });

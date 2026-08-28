@@ -171,6 +171,7 @@ const en: Record<string, string> = {
   'blog.cta': 'Get Started for Free',
   'blog.empty': 'No posts yet — check back soon.',
   'blog.keepReading': 'Keep reading',
+  'blog.sourceLabel': 'Source',
   'blog.postCtaTitle': 'Ready for WhatsApp AI that actually runs your business?',
   'blog.postCtaBody': 'Start your free trial and see what waai can do.',
 

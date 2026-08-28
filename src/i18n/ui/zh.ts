@@ -544,6 +544,9 @@ const zh: Record<string, string> = {
   // ---- 通用 ----
   'common.toggleMenu': '切换菜单',
   'common.loading': '加载中…',
+
+  // ---- 博客（其余 blog.* 键回退到 EN）----
+  'blog.sourceLabel': '来源',
 };
 
 export default zh;

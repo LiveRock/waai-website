@@ -4,6 +4,8 @@ name: Weekly blog post
 # - Weekly (Tue ~09:07 SGT): English post.
 # - 1st of month (~08:13 SGT): a multilingual post, alternating Chinese / Malay.
 # Manual: workflow_dispatch with a lang input to generate on demand.
+# News-commentary mode: dispatch with source_url to fetch a third-party article and
+# write an ORIGINAL post that cites it (category=News, originality-checked).
 on:
   schedule:
     - cron: "7 1 * * 2"    # Tue 01:07 UTC = ~09:07 SGT (English weekly)
@@ -13,6 +15,14 @@ on:
       lang:
         description: "Language (en / zh / ms)"
         default: "en"
+      source_url:
+        description: "Source article URL — enables news-commentary mode (original post that cites the source)"
+        required: false
+        default: ""
+      source_name:
+        description: "Source display name override (optional, e.g. 'IDC via WhatsApp for Business')"
+        required: false
+        default: ""
 
 permissions:
   contents: write        # push the blog/auto-* branch
@@ -34,9 +44,15 @@ jobs:
 
       - name: Determine language
         id: lang
+        env:
+          SRC_URL: ${{ inputs.source_url }}
+          LANG_IN: ${{ inputs.lang }}
         run: |
-          if [ -n "${{ inputs.lang }}" ]; then
-            echo "lang=${{ inputs.lang }}" >> "$GITHUB_OUTPUT"
+          if [ -n "$SRC_URL" ]; then
+            # news-commentary dispatch: lang comes straight from the input, never the monthly rotation
+            echo "lang=${LANG_IN:-en}" >> "$GITHUB_OUTPUT"
+          elif [ -n "$LANG_IN" ]; then
+            echo "lang=$LANG_IN" >> "$GITHUB_OUTPUT"
           elif [ "$(date -u +%d)" = "01" ]; then
             # 1st of month: alternate zh / ms by month number
             M=$(date -u +%m)
@@ -51,19 +67,24 @@ jobs:
         env:
           ZAI_API_KEY: ${{ secrets.ZAI_API_KEY }}
           BLOG_LANG: ${{ steps.lang.outputs.lang }}
+          SOURCE_URL: ${{ inputs.source_url }}
+          SOURCE_NAME: ${{ inputs.source_name }}
 
       - name: Open pull request
         uses: peter-evans/create-pull-request@v6
         with:
-          commit-message: "blog: automated post (${{ steps.lang.outputs.lang }}) — ${{ steps.gen.outputs.slug }}"
+          commit-message: "blog: ${{ steps.gen.outputs.mode == 'news' && 'news commentary' || 'automated post' }} (${{ steps.lang.outputs.lang }}) — ${{ steps.gen.outputs.slug }}"
           branch: blog/auto-${{ github.run_id }}
-          title: "blog: ${{ steps.gen.outputs.title }}"
+          title: "blog: ${{ steps.gen.outputs.mode == 'news' && '[news] ' || '' }}${{ steps.gen.outputs.title }}"
           body: |
             **Automated blog post — eyeball before merging.**
 
+            - **Mode:** ${{ steps.gen.outputs.mode == 'news' && 'News commentary — reacts to a source article. Check the quotes are ≤2 and short, and that no passage is lifted.' || 'Topic rotation' }}
             - **Language:** ${{ steps.lang.outputs.lang }}
             - **Pillar:** ${{ steps.gen.outputs.pillar }}
             - **Category:** ${{ steps.gen.outputs.category }}
+            - **Source:** ${{ steps.gen.outputs.source_url || '—' }}
+            - **Originality check:** ${{ steps.gen.outputs.source_check || 'n/a' }}
 
             Edit the markdown directly in this PR to tweak it. **Merge to publish** (auto-deploys via `deploy.yml`).
 

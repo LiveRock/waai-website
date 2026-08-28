@@ -41,5 +41,7 @@ collections:
         options: ["Guides", "Product", "Comparisons", "Integrations", "Industry", "News"]
       - { name: "tags", label: "Tags", widget: "list", required: false, hint: "One tag per line" }
       - { name: "heroImage", label: "Hero image (optional)", widget: "image", required: false }
+      - { name: "sourceUrl", label: "Source URL (news commentary — the article this post reacts to)", widget: "string", required: false, hint: "Shown as a link-back attribution box at the top of the post" }
+      - { name: "sourceName", label: "Source name (shown in the attribution box)", widget: "string", required: false, hint: "e.g. 'IDC via WhatsApp for Business'" }
       - { name: "draft", label: "Draft (hide from the live site)", widget: "boolean", default: false }
       - { name: "body", label: "Content (Markdown)", widget: "markdown" }
