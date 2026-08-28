@@ -24,7 +24,7 @@ The core problem the research identifies is the trade-off between convenience an
 >
 > — IDC, via WhatsApp for Business
 
-This is why messaging is emerging as the critical infrastructure. It is not just a chat window; it is a persistent thread that lives in the customer's pocket. It captures the "who," the "when," and the "why" in a way that a fleeting search query or a isolated website session simply cannot. For an AI to be truly "agentic"—meaning it can act on your behalf—it needs that history. It needs to know that the customer asking about a reschedule is the same person who had an issue last week, without forcing them to explain it all over again.
+This is why messaging is emerging as the critical infrastructure. It is not just a chat window; it is a persistent thread that lives in the customer's pocket. It captures the "who," the "when," and the "why" in a way that a fleeting search query or an isolated website session simply cannot. For an AI to be truly "agentic"—meaning it can act on your behalf—it needs that history. It needs to know that the customer asking about a reschedule is the same person who had an issue last week, without forcing them to explain it all over again.
 
 ## Why the Platform Owner’s Thesis Matters
 
