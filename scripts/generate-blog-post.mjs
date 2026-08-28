@@ -16,7 +16,7 @@
  *                  post that cites it (skips the topic rotation; category=News)
  *   SOURCE_NAME    display name for the source override, e.g. "IDC via WhatsApp for Business"
  */
-import { writeFileSync, readFileSync, existsSync, appendFileSync } from 'node:fs';
+import { writeFileSync, readFileSync, existsSync, appendFileSync, mkdirSync } from 'node:fs';
 
 const ZAI_API_KEY = process.env.ZAI_API_KEY;
 if (!ZAI_API_KEY) {
@@ -271,36 +271,36 @@ const body = {
 };
 if (isCoding) body.thinking = { type: 'disabled' }; // coding endpoint enables reasoning by default; disable for speed
 
-const res = await fetch(`${ZAI_BASE}/chat/completions`, {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${ZAI_API_KEY}` },
-  body: JSON.stringify(body),
-});
-
-if (!res.ok) {
-  console.error(`✖ z.ai HTTP ${res.status}: ${(await res.text()).slice(0, 500)}`);
-  console.error('  If "insufficient balance" / 429: your key may be coding-plan-only on the wrong endpoint, or rate-limited. Adjust ZAI_BASE_URL / ZAI_MODEL.');
-  process.exit(1);
-}
-const data = await res.json();
-const raw = data.choices?.[0]?.message?.content || '';
-
-// ---- parse JSON (defensive: strip fences / extract first object) ----
-let post;
-try {
-  post = JSON.parse(raw);
-} catch {
-  const m = raw.match(/\{[\s\S]*\}/);
-  if (!m) {
-    console.error('✖ Could not parse JSON from model output:\n', raw.slice(0, 800));
+async function callModel() {
+  const res = await fetch(`${ZAI_BASE}/chat/completions`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${ZAI_API_KEY}` },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    console.error(`✖ z.ai HTTP ${res.status}: ${(await res.text()).slice(0, 500)}`);
+    console.error('  If "insufficient balance" / 429: your key may be coding-plan-only on the wrong endpoint, or rate-limited. Adjust ZAI_BASE_URL / ZAI_MODEL.');
     process.exit(1);
   }
-  post = JSON.parse(m[0]);
+  const data = await res.json();
+  const raw = data.choices?.[0]?.message?.content || '';
+
+  // parse JSON (defensive: strip fences / extract first object)
+  try {
+    return JSON.parse(raw);
+  } catch {
+    const m = raw.match(/\{[\s\S]*\}/);
+    if (!m) {
+      console.error('✖ Could not parse JSON from model output:\n', raw.slice(0, 800));
+      process.exit(1);
+    }
+    return JSON.parse(m[0]);
+  }
 }
 
 // ---- originality check (news mode): refuse to write near-verbatim output ----
 // Strips blockquote lines (short attributed quotes are permitted), then looks for
-// any run of >= 8 consecutive words shared with the source. Hard-fail before writing.
+// any run of >= 8 consecutive words shared with the source. Resamples on failure.
 function normalizeWords(s, { dropQuotes = false } = {}) {
   const cleaned = dropQuotes
     ? String(s)
@@ -313,6 +313,32 @@ function normalizeWords(s, { dropQuotes = false } = {}) {
     .replace(/[^a-z0-9\s]/g, ' ')
     .split(/\s+/)
     .filter(Boolean);
+}
+
+const sourceGrams = source
+  ? (() => {
+      const w = normalizeWords(source.fullText);
+      const grams = new Set();
+      for (let i = 0; i + 8 <= w.length; i++) grams.add(w.slice(i, i + 8).join(' '));
+      return grams;
+    })()
+  : null;
+
+function findVerbatimRuns(bodyMarkdown) {
+  if (!sourceGrams) return [];
+  const genWords = normalizeWords(bodyMarkdown, { dropQuotes: true });
+  const runs = [];
+  for (let i = 0; i + 8 <= genWords.length; ) {
+    if (sourceGrams.has(genWords.slice(i, i + 8).join(' '))) {
+      let end = i + 8;
+      while (end + 1 <= genWords.length && sourceGrams.has(genWords.slice(end - 7, end + 1).join(' '))) end++;
+      runs.push(genWords.slice(i, end));
+      i = end;
+    } else {
+      i++;
+    }
+  }
+  return runs;
 }
 
 function quoteStats(body) {
@@ -333,29 +359,24 @@ function quoteStats(body) {
   return { count: blocks.length, longest };
 }
 
-let sourceCheck = 'n/a';
-if (source) {
-  const srcWords = normalizeWords(source.fullText);
-  const grams = new Set();
-  for (let i = 0; i + 8 <= srcWords.length; i++) grams.add(srcWords.slice(i, i + 8).join(' '));
-  const genWords = normalizeWords(post.bodyMarkdown || '', { dropQuotes: true });
-  const runs = [];
-  for (let i = 0; i + 8 <= genWords.length; ) {
-    if (grams.has(genWords.slice(i, i + 8).join(' '))) {
-      let end = i + 8;
-      while (end + 1 <= genWords.length && grams.has(genWords.slice(end - 7, end + 1).join(' '))) end++;
-      runs.push(genWords.slice(i, end));
-      i = end;
-    } else {
-      i++;
-    }
-  }
-  if (runs.length) {
-    console.error(`✖ Verbatim overlap with the source (${runs.length} run(s) of >= 8 words outside quotes) — refusing to write.`);
-    for (const run of runs) console.error(`  "${run.slice(0, 12).join(' ')}…"`);
-    console.error('Re-run, or tighten the originality rules in the prompt.');
+// ---- generate; news mode resamples on verbatim overlap (fresh draw, same guardrails) ----
+const MAX_GEN_ATTEMPTS = 3;
+let post;
+for (let attempt = 1; ; attempt++) {
+  post = await callModel();
+  const runs = findVerbatimRuns(post.bodyMarkdown || '');
+  if (!runs.length) break;
+  console.warn(`⚠ attempt ${attempt}/${MAX_GEN_ATTEMPTS}: verbatim overlap with the source (${runs.length} run(s) of >= 8 words outside quotes):`);
+  for (const run of runs) console.warn(`  "${run.slice(0, 12).join(' ')}…"`);
+  if (attempt >= MAX_GEN_ATTEMPTS) {
+    console.error('✖ Verbatim overlap persisted after resampling — refusing to write. Tighten the originality rules in the prompt.');
     process.exit(1);
   }
+  console.warn('Resampling with a fresh generation…');
+}
+
+let sourceCheck = 'n/a';
+if (source) {
   const qs = quoteStats(post.bodyMarkdown || '');
   if (qs.count > 2 || qs.longest > 30) {
     console.warn(`⚠ quote guardrail: ${qs.count} quotes, longest ${qs.longest} words (target: <= 2 quotes, < 25 words each)`);
@@ -398,6 +419,7 @@ const frontmatter = [
   '',
 ].filter((l) => l !== null).join('\n');
 
+mkdirSync(OUT_DIR, { recursive: true });
 writeFileSync(path, frontmatter);
 
 // ---- emit GITHUB_OUTPUT for the PR step ----
