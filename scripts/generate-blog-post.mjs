@@ -412,7 +412,7 @@ if (source) {
 const slugify = (s) =>
   String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 70);
 let slug = slugify(post.slug || post.title) || `post-${now.getTime()}`;
-if (source && LANG) slug = `${slug}-${LANG}`; // same-source EN+ZH runs must not collide / conflict at merge
+if (source && LANG && LANG !== 'en') slug = `${slug}-${LANG}`; // same-source EN+ZH runs must not collide / conflict at merge (English keeps a clean slug)
 let path = `${OUT_DIR}/${slug}.md`;
 let n = 2;
 while (existsSync(path)) {
