@@ -31,9 +31,14 @@ REPO = "LiveRock/waai-website"
 LABEL = "automated-blog"
 REVIEWER = "peter@hotsource.net"
 # Outbound goes through the box's SMTP2GO relay, which only has hsi.asia as a
-# verified sender domain — From must be @hsi.asia or the relay 550s at DATA time.
-# Replies are routed to the blog-review@waai.me mailbox via Reply-To.
-# (If waai.me ever gets verified in SMTP2GO, swap SENDER/MAILBOX to unify.)
+# verified sender domain — From must be @hsi.asia or the relay 550s at DATA time
+# (tested 2026-08-28: waai.me still 550s as "sender domain not verified" despite
+# an attempted verification — check Sending > Verified Senders on the account the
+# box relays through before swapping this). NOTE: the 550 bounces AFTER sendmail
+# returns 0, so an unverified From fails SILENTLY — the review email never arrives
+# and the script doesn't notice.
+# Replies are routed to the blog-review@waai.me mailbox via Reply-To (this works —
+# Peter's replies do land, sometimes delayed ~1h by his provider).
 SENDER = "noreply@hsi.asia"
 MAILBOX = "blog-review@waai.me"
 MAILDIR = Path("/home/waai/homes/blog-review/Maildir")
