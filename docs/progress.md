@@ -2,6 +2,15 @@
 
 Running log of significant work sessions. Newest first.
 
+## 2026-09-04
+
+### Hero "galaxy" particle effect (OpenAI GPT-6 Astra inspired)
+Researched the particle-galaxy hero on OpenAI's GPT-6 Astra announcement page (Three.js WebGL, ~330 KB renderer) and recreated the aesthetic in vanilla Canvas 2D — zero new dependencies. Deployed live after two tuning rounds (v1 too dim → punchier v2 with cursor interaction).
+- **New `src/components/home/GalaxyCanvas.astro`** + 2 lines in `Hero.astro`: spiral galaxy of ~600–1100 brand-colored glow-sprite particles (white/wa-green/ai-purple) behind the hero content. 3 log-spiral arms + bright core bulge, rigid-pattern rotation (disk 1 turn/160s — differential rotation was rejected: arms shear into a ring), per-star twinkle/wobble, dark "sky pocket" + core bloom so stars pop on the mid-green gradient.
+- **Interactivity**: mouse parallax ±24px (per-star depth factors; touch skips it) and **cursor repulsion** — stars within 130px of the pointer are pushed away and flare ~60% brighter, spring-relaxing back to orbit.
+- **Site-first lifecycle safeguards**: pauses offscreen (IntersectionObserver) and on hidden tabs (visibilitychange); `prefers-reduced-motion` → single static frame, no loop (first reduced-motion handling anywhere on the site); DPR capped (1.5 mobile/2 desktop); field rebuilt only on width change >2px; `getContext` fail-safe leaves today's hero untouched.
+- **Perf/server**: bundled script ships as a ~4.7 KB hashed/cacheable deferred chunk (outgrew Astro's inline threshold); 100% client-side on a static site → zero server cost. Verified via headless Chromium: pixel-fingerprint tests (static under reduced-motion, animating normally, paused offscreen), cursor-region alpha probe (238 vs 32 background), desktop+mobile vision checks (legibility clean, "would pass a professional design review").
+
 ## 2026-08-23
 
 ### New product features on the site: Booking, Catalog, CRM

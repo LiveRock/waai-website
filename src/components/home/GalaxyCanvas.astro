@@ -1,0 +1,362 @@
+<canvas
+  data-galaxy-canvas
+  class="absolute inset-0 h-full w-full pointer-events-none opacity-90"
+  aria-hidden="true"
+></canvas>
+
+<script>
+  // Spiral-galaxy hero background — vanilla Canvas 2D, zero dependencies.
+  // Inspired by OpenAI's GPT-6 Astra particle hero; adapted to waai brand colors.
+  // Runs only while the hero is on screen and the tab is visible; renders a
+  // single static frame when prefers-reduced-motion is set.
+  const canvas = document.querySelector('[data-galaxy-canvas]');
+  if (canvas) {
+    const section = canvas.closest('section');
+    let ctx: CanvasRenderingContext2D | null = null;
+    try {
+      ctx = canvas.getContext('2d');
+    } catch {
+      ctx = null;
+    }
+    if (section && ctx) init(canvas, section, ctx);
+  }
+
+  function init(canvas: HTMLCanvasElement, section: HTMLElement, ctx: CanvasRenderingContext2D) {
+    const TWO_PI = Math.PI * 2;
+
+    // --- Tunables -----------------------------------------------------------
+    const ARMS = 3;                      // spiral arm count
+    const THETA_MAX = 2.4 * Math.PI;     // ~1.2 turns of wrap per arm
+    const T_POWER = 1.65;                // core-weighted radial distribution
+    const ARM_SPREAD = 0.18;             // angular jitter (widens outward)
+    const BULGE_FRACTION = 0.26;         // share of particles in the core bulge
+    const Y_SQUASH = 0.72;               // disk inclination
+    const DISK_OMEGA = TWO_PI / 160;     // disk: one rotation / ~2.7 min
+    const BULGE_OMEGA = TWO_PI / 110;    // bulge: visibly faster core
+    const WOBBLE_AMP = 0.06;             // oscillatory per-particle angular wobble
+    const PARALLAX_X = 48;               // max horizontal parallax (±24px)
+    const PARALLAX_Y = 28;               // max vertical parallax (±14px)
+    const PUSH_RADIUS = 130;             // cursor influence radius (px)
+    const PUSH_STRENGTH = 30;            // max cursor displacement (px)
+
+    // Brand palette (must stay in sync with @theme in src/styles/global.css)
+    const RGB_WHITE = '255,255,255';
+    const RGB_GREEN = '37,211,102';      // --color-wa-green
+    const RGB_PURPLE = '124,58,237';     // --color-ai-purple
+
+    type Particle = {
+      theta0: number;
+      r: number;
+      bulge: boolean;
+      sprite: number;
+      size: number;
+      baseAlpha: number;
+      twinklePhase: number;
+      twinkleFreq: number;
+      wobblePhase: number;
+      wobblePeriod: number;
+      parallax: number;
+      ox: number; // cursor-push offset
+      oy: number;
+    };
+
+    // --- Pre-rendered glow sprites (drawImage only — no per-particle arcs) ---
+    function makeGlowSprite(rgb: string, size: number): HTMLCanvasElement {
+      const c = document.createElement('canvas');
+      c.width = c.height = size;
+      const g = c.getContext('2d')!;
+      const grad = g.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+      grad.addColorStop(0, `rgba(${rgb},1)`);
+      grad.addColorStop(0.3, `rgba(${rgb},0.7)`);
+      grad.addColorStop(1, `rgba(${rgb},0)`);
+      g.fillStyle = grad;
+      g.fillRect(0, 0, size, size);
+      return c;
+    }
+    const sprites = [makeGlowSprite(RGB_WHITE, 32), makeGlowSprite(RGB_GREEN, 32), makeGlowSprite(RGB_PURPLE, 32)];
+    const coreGlow = (() => {
+      const size = 256;
+      const c = document.createElement('canvas');
+      c.width = c.height = size;
+      const g = c.getContext('2d')!;
+      const grad = g.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+      grad.addColorStop(0, 'rgba(255,255,255,0.95)');
+      grad.addColorStop(0.18, `rgba(${RGB_GREEN},0.4)`);
+      grad.addColorStop(0.55, `rgba(${RGB_GREEN},0.12)`);
+      grad.addColorStop(1, `rgba(${RGB_GREEN},0)`);
+      g.fillStyle = grad;
+      g.fillRect(0, 0, size, size);
+      return c;
+    })();
+
+    // Dark "deep space" pocket — gives the stars a near-black sky to pop against,
+    // like the reference effect, while the brand gradient stays visible at the edges.
+    const skyPocket = (() => {
+      const size = 256;
+      const c = document.createElement('canvas');
+      c.width = c.height = size;
+      const g = c.getContext('2d')!;
+      const grad = g.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+      grad.addColorStop(0, 'rgba(3,26,22,0.66)');
+      grad.addColorStop(0.55, 'rgba(3,26,22,0.38)');
+      grad.addColorStop(1, 'rgba(3,26,22,0)');
+      g.fillStyle = grad;
+      g.fillRect(0, 0, size, size);
+      return c;
+    })();
+
+    // --- State -------------------------------------------------------------
+    let particles: Particle[] = [];
+    let cssW = 0;
+    let cssH = 0;
+    let R = 0;
+    let cx = 0;
+    let cy = 0;
+    let diskAngle = 0;
+    let bulgeAngle = 0;
+    let offX = 0;
+    let offY = 0;
+    let targetX = 0;
+    let targetY = 0;
+    let mouseOn = false;
+    let mouseClientX = 0;
+    let mouseClientY = 0;
+    let mx = 0;
+    let my = 0;
+    let last = 0;
+    let rafId = 0;
+    let intersecting = false;
+    let resizeTimer: ReturnType<typeof setTimeout> | 0 = 0;
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const controller = new AbortController();
+
+    // --- Field generation (all randomness here — never in the frame loop) ---
+    function buildField() {
+      const desktop = cssW >= 1024;
+      R = Math.min(cssW, cssH) * (desktop ? 0.6 : 0.85);
+      // Desktop: core in the open space below the CTAs / left of the phone mockup,
+      // arms sweeping up behind the phone. Mobile: below the centered text stack.
+      cx = desktop ? cssW * 0.58 : cssW * 0.5;
+      cy = desktop ? cssH * 0.66 : cssH * 0.72;
+
+      const count = cssW < 640 ? 400 : Math.min(1100, Math.max(600, Math.round((cssW * cssH) / 1200)));
+      const bulgeCount = Math.round(count * BULGE_FRACTION);
+      const diskCount = count - bulgeCount;
+      const R_MIN = R * 0.07;
+      const b = Math.log(R / R_MIN) / THETA_MAX;
+
+      particles = [];
+
+      // Disk: 3 logarithmic-spiral arms, density falling off outward.
+      for (let i = 0; i < diskCount; i++) {
+        const t = Math.pow(Math.random(), T_POWER);
+        const arm = Math.floor(Math.random() * ARMS);
+        const jitter = (Math.random() - 0.5) * ARM_SPREAD * (0.3 + t);
+        const theta0 = arm * (TWO_PI / ARMS) + THETA_MAX * t + jitter;
+        const r = R_MIN * Math.exp(b * THETA_MAX * t) * (1 + (Math.random() - 0.5) * 0.12);
+        // Color by band: white/green coreward, green/purple outward.
+        const roll = Math.random();
+        let sprite: number;
+        if (t < 0.35) sprite = roll < 0.7 ? 0 : 1;
+        else if (t < 0.7) sprite = roll < 0.2 ? 0 : roll < 0.75 ? 1 : 2;
+        else sprite = roll < 0.6 ? 1 : 2;
+        particles.push(makeParticle(theta0, r, false, sprite, 3.5 + Math.random() * 3, 0.85 + Math.random() * 0.15));
+      }
+
+      // Core bulge: isotropic, brighter, whiter.
+      for (let i = 0; i < bulgeCount; i++) {
+        const r = R * 0.16 * Math.pow(Math.random(), 2);
+        const theta0 = Math.random() * TWO_PI;
+        const sprite = Math.random() < 0.8 ? 0 : 1;
+        particles.push(makeParticle(theta0, r, true, sprite, 3.5 + Math.random() * 3, 0.85 + Math.random() * 0.15));
+      }
+
+      // Hero stars: a few bright beads along the arms, drawn last (on top).
+      const heroCount = Math.round(diskCount * 0.04);
+      for (let i = 0; i < heroCount; i++) {
+        const t = 0.15 + Math.random() * 0.8;
+        const arm = Math.floor(Math.random() * ARMS);
+        const jitter = (Math.random() - 0.5) * ARM_SPREAD * (0.3 + t);
+        const theta0 = arm * (TWO_PI / ARMS) + THETA_MAX * t + jitter;
+        const r = R_MIN * Math.exp(b * THETA_MAX * t);
+        particles.push(makeParticle(theta0, r, false, 0, 11 + Math.random() * 5, 1));
+      }
+    }
+
+    function makeParticle(
+      theta0: number,
+      r: number,
+      bulge: boolean,
+      sprite: number,
+      size: number,
+      baseAlpha: number
+    ): Particle {
+      return {
+        theta0,
+        r,
+        bulge,
+        sprite,
+        size,
+        baseAlpha,
+        twinklePhase: Math.random() * TWO_PI,
+        twinkleFreq: 0.5 + Math.random() * 0.9,
+        wobblePhase: Math.random() * TWO_PI,
+        wobblePeriod: 20 + Math.random() * 30,
+        parallax: 0.6 + Math.random() * 0.8,
+        ox: 0,
+        oy: 0,
+      };
+    }
+
+    // --- Sizing -------------------------------------------------------------
+    function fit() {
+      cssW = section.clientWidth;
+      cssH = section.clientHeight;
+      const dpr = Math.min(window.devicePixelRatio || 1, cssW < 640 ? 1.5 : 2);
+      canvas.width = Math.round(cssW * dpr);
+      canvas.height = Math.round(cssH * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    // --- Rendering ----------------------------------------------------------
+    function draw(nowSec: number) {
+      ctx.clearRect(0, 0, cssW, cssH);
+
+      // Dark sky pocket first, so stars sit on a deep background.
+      const skyW = R * 3.4;
+      const skyH = skyW * 0.85;
+      ctx.globalAlpha = 1;
+      ctx.drawImage(skyPocket, cx + offX * 0.5 - skyW / 2, cy + offY * 0.5 - skyH / 2, skyW, skyH);
+
+      // Core bloom under the particles (squashed to match the disk inclination).
+      const glowW = R * 2.7;
+      const glowH = glowW * 0.8;
+      ctx.globalAlpha = 0.95;
+      ctx.drawImage(coreGlow, cx + offX * 0.5 - glowW / 2, cy + offY * 0.5 - glowH / 2, glowW, glowH);
+
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        const theta =
+          p.theta0 +
+          (p.bulge ? bulgeAngle : diskAngle) +
+          WOBBLE_AMP * Math.sin((nowSec * TWO_PI) / p.wobblePeriod + p.wobblePhase);
+        const bx = cx + offX * p.parallax + Math.cos(theta) * p.r;
+        const by = cy + offY * p.parallax + Math.sin(theta) * p.r * Y_SQUASH;
+
+        // Cursor repulsion: stars within PUSH_RADIUS are pushed away and lit up,
+        // relaxing back to orbit with a spring once the cursor moves on.
+        let push = 0;
+        let tx = 0;
+        let ty = 0;
+        if (mouseOn) {
+          const dx = bx + p.ox - mx;
+          const dy = by + p.oy - my;
+          const d2 = dx * dx + dy * dy;
+          if (d2 < PUSH_RADIUS * PUSH_RADIUS) {
+            const d = Math.sqrt(d2) || 1;
+            push = 1 - d / PUSH_RADIUS;
+            tx = (dx / d) * PUSH_STRENGTH * push;
+            ty = (dy / d) * PUSH_STRENGTH * push;
+          }
+        }
+        p.ox += (tx - p.ox) * 0.16;
+        p.oy += (ty - p.oy) * 0.16;
+
+        const x = bx + p.ox;
+        const y = by + p.oy;
+        const size = p.size * (1 + 0.4 * push);
+        const alpha = p.baseAlpha * (0.8 + 0.2 * Math.sin(nowSec * p.twinkleFreq + p.twinklePhase)) * (1 + 0.6 * push);
+        ctx.globalAlpha = Math.min(alpha, 1);
+        ctx.drawImage(sprites[p.sprite], x - size / 2, y - size / 2, size, size);
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    function frame(now: number) {
+      const dt = Math.min(now - last, 50);
+      last = now;
+      diskAngle += DISK_OMEGA * (dt / 1000);
+      bulgeAngle += BULGE_OMEGA * (dt / 1000);
+      const k = 1 - Math.exp((-6 * dt) / 1000);
+      offX += (targetX - offX) * k;
+      offY += (targetY - offY) * k;
+      if (mouseOn) {
+        const rect = canvas.getBoundingClientRect();
+        mx = mouseClientX - rect.left;
+        my = mouseClientY - rect.top;
+      }
+      draw(now / 1000);
+      rafId = requestAnimationFrame(frame);
+    }
+
+    // --- Run gate: only while visible, on screen, motion allowed -------------
+    function updateRunning() {
+      const should = intersecting && !document.hidden && !reducedMotion;
+      if (should && !rafId) {
+        last = performance.now();
+        rafId = requestAnimationFrame(frame);
+      } else if (!should && rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = 0;
+      }
+    }
+
+    // --- Boot ----------------------------------------------------------------
+    fit();
+    buildField();
+
+    if (reducedMotion) {
+      draw(0); // one static frame — no listeners, no loop
+      return;
+    }
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        intersecting = entries[0].isIntersecting;
+        updateRunning();
+      },
+      { threshold: 0 }
+    );
+    io.observe(section);
+
+    const ro = new ResizeObserver(() => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        const prevW = cssW;
+        fit();
+        // Rebuild only on real width changes (mobile URL-bar churn is height-only).
+        if (Math.abs(cssW - prevW) > 2) buildField();
+      }, 150);
+    });
+    ro.observe(section);
+
+    window.addEventListener(
+      'pointermove',
+      (e) => {
+        // Touch drag-scroll must not jiggle the field.
+        if (e.pointerType && e.pointerType !== 'mouse') return;
+        mouseOn = true;
+        mouseClientX = e.clientX;
+        mouseClientY = e.clientY;
+        targetX = (e.clientX / window.innerWidth - 0.5) * PARALLAX_X;
+        targetY = (e.clientY / window.innerHeight - 0.5) * PARALLAX_Y;
+      },
+      { signal: controller.signal }
+    );
+    document.addEventListener('pointerleave', () => (mouseOn = false), { signal: controller.signal });
+
+    document.addEventListener('visibilitychange', updateRunning, { signal: controller.signal });
+    window.addEventListener(
+      'pagehide',
+      () => {
+        controller.abort();
+        io.disconnect();
+        ro.disconnect();
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = 0;
+      },
+      { signal: controller.signal }
+    );
+  }
+</script>

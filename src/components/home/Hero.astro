@@ -1,5 +1,6 @@
 ---
 import CTAButton from '../shared/CTAButton.astro';
+import GalaxyCanvas from './GalaxyCanvas.astro';
 import { getLangFromUrl, useTranslations, localizePath } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
@@ -7,6 +8,7 @@ const t = useTranslations(lang);
 ---
 
 <section class="relative overflow-hidden bg-gradient-to-br from-wa-teal via-wa-teal-light to-wa-green-dark">
+  <GalaxyCanvas />
   <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(37,211,102,0.15),transparent_60%)]"></div>
   <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 lg:py-36">
     <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
