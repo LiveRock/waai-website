@@ -58,6 +58,7 @@ const ta: Record<string, string> = {
   'footer.privacy': 'தனியுரிமைக் கொள்கை',
   'footer.getTheApp': 'waai செயலியைப் பெறுங்கள்',
   'footer.googleCompliance': 'Google இணக்கம்',
+  'footer.security': 'பாதுகாப்பு',
   'footer.tagline':
     'உங்கள் WhatsApp AI முகவர் ஒருபோதும் தூங்காது. AI சிறப்பாகச் செய்யும்போது செய்திகளைக் கைமுறையாக ஏன் கையாள வேண்டும்?',
   'footer.productOf': 'Hotsource Intelligence & Hotsource ESD இன் தயாரிப்பு',

@@ -38,7 +38,7 @@ export const LOCALES: Record<Lang, LocaleMeta> = {
  * Stored normalized with a trailing slash to match `normalizePath()` output.
  * The language switcher sends users to the locale homepage instead of these.
  */
-export const ENGLISH_ONLY_PATHS = ['/terms/', '/privacy/', '/google-compliance/'];
+export const ENGLISH_ONLY_PATHS = ['/terms/', '/privacy/', '/google-compliance/', '/security/'];
 
 export function isLang(code: string): code is Lang {
   return (LANGS as string[]).includes(code);

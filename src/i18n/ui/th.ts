@@ -58,6 +58,7 @@ const th: Record<string, string> = {
   'footer.privacy': 'นโยบายความเป็นส่วนตัว',
   'footer.getTheApp': 'รับแอป waai',
   'footer.googleCompliance': 'การปฏิบัติตามข้อกำหนดของ Google',
+  'footer.security': 'ความปลอดภัย',
   'footer.tagline':
     'AI Agent สำหรับ WhatsApp ของคุณที่ไม่เคยหยุดพัก ทำไมต้องดูแลข้อความด้วยตนเอง เมื่อ AI ทำได้ดีกว่า?',
   'footer.productOf': 'ผลิตภัณฑ์ของ Hotsource Intelligence & Hotsource ESD',

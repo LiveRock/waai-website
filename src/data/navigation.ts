@@ -98,5 +98,6 @@ export const footerLinks = {
     { key: 'footer.terms', href: '/terms' },
     { key: 'footer.privacy', href: '/privacy' },
     { key: 'footer.googleCompliance', href: '/google-compliance' },
+    { key: 'footer.security', href: '/security' },
   ],
 };

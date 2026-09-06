@@ -58,6 +58,7 @@ const zh: Record<string, string> = {
   'footer.privacy': '隐私政策',
   'footer.getTheApp': '下载 waai 应用',
   'footer.googleCompliance': 'Google 合规',
+  'footer.security': '安全',
   'footer.tagline': '您的 WhatsApp AI 智能客服，全天候在线。何必手动处理消息，AI 做得更好。',
   'footer.productOf': '由 Hotsource Intelligence 与 Hotsource ESD 出品',
   'footer.rights': '保留所有权利。',
