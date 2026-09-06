@@ -58,6 +58,7 @@ const es: Record<string, string> = {
   'footer.privacy': 'Política de Privacidad',
   'footer.getTheApp': 'Descarga la app de waai',
   'footer.googleCompliance': 'Cumplimiento de Google',
+  'footer.security': 'Seguridad',
   'footer.tagline':
     'Tu agente de IA para WhatsApp que nunca duerme. ¿Por qué gestionar mensajes manualmente cuando la IA lo hace mejor?',
   'footer.productOf': 'Un producto de Hotsource Intelligence & Hotsource ESD',

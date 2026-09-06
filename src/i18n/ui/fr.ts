@@ -58,6 +58,7 @@ const fr: Record<string, string> = {
   'footer.privacy': 'Politique de Confidentialité',
   'footer.getTheApp': 'Téléchargez l\'app waai',
   'footer.googleCompliance': 'Conformité Google',
+  'footer.security': 'Sécurité',
   'footer.tagline':
     'Votre agent IA WhatsApp qui ne dort jamais. Pourquoi gérer les messages manuellement quand l’IA le fait mieux ?',
   'footer.productOf': 'Un produit de Hotsource Intelligent & Hotsource ESD',

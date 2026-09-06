@@ -58,6 +58,7 @@ const ms: Record<string, string> = {
   'footer.privacy': 'Polisi Privasi',
   'footer.getTheApp': 'Dapatkan app waai',
   'footer.googleCompliance': 'Pematuhan Google',
+  'footer.security': 'Keselamatan',
   'footer.tagline':
     'Ejen AI WhatsApp anda yang tidak pernah tidur. Mengendalikan mesej secara manual apabila AI melakukannya dengan lebih baik?',
   'footer.productOf': 'Produk Hotsource Intelligence & Hotsource ESD',
