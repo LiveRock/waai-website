@@ -10,16 +10,16 @@ import PageLayout from '../layouts/PageLayout.astro';
   <section class="py-16 sm:py-20 bg-white">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
       <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-2">Security</h1>
-      <p class="text-sm text-gray-500 mb-10">Last updated: September 6, 2026</p>
+      <p class="text-sm text-gray-500 mb-10">Last updated: September 7, 2026</p>
 
       <div class="prose prose-gray max-w-none space-y-8 text-gray-700 leading-relaxed">
         <div>
           <h2 class="text-xl font-bold text-gray-900 mb-3">Security at waai</h2>
-          <p>Protecting your data — customer accounts, WhatsApp conversations, and connected integrations — is foundational to waai. This page describes the security controls we operate, which are aligned with the SOC 2 Common Criteria (Security) from the AICPA Trust Services Criteria. An independent SOC 2 audit is planned; until it is completed, this page describes our controls and is not a certification or audit report.</p>
+          <p>Protecting your data — customer accounts, WhatsApp conversations, and connected integrations — is foundational to waai. This page describes the security controls we operate, which are aligned with the SOC 2 Common Criteria (Security) from the AICPA Trust Services Criteria — each control area below notes the Common Criteria reference it maps to (CC6.x, CC7.x). An independent SOC 2 audit is planned; until it is completed, this page describes our controls and is not a certification or audit report.</p>
         </div>
 
         <div>
-          <h2 class="text-xl font-bold text-gray-900 mb-3">Encryption at Rest</h2>
+          <h2 class="text-xl font-bold text-gray-900 mb-3">Encryption at Rest (CC6.1)</h2>
           <ul class="list-disc list-inside space-y-2">
             <li><strong>Encrypted credentials.</strong> WhatsApp access tokens, AI provider API keys, and OAuth tokens (including Google) are encrypted at rest using Fernet symmetric (AES) encryption and are never stored in plaintext.</li>
             <li><strong>Password hashing.</strong> Account passwords are hashed with bcrypt and salted — they are never stored or transmitted in readable form.</li>
@@ -27,7 +27,7 @@ import PageLayout from '../layouts/PageLayout.astro';
         </div>
 
         <div>
-          <h2 class="text-xl font-bold text-gray-900 mb-3">Multi-Factor Authentication</h2>
+          <h2 class="text-xl font-bold text-gray-900 mb-3">Multi-Factor Authentication (CC6.1)</h2>
           <ul class="list-disc list-inside space-y-2">
             <li><strong>Authenticator apps.</strong> Every account can enable time-based one-time passwords (TOTP) with any authenticator app.</li>
             <li><strong>Passkeys.</strong> Passwordless sign-in with passkeys (WebAuthn / FIDO2) — fingerprint, face, or hardware key.</li>
@@ -36,7 +36,7 @@ import PageLayout from '../layouts/PageLayout.astro';
         </div>
 
         <div>
-          <h2 class="text-xl font-bold text-gray-900 mb-3">Role-Based Access Control</h2>
+          <h2 class="text-xl font-bold text-gray-900 mb-3">Role-Based Access Control (CC6.2 &amp; CC6.3)</h2>
           <ul class="list-disc list-inside space-y-2">
             <li><strong>Granular roles.</strong> Team access is managed through Owner, Admin, Customer Service Officer, and Custom roles with per-page permissions.</li>
             <li><strong>Tenant isolation.</strong> Every query is scoped to your account — one business's data is never visible to another.</li>
@@ -44,7 +44,7 @@ import PageLayout from '../layouts/PageLayout.astro';
         </div>
 
         <div>
-          <h2 class="text-xl font-bold text-gray-900 mb-3">Secure Integrations &amp; Transmission</h2>
+          <h2 class="text-xl font-bold text-gray-900 mb-3">Secure Integrations &amp; Transmission (CC6.6 &amp; CC6.7)</h2>
           <ul class="list-disc list-inside space-y-2">
             <li><strong>HTTPS/TLS everywhere.</strong> All traffic to and from waai is encrypted in transit.</li>
             <li><strong>Verified webhooks.</strong> Incoming events from Meta, Stripe, and Cal.com are validated with HMAC-SHA256 signature verification; Apple server notifications are JWS-verified with certificate-chain pinning. Forged or unsigned requests are rejected.</li>
@@ -53,7 +53,7 @@ import PageLayout from '../layouts/PageLayout.astro';
         </div>
 
         <div>
-          <h2 class="text-xl font-bold text-gray-900 mb-3">Application Hardening</h2>
+          <h2 class="text-xl font-bold text-gray-900 mb-3">Application Hardening (CC6.6)</h2>
           <ul class="list-disc list-inside space-y-2">
             <li><strong>SSRF protection.</strong> Every server-side fetch of a user-supplied URL passes an outbound guard that blocks internal and private network targets.</li>
             <li><strong>Rate limiting.</strong> API endpoints are rate-limited per IP and per user to blunt brute-force and abuse.</li>
@@ -71,7 +71,7 @@ import PageLayout from '../layouts/PageLayout.astro';
 
         <div>
           <h2 class="text-xl font-bold text-gray-900 mb-3">Contact</h2>
-          <p>Questions about security or reporting a vulnerability? Contact us at <a href="mailto:hello@waai.me" class="text-wa-teal hover:underline">hello@waai.me</a>.</p>
+          <p>Questions about security or reporting a vulnerability? Contact us at <a href="mailto:info@waai.me" class="text-wa-teal hover:underline">info@waai.me</a>.</p>
         </div>
 
         <div class="pt-4 border-t border-gray-200 text-sm text-gray-400">
