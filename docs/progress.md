@@ -2,6 +2,13 @@
 
 Running log of significant work sessions. Newest first.
 
+## 2026-09-10
+
+### Hero video on mobile + Book-a-Demo CTA
+- **Phone mockup now visible on mobile** (was `hidden lg:flex`): stacks below the hero text. Mobile shows the poster + a green play overlay (`data-hero-play`, `lg:hidden`) — **tap starts playback with sound** (tap = the user gesture autoplay policies require; zero video data until the visitor opts in, poster only). Once started, scrolling away pauses and returning resumes (`userStarted` flag in the gate script). Desktop behavior unchanged (muted autoplay loop + sound button). Floating badges went responsive (`-left-6`/`-right-6` below `lg`, 96px only on desktop) so they don't overflow a 390px screen. Verified in headless Chromium: desktop regression clean, mobile poster/overlay/tap-unmuted-play/pause/resume all pass, badges zero viewport overhang, no console errors.
+- **Hero secondary CTA is now "Book a Demo"** → https://cal.com/peter-rock-steady-crew/30min in a new tab (`CTAButton` gained an `external` prop for `target=_blank rel=noopener`). Uses the existing-but-unused `cta.bookDemo` key (already translated in all 10 locales). "Talk to Sales"/contact form remain via header nav.
+- **Blog-review daemon fix** (separate commit, landed Sep 9 late): Apple Mail's UTF-8 BOM in front of the quoted section broke the `^On … wrote:` quote matcher, so Peter's YES for PR #36 matched both YES and NO → ignored as ambiguous. `load_mail()` now strips zero-width chars; verified against the real Sep 8 reply. Cron runs the script from the repo checkout, so the fix went live on commit.
+
 ## 2026-09-09
 
 ### Hero phone: static chat mockup → waai promo video

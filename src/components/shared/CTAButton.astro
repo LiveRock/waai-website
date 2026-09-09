@@ -3,9 +3,11 @@ interface Props {
   href: string;
   variant?: 'primary' | 'secondary' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
+  /** Open in a new tab (for off-site links, e.g. cal.com demo booking). */
+  external?: boolean;
 }
 
-const { href, variant = 'primary', size = 'md' } = Astro.props;
+const { href, variant = 'primary', size = 'md', external = false } = Astro.props;
 
 const base = 'inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-200';
 
@@ -22,6 +24,6 @@ const sizes = {
 };
 ---
 
-<a href={href} class:list={[base, variants[variant], sizes[size]]}>
+<a href={href} target={external ? '_blank' : undefined} rel={external ? 'noopener noreferrer' : undefined} class:list={[base, variants[variant], sizes[size]]}>
   <slot />
 </a>

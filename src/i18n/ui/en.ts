@@ -433,6 +433,7 @@ const en: Record<string, string> = {
   'home.hero.trialNote': 'No credit card required. Free trial.',
   'home.hero.video.soundOn': 'Enable sound',
   'home.hero.video.soundOff': 'Mute',
+  'home.hero.video.play': 'Play video',
   'home.hero.badge.responseTime': 'Response Time',
   'home.hero.badge.responseValue': '< 3 seconds',
   'home.hero.badge.aiPowered': 'AI Powered',

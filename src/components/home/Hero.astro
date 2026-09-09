@@ -27,13 +27,13 @@ const t = useTranslations(lang);
           <CTAButton href={localizePath('/signup', lang)} variant="primary" size="lg">
             {t('cta.startTrial')}
           </CTAButton>
-          <CTAButton href={localizePath('/contact', lang)} variant="secondary" size="lg" class="!border-white/30 !text-white hover:!bg-white/10">
-            {t('cta.talkToSales')}
+          <CTAButton href="https://cal.com/peter-rock-steady-crew/30min" variant="secondary" size="lg" external class="!border-white/30 !text-white hover:!bg-white/10">
+            {t('cta.bookDemo')}
           </CTAButton>
         </div>
         <p class="mt-6 text-sm text-green-100/70">{t('home.hero.trialNote')}</p>
       </div>
-      <div class="hidden lg:flex justify-center">
+      <div class="flex justify-center">
         <div class="relative">
           <!-- Phone mockup -->
           <div class="w-72 h-[580px] bg-gray-900 rounded-[3rem] p-3 shadow-2xl">
@@ -51,6 +51,17 @@ const t = useTranslations(lang);
                 class="w-full h-full object-cover"
                 aria-label="waai — WhatsApp AI agent in action"
               ></video>
+              <!-- Mobile tap-to-play overlay (desktop autoplays muted instead) -->
+              <button
+                type="button"
+                data-hero-play
+                aria-label={t('home.hero.video.play')}
+                class="lg:hidden absolute inset-0 z-10 flex items-center justify-center bg-black/20 cursor-pointer group"
+              >
+                <span class="flex items-center justify-center w-16 h-16 rounded-full bg-wa-green shadow-xl ring-4 ring-white/40 group-hover:scale-110 group-active:scale-95 transition-transform">
+                  <svg class="w-7 h-7 text-white ml-1" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+                </span>
+              </button>
               <!-- Sound toggle (video autoplays muted) -->
               <button
                 type="button"
@@ -67,7 +78,7 @@ const t = useTranslations(lang);
             </div>
           </div>
           <!-- Floating badges -->
-          <div class="absolute -left-24 top-20 bg-white rounded-xl shadow-lg px-4 py-3 flex items-center gap-3">
+          <div class="absolute -left-6 lg:-left-24 top-20 z-20 bg-white rounded-xl shadow-lg px-4 py-3 flex items-center gap-3">
             <div class="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
               <svg class="w-5 h-5 text-wa-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             </div>
@@ -76,7 +87,7 @@ const t = useTranslations(lang);
               <div class="text-sm font-bold text-gray-900">{t('home.hero.badge.responseValue')}</div>
             </div>
           </div>
-          <div class="absolute -right-24 bottom-40 bg-white rounded-xl shadow-lg px-4 py-3 flex items-center gap-3">
+          <div class="absolute -right-6 lg:-right-24 bottom-40 z-20 bg-white rounded-xl shadow-lg px-4 py-3 flex items-center gap-3">
             <div class="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center">
               <svg class="w-5 h-5 text-ai-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
             </div>
@@ -91,22 +102,42 @@ const t = useTranslations(lang);
   </div>
 
   <script is:inline>
-    // Hero phone video — muted loop, played only when it can be seen and motion
-    // is allowed: desktop (mockup is hidden below lg), no prefers-reduced-motion,
-    // and on screen (IntersectionObserver). Same run-gate idea as GalaxyCanvas.
+    // Hero phone video. Desktop (>=1024px): muted autoplay loop while on screen
+    // and motion is allowed (same run-gate idea as GalaxyCanvas). Mobile: poster
+    // + tap-to-play overlay — the tap is the user gesture browsers require, so
+    // playback starts WITH sound; afterwards scrolling away pauses and returning
+    // resumes it.
     (function () {
       var video = document.querySelector('[data-hero-video]');
       if (!video) return;
       var desktop = window.matchMedia('(min-width: 1024px)');
       var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+      var overlay = document.querySelector('[data-hero-play]');
+      var soundBtn = document.querySelector('[data-hero-sound]');
+      var iconMuted = soundBtn && soundBtn.querySelector('[data-icon-muted]');
+      var iconOn = soundBtn && soundBtn.querySelector('[data-icon-on]');
       var onScreen = true;
+      var userStarted = false; // set on first tap — opts the video into resume-on-visible
+
+      function syncSound() {
+        if (!soundBtn) return;
+        var audible = !video.muted;
+        iconMuted.classList.toggle('hidden', audible);
+        iconOn.classList.toggle('hidden', !audible);
+        soundBtn.setAttribute('aria-pressed', audible ? 'true' : 'false');
+        soundBtn.setAttribute('aria-label', audible ? soundBtn.getAttribute('data-label-off') : soundBtn.getAttribute('data-label-on'));
+      }
+      function syncOverlay() {
+        if (overlay) overlay.classList.toggle('hidden', !video.paused);
+      }
       function update() {
-        if (desktop.matches && !reduced.matches && onScreen) {
+        if (onScreen && (userStarted || (desktop.matches && !reduced.matches))) {
           var p = video.play();
           if (p && p.catch) p.catch(function () {});
         } else {
           video.pause();
         }
+        syncOverlay();
       }
       if ('IntersectionObserver' in window) {
         new IntersectionObserver(function (entries) {
@@ -116,21 +147,22 @@ const t = useTranslations(lang);
       }
       desktop.addEventListener('change', update);
       reduced.addEventListener('change', update);
-      update();
 
-      // Sound toggle — video autoplays muted; this button unmutes it (user
-      // gesture, so autoplay policies are satisfied). Click again to re-mute.
-      var soundBtn = document.querySelector('[data-hero-sound]');
+      // Mobile: tap the poster overlay to start the video with sound.
+      if (overlay) {
+        overlay.addEventListener('click', function () {
+          userStarted = true;
+          video.muted = false;
+          video.volume = 1;
+          var p = video.play();
+          if (p && p.catch) p.catch(function () {});
+          syncSound();
+          syncOverlay();
+        });
+      }
+      // Sound toggle — video autoplays muted; click unmutes it (user gesture,
+      // so autoplay policies are satisfied). Click again to re-mute.
       if (soundBtn) {
-        var iconMuted = soundBtn.querySelector('[data-icon-muted]');
-        var iconOn = soundBtn.querySelector('[data-icon-on]');
-        function syncSound() {
-          var audible = !video.muted;
-          iconMuted.classList.toggle('hidden', audible);
-          iconOn.classList.toggle('hidden', !audible);
-          soundBtn.setAttribute('aria-pressed', audible ? 'true' : 'false');
-          soundBtn.setAttribute('aria-label', audible ? soundBtn.getAttribute('data-label-off') : soundBtn.getAttribute('data-label-on'));
-        }
         soundBtn.addEventListener('click', function () {
           video.muted = !video.muted;
           if (!video.muted) {
@@ -140,8 +172,9 @@ const t = useTranslations(lang);
           }
           syncSound();
         });
-        syncSound();
       }
+      syncSound();
+      update();
     })();
   </script>
 </section>
