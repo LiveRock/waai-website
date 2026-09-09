@@ -82,6 +82,12 @@ def load_mail(path: Path):
     msg = BytesParser(policy=policy.default).parsebytes(path.read_bytes())
     body_part = msg.get_body(preferencelist=("plain",))
     body = body_part.get_content() if body_part else ""
+    # Apple Mail prefixes the quoted section with a UTF-8 BOM (﻿, =EF=BB=BF on
+    # the wire), which defeats the ^On ... wrote: quote matcher in QUOTE_RE — the
+    # whole quoted original then scans as reply text and the embedded "YES → ... /
+    # NO → ..." instructions match BOTH keyword sets, so the reply is ignored as
+    # ambiguous (happened 2026-09-08, PR #36). Strip zero-width chars before matching.
+    body = body.replace("﻿", "").replace("​", "")
     return msg, body
 
 
