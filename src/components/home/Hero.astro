@@ -37,7 +37,7 @@ const t = useTranslations(lang);
         <div class="relative">
           <!-- Phone mockup -->
           <div class="w-72 h-[580px] bg-gray-900 rounded-[3rem] p-3 shadow-2xl">
-            <div class="w-full h-full bg-black rounded-[2.4rem] overflow-hidden">
+            <div class="relative w-full h-full bg-black rounded-[2.4rem] overflow-hidden">
               <!-- waai promo Short, self-hosted (muted loop; script below gates playback) -->
               <video
                 data-hero-video
@@ -51,10 +51,23 @@ const t = useTranslations(lang);
                 class="w-full h-full object-cover"
                 aria-label="waai — WhatsApp AI agent in action"
               ></video>
+              <!-- Sound toggle (video autoplays muted) -->
+              <button
+                type="button"
+                data-hero-sound
+                data-label-on={t('home.hero.video.soundOn')}
+                data-label-off={t('home.hero.video.soundOff')}
+                aria-pressed="false"
+                aria-label={t('home.hero.video.soundOn')}
+                class="absolute bottom-3 right-3 z-10 flex items-center justify-center w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm text-white/90 shadow-lg ring-1 ring-white/25 hover:bg-black/65 hover:scale-105 active:scale-95 transition cursor-pointer"
+              >
+                <svg data-icon-muted class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+                <svg data-icon-on class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+              </button>
             </div>
           </div>
           <!-- Floating badges -->
-          <div class="absolute -left-16 top-20 bg-white rounded-xl shadow-lg px-4 py-3 flex items-center gap-3">
+          <div class="absolute -left-24 top-20 bg-white rounded-xl shadow-lg px-4 py-3 flex items-center gap-3">
             <div class="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
               <svg class="w-5 h-5 text-wa-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             </div>
@@ -63,7 +76,7 @@ const t = useTranslations(lang);
               <div class="text-sm font-bold text-gray-900">{t('home.hero.badge.responseValue')}</div>
             </div>
           </div>
-          <div class="absolute -right-16 bottom-40 bg-white rounded-xl shadow-lg px-4 py-3 flex items-center gap-3">
+          <div class="absolute -right-24 bottom-40 bg-white rounded-xl shadow-lg px-4 py-3 flex items-center gap-3">
             <div class="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center">
               <svg class="w-5 h-5 text-ai-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
             </div>
@@ -104,6 +117,31 @@ const t = useTranslations(lang);
       desktop.addEventListener('change', update);
       reduced.addEventListener('change', update);
       update();
+
+      // Sound toggle — video autoplays muted; this button unmutes it (user
+      // gesture, so autoplay policies are satisfied). Click again to re-mute.
+      var soundBtn = document.querySelector('[data-hero-sound]');
+      if (soundBtn) {
+        var iconMuted = soundBtn.querySelector('[data-icon-muted]');
+        var iconOn = soundBtn.querySelector('[data-icon-on]');
+        function syncSound() {
+          var audible = !video.muted;
+          iconMuted.classList.toggle('hidden', audible);
+          iconOn.classList.toggle('hidden', !audible);
+          soundBtn.setAttribute('aria-pressed', audible ? 'true' : 'false');
+          soundBtn.setAttribute('aria-label', audible ? soundBtn.getAttribute('data-label-off') : soundBtn.getAttribute('data-label-on'));
+        }
+        soundBtn.addEventListener('click', function () {
+          video.muted = !video.muted;
+          if (!video.muted) {
+            video.volume = 1;
+            var p = video.play();
+            if (p && p.catch) p.catch(function () {});
+          }
+          syncSound();
+        });
+        syncSound();
+      }
     })();
   </script>
 </section>

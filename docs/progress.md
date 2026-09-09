@@ -12,6 +12,10 @@ Replaced the desktop hero phone screen's fake WhatsApp chat (HTML bubbles + `hom
 - **i18n**: removed the 8 dead `home.hero.chat.*` keys from all 10 locale dictionaries (video is language-neutral).
 - **Verification**: full gate suite in headless Chromium — autoplay/muted/advancing, loop, offscreen pause + resume, reduced-motion pause + resume, mobile zero-mp4-requests, zero console errors. Caveat found: Playwright's headless shell **cannot decode H.264** (`canPlayType: ""`, `networkState: NO_SOURCE`) — playback logic was proven with a temporary WebM swap; the poster/geometry checks used the real files. Final poster confirmed by direct pixel crop of the screenshot.
 
+#### Follow-up same day (Peter feedback)
+- **Badges pushed further out**: `-left-16`/`-right-16` → `-left-24`/`-right-24` (96px off-frame, only ~65–75px contact with the phone; the 64px grid gap absorbs the overhang at 1024px so nothing collides).
+- **Sound toggle added**: re-encoded the MP4 **with** AAC 96k audio (~3.0 MB total). A small dark circular button (`data-hero-sound`, speaker icon, bottom-right over the video) unmutes — the click provides the user gesture autoplay policies require — and click-again re-mutes; swaps icon + `aria-pressed` + localized `aria-label` (`home.hero.video.soundOn/soundOff`, en.ts only, icon-only button). Verified end-to-end with an audio-bearing WebM swap (unmute keeps playing at volume 1; re-mute works; zero console errors).
+
 ## 2026-09-04
 
 ### Hero "galaxy" particle effect (OpenAI GPT-6 Astra inspired)
