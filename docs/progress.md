@@ -2,6 +2,16 @@
 
 Running log of significant work sessions. Newest first.
 
+## 2026-09-09
+
+### Hero phone: static chat mockup → waai promo video
+Replaced the desktop hero phone screen's fake WhatsApp chat (HTML bubbles + `home.hero.chat.*` i18n keys) with the waai Short "waai Changes Everything" (`youtu.be/nBuenBaCmE8`), playing as a muted loop.
+- **Asset**: YouTube blocks every download route from this server's IP (yt-dlp all player clients, real-browser cookie harvest, nocookie embed → Error 153, Piped + Invidious instances all bot-walled) — Peter uploaded the original MP4 via Virtualmin to `/home/waai/`. Re-encoded with ffmpeg: 720×1280 H.264, audio stripped, CRF 27/preset slow, `+faststart` → **2.6 MB** (source 33 MB / 1080p / 24.6 s). Poster = hand-picked frame at 14 s (sharp WhatsApp-chat-UI close-up; the early café frames are motion-blurred). Both live in `public/videos/`.
+- **Playback gating** (`is:inline` script in `Hero.astro`, no `autoplay` attr): plays only when viewport ≥1024px **and** no `prefers-reduced-motion` **and** IntersectionObserver on-screen — mobile downloads nothing beyond moov metadata, reduced-motion users get the static poster, scrolling away pauses it. Same run-gate pattern as GalaxyCanvas.
+- **Badges symmetrized**: right "AI Powered" badge `-right-12 bottom-32` → `-right-16 bottom-40` (64px off-frame, matching the left badge) — fixes the pre-existing clip onto the screen; verified no viewport overhang at 1024/1280/1440.
+- **i18n**: removed the 8 dead `home.hero.chat.*` keys from all 10 locale dictionaries (video is language-neutral).
+- **Verification**: full gate suite in headless Chromium — autoplay/muted/advancing, loop, offscreen pause + resume, reduced-motion pause + resume, mobile zero-mp4-requests, zero console errors. Caveat found: Playwright's headless shell **cannot decode H.264** (`canPlayType: ""`, `networkState: NO_SOURCE`) — playback logic was proven with a temporary WebM swap; the poster/geometry checks used the real files. Final poster confirmed by direct pixel crop of the screenshot.
+
 ## 2026-09-04
 
 ### Hero "galaxy" particle effect (OpenAI GPT-6 Astra inspired)
