@@ -255,6 +255,10 @@ const ko: Record<string, string> = {
   'pricing.nFlows': '{n} 로직 플로우',
   'pricing.unlimitedMessages': '무제한 메시지',
   'pricing.nMessages': '{n} 메시지/월',
+  'pricing.footnote.csw': '고객 서비스 창(CSW) 내',
+  'pricing.footnote.fep': '무료 진입점(FEP) 내',
+  'pricing.footnote.marketingTitle': 'WhatsApp 마케팅 메시지',
+  'pricing.footnote.marketingBody': 'WhatsApp 메시지 요금은 Meta의 가격 정책, 목적지 국가, 메시지 카테고리 및 전환 유형에 따라 달라질 수 있습니다. 모든 요금은 사전 통지 없이 변경될 수 있습니다.',
   'pricing.onboardingOpt': '옵션 온보딩 지원 ({price})',
   'pricing.unlimited': '무제한',
   'pricing.contactPrice': '문의',
@@ -307,7 +311,6 @@ const ko: Record<string, string> = {
   'pricing.row.bookingsMonth': '월별 예약',
   'pricing.row.catalogProducts': '카탈로그 제품',
   'pricing.row.contacts': '연락처',
-  'pricing.row.broadcastsMonth': '월별 브로드캐스트',
 
   // Onboarding section
   'pricing.onboardingTitle': '옵션 온보딩 지원',

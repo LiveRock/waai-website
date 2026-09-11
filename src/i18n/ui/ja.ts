@@ -255,6 +255,10 @@ const ja: Record<string, string> = {
   'pricing.nFlows': '{n} ロジックフロー',
   'pricing.unlimitedMessages': '無制限のメッセージ',
   'pricing.nMessages': '{n} メッセージ/月',
+  'pricing.footnote.csw': 'カスタマーサービスウィンドウ（CSW）内',
+  'pricing.footnote.fep': '無料エントリーポイント（FEP）内',
+  'pricing.footnote.marketingTitle': 'WhatsAppマーケティングメッセージ',
+  'pricing.footnote.marketingBody': 'WhatsAppメッセージの料金は、Metaの価格設定、宛先国、メッセージカテゴリ、コンバージョンタイプにより異なる場合があります。すべての価格は予告なく変更されることがあります。',
   'pricing.onboardingOpt': 'オプションのオンボーディング支援（{price}）',
   'pricing.unlimited': '無制限',
   'pricing.contactPrice': 'お問い合わせ',
@@ -307,7 +311,6 @@ const ja: Record<string, string> = {
   'pricing.row.bookingsMonth': '月間予約数',
   'pricing.row.catalogProducts': 'カタログ製品数',
   'pricing.row.contacts': '連絡先数',
-  'pricing.row.broadcastsMonth': '月間ブロードキャスト数',
 
   // Onboarding section
   'pricing.onboardingTitle': 'オプションのオンボーディング支援',

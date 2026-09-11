@@ -249,6 +249,10 @@ const zh: Record<string, string> = {
   'pricing.nFlows': '{n} 逻辑流程',
   'pricing.unlimitedMessages': '无限消息',
   'pricing.nMessages': '{n} 条消息/月',
+  'pricing.footnote.csw': '客户服务窗口（CSW）内',
+  'pricing.footnote.fep': '免费入口（FEP）内',
+  'pricing.footnote.marketingTitle': 'WhatsApp 营销消息',
+  'pricing.footnote.marketingBody': 'WhatsApp 消息费用可能因 Meta 定价、目标国家/地区、消息类别和转化类型而有所不同。所有价格如有变更，恕不另行通知。',
   'pricing.onboardingOpt': '可选上线协助 ({price})',
   'pricing.unlimited': '无限',
   'pricing.contactPrice': '联系询价',
@@ -301,7 +305,6 @@ const zh: Record<string, string> = {
   'pricing.row.bookingsMonth': '预约数 / 月',
   'pricing.row.catalogProducts': '目录产品数',
   'pricing.row.contacts': '联系人数',
-  'pricing.row.broadcastsMonth': '群发数 / 月',
 
   // 上线协助
   'pricing.onboardingTitle': '可选上线协助',

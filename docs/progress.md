@@ -2,6 +2,15 @@
 
 Running log of significant work sessions. Newest first.
 
+## 2026-09-11
+
+### Pricing page: messages/month CSW/FEP footnotes + Meta-charges disclaimer
+- The messages/month quota now carries a `*` on the /pricing plan cards and the comparison-table row label — footnoted below the table: `*Within Customer Service Window (CSW)` and `*Within Free Entry Point (FEP)` as teal links to Meta's official docs (both anchors verified live), then a bold **WhatsApp Marketing Messages** heading with Peter's exact disclaimer copy (charges vary by Meta pricing / destination country / message category / conversion type; pricing subject to change without notice).
+- The `*` lives at the PricingPage call sites only — the `pricing.nMessages` i18n key is shared with SignupForm's copy-pasted `msgLine`, and /signup intentionally stays unmarked (verified leak-free).
+- 4 new `pricing.footnote.*` keys translated in all 10 locales (AI-authored as usual).
+- **Follow-up same day (Peter feedback): removed the "Broadcasts / month" comparison row** — broadcast sends are WhatsApp marketing messages, so the Meta-charges footnote below the table covers them (the row's info would contradict the disclaimer). Dead `pricing.row.broadcastsMonth` key deleted from all 10 dictionaries. Re-verified: row gone (EN + zh), footnote/FAQ/markers intact, zero console errors.
+- Verified headless: EN + zh markers/footnotes/links (`target=_blank rel=noopener`), signup unaffected, FAQ intact, zero console errors; build green at 545 pages.
+
 ## 2026-09-10
 
 ### Hero video on mobile + Book-a-Demo CTA

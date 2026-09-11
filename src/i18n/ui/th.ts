@@ -255,6 +255,10 @@ const th: Record<string, string> = {
   'pricing.nFlows': 'ฟลูตรรกะ {n} ฟลู',
   'pricing.unlimitedMessages': 'ข้อความไม่จำกัด',
   'pricing.nMessages': 'ข้อความ {n}/เดือน',
+  'pricing.footnote.csw': 'ภายในหน้าต่างบริการลูกค้า (CSW)',
+  'pricing.footnote.fep': 'ภายในจุดเข้าใช้งานฟรี (FEP)',
+  'pricing.footnote.marketingTitle': 'ข้อความการตลาด WhatsApp',
+  'pricing.footnote.marketingBody': 'ค่าบริการข้อความ WhatsApp อาจแตกต่างกันขึ้นอยู่กับราคาของ Meta ประเทศปลายทาง หมวดหมู่ข้อความ และประเภทการแปลง ราคาทั้งหมดอาจเปลี่ยนแปลงได้โดยไม่ต้องแจ้งล่วงหน้า',
   'pricing.onboardingOpt': 'บริการตั้งค่าเบื้องต้นเพิ่มเติม ({price})',
   'pricing.unlimited': 'ไม่จำกัด',
   'pricing.contactPrice': 'ติดต่อ',
@@ -307,7 +311,6 @@ const th: Record<string, string> = {
   'pricing.row.bookingsMonth': 'การจอง / เดือน',
   'pricing.row.catalogProducts': 'สินค้าในแคตตาล็อก',
   'pricing.row.contacts': 'ผู้ติดต่อ',
-  'pricing.row.broadcastsMonth': 'การส่งบรอดแคสต์ / เดือน',
 
   // Onboarding section
   'pricing.onboardingTitle': 'บริการตั้งค่าเบื้องต้นเพิ่มเติม',

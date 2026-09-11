@@ -255,6 +255,10 @@ const es: Record<string, string> = {
   'pricing.nFlows': '{n} flujos lógicos',
   'pricing.unlimitedMessages': 'Mensajes ilimitados',
   'pricing.nMessages': '{n} mensajes/mes',
+  'pricing.footnote.csw': 'Dentro de la ventana de servicio al cliente (CSW)',
+  'pricing.footnote.fep': 'Dentro del punto de entrada gratuito (FEP)',
+  'pricing.footnote.marketingTitle': 'Mensajes de marketing de WhatsApp',
+  'pricing.footnote.marketingBody': 'Los cargos de mensajería de WhatsApp pueden variar según los precios de Meta, el país de destino, la categoría del mensaje y el tipo de conversión. Todos los precios están sujetos a cambios sin previo aviso.',
   'pricing.onboardingOpt': 'Asistencia de Onboarding Opcional ({price})',
   'pricing.unlimited': 'Ilimitado',
   'pricing.contactPrice': 'Contacto',
@@ -307,7 +311,6 @@ const es: Record<string, string> = {
   'pricing.row.bookingsMonth': 'Reservas / mes',
   'pricing.row.catalogProducts': 'Productos del Catálogo',
   'pricing.row.contacts': 'Contactos',
-  'pricing.row.broadcastsMonth': 'Difusiones / mes',
 
   // Onboarding section
   'pricing.onboardingTitle': 'Asistencia de Onboarding Opcional',

@@ -255,6 +255,10 @@ const ta: Record<string, string> = {
   'pricing.nFlows': '{n} தர்க்க ஓடைகள்',
   'pricing.unlimitedMessages': 'வரம்பற்ற செய்திகள்',
   'pricing.nMessages': '{n} செய்திகள்/மாதம்',
+  'pricing.footnote.csw': 'வாடிக்கையாளர் சேவை சாளரத்திற்குள் (CSW)',
+  'pricing.footnote.fep': 'இலவச நுழைவு புள்ளிக்குள் (FEP)',
+  'pricing.footnote.marketingTitle': 'WhatsApp சந்தைப்படுத்தல் செய்திகள்',
+  'pricing.footnote.marketingBody': 'Meta விலையமைப்பு, இலக்கு நாடு, செய்தி வகை மற்றும் மாற்று வகையைப் பொறுத்து WhatsApp செய்தி கட்டணங்கள் வேறுபடலாம். முன் அறிவிப்பு இன்றி அனைத்து விலைகளும் மாற்றப்படலாம்.',
   'pricing.onboardingOpt': 'விருப்ப ஆன்போர்டிங் உதவி ({price})',
   'pricing.unlimited': 'வரம்பற்றது',
   'pricing.contactPrice': 'தொடர்பு',
@@ -307,7 +311,6 @@ const ta: Record<string, string> = {
   'pricing.row.bookingsMonth': 'சந்திப்பு பதிவுகள் / மாதம்',
   'pricing.row.catalogProducts': 'கேட்டலாக் தயாரிப்புகள்',
   'pricing.row.contacts': 'தொடர்புகள்',
-  'pricing.row.broadcastsMonth': 'ஒளிபரப்புகள் / மாதம்',
 
   // ஆன்போர்டிங் பகுதி
   'pricing.onboardingTitle': 'விருப்ப ஆன்போர்டிங் உதவி',

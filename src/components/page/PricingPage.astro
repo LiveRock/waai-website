@@ -71,8 +71,12 @@ const qaLine = (p: typeof dbPlans[number]) => p.max_qa_pairs
 const flowsLine = (p: typeof dbPlans[number]) => p.max_flows
   ? t('pricing.nFlows').replace('{n}', formatLimit(p.max_flows))
   : t('pricing.unlimitedFlows');
+// '*' marks the quota as within-CSW/FEP — footnoted below the comparison table.
+// NOTE: added at this call site, NOT in the pricing.nMessages dictionary value,
+// because SignupForm.astro has a copy-pasted msgLine using the same key (signup
+// intentionally stays unmarked).
 const msgLine = (p: typeof dbPlans[number]) => p.max_messages_monthly
-  ? t('pricing.nMessages').replace('{n}', formatLimit(p.max_messages_monthly))
+  ? '*' + t('pricing.nMessages').replace('{n}', formatLimit(p.max_messages_monthly))
   : t('pricing.unlimitedMessages');
 
 const plans = dbPlans.length > 0
@@ -118,7 +122,7 @@ const comparisonQuotaRows = [
   { label: t('pricing.row.trialPeriod'), key: 'trial_days', format: (v: number | null) => v ? t('pricing.daysPeriod').replace('{n}', String(v)) : '—' },
   { label: t('pricing.row.qaPairs'), key: 'max_qa_pairs' },
   { label: t('pricing.row.logicFlows'), key: 'max_flows' },
-  { label: t('pricing.row.messagesMonth'), key: 'max_messages_monthly' },
+  { label: '*' + t('pricing.row.messagesMonth'), key: 'max_messages_monthly' },
   { label: t('pricing.row.surveyRespondents'), key: 'max_respondents', format: fmtCount },
   { label: t('pricing.row.webPages'), key: 'max_web_pages', format: fmtCount },
   { label: t('pricing.row.workspaceSends'), key: 'max_drive_sends_monthly', format: fmtCount },
@@ -126,7 +130,8 @@ const comparisonQuotaRows = [
   { label: t('pricing.row.bookingsMonth'), key: 'max_bookings_monthly', format: fmtCount },
   { label: t('pricing.row.catalogProducts'), key: 'max_catalog_products', format: fmtCount },
   { label: t('pricing.row.contacts'), key: 'max_contacts' },
-  { label: t('pricing.row.broadcastsMonth'), key: 'max_broadcasts_monthly', format: fmtCount },
+  // Broadcasts/month row removed 2026-09-11 — broadcast sends are WhatsApp
+  // marketing messages, covered by the footnote disclaimer below the table.
 ];
 const comparisonFeatureRows = [
   { label: t('pf.aiAutoResponder'), plans: ['trial', 'starter', 'pro'] },
@@ -253,6 +258,15 @@ const comparisonFeatureRows = [
               ))}
             </tbody>
           </table>
+        </div>
+        <!-- Footnotes: message quota windows + Meta messaging charges -->
+        <div class="mt-4 text-xs text-gray-500 leading-relaxed">
+          <p>* <a href="https://developers.facebook.com/docs/whatsapp/cloud-api/guides/send-messages#customer-service-windows" class="text-wa-teal hover:underline" target="_blank" rel="noopener">{t('pricing.footnote.csw')}</a></p>
+          <p>* <a href="https://developers.facebook.com/docs/whatsapp/pricing#free-entry-point-windows" class="text-wa-teal hover:underline" target="_blank" rel="noopener">{t('pricing.footnote.fep')}</a></p>
+          <div class="mt-3 pt-3 border-t border-gray-100">
+            <p class="font-semibold text-gray-700">{t('pricing.footnote.marketingTitle')}</p>
+            <p class="mt-1">{t('pricing.footnote.marketingBody')}</p>
+          </div>
         </div>
       </div>
 

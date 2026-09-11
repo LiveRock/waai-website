@@ -255,6 +255,10 @@ const ms: Record<string, string> = {
   'pricing.nFlows': '{n} Aliran Logik',
   'pricing.unlimitedMessages': 'Mesej Tanpa Had',
   'pricing.nMessages': '{n} Mesej/bulan',
+  'pricing.footnote.csw': 'Dalam Tetingkap Perkhidmatan Pelanggan (CSW)',
+  'pricing.footnote.fep': 'Dalam Titik Masukan Percuma (FEP)',
+  'pricing.footnote.marketingTitle': 'Mesej Pemasaran WhatsApp',
+  'pricing.footnote.marketingBody': 'Caj pemesejan WhatsApp mungkin berbeza bergantung pada harga Meta, negara destinasi, kategori mesej dan jenis penukaran. Semua harga tertakluk kepada perubahan tanpa notis terdahulu.',
   'pricing.onboardingOpt': 'Bantuan Onboarding Pilihan ({price})',
   'pricing.unlimited': 'Tanpa Had',
   'pricing.contactPrice': 'Hubungi',
@@ -307,7 +311,6 @@ const ms: Record<string, string> = {
   'pricing.row.bookingsMonth': 'Tempahan / bulan',
   'pricing.row.catalogProducts': 'Produk Katalog',
   'pricing.row.contacts': 'Kenalan',
-  'pricing.row.broadcastsMonth': 'Siaran / bulan',
 
   // Bahagian onboarding
   'pricing.onboardingTitle': 'Bantuan Onboarding Pilihan',

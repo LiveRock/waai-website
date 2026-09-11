@@ -262,6 +262,10 @@ const en: Record<string, string> = {
   'pricing.nFlows': '{n} Logic Flows',
   'pricing.unlimitedMessages': 'Unlimited Messages',
   'pricing.nMessages': '{n} Messages/month',
+  'pricing.footnote.csw': 'Within Customer Service Window (CSW)',
+  'pricing.footnote.fep': 'Within Free Entry Point (FEP)',
+  'pricing.footnote.marketingTitle': 'WhatsApp Marketing Messages',
+  'pricing.footnote.marketingBody': 'WhatsApp messaging charges may vary depending on Meta\'s pricing, destination country, message category and conversion type. All pricing is subject to change without prior notice.',
   'pricing.onboardingOpt': 'Optional Onboarding Assistance ({price})',
   'pricing.unlimited': 'Unlimited',
   'pricing.contactPrice': 'Contact',
@@ -314,7 +318,6 @@ const en: Record<string, string> = {
   'pricing.row.bookingsMonth': 'Bookings / month',
   'pricing.row.catalogProducts': 'Catalog Products',
   'pricing.row.contacts': 'Contacts',
-  'pricing.row.broadcastsMonth': 'Broadcasts / month',
 
   // Onboarding section
   'pricing.onboardingTitle': 'Optional Onboarding Assistance',
