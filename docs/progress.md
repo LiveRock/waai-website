@@ -2,6 +2,14 @@
 
 Running log of significant work sessions. Newest first.
 
+## 2026-09-12
+
+### Meta "Official Meta Tech Provider" badge — hero + footer + trial LPs
+- Peter asked for a front-page mention + Meta logo, then "match meta badge" (use Meta's verbatim partner-badge wording) and "elsewhere too" (repeat beyond the hero).
+- **Three placements**: homepage hero pill (next to the "Your WhatsApp AI Agent" badge, same glass-pill styling; wraps to a centered second row on mobile); Footer brand column under the tagline (every `PageLayout` page × 10 locales — i.e. site-wide except trial LPs/404); `/trial` slim brand bar, right-aligned opposite the waai.me logo (all 100 LPs).
+- One shared EN-only i18n key `meta.techProvider` — program label, locales fall back to EN (same convention as `nav.blog`). Meta loop = monochrome inline SVG from simple-icons, `fill="currentColor"` so each placement tints it (white hero / gray-300 footer / gray-500 trial bar). No image assets added.
+- Verified: build 545 pages; DOM checks EN + zh, desktop + 390px (hero pills wrap cleanly, trial-bar lockup inside viewport); vision QA on hero, footer, and trial brand bar; zero console errors.
+
 ## 2026-09-11
 
 ### Pricing page: messages/month CSW/FEP footnotes + Meta-charges disclaimer

@@ -434,6 +434,9 @@ const en: Record<string, string> = {
   'home.hero.subhead':
     'Turn every WhatsApp message into an opportunity. AI auto-responses, bookings, orders, and seamless human handoff — your customers never wait again.',
   'home.hero.trialNote': 'No credit card required. Free trial.',
+  // Universal program label — intentionally EN-only (other locales fall back, like nav.blog).
+  // Word order matches Meta's official partner badge verbatim. Used in hero + footer.
+  'meta.techProvider': 'Official Meta Tech Provider',
   'home.hero.video.soundOn': 'Enable sound',
   'home.hero.video.soundOff': 'Mute',
   'home.hero.video.play': 'Play video',
