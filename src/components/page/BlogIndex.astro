@@ -3,7 +3,7 @@ import PageLayout from '../../layouts/PageLayout.astro';
 import SectionHeading from '../shared/SectionHeading.astro';
 import CTAButton from '../shared/CTAButton.astro';
 import { getCollection } from 'astro:content';
-import { getLangFromUrl, useTranslations, localizePath } from '../../i18n/utils';
+import { getLangFromUrl, useTranslations, localizePath, SITE } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -33,10 +33,10 @@ const featured = all[0];
 const rest = all.slice(1);
 ---
 
-<PageLayout title={t('page.blog.title')} description={t('page.blog.description')} canonicalPath={Astro.url.pathname}>
+<PageLayout title={t('page.blog.title')} description={t('page.blog.description')} canonicalPath={Astro.url.pathname} rssUrl={`${SITE}/blog/rss.xml`}>
   <section class="py-20 sm:py-24 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <SectionHeading title={t('blog.heading')} subtitle={t('blog.sub')} />
+      <SectionHeading as="h1" title={t('blog.heading')} subtitle={t('blog.sub')} />
 
       {all.length === 0 ? (
         <p class="text-center text-gray-500 py-16">{t('blog.empty')}</p>

@@ -1,5 +1,5 @@
 ---
-title: "WhatsApp AI for Salons, Spas & Barbershops: End No-Shows and Book 24/7"
+title: "Salon & Spa Booking Automation on WhatsApp: A Setup Walkthrough"
 description: "Discover how salons and spas use WhatsApp AI to automate 24/7 bookings, manage staff schedules, take deposits, and send reminders to eliminate no-shows."
 pubDate: 2026-08-22
 author: waai

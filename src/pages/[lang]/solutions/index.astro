@@ -1,0 +1,10 @@
+---
+import SolutionsIndex from '../../../components/page/SolutionsIndex.astro';
+import { NON_DEFAULT_LANGS } from '../../../i18n/config';
+
+export function getStaticPaths() {
+  return NON_DEFAULT_LANGS.map((lang) => ({ params: { lang } }));
+}
+---
+
+<SolutionsIndex />

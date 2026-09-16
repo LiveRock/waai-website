@@ -1,9 +1,19 @@
 // ภาษาไทย (Thai) UI strings.
 const th: Record<string, string> = {
   // ---- Page metadata ----
-  'page.home.title': 'waai — แพลตฟอร์ม AI Agent สำหรับ WhatsApp',
+  'page.home.title': 'waai — WhatsApp AI เอเจนต์สำหรับธุรกิจในสิงคโปร์',
   'page.home.description':
-    'เปลี่ยนทุกข้อความ WhatsApp ให้เป็นโอกาส ตอบกลับอัตโนมัติด้วย AI การจองนัดหมาย คำสั่งซื้อ และการส่งต่อให้พนักงานอย่างราบรื่น ทดลองใช้ฟรี',
+    'แพลตฟอร์ม WhatsApp AI เอเจนต์สำหรับ SME สิงคโปร์ — ตอบกลับอัตโนมัติด้วย AI จองคิว รับออเดอร์แคตตาล็อก และ CRM พร้อมส่งต่อให้ทีมงานได้ลื่นไหล ทดลองใช้ฟรี',
+    'page.features.title': 'ฟีเจอร์ WhatsApp AI — ตอบกลับอัตโนมัติ จองคิว และ CRM',
+  'page.features.description': 'สำรวจชุดเครื่องมือ WhatsApp AI ครบครันจาก waai — ตอบกลับอัตโนมัติ ฐานความรู้ Logic Flows การจอง แคตตาล็อก CRM แคมเปญ และการวิเคราะห์',
+  'page.industries.title': 'WhatsApp AI สำหรับทุกอุตสาหกรรม — 9 กรณีใช้งาน',
+  'page.industries.description': 'ตั้งแต่ร้านอาหารไปจนถึงอสังหาริมทรัพย์ waai ทำให้ WhatsApp ของอุตสาหกรรมคุณเป็นอัตโนมัติ — ตอบกลับ AI ทันที จองคิว รับออเดอร์ และเก็บลีด',
+  'page.solutions.title': 'โซลูชัน WhatsApp AI — การตลาด การขาย และซัพพอร์ต',
+  'page.solutions.description': 'เวิร์กโฟลว์ WhatsApp AI ที่ออกแบบเฉพาะสำหรับทีมการตลาด การขาย และซัพพอร์ต เก็บลีด ปิดการขาย และตอบคำถามได้ตลอด 24 ชั่วโมง',
+  'page.industry.titlePattern': 'WhatsApp AI สำหรับ{title}',
+  'page.solution.titlePattern': 'WhatsApp AI {title}',
+  'solution.indexH1': 'WhatsApp AI สำหรับทุกทีม',
+  'solution.indexSub': 'การตลาด การขาย หรือซัพพอร์ต — waai มอบเวิร์กโฟลว์ AI แบบเฉพาะทางให้ทุกทีมบน WhatsApp ที่ลูกค้าของคุณใช้อยู่แล้ว',
   // ---- Navigation (header) ----
   'nav.features': 'ฟีเจอร์',
   'nav.solutions': 'โซลูชัน',
@@ -128,9 +138,9 @@ const th: Record<string, string> = {
   'solution.transformBody': 'เริ่มทดลองใช้ฟรี ไม่ต้องใช้บัตรเครดิต ตั้งค่าในไม่ถึงชั่วโมง',
 
   // ---- Contact page ----
-  'page.contact.title': 'ติดต่อเรา',
+  'page.contact.title': 'ติดต่อ waai — ฝ่ายขายและซัพพอร์ตสิงคโปร์',
   'page.contact.description':
-    'ติดต่อทีมงาน waai เรายินดีรับฟังคุณ — คำถาม ความคิดเห็น หรือสอบถามเรื่องพาร์ทเนอร์ ยินดีต้อนรับเสมอ',
+    'คุยกับทีม waai ในสิงคโปร์ — คำถาม เดโม หรือร่วมงานกับเรา ตอบกลับภายในหนึ่งวันทำการ',
   'contact.heading': 'เกี่ยวกับการติดต่อ',
   'contact.sub': 'มีคำถามเกี่ยวกับ waai ไหม? อยากดูเดโม? ต้องการความช่วยเหลือเริ่มต้น? เราพร้อมช่วยคุณ',
   'contact.email': 'อีเมล',
@@ -159,7 +169,7 @@ const th: Record<string, string> = {
   'contact.errorNetwork': 'ข้อผิดพลาดเครือข่าย กรุณาตรวจสอบการเชื่อมต่อแล้วลองอีกครั้ง',
 
   // ---- Blog page ----
-  'page.blog.title': 'บล็อก',
+  'page.blog.title': 'บล็อก WhatsApp AI — คู่มือและอัปเดตผลิตภัณฑ์',
   'page.blog.description': 'ข้อมูลเชิงลึก คู่มือ และอัปเดตผลิตภัณฑ์จากทีม waai เรียนรู้วิธีใช้ประโยชน์สูงสุดจาก AI Agent สำหรับ WhatsApp ของคุณ',
   'blog.heading': 'บล็อก',
   'blog.sub': 'ข้อมูลเชิงลึก คู่มือ และอัปเดตเพื่อช่วยให้คุณใช้ประโยชน์สูงสุดจาก AI Agent สำหรับ WhatsApp',
@@ -170,7 +180,7 @@ const th: Record<string, string> = {
   'blog.cta': 'เริ่มใช้งานฟรี',
 
   // ---- Integrations pages (chrome) ----
-  'page.integrations.title': 'การเชื่อมต่อ',
+  'page.integrations.title': 'การเชื่อมต่อ — Google Workspace และอื่น ๆ',
   'page.integrations.description': 'เชื่อมต่อ waai กับเครื่องมือที่คุณใช้อยู่แล้ว Google Workspace, AI Super Powers และอื่นๆ',
   'integ.heroTitle': 'เชื่อมต่อเครื่องมือของคุณ เพิ่มพลังให้ Agent',
   'integ.heroSub': 'waai เชื่อมต่อกับบริการที่ธุรกิจของคุณพึ่งพา ตั้งแต่ Google Workspace ไปจนถึงความสามารถ AI ด้านการมองเห็นและการค้นหา Agent WhatsApp ของคุณทำได้มากกว่าแค่แชท',
@@ -181,7 +191,7 @@ const th: Record<string, string> = {
   'integ.readyTitle': 'พร้อมเชื่อมต่อหรือยัง?',
   'integ.readyBody': 'เริ่มทดลองใช้ฟรีและสำรวจการเชื่อมต่อทั้งหมด แผน Pro และ Custom ปลดล็อกพลังเต็มรูปแบบ',
   'integ.comparePlans': 'เปรียบเทียบแผน',
-  'page.gw.title': 'การเชื่อมต่อ Google Workspace',
+  'page.gw.title': 'เชื่อมต่อ Google Workspace สำหรับ WhatsApp AI',
   'page.gw.description': 'เชื่อมต่อ waai กับ Google Calendar, Drive, Docs และ Sheets ทำงานอัตโนมัติด้านการจัดตาราง การจัดการไฟล์ และการสร้างเอกสารจาก WhatsApp',
   'gw.heroTitle': 'Agent WhatsApp ของคุณ ขับเคลื่อนโดย Google',
   'gw.heroBody': 'การเชื่อมต่อ OAuth เพียงครั้งเดียวปลดล็อก Calendar, Drive, Docs และ Sheets AI Agent ของคุณจัดการส่วนที่เหลือ — จองนัดหมาย ส่งไฟล์ สร้างเอกสาร และเก็บข้อมูล — ทั้งหมดผ่าน WhatsApp',
@@ -232,8 +242,8 @@ const th: Record<string, string> = {
   'gw.detail.sheets.uc4': 'ส่งออกข้อมูลการสนทนาเพื่อวิเคราะห์และทำรายงาน',
 
   // ---- Pricing page (chrome; plan details/FAQ stay English for now) ----
-  'page.pricing.title': 'ราคา',
-  'page.pricing.description': 'ราคาเรียบง่าย โปร่งใส สำหรับ AI Agent สำหรับ WhatsApp เริ่มทดลองใช้ฟรี แล้วเลือกแผนที่เหมาะกับธุรกิจของคุณ',
+  'page.pricing.title': 'ราคา WhatsApp AI — ทดลองใช้ฟรี {days} วัน',
+  'page.pricing.description': 'ราคา WhatsApp AI เอเจนต์ที่โปร่งใสในสกุล SGD แพ็กเกจ Starter และ Pro บริการออนบอร์ดิงเสริม และทดลองใช้ฟรี {days} วัน — ไม่ต้องใช้บัตรเครดิต',
   'pricing.title': 'ราคาเรียบง่าย ฟีเจอร์ทรงพลัง',
   'pricing.sub': 'เริ่มฟรี ขยายตามที่คุณเติบโต ไม่มีค่าใช้จ่ายซ่อนเร้น ไม่มีความเซอร์ไพรส์',
   'pricing.monthly': 'รายเดือน',
@@ -341,7 +351,7 @@ const th: Record<string, string> = {
   'pricing.faq8.a': 'เรารับบัตรเครดิตและบัตรเดบิตหลักๆ ทั้งหมดผ่าน Stripe มีบิลรายปีพร้อมส่วนลดเทียบเท่า 2 เดือนฟรี',
 
   // ---- Signup page (chrome; form details stay English for now) ----
-  'page.signup.title': 'เริ่มทดลองใช้ฟรี',
+  'page.signup.title': 'เริ่มทดลองใช้ฟรี {days} วัน',
   'page.signup.description': 'สร้างบัญชี waai และเปิดตัว AI Agent สำหรับ WhatsApp ของคุณในไม่กี่นาที ไม่ต้องใช้บัตรเครดิต',
   'signup.heading': 'สร้างบัญชีของคุณ',
   'signup.sub': 'เลือกแผน แล้วกรอกรายละเอียดของคุณ ไม่ต้องใช้บัตรเครดิต',

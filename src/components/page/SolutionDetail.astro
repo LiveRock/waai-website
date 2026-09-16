@@ -2,8 +2,9 @@
 import PageLayout from '../../layouts/PageLayout.astro';
 import SectionHeading from '../shared/SectionHeading.astro';
 import CTAButton from '../shared/CTAButton.astro';
+import JsonLd from '../seo/JsonLd.astro';
 import { getSolution } from '../../i18n/content';
-import { getLangFromUrl, useTranslations, localizePath } from '../../i18n/utils';
+import { getLangFromUrl, useTranslations, localizePath, SITE } from '../../i18n/utils';
 
 interface Props { slug: string }
 const { slug } = Astro.props;
@@ -25,9 +26,23 @@ const painPointIcons: Record<string, string> = {
   'moon': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>',
   'message-circle': '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>',
 };
+
+// Keyword-rich title pattern ("WhatsApp AI for Marketing") + BreadcrumbList
+// structured data mirroring the visible breadcrumb.
+const pageTitle = t('page.solution.titlePattern').replace('{title}', title);
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: t('breadcrumb.home'), item: `${SITE}${localizePath('/', lang)}` },
+    { '@type': 'ListItem', position: 2, name: t('breadcrumb.solutions'), item: `${SITE}${localizePath('/solutions', lang)}` },
+    { '@type': 'ListItem', position: 3, name: title, item: `${SITE}${Astro.url.pathname}` },
+  ],
+};
 ---
 
-<PageLayout title={`${title} — waai`} description={solution?.metaDescription ?? ''} canonicalPath={Astro.url.pathname}>
+<PageLayout title={pageTitle} description={solution?.metaDescription ?? ''} canonicalPath={Astro.url.pathname}>
+  <JsonLd data={breadcrumbJsonLd} />
   <!-- Hero -->
   <section class="relative py-20 sm:py-28 bg-gradient-to-b from-green-50 to-white overflow-hidden">
     <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle, #25D366 1px, transparent 1px); background-size: 24px 24px;"></div>
@@ -35,7 +50,7 @@ const painPointIcons: Record<string, string> = {
       <nav class="mb-8 text-sm text-gray-500">
         <a href={localizePath('/', lang)} class="hover:text-wa-green transition-colors">{t('breadcrumb.home')}</a>
         <span class="mx-2">/</span>
-        <a href={localizePath('/solutions/marketing', lang)} class="hover:text-wa-green transition-colors">{t('breadcrumb.solutions')}</a>
+        <a href={localizePath('/solutions', lang)} class="hover:text-wa-green transition-colors">{t('breadcrumb.solutions')}</a>
         <span class="mx-2">/</span>
         <span class="text-gray-900 font-medium">{title}</span>
       </nav>

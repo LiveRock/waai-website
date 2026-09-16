@@ -1,9 +1,19 @@
 // 简体中文 (Simplified Chinese) UI strings.
 const zh: Record<string, string> = {
   // ---- 页面元数据 ----
-  'page.home.title': 'waai — WhatsApp AI 客服平台',
+  'page.home.title': 'waai — 新加坡企业的 WhatsApp AI 智能体',
   'page.home.description':
-    '把每条 WhatsApp 消息变成商机。AI 自动回复、预约、订单，以及无缝人工接管。立即免费试用。',
+    '面向新加坡中小企业的 WhatsApp AI 智能体平台 — AI 自动回复、预约、商品目录订单与 CRM，人工无缝接管。立即免费试用。',
+    'page.features.title': 'WhatsApp AI 功能 — 自动回复、预约与 CRM',
+  'page.features.description': '探索完整的 waai WhatsApp AI 工具箱 — 自动回复、知识库、逻辑流程、预约、商品目录、CRM、群发与数据分析。',
+  'page.industries.title': '各行各业适用的 WhatsApp AI — 9 大场景',
+  'page.industries.description': '从餐饮到房地产，waai 为您的行业自动化 WhatsApp — 即时 AI 回复、预约、订单与线索获取。',
+  'page.solutions.title': 'WhatsApp AI 解决方案 — 营销、销售与客服',
+  'page.solutions.description': '为营销、销售与客服团队量身定制的 WhatsApp AI 工作流。获取线索、达成交易、全天候解答咨询。',
+  'page.industry.titlePattern': '面向{title}的 WhatsApp AI',
+  'page.solution.titlePattern': 'WhatsApp AI {title}',
+  'solution.indexH1': '为每个团队打造的 WhatsApp AI',
+  'solution.indexSub': '营销、销售或客服 — waai 为每个团队提供专属的 WhatsApp AI 工作流，在客户已经在用的 WhatsApp 上运行。',
   // ---- 导航 (页头) ----
   'nav.features': '功能',
   'nav.solutions': '解决方案',
@@ -123,8 +133,8 @@ const zh: Record<string, string> = {
   'solution.transformBody': '开始免费试用。无需信用卡。一小时内即可完成设置。',
 
   // ---- 联系我们页 ----
-  'page.contact.title': '联系我们',
-  'page.contact.description': '与 waai 团队取得联系。欢迎任何问题、反馈或合作咨询。',
+  'page.contact.title': '联系 waai — 新加坡销售与支持团队',
+  'page.contact.description': '与新加坡的 waai 团队交流 — 咨询、演示、合作。我们在一个工作日内回复。',
   'contact.heading': '与我们联系',
   'contact.sub': '对 waai 有疑问？想要演示？需要上手帮助？我们随时为您服务。',
   'contact.email': '电子邮箱',
@@ -153,7 +163,7 @@ const zh: Record<string, string> = {
   'contact.errorNetwork': '网络错误。请检查您的连接后重试。',
 
   // ---- 博客页 ----
-  'page.blog.title': '博客',
+  'page.blog.title': 'WhatsApp AI 博客 — 指南与产品更新',
   'page.blog.description': '来自 waai 团队的洞察、指南和产品更新。了解如何充分利用您的 WhatsApp AI 客服。',
   'blog.heading': '博客',
   'blog.sub': '帮助您充分利用 WhatsApp AI 客服的洞察、指南和更新。',
@@ -164,7 +174,7 @@ const zh: Record<string, string> = {
   'blog.cta': '免费开始',
 
   // ---- 集成页（通用） ----
-  'page.integrations.title': '集成',
+  'page.integrations.title': '集成 — Google Workspace 等',
   'page.integrations.description': '将 waai 与您已在使用的工具连接。Google Workspace、AI 超能力等。',
   'integ.heroTitle': '连接您的工具，放大您的客服',
   'integ.heroSub': 'waai 与您业务依赖的服务集成。从 Google Workspace 到 AI 图像与搜索，您的 WhatsApp 客服能做的远不止聊天。',
@@ -175,7 +185,7 @@ const zh: Record<string, string> = {
   'integ.readyTitle': '准备好连接了吗？',
   'integ.readyBody': '开始免费试用，探索所有集成。专业版和定制版解锁全部功能。',
   'integ.comparePlans': '对比方案',
-  'page.gw.title': 'Google Workspace 集成',
+  'page.gw.title': '面向 WhatsApp AI 的 Google Workspace 集成',
   'page.gw.description': '将 waai 与 Google 日历、云端硬盘、文档和表格连接。从 WhatsApp 自动化日程、文件管理和文档生成。',
   'gw.heroTitle': '您的 WhatsApp 客服，由 Google 驱动',
   'gw.heroBody': '一次 OAuth 连接即可解锁日历、云端硬盘、文档和表格。其余交给 AI 客服——预约、发文件、生成文档、收集数据，全程通过 WhatsApp。',
@@ -226,8 +236,8 @@ const zh: Record<string, string> = {
   'gw.detail.sheets.uc4': '导出对话数据用于分析与报告',
 
   // ---- 定价页（通用；方案详情/FAQ 暂留英文） ----
-  'page.pricing.title': '定价',
-  'page.pricing.description': 'WhatsApp AI 客服简单透明的定价。开始免费试用，再选择适合您的方案。',
+  'page.pricing.title': 'WhatsApp AI 价格 — 免费 {days} 天试用',
+  'page.pricing.description': '透明的新币（SGD）WhatsApp AI 智能体定价。Starter 与 Pro 套餐、可选入门服务，以及 {days} 天免费试用 — 无需信用卡。',
   'pricing.title': '简单定价，强大功能',
   'pricing.sub': '免费开始，随业务增长而扩展。无隐藏费用，无意外。',
   'pricing.monthly': '按月',
@@ -335,7 +345,7 @@ const zh: Record<string, string> = {
   'pricing.faq8.a': '我们通过 Stripe 接受所有主流信用卡和借记卡。年付可享相当于免两个月的折扣。',
 
   // ---- 注册页（通用；表单详情暂留英文） ----
-  'page.signup.title': '开始免费试用',
+  'page.signup.title': '开始您的 {days} 天免费试用',
   'page.signup.description': '创建您的 waai 账户，几分钟内上线 WhatsApp AI 客服。无需信用卡。',
   'signup.heading': '创建您的账户',
   'signup.sub': '选择方案，然后填写您的信息。无需信用卡。',

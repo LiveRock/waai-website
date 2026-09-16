@@ -1,9 +1,19 @@
 // 한국어 (Korean) UI strings.
 const ko: Record<string, string> = {
   // ---- Page metadata ----
-  'page.home.title': 'waai — WhatsApp AI 에이전트 플랫폼',
+  'page.home.title': 'waai — 싱가포르 비즈니스를 위한 WhatsApp AI 에이전트',
   'page.home.description':
-    '모든 WhatsApp 메시지를 기회로 바꾸세요. AI 기반 자동 응답, 예약, 주문, 매끄러운 상담원 연결. 무료로 체험해 보세요.',
+    '싱가포르 중소기업을 위한 WhatsApp AI 에이전트 플랫폼 — AI 자동 응답, 예약, 카탈로그 주문 & CRM, 원활한 상담원 연결. 무료로 체험해 보세요.',
+    'page.features.title': 'WhatsApp AI 기능 — 자동 응답, 예약 & CRM',
+  'page.features.description': 'waai의 완전한 WhatsApp AI 도구 세트를 살펴보세요 — 자동 응답, 지식 베이스, 로직 플로우, 예약, 카탈로그, CRM, 캠페인 및 분석.',
+  'page.industries.title': '모든 산업을 위한 WhatsApp AI — 9가지 활용 사례',
+  'page.industries.description': '음식점부터 부동산까지, waai는 귀하의 산업에 맞춰 WhatsApp를 자동화합니다 — 즉각적인 AI 응답, 예약, 주문 및 리드 확보.',
+  'page.solutions.title': 'WhatsApp AI 솔루션 — 마케팅, 영업 & 지원',
+  'page.solutions.description': '마케팅, 영업, 지원 팀을 위한 맞춤형 WhatsApp AI 워크플로. 리드를 확보하고 거래를 성사시키며 연중무휴 문의를 해결하세요.',
+  'page.industry.titlePattern': '{title}을 위한 WhatsApp AI',
+  'page.solution.titlePattern': 'WhatsApp AI {title}',
+  'solution.indexH1': '모든 팀을 위한 WhatsApp AI',
+  'solution.indexSub': '마케팅, 영업 또는 지원 — waai는 고객이 이미 사용하는 WhatsApp에서 각 팀을 위한 맞춤형 AI 워크플로를 제공합니다.',
   // ---- Navigation (header) ----
   'nav.features': '기능',
   'nav.solutions': '솔루션',
@@ -128,9 +138,9 @@ const ko: Record<string, string> = {
   'solution.transformBody': '무료 체험을 시작하세요. 신용카드 불필요. 1시간 이내 설정 완료.',
 
   // ---- Contact page ----
-  'page.contact.title': '문의하기',
+  'page.contact.title': 'waai 문의 — 싱가포르 세일즈 & 지원',
   'page.contact.description':
-    'waai 팀과 연락하세요. 질문, 피드백, 제휴 문의 모두 환영합니다.',
+    '싱가포르 waai 팀에 문의하세요 — 질문, 데모, 파트너십. 영업일 기준 1일 이내에 답변드립니다.',
   'contact.heading': '연락하기',
   'contact.sub': 'waai에 대해 궁금한 점이 있으신가요? 데모를 원하시나요? 시작하는 데 도움이 필요하신가요? 저희가 함께합니다.',
   'contact.email': '이메일',
@@ -159,7 +169,7 @@ const ko: Record<string, string> = {
   'contact.errorNetwork': '네트워크 오류입니다. 연결을 확인하고 다시 시도해 주세요.',
 
   // ---- Blog page ----
-  'page.blog.title': '블로그',
+  'page.blog.title': 'WhatsApp AI 블로그 — 가이드 & 제품 업데이트',
   'page.blog.description': 'waai 팀의 인사이트, 가이드, 제품 업데이트. WhatsApp AI 에이전트를 최대한 활용하는 방법을 알아보세요.',
   'blog.heading': '블로그',
   'blog.sub': 'WhatsApp AI 에이전트를 최대한 활용할 수 있는 인사이트, 가이드, 업데이트.',
@@ -170,7 +180,7 @@ const ko: Record<string, string> = {
   'blog.cta': '무료로 시작하기',
 
   // ---- Integrations pages (chrome) ----
-  'page.integrations.title': '연동',
+  'page.integrations.title': '연동 — Google Workspace 등',
   'page.integrations.description': '이미 사용 중인 도구와 waai를 연결하세요. Google Workspace, AI 슈퍼 파워 등.',
   'integ.heroTitle': '도구를 연결하고 에이전트의 힘을 키우세요',
   'integ.heroSub': 'waai는 비즈니스가 의존하는 서비스와 연동됩니다. Google Workspace부터 AI 기반 비전 및 검색까지, WhatsApp 에이전트가 단순한 채팅 그 이상을 할 수 있습니다.',
@@ -181,7 +191,7 @@ const ko: Record<string, string> = {
   'integ.readyTitle': '연결할 준비가 되셨나요?',
   'integ.readyBody': '무료 체험을 시작하고 모든 연동을 살펴보세요. Pro 및 Custom 요금제에서 모든 기능을 사용할 수 있습니다.',
   'integ.comparePlans': '요금제 비교',
-  'page.gw.title': 'Google Workspace 연동',
+  'page.gw.title': 'WhatsApp AI를 위한 Google Workspace 연동',
   'page.gw.description': 'waai를 Google Calendar, Drive, Docs, Sheets와 연결하세요. WhatsApp에서 일정, 파일 관리, 문서 생성을 자동화하세요.',
   'gw.heroTitle': 'Google과 작동하는 WhatsApp 에이전트',
   'gw.heroBody': '한 번의 OAuth 연결로 Calendar, Drive, Docs, Sheets가 열립니다. AI 에이전트가 나머지를 처리합니다 — 예약, 파일 전송, 문서 생성, 데이터 수집 모두 WhatsApp으로.',
@@ -232,8 +242,8 @@ const ko: Record<string, string> = {
   'gw.detail.sheets.uc4': '분석 및 보고를 위해 대화 데이터 내보내기',
 
   // ---- Pricing page (chrome; plan details/FAQ stay English for now) ----
-  'page.pricing.title': '요금제',
-  'page.pricing.description': 'WhatsApp AI 에이전트를 위한 간단하고 투명한 요금제. 무료 체험을 시작한 후 비즈니스에 맞는 요금제를 선택하세요.',
+  'page.pricing.title': 'WhatsApp AI 요금 — {days}일 무료 체험',
+  'page.pricing.description': 'SGD 기준 투명한 WhatsApp AI 에이전트 요금. Starter와 Pro 플랜, 선택형 온보딩, {days}일 무료 체험 — 신용카드 불필요.',
   'pricing.title': '간단한 요금제, 강력한 기능',
   'pricing.sub': '무료로 시작하고 성장에 맞춰 확장하세요. 숨겨진 비용도, 깜짝 요금도 없습니다.',
   'pricing.monthly': '월간',
@@ -341,7 +351,7 @@ const ko: Record<string, string> = {
   'pricing.faq8.a': 'Stripe를 통해 모든 주요 신용카드 및 직불카드를 지원합니다. 연간 결제 시 2개월 무료에 해당하는 할인이 제공됩니다.',
 
   // ---- Signup page (chrome; form details stay English for now) ----
-  'page.signup.title': '무료 체험 시작',
+  'page.signup.title': '{days}일 무료 체험 시작하기',
   'page.signup.description': 'waai 계정을 만들고 몇 분 만에 WhatsApp AI 에이전트를 실행하세요. 신용카드 불필요.',
   'signup.heading': '계정 만들기',
   'signup.sub': '요금제를 선택한 후 세부 정보를 입력하세요. 신용카드 불필요.',

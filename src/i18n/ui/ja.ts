@@ -1,9 +1,19 @@
 // 日本語 (Japanese) UI strings.
 const ja: Record<string, string> = {
   // ---- Page metadata ----
-  'page.home.title': 'waai — WhatsApp AIエージェントプラットフォーム',
+  'page.home.title': 'waai — シンガポール企業のためのWhatsApp AIエージェント',
   'page.home.description':
-    'すべてのWhatsAppメッセージをチャンスに変えましょう。AIを活用した自動応答、予約、注文、シームレスなヒューマンハンドオフ。今すぐ無料でお試しください。',
+    'シンガポールの中小企業のためのWhatsApp AIエージェントプラットフォーム — AI自動応答、予約、カタログ注文、CRMをシームレスな有人対応と共に。無料で試す。',
+    'page.features.title': 'WhatsApp AI機能 — 自動応答・予約・CRM',
+  'page.features.description': 'waaiの完全なWhatsApp AIツールキットを探る — 自動応答、ナレッジベース、ロジックフロー、予約、カタログ、CRM、キャンペーン、分析。',
+  'page.industries.title': 'あらゆる業界のためのWhatsApp AI — 9つのユースケース',
+  'page.industries.description': '飲食店から不動産まで、waaiはあなたの業界のWhatsAppを自動化 — 即時AI応答、予約、注文、リード獲得。',
+  'page.solutions.title': 'WhatsApp AIソリューション — マーケティング・営業・サポート',
+  'page.solutions.description': 'マーケティング、営業、サポートチームのためのWhatsApp AIワークフロー。リードを獲得し、商談を閉じ、24時間質問に解答。',
+  'page.industry.titlePattern': '{title}向けWhatsApp AI',
+  'page.solution.titlePattern': 'WhatsApp AI {title}',
+  'solution.indexH1': 'すべてのチームのためのWhatsApp AI',
+  'solution.indexSub': 'マーケティング、営業、サポート — waaiは、お客様がすでに使っているWhatsApp上で、各チーム専用のAIワークフローを提供します。',
   // ---- Navigation (header) ----
   'nav.features': '機能',
   'nav.solutions': 'ソリューション',
@@ -128,9 +138,9 @@ const ja: Record<string, string> = {
   'solution.transformBody': '無料トライアルを始めましょう。クレジットカード不要。1時間以内でセットアップ可能。',
 
   // ---- Contact page ----
-  'page.contact.title': 'お問い合わせ',
+  'page.contact.title': 'waaiへお問い合わせ — シンガポールのセールス＆サポート',
   'page.contact.description':
-    'waaiチームにお気軽にご連絡ください。ご質問、フィードバック、パートナーシップに関するお問い合わせを歓迎します。',
+    'シンガポールのwaaiチームにご連絡ください — ご質問、デモ、パートナーシップ。1営業日以内にご返信します。',
   'contact.heading': 'お気軽にご連絡ください',
   'contact.sub': 'waaiについてご質問がありますか？デモをご希望ですか？始め方のサポートが必要ですか？私たちがサポートします。',
   'contact.email': 'メール',
@@ -159,7 +169,7 @@ const ja: Record<string, string> = {
   'contact.errorNetwork': 'ネットワークエラーです。接続を確認して再度お試しください。',
 
   // ---- Blog page ----
-  'page.blog.title': 'ブログ',
+  'page.blog.title': 'WhatsApp AIブログ — ガイド＆製品アップデート',
   'page.blog.description': 'waaiチームによる洞察、ガイド、プロダクトアップデート。WhatsApp AIエージェントを最大限に活用する方法をご紹介します。',
   'blog.heading': 'ブログ',
   'blog.sub': 'WhatsApp AIエージェントを最大限に活用するための洞察、ガイド、アップデート。',
@@ -170,7 +180,7 @@ const ja: Record<string, string> = {
   'blog.cta': '無料で始める',
 
   // ---- Integrations pages (chrome) ----
-  'page.integrations.title': '連携',
+  'page.integrations.title': '連携 — Google Workspaceなど',
   'page.integrations.description': 'waaiを普段お使いのツールと連携しましょう。Google Workspace、AIスーパーパワーなど。',
   'integ.heroTitle': 'ツールを連携して、エージェントを強化',
   'integ.heroSub': 'waaiはビジネスが依存するサービスと連携します。Google WorkspaceからAIを活用した画像認識や検索まで、あなたのWhatsAppエージェントはチャット以上のことができます。',
@@ -181,7 +191,7 @@ const ja: Record<string, string> = {
   'integ.readyTitle': '連携の準備はできましたか？',
   'integ.readyBody': '無料トライアルを始めて、すべての連携を体験してください。ProおよびCustomプランで全機能が利用可能です。',
   'integ.comparePlans': 'プランを比較',
-  'page.gw.title': 'Google Workspace 連携',
+  'page.gw.title': 'WhatsApp AIのためのGoogle Workspace連携',
   'page.gw.description': 'waaiをGoogle Calendar、Drive、Docs、Sheetsと連携しましょう。WhatsAppからスケジューリング、ファイル管理、ドキュメント生成を自動化できます。',
   'gw.heroTitle': 'Googleの力で動く、あなたのWhatsAppエージェント',
   'gw.heroBody': '一度のOAuth認証でCalendar、Drive、Docs、Sheetsが利用可能に。AIエージェントが予約の取得、ファイル送信、ドキュメント生成、データ収集をすべてWhatsApp経由で処理します。',
@@ -232,8 +242,8 @@ const ja: Record<string, string> = {
   'gw.detail.sheets.uc4': '分析とレポート作成のために会話データをエクスポート',
 
   // ---- Pricing page (chrome; plan details/FAQ stay English for now) ----
-  'page.pricing.title': '料金',
-  'page.pricing.description': 'シンプルで透明なWhatsApp AIエージェントの料金。無料トライアルを始めて、ビジネスに合ったプランをお選びください。',
+  'page.pricing.title': 'WhatsApp AI料金 — {days}日間無料トライアル',
+  'page.pricing.description': 'SGD建ての透明なWhatsApp AIエージェント料金。StarterおよびProプラン、オプションのオンボーディング、{days}日間無料トライアル — クレジットカード不要。',
   'pricing.title': 'シンプルな料金、強力な機能',
   'pricing.sub': '無料で始めて、成長に合わせてスケール。隠れた費用も予想外の請求もありません。',
   'pricing.monthly': '月額',
@@ -341,7 +351,7 @@ const ja: Record<string, string> = {
   'pricing.faq8.a': 'Stripeを通じてすべての主要なクレジットカード・デビットカードに対応しています。年額決済では2ヶ月分無料に相当する割引をご利用いただけます。',
 
   // ---- Signup page (chrome; form details stay English for now) ----
-  'page.signup.title': '無料トライアルを開始',
+  'page.signup.title': '{days}日間無料トライアルを始める',
   'page.signup.description': 'waaiアカウントを作成して、数分でWhatsApp AIエージェントを立ち上げましょう。クレジットカードは不要です。',
   'signup.heading': 'アカウントを作成',
   'signup.sub': 'プランを選択し、情報を入力してください。クレジットカードは不要です。',

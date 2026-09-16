@@ -3,15 +3,21 @@ import PageLayout from '../../layouts/PageLayout.astro';
 import SectionHeading from '../shared/SectionHeading.astro';
 import SignupForm from '../signup/SignupForm.astro';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { getTrialDays } from '../../lib/trialDays';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+const days = await getTrialDays();
 ---
 
-<PageLayout title={t('page.signup.title')} description={t('page.signup.description')} canonicalPath={Astro.url.pathname}>
+<PageLayout
+  title={t('page.signup.title').replace('{days}', String(days))}
+  description={t('page.signup.description')}
+  canonicalPath={Astro.url.pathname}
+>
   <section class="py-16 sm:py-20 bg-gray-50">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-      <SectionHeading title={t('signup.heading')} subtitle={t('signup.sub')} />
+      <SectionHeading as="h1" title={t('signup.heading')} subtitle={t('signup.sub')} />
 
       <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 sm:p-10">
         <SignupForm />

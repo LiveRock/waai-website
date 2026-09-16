@@ -1,9 +1,11 @@
 // English UI strings — source of truth. Keys are flat dot-namespace strings.
 const en: Record<string, string> = {
   // ---- Page metadata ----
-  'page.home.title': 'waai — WhatsApp AI Agent Platform',
+  // SEO titles are keyword-first and Singapore-forward (SGD pricing, en-SG
+  // hreflang); keep rendered titles ≤ ~60 chars incl. the '| waai.me' suffix.
+  'page.home.title': 'waai — WhatsApp AI Agent for Singapore Businesses',
   'page.home.description':
-    'Turn every WhatsApp message into an opportunity. AI auto-responses, bookings, orders, and seamless human handoff. Try it free.',
+    'The WhatsApp AI agent platform for Singapore SMBs — AI auto-replies, bookings, catalog orders & CRM with seamless human handoff. Try it free.',
   // ---- Navigation (header) ----
   'nav.features': 'Features',
   'nav.solutions': 'Solutions',
@@ -130,9 +132,9 @@ const en: Record<string, string> = {
   'solution.transformBody': 'Start your free trial. No credit card required. Set up in under an hour.',
 
   // ---- Contact page ----
-  'page.contact.title': 'Contact Us',
+  'page.contact.title': 'Contact waai — Singapore Sales & Support',
   'page.contact.description':
-    "Get in touch with the waai team. We'd love to hear from you — questions, feedback, or partnership inquiries welcome.",
+    'Talk to the waai team in Singapore — questions, demos, partnerships. We reply within one business day.',
   'contact.heading': 'Get in Touch',
   'contact.sub': "Have a question about waai? Want a demo? Need help getting started? We're here for you.",
   'contact.email': 'Email',
@@ -161,7 +163,7 @@ const en: Record<string, string> = {
   'contact.errorNetwork': 'Network error. Please check your connection and try again.',
 
   // ---- Blog page ----
-  'page.blog.title': 'Blog',
+  'page.blog.title': 'WhatsApp AI Blog — Guides & Product Updates',
   'page.blog.description': 'Insights, guides, and product updates from the waai team. Learn how to get the most from your WhatsApp AI agent.',
   'blog.heading': 'Blog',
   'blog.sub': 'Insights, guides, and updates to help you get the most from your WhatsApp AI agent.',
@@ -177,7 +179,20 @@ const en: Record<string, string> = {
   'blog.postCtaBody': 'Start your free trial and see what waai can do.',
 
   // ---- Integrations pages (chrome) ----
-  'page.integrations.title': 'Integrations',
+  'page.integrations.title': 'Integrations — Google Workspace & More',
+  'page.features.title': 'WhatsApp AI Features — Auto-Reply, Bookings & CRM',
+  'page.features.description':
+    'Explore the complete waai WhatsApp AI toolkit — auto-responder, knowledge base, logic flows, bookings, catalog, CRM, campaigns and analytics.',
+  'page.industries.title': 'WhatsApp AI for Every Industry — 9 Use Cases',
+  'page.industries.description':
+    'From restaurants to real estate, waai automates WhatsApp for your industry — instant AI replies, bookings, orders and lead capture.',
+  'page.solutions.title': 'WhatsApp AI Solutions — Marketing, Sales & Support',
+  'page.solutions.description':
+    'Purpose-built WhatsApp AI workflows for marketing, sales and support teams. Capture leads, close deals, and resolve queries around the clock.',
+  'page.industry.titlePattern': 'WhatsApp AI for {title}',
+  'page.solution.titlePattern': 'WhatsApp AI {title}',
+  'solution.indexH1': 'WhatsApp AI for Every Team',
+  'solution.indexSub': 'Marketing, sales, or support — waai gives each team purpose-built AI workflows on the WhatsApp your customers already use.',
   'page.integrations.description': 'Connect waai with the tools you already use. Google Workspace, AI Super Powers, and more.',
   'integ.heroTitle': 'Connect Your Tools, Amplify Your Agent',
   'integ.heroSub': 'waai integrates with the services your business relies on. From Google Workspace to AI-powered vision and search, your WhatsApp agent can do more than chat.',
@@ -188,7 +203,7 @@ const en: Record<string, string> = {
   'integ.readyTitle': 'Ready to Connect?',
   'integ.readyBody': 'Start your free trial and explore all integrations. Pro and Custom plans unlock the full power.',
   'integ.comparePlans': 'Compare Plans',
-  'page.gw.title': 'Google Workspace Integration',
+  'page.gw.title': 'Google Workspace Integration for WhatsApp AI',
   'page.gw.description': 'Connect waai with Google Calendar, Drive, Docs, and Sheets. Automate scheduling, file management, and document generation from WhatsApp.',
   'gw.heroTitle': 'Your WhatsApp Agent, Powered by Google',
   'gw.heroBody': 'One OAuth connection unlocks Calendar, Drive, Docs, and Sheets. Your AI agent handles the rest — booking appointments, sending files, generating documents, and collecting data — all through WhatsApp.',
@@ -239,8 +254,9 @@ const en: Record<string, string> = {
   'gw.detail.sheets.uc4': 'Export conversation data for analysis and reporting',
 
   // ---- Pricing page (chrome; plan details/FAQ stay English for now) ----
-  'page.pricing.title': 'Pricing',
-  'page.pricing.description': 'Simple, transparent pricing for WhatsApp AI agents. Start your free trial, then choose the plan that fits your business.',
+  'page.pricing.title': 'WhatsApp AI Pricing — Free {days}-Day Trial',
+  'page.pricing.description':
+    'Transparent WhatsApp AI agent pricing in SGD. Starter and Pro plans, optional onboarding, and a free {days}-day trial — no credit card.',
   'pricing.title': 'Simple Pricing, Powerful Features',
   'pricing.sub': 'Start free, scale as you grow. No hidden fees, no surprises.',
   'pricing.monthly': 'Monthly',
@@ -348,7 +364,7 @@ const en: Record<string, string> = {
   'pricing.faq8.a': 'We accept all major credit and debit cards through Stripe. Annual billing is available with a discount equivalent to 2 months free.',
 
   // ---- Signup page (chrome; form details stay English for now) ----
-  'page.signup.title': 'Start Free Trial',
+  'page.signup.title': 'Start Your {days}-Day Free Trial',
   'page.signup.description': 'Create your waai account and launch your WhatsApp AI agent in minutes. No credit card required.',
   'signup.heading': 'Create Your Account',
   'signup.sub': 'Choose a plan, then fill in your details. No credit card required.',

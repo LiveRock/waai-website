@@ -4,11 +4,14 @@ interface Props {
   subtitle?: string;
   badge?: string;
   align?: 'center' | 'left';
+  /** Heading level — 'h1' for pages whose SectionHeading is the only page heading. */
+  as?: 'h1' | 'h2';
 }
 
-const { title, subtitle, badge, align = 'center' } = Astro.props;
+const { title, subtitle, badge, align = 'center', as = 'h2' } = Astro.props;
 
 const alignment = align === 'center' ? 'text-center mx-auto' : 'text-left';
+const Heading = as;
 ---
 
 <div class:list={['max-w-3xl mb-12', alignment]}>
@@ -17,7 +20,7 @@ const alignment = align === 'center' ? 'text-center mx-auto' : 'text-left';
       {badge}
     </span>
   )}
-  <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">{title}</h2>
+  <Heading class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">{title}</Heading>
   {subtitle && (
     <p class="text-lg text-gray-600 leading-relaxed">{subtitle}</p>
   )}

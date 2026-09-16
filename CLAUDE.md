@@ -177,6 +177,19 @@ Ad landing pages with the real signup form embedded, live at `/trial/` (generic)
 - **Meta Pixel**: `BaseLayout` emits the fbevents snippet on every page **only when `META_PIXEL_ID` is set at build time** — the value lives in `.env.production` (gitignored, loaded by Vite only for production builds; dev server never sees it). `Lead` fires on signup POST success, `CompleteRegistration` on email verify (400 ms beacon-flush delay before redirect). GA4 mirrors: `generate_lead` / `sign_up`. Pixel off → all `fbq?.()` no-ops. ⚠️ `<noscript set:html={…}>` breaks the Astro compiler — don't re-add a noscript pixel img. Full ads setup/runbook: `docs/facebook-ads-guide.md`.
 - Ad final URLs must use trailing slashes (`/trial/restaurants/`) — site is `trailingSlash: 'always'`.
 
+## SEO
+
+Positioning is **Singapore-forward** (Peter's call, 2026-09-16): SGD pricing, `-SG` hreflang, SG app-store links — homepage/pricing/contact titles+descriptions name Singapore; feature/industry/solution pages stay geo-neutral keyword-rich. Page titles come from `page.*` i18n keys, render as `{title} | waai.me`, target ≤ ~60 chars. Detail pages use **title patterns** (not string concat): `page.industry.titlePattern` (`WhatsApp AI for {title}`) and `page.solution.titlePattern` (`WhatsApp AI {title}`) — {title} is the localized data title. `{days}` in `page.pricing.title`/`page.signup.title` is interpolated from the build-time API at the call sites.
+
+- **Structured data (JSON-LD)** — emitted via `src/components/seo/JsonLd.astro` wrapper: `Organization` + `WebSite` on **every page** (BaseLayout; ⚠️ deliberately NO aggregateRating/review — testimonials aren't verified reviews); `SoftwareApplication` + `AggregateOffer` (SGD, prices from the build-time plans API) + `FAQPage` (mirrors the visible pricing accordion) on `/pricing`; `BreadcrumbList` on Feature/Industry/Solution detail + blog posts (mirrors the visible breadcrumb, localized hrefs); `BlogPosting` on posts.
+- **Head extras** (`BaseLayout` props): `publishedTime`/`modifiedTime` → `article:*_time` (BlogPost passes frontmatter dates), `rssUrl` → RSS `<link rel=alternate>` (BlogIndex + BlogPost), `noCanonical` → suppresses canonical + hreflang (404 only). OG now includes `og:image:width/height/alt` + `og:locale:alternate` (all locales minus current).
+- **og:image = `public/images/og-default.jpg`** (1200×630, ~60 KB) — regenerate after brand/copy changes with `node scripts/generate-og-image.mjs` (renders `scripts/og-card.html` in headless Chromium via the Slate puppeteer rig, converts to JPEG). Was a sitewide 404 (`og-default.png` referenced but never existed) before 2026-09-16.
+- **robots.txt** disallows `/admin/` + `/awstats/` and points at `/sitemap-index.xml` (NOT `/sitemap.xml` — that URL was a 404 before). `/trial/*` stays crawlable on purpose (meta noindex needs crawling).
+- **Sitemap** (`astro.config.mjs`): blog URLs carry `lastmod` (updatedDate ?? pubDate, parsed from frontmatter by regex into `blogLastmod` map); static pages deliberately get none (build-date lastmod is noise).
+- **Legal pages** must NOT pass a slashless `canonicalPath` prop — the default `Astro.url.pathname` produces `/terms/` matching hreflang (`trailingSlash: 'always'`).
+- **H1 convention**: `SectionHeading` accepts `as?: 'h1'|'h2'` — pages whose only heading is a SectionHeading (pricing, blog, contact, signup, integrations) pass `as="h1"`; same styling either way.
+- **`/solutions/` index** (new 2026-09-16, ×10 locales): `SolutionsIndex.astro` + 2 thin routes; fixes the breadcrumb target (was `/solutions/marketing`) and gives footer/header a hub link.
+
 ## Analytics (GA4 + AWStats)
 
 Two layers: a client-side **GA4** tag (events/engagement/conversions) and a server-side **AWStats** portal (raw visit/host/bandwidth/referrer log analysis).

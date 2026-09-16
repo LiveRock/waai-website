@@ -2,7 +2,8 @@
 import PageLayout from '../../layouts/PageLayout.astro';
 import SectionHeading from '../shared/SectionHeading.astro';
 import Accordion from '../shared/Accordion.astro';
-import { getLangFromUrl, useTranslations, localizePath } from '../../i18n/utils';
+import JsonLd from '../seo/JsonLd.astro';
+import { getLangFromUrl, useTranslations, localizePath, SITE } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -107,6 +108,30 @@ const plans = dbPlans.length > 0
 const tablePlans = dbPlans.length > 0 ? dbPlans.filter((p) => p.name !== 'custom') : [];
 const trialDays = dbPlans.find((p) => p.name === 'trial')?.trial_days || 30;
 
+// Structured data (SEO). Offers come from the same build-time plans API as the
+// rendered cards (fallbacks match the offline cards); the FAQ mirrors the
+// visible accordion verbatim, already {days}/{price}-interpolated. Intentionally
+// no aggregateRating — see BaseLayout's Organization note.
+const starterMonthly = dbPlans.find((p) => p.name === 'starter')?.price_monthly ?? 2000;
+const proMonthly = dbPlans.find((p) => p.name === 'pro')?.price_monthly ?? 9900;
+const softwareJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'waai',
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Web',
+  description: t('page.home.description'),
+  url: `${SITE}/pricing/`,
+  image: `${SITE}/images/og-default.jpg`,
+  offers: {
+    '@type': 'AggregateOffer',
+    priceCurrency: 'SGD',
+    lowPrice: starterMonthly / 100,
+    highPrice: proMonthly / 100,
+    offerCount: 2,
+    url: `${SITE}/pricing/`,
+  },
+};
 const faqItems = [
   { question: t('pricing.faq1.q'), answer: t('pricing.faq1.a').replace('{days}', String(trialDays)) },
   { question: t('pricing.faq2.q'), answer: t('pricing.faq2.a') },
@@ -117,6 +142,15 @@ const faqItems = [
   { question: t('pricing.faq7.q'), answer: t('pricing.faq7.a') },
   { question: t('pricing.faq8.q'), answer: t('pricing.faq8.a') },
 ];
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((f) => ({
+    '@type': 'Question',
+    name: f.question,
+    acceptedAnswer: { '@type': 'Answer', text: f.answer },
+  })),
+};
 
 const comparisonQuotaRows = [
   { label: t('pricing.row.trialPeriod'), key: 'trial_days', format: (v: number | null) => v ? t('pricing.daysPeriod').replace('{n}', String(v)) : '—' },
@@ -147,10 +181,16 @@ const comparisonFeatureRows = [
 ];
 ---
 
-<PageLayout title={t('page.pricing.title')} description={t('page.pricing.description')} canonicalPath={Astro.url.pathname}>
+<PageLayout
+  title={t('page.pricing.title').replace('{days}', String(trialDays))}
+  description={t('page.pricing.description').replace('{days}', String(trialDays))}
+  canonicalPath={Astro.url.pathname}
+>
+  <JsonLd data={softwareJsonLd} />
+  <JsonLd data={faqJsonLd} />
   <section class="py-20 sm:py-24 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <SectionHeading title={t('pricing.title')} subtitle={t('pricing.sub')} />
+      <SectionHeading as="h1" title={t('pricing.title')} subtitle={t('pricing.sub')} />
 
       <!-- Pricing Toggle -->
       <div class="flex justify-center mb-12">

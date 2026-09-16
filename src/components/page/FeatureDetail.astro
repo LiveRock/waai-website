@@ -2,8 +2,9 @@
 import PageLayout from '../../layouts/PageLayout.astro';
 import SectionHeading from '../shared/SectionHeading.astro';
 import CTAButton from '../shared/CTAButton.astro';
+import JsonLd from '../seo/JsonLd.astro';
 import { getFeature, getFeatures } from '../../i18n/content';
-import { getLangFromUrl, useTranslations, localizePath } from '../../i18n/utils';
+import { getLangFromUrl, useTranslations, localizePath, SITE } from '../../i18n/utils';
 
 interface Props { slug: string }
 const { slug } = Astro.props;
@@ -44,9 +45,21 @@ const stepColors: string[] = [
 const planLabel = (plan: string) => (plan === 'All Plans' ? t('feature.planAll') : t('feature.planPro'));
 const useCasesSub = t('feature.useCasesSub').replace('{title}', feature?.shortTitle ?? '');
 const tryTitle = t('feature.tryTitle').replace('{title}', feature?.shortTitle ?? '');
+
+// BreadcrumbList structured data — mirrors the visible breadcrumb above.
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: t('breadcrumb.home'), item: `${SITE}${localizePath('/', lang)}` },
+    { '@type': 'ListItem', position: 2, name: t('breadcrumb.features'), item: `${SITE}${localizePath('/features', lang)}` },
+    { '@type': 'ListItem', position: 3, name: feature?.shortTitle ?? '', item: `${SITE}${Astro.url.pathname}` },
+  ],
+};
 ---
 
 <PageLayout title={feature?.title ?? ''} description={feature?.metaDescription ?? ''} canonicalPath={Astro.url.pathname}>
+  <JsonLd data={breadcrumbJsonLd} />
   <!-- Breadcrumb -->
   <div class="bg-gray-50 border-b border-gray-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">

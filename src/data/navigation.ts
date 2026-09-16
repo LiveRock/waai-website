@@ -29,6 +29,7 @@ export const navigation: NavItem[] = [
   },
   {
     key: 'nav.solutions',
+    href: '/solutions',
     children: [
       { key: 'nav.solution.marketing', href: '/solutions/marketing' },
       { key: 'nav.solution.sales', href: '/solutions/sales' },
@@ -74,9 +75,11 @@ export const footerLinks = {
     { key: 'nav.pricing', href: '/pricing' },
   ],
   solutions: [
+    { key: 'nav.solutions', href: '/solutions' },
     { key: 'nav.solution.marketing', href: '/solutions/marketing' },
     { key: 'nav.solution.sales', href: '/solutions/sales' },
     { key: 'nav.solution.support', href: '/solutions/support' },
+    { key: 'nav.industries', href: '/industries' },
     { key: 'nav.industry.ecommerce', href: '/industries/ecommerce' },
     { key: 'nav.industry.healthcare', href: '/industries/healthcare' },
     { key: 'nav.industry.education', href: '/industries/education' },

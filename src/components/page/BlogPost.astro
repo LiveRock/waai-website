@@ -3,7 +3,9 @@ import type { CollectionEntry } from 'astro:content';
 import { getCollection, render } from 'astro:content';
 import PageLayout from '../../layouts/PageLayout.astro';
 import CTAButton from '../shared/CTAButton.astro';
-import { getLangFromUrl, useTranslations, localizePath } from '../../i18n/utils';
+import JsonLd from '../seo/JsonLd.astro';
+import { getLangFromUrl, useTranslations, localizePath, SITE } from '../../i18n/utils';
+import { LOCALES } from '../../i18n/config';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -28,6 +30,39 @@ const related = (await getCollection('blog'))
 const fmt = (d: Date) =>
   d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 
+// Structured data (SEO). BlogPosting + BreadcrumbList mirroring the visible
+// breadcrumb; URLs localized via localizePath.
+const canonical = `${SITE}${Astro.url.pathname}`;
+const ogImageAbs = heroImage
+  ? (heroImage.startsWith('http') ? heroImage : `${SITE}${heroImage}`)
+  : `${SITE}/images/og-default.jpg`;
+const blogPostingJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description,
+  image: ogImageAbs,
+  datePublished: pubDate.toISOString(),
+  dateModified: (updatedDate ?? pubDate).toISOString(),
+  author: { '@type': 'Organization', name: author },
+  publisher: {
+    '@type': 'Organization',
+    name: 'waai',
+    logo: { '@type': 'ImageObject', url: `${SITE}/images/logos/logo.jpg` },
+  },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+  inLanguage: LOCALES[lang].htmlLang,
+};
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: t('breadcrumb.home'), item: `${SITE}${localizePath('/', lang)}` },
+    { '@type': 'ListItem', position: 2, name: t('breadcrumb.blog'), item: `${SITE}${localizePath('/blog', lang)}` },
+    { '@type': 'ListItem', position: 3, name: title, item: canonical },
+  ],
+};
+
 const categoryColor: Record<string, string> = {
   Guides: 'bg-green-50 text-green-700',
   Product: 'bg-blue-50 text-blue-700',
@@ -38,7 +73,18 @@ const categoryColor: Record<string, string> = {
 };
 ---
 
-<PageLayout title={title} description={description} canonicalPath={Astro.url.pathname} ogImage={heroImage} ogType="article">
+<PageLayout
+  title={title}
+  description={description}
+  canonicalPath={Astro.url.pathname}
+  ogImage={heroImage}
+  ogType="article"
+  publishedTime={pubDate}
+  modifiedTime={updatedDate ?? pubDate}
+  rssUrl={`${SITE}/blog/rss.xml`}
+>
+  <JsonLd data={blogPostingJsonLd} />
+  <JsonLd data={breadcrumbJsonLd} />
   <!-- Breadcrumb -->
   <div class="bg-gray-50 border-b border-gray-100">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-3">

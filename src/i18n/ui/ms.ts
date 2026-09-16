@@ -1,9 +1,19 @@
 // Bahasa Malay UI strings.
 const ms: Record<string, string> = {
   // ---- Metadata halaman ----
-  'page.home.title': 'waai — Platform Ejen AI WhatsApp',
+  'page.home.title': 'waai — Ejen AI WhatsApp untuk Perniagaan Singapura',
   'page.home.description':
-    'Tukarkan setiap mesej WhatsApp menjadi peluang. Auto-respons berkuasa AI, tempahan, pesanan dan serah manusia yang lancar. Cuba percuma.',
+    'Platform ejen AI WhatsApp untuk PKS Singapura — balasan automatik AI, tempahan, pesanan katalog & CRM dengan pengambilalihan manusia yang lancar. Cuba percuma.',
+    'page.features.title': 'Ciri AI WhatsApp — Balasan Auto, Tempahan & CRM',
+  'page.features.description': 'Terokai set alat AI WhatsApp waai yang lengkap — auto-responder, pangkalan pengetahuan, aliran logik, tempahan, katalog, CRM, kempen dan analitik.',
+  'page.industries.title': 'AI WhatsApp untuk Semua Industri — 9 Kes Penggunaan',
+  'page.industries.description': 'Dari restoran hingga hartanah, waai mengautomasikan WhatsApp untuk industri anda — balasan AI segera, tempahan, pesanan dan tangkapan bakal pelanggan.',
+  'page.solutions.title': 'Penyelesaian AI WhatsApp — Pemasaran, Jualan & Sokongan',
+  'page.solutions.description': 'Aliran kerja AI WhatsApp khusus untuk pasukan pemasaran, jualan dan sokongan. Dapatkan bakal pelanggan, tutup urusan, dan selesaikan pertanyaan sepanjang masa.',
+  'page.industry.titlePattern': 'AI WhatsApp untuk {title}',
+  'page.solution.titlePattern': 'AI WhatsApp {title}',
+  'solution.indexH1': 'AI WhatsApp untuk Setiap Pasukan',
+  'solution.indexSub': 'Pemasaran, jualan atau sokongan — waai memberi setiap pasukan aliran kerja AI WhatsApp yang dibina khusus, di WhatsApp yang pelanggan anda sudah gunakan.',
   // ---- Navigasi (pengepala) ----
   'nav.features': 'Ciri',
   'nav.solutions': 'Penyelesaian',
@@ -128,9 +138,9 @@ const ms: Record<string, string> = {
   'solution.transformBody': 'Mula percubaan percuma anda. Tiada kad kredit diperlukan. Sediakan dalam kurang sejam.',
 
   // ---- Laman hubungi ----
-  'page.contact.title': 'Hubungi Kami',
+  'page.contact.title': 'Hubungi waai — Jualan & Sokongan Singapura',
   'page.contact.description':
-    'Hubungi pasukan waai. Kami ingin mendengar daripada anda — soalan, maklum balas atau pertanyaan perkongsian dialu-alukan.',
+    'Hubungi pasukan waai di Singapura — soalan, demo, perkongsian. Kami membalas dalam satu hari bekerja.',
   'contact.heading': 'Hubungi Kami',
   'contact.sub': 'Ada soalan tentang waai? Mahu demo? Perlukan bantuan untuk bermula? Kami di sini untuk anda.',
   'contact.email': 'E-mel',
@@ -159,7 +169,7 @@ const ms: Record<string, string> = {
   'contact.errorNetwork': 'Ralat rangkaian. Sila semak sambungan anda dan cuba lagi.',
 
   // ---- Laman blog ----
-  'page.blog.title': 'Blog',
+  'page.blog.title': 'Blog AI WhatsApp — Panduan & Kemas Kini Produk',
   'page.blog.description': 'Cerapan, panduan dan kemas kini produk daripada pasukan waai. Ketahui cara mendapatkan paling banyak daripada ejen AI WhatsApp anda.',
   'blog.heading': 'Blog',
   'blog.sub': 'Cerapan, panduan dan kemas kini untuk membantu anda mendapatkan paling banyak daripada ejen AI WhatsApp anda.',
@@ -170,7 +180,7 @@ const ms: Record<string, string> = {
   'blog.cta': 'Mula Percuma',
 
   // ---- Laman integrasi (chrome) ----
-  'page.integrations.title': 'Integrasi',
+  'page.integrations.title': 'Integrasi — Google Workspace & Lagi',
   'page.integrations.description': 'Sambung waai dengan alat yang anda sudah gunakan. Google Workspace, Kuasa Hebat AI dan lain-lain.',
   'integ.heroTitle': 'Sambung Alat Anda, Perkuat Ejen Anda',
   'integ.heroSub': 'waai berintegrasi dengan perkhidmatan yang dipercayai perniagaan anda. Daripada Google Workspace hingga penglihatan dan carian berkuasa AI, ejen WhatsApp anda boleh melakukan lebih daripada sembang.',
@@ -181,7 +191,7 @@ const ms: Record<string, string> = {
   'integ.readyTitle': 'Bersedia untuk Menyambung?',
   'integ.readyBody': 'Mula percubaan percuma anda dan terokai semua integrasi. Pelan Pro dan Custom membuka kuasa penuh.',
   'integ.comparePlans': 'Bandingkan Pelan',
-  'page.gw.title': 'Integrasi Google Workspace',
+  'page.gw.title': 'Integrasi Google Workspace untuk AI WhatsApp',
   'page.gw.description': 'Sambung waai dengan Google Kalendar, Drive, Docs dan Sheets. Automatikkan penjadualan, pengurusan fail dan penjanaan dokumen dari WhatsApp.',
   'gw.heroTitle': 'Ejen WhatsApp Anda, Dikuasakan oleh Google',
   'gw.heroBody': 'Satu sambungan OAuth membuka Kalendar, Drive, Docs dan Sheets. Ejen AI anda mengendalikan selebihnya — menempah janji temu, menghantar fail, menjana dokumen dan mengumpul data — semuanya melalui WhatsApp.',
@@ -232,8 +242,8 @@ const ms: Record<string, string> = {
   'gw.detail.sheets.uc4': 'Eksport data perbualan untuk analisis dan pelaporan',
 
   // ---- Laman harga (chrome; butiran pelan/FAQ kekal English buat masa ini) ----
-  'page.pricing.title': 'Harga',
-  'page.pricing.description': 'Harga mudah dan telus untuk ejen AI WhatsApp. Mula percubaan percuma anda, kemudian pilih pelan yang sesuai untuk perniagaan anda.',
+  'page.pricing.title': 'Harga AI WhatsApp — Percubaan {days} Hari Percuma',
+  'page.pricing.description': 'Harga ejen AI WhatsApp yang telus dalam SGD. Pelan Starter dan Pro, onboarding pilihan, dan percubaan percuma {days} hari — tanpa kad kredit.',
   'pricing.title': 'Harga Mudah, Ciri Berkuasa',
   'pricing.sub': 'Mula percuma, berkembang seiring pertumbuhan anda. Tiada yuran tersembunyi, tiada kejutan.',
   'pricing.monthly': 'Bulanan',
@@ -341,7 +351,7 @@ const ms: Record<string, string> = {
   'pricing.faq8.a': 'Kami menerima semua kad kredit dan debit utama melalui Stripe. Pengebilan tahunan tersedia dengan diskaun bersamaan 2 bulan percuma.',
 
   // ---- Laman pendaftaran (chrome; butiran borang kekal English buat masa ini) ----
-  'page.signup.title': 'Mula Percubaan Percuma',
+  'page.signup.title': 'Mula Percubaan Percuma {days} Hari Anda',
   'page.signup.description': 'Cipta akaun waai anda dan lancarkan ejen AI WhatsApp anda dalam beberapa minit. Tiada kad kredit diperlukan.',
   'signup.heading': 'Cipta Akaun Anda',
   'signup.sub': 'Pilih pelan, kemudian isi butiran anda. Tiada kad kredit diperlukan.',

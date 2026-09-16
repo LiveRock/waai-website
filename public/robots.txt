@@ -1,4 +1,6 @@
 User-agent: *
-Allow: /
+Disallow: /admin/
+Disallow: /awstats/
 
-Sitemap: https://waai.me/sitemap.xml
+# Sitemap is emitted by @astrojs/sitemap as an index (sitemap-index.xml).
+Sitemap: https://waai.me/sitemap-index.xml

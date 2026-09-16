@@ -1,9 +1,19 @@
 // Français (French) UI strings.
 const fr: Record<string, string> = {
   // ---- Page metadata ----
-  'page.home.title': 'waai — Plateforme d’agent IA WhatsApp',
+  'page.home.title': 'waai — Agent IA WhatsApp pour entreprises singapouriennes',
   'page.home.description':
-    'Transformez chaque message WhatsApp en opportunité. Réponses automatiques par IA, réservations, commandes et transfert fluide vers un humain. Essayez gratuitement.',
+    "La plateforme d'agents IA WhatsApp pour les PME de Singapour — réponses automatiques IA, réservations, commandes catalogue & CRM avec relais humain fluide. Essai gratuit.",
+    'page.features.title': 'Fonctionnalités IA WhatsApp',
+  'page.features.description': 'Explorez la boîte à outils IA WhatsApp complète de waai — répondeur automatique, base de connaissances, flux logiques, réservations, catalogue, CRM, campagnes et analytique.',
+  'page.industries.title': 'IA WhatsApp pour tous les secteurs — 9 cas d’usage',
+  'page.industries.description': "De la restauration à l'immobilier, waai automatise WhatsApp pour votre secteur — réponses IA instantanées, réservations, commandes et capture de leads.",
+  'page.solutions.title': 'Solutions IA WhatsApp — Marketing, ventes & support',
+  'page.solutions.description': 'Des workflows IA WhatsApp conçus pour les équipes marketing, ventes et support. Captez des leads, concluez des affaires et répondez aux questions 24h/24.',
+  'page.industry.titlePattern': 'IA WhatsApp pour {title}',
+  'page.solution.titlePattern': 'IA WhatsApp {title}',
+  'solution.indexH1': "L'IA WhatsApp pour chaque équipe",
+  'solution.indexSub': 'Marketing, ventes ou support — waai offre à chaque équipe des workflows IA dédiés sur le WhatsApp que vos clients utilisent déjà.',
   // ---- Navigation (header) ----
   'nav.features': 'Fonctionnalités',
   'nav.solutions': 'Solutions',
@@ -128,9 +138,9 @@ const fr: Record<string, string> = {
   'solution.transformBody': 'Démarrez votre essai gratuit. Aucune carte bancaire requise. Configuration en moins d’une heure.',
 
   // ---- Contact page ----
-  'page.contact.title': 'Contactez-nous',
+  'page.contact.title': 'Contacter waai — Ventes & support à Singapour',
   'page.contact.description':
-    'Entrez en contact avec l’équipe waai. Nous serions ravis d’avoir de vos nouvelles — questions, retours ou demandes de partenariat bienvenus.',
+    "Parlez à l'équipe waai à Singapour — questions, démos, partenariats. Réponse en un jour ouvré.",
   'contact.heading': 'Entrer en contact',
   'contact.sub': 'Une question sur waai ? Vous voulez une démo ? Besoin d’aide pour démarrer ? Nous sommes là pour vous.',
   'contact.email': 'E-mail',
@@ -159,7 +169,7 @@ const fr: Record<string, string> = {
   'contact.errorNetwork': 'Erreur réseau. Veuillez vérifier votre connexion et réessayer.',
 
   // ---- Blog page ----
-  'page.blog.title': 'Blog',
+  'page.blog.title': 'Blog IA WhatsApp — Guides & actualités produit',
   'page.blog.description': 'Analyses, guides et mises à jour produits de l’équipe waai. Apprenez à tirer le meilleur de votre agent IA WhatsApp.',
   'blog.heading': 'Blog',
   'blog.sub': 'Analyses, guides et mises à jour pour vous aider à tirer le meilleur de votre agent IA WhatsApp.',
@@ -170,7 +180,7 @@ const fr: Record<string, string> = {
   'blog.cta': 'Commencer gratuitement',
 
   // ---- Integrations pages (chrome) ----
-  'page.integrations.title': 'Intégrations',
+  'page.integrations.title': 'Intégrations — Google Workspace et plus',
   'page.integrations.description': 'Connectez waai aux outils que vous utilisez déjà. Google Workspace, Super Pouvoirs IA, et plus encore.',
   'integ.heroTitle': 'Connectez vos outils, amplifiez votre agent',
   'integ.heroSub': 'waai s’intègre aux services dont votre entreprise dépend. De Google Workspace à la vision et la recherche basées sur l’IA, votre agent WhatsApp fait bien plus que discuter.',
@@ -181,7 +191,7 @@ const fr: Record<string, string> = {
   'integ.readyTitle': 'Prêt à vous connecter ?',
   'integ.readyBody': 'Démarrez votre essai gratuit et explorez toutes les intégrations. Les forfaits Pro et Personnalisé dévoilent toute la puissance.',
   'integ.comparePlans': 'Comparer les forfaits',
-  'page.gw.title': 'Intégration Google Workspace',
+  'page.gw.title': "Intégration Google Workspace pour l'IA WhatsApp",
   'page.gw.description': 'Connectez waai avec Google Calendar, Drive, Docs et Sheets. Automatisez la planification, la gestion de fichiers et la génération de documents depuis WhatsApp.',
   'gw.heroTitle': 'Votre agent WhatsApp, propulsé par Google',
   'gw.heroBody': 'Une seule connexion OAuth débloque Calendar, Drive, Docs et Sheets. Votre agent IA s’occupe du reste — prise de rendez-vous, envoi de fichiers, génération de documents et collecte de données — le tout via WhatsApp.',
@@ -232,8 +242,8 @@ const fr: Record<string, string> = {
   'gw.detail.sheets.uc4': 'Exportez les données de conversation pour l’analyse et les rapports',
 
   // ---- Pricing page (chrome; plan details/FAQ stay English for now) ----
-  'page.pricing.title': 'Tarifs',
-  'page.pricing.description': 'Des tarifs simples et transparents pour les agents IA WhatsApp. Démarrez votre essai gratuit, puis choisissez le forfait adapté à votre entreprise.',
+  'page.pricing.title': 'Tarifs IA WhatsApp — Essai gratuit de {days} jours',
+  'page.pricing.description': 'Tarification transparente des agents IA WhatsApp en SGD. Offres Starter et Pro, onboarding optionnel et essai gratuit de {days} jours — sans carte bancaire.',
   'pricing.title': 'Tarifs simples, fonctionnalités puissantes',
   'pricing.sub': 'Commencez gratuitement, évoluez selon votre croissance. Aucuns frais cachés, aucune mauvaise surprise.',
   'pricing.monthly': 'Mensuel',
@@ -341,7 +351,7 @@ const fr: Record<string, string> = {
   'pricing.faq8.a': 'Nous acceptons toutes les principales cartes de crédit et de débit via Stripe. La facturation annuelle est disponible avec une remise équivalente à 2 mois gratuits.',
 
   // ---- Signup page (chrome; form details stay English for now) ----
-  'page.signup.title': 'Démarrer l’essai gratuit',
+  'page.signup.title': 'Commencez votre essai gratuit de {days} jours',
   'page.signup.description': 'Créez votre compte waai et lancez votre agent IA WhatsApp en quelques minutes. Aucune carte bancaire requise.',
   'signup.heading': 'Créez votre compte',
   'signup.sub': 'Choisissez un forfait, puis remplissez vos coordonnées. Aucune carte bancaire requise.',

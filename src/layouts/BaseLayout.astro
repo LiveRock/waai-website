@@ -1,7 +1,8 @@
 ---
 import '../styles/global.css';
-import { getLangFromUrl, getAlternates, stripLang } from '../i18n/utils';
+import { getLangFromUrl, getAlternates, stripLang, SITE } from '../i18n/utils';
 import { LOCALES, type LocaleFont } from '../i18n/config';
+import JsonLd from '../components/seo/JsonLd.astro';
 
 interface Props {
   title: string;
@@ -11,22 +12,67 @@ interface Props {
   ogType?: string;
   /** Ads-only pages (e.g. /trial/*) — keeps them out of search indexes. */
   noindex?: boolean;
+  /** Serve-page (404): suppress canonical + hreflang — none of them are real. */
+  noCanonical?: boolean;
+  /** Blog posts: article:published_time / article:modified_time (ISO-fied). */
+  publishedTime?: Date | string;
+  modifiedTime?: Date | string;
+  /** Absolute RSS feed URL → <link rel="alternate" type="application/rss+xml">. */
+  rssUrl?: string;
 }
 
 const {
   title,
   description,
   canonicalPath = Astro.url.pathname,
-  ogImage = '/images/og-default.png',
+  ogImage = '/images/og-default.jpg',
   ogType = 'website',
   noindex = false,
+  noCanonical = false,
+  publishedTime,
+  modifiedTime,
+  rssUrl,
 } = Astro.props;
 
 const lang = getLangFromUrl(Astro.url);
 const locale = LOCALES[lang];
-const canonicalUrl = `https://waai.me${canonicalPath}`;
+const canonicalUrl = `${SITE}${canonicalPath}`;
 const alternates = getAlternates(Astro.url.pathname);
-const xDefaultUrl = `https://waai.me${stripLang(Astro.url.pathname)}`;
+const xDefaultUrl = `${SITE}${stripLang(Astro.url.pathname)}`;
+const ogLocaleAlternates = alternates
+  .filter((alt) => alt.lang !== lang)
+  .map((alt) => LOCALES[alt.lang].htmlLang.replace('-', '_'));
+const iso = (d: Date | string | undefined) => (d ? new Date(d).toISOString() : undefined);
+const publishedIso = iso(publishedTime);
+const modifiedIso = iso(modifiedTime);
+
+// Site-wide entity structured data (every page, every locale). Intentionally
+// NO aggregateRating/review — testimonials are not verified first-party
+// reviews; fabricated ratings risk a Google manual action.
+const orgJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'waai',
+  url: SITE,
+  logo: `${SITE}/images/logos/logo.jpg`,
+  sameAs: [
+    'https://apps.apple.com/sg/app/waai-assistant/id6766452095',
+    'https://play.google.com/store/apps/details?id=net.hotsource.waai',
+  ],
+  contactPoint: [{
+    '@type': 'ContactPoint',
+    contactType: 'customer service',
+    telephone: '+65 8177 3301',
+    availableLanguage: ['en', 'zh', 'ms', 'ta'],
+  }],
+};
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'waai.me',
+  url: SITE,
+  inLanguage: locale.htmlLang,
+};
 
 // Load an extra webfont only when the locale's script needs it.
 const FONT_HREFS: Record<LocaleFont, string> = {
@@ -61,25 +107,41 @@ const pixelInit = metaPixelId
   <title>{title} | waai.me</title>
   <meta name="description" content={description} />
   {noindex && <meta name="robots" content="noindex, follow" />}
-  <link rel="canonical" href={canonicalUrl} />
-
-  {alternates.map((alt) => (
-    <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
-  ))}
-  <link rel="alternate" hreflang="x-default" href={xDefaultUrl} />
+  {!noCanonical && (
+    <Fragment>
+      <link rel="canonical" href={canonicalUrl} />
+      {alternates.map((alt) => (
+        <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
+      ))}
+      <link rel="alternate" hreflang="x-default" href={xDefaultUrl} />
+    </Fragment>
+  )}
 
   <meta property="og:type" content={ogType} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:url" content={canonicalUrl} />
-  <meta property="og:image" content={`https://waai.me${ogImage}`} />
+  <meta property="og:image" content={`${SITE}${ogImage}`} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="waai — WhatsApp AI Agent Platform" />
   <meta property="og:site_name" content="waai.me" />
   <meta property="og:locale" content={locale.htmlLang.replace('-', '_')} />
+  {ogLocaleAlternates.map((l) => (
+    <meta property="og:locale:alternate" content={l} />
+  ))}
+  {publishedIso && <meta property="article:published_time" content={publishedIso} />}
+  {modifiedIso && <meta property="article:modified_time" content={modifiedIso} />}
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
-  <meta name="twitter:image" content={`https://waai.me${ogImage}`} />
+  <meta name="twitter:image" content={`${SITE}${ogImage}`} />
+
+  {rssUrl && <link rel="alternate" type="application/rss+xml" title="waai Blog" href={rssUrl} />}
+
+  <JsonLd data={orgJsonLd} />
+  <JsonLd data={websiteJsonLd} />
 
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
