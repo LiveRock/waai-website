@@ -336,7 +336,7 @@ const es: Record<string, string> = {
   'pricing.faq1.q': '¿Cómo funciona la prueba gratis?',
   'pricing.faq1.a': 'Regístrate solo con tu correo electrónico, sin tarjeta de crédito. Tendrás acceso completo a las funciones del plan Trial durante {days} días. Después, elige un plan de pago o continúa con funciones limitadas.',
   'pricing.faq2.q': '¿Puedo cambiar de plan en cualquier momento?',
-  'pricing.faq2.a': 'Sí, puedes mejorar o reducir tu plan en cualquier momento. Al mejorar, tendrás acceso inmediato a las nuevas funciones. Al reducir, el cambio surte efecto en el próximo ciclo de facturación.',
+  'pricing.faq2.a': 'Puedes mejorar tu plan en cualquier momento: las mejoras surten efecto de inmediato con un cargo prorrateado por el resto de tu ciclo de facturación, y puedes cambiar entre facturación mensual y anual dentro del mismo plan. Las reducciones a un plan inferior no son autogestionadas; si necesitas un plan inferior, escríbenos a info@waai.me y te ayudaremos.',
   'pricing.faq3.q': '¿Qué es la Asistencia de Onboarding Opcional?',
   'pricing.faq3.a': 'Si prefieres no configurarlo tú mismo, añade la Asistencia de Onboarding por un pago único ({starter} en Starter, {pro} en Pro). Un especialista configura tu agente de WhatsApp (creando tu base de conocimiento de preguntas y respuestas, tus Flujos Lógicos y la configuración de IA) mediante el modo asistido, normalmente en 30 días. Es totalmente opcional; siempre puedes hacerlo tú mismo gratis.',
   'pricing.faq4.q': '¿Qué ocurre si supero mi límite de mensajes?',

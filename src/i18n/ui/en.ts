@@ -349,7 +349,7 @@ const en: Record<string, string> = {
   'pricing.faq1.q': 'How does the free trial work?',
   'pricing.faq1.a': 'Sign up with just your email — no credit card required. You get full access to the Trial plan features for {days} days. After that, choose a paid plan or continue with limited features.',
   'pricing.faq2.q': 'Can I switch plans at any time?',
-  'pricing.faq2.a': 'Yes, you can upgrade or downgrade your plan at any time. When upgrading, you get immediate access to new features. When downgrading, the change takes effect at your next billing cycle.',
+  'pricing.faq2.a': 'You can upgrade at any time — upgrades take effect immediately with a prorated charge for the rest of your billing cycle, and you can switch between monthly and yearly billing on the same plan. Downgrades to a lower-tier plan are not self-service; if you need a lower plan, contact us at info@waai.me and we will help.',
   'pricing.faq3.q': 'What is Optional Onboarding Assistance?',
   'pricing.faq3.a': 'If you\'d rather not set things up yourself, add Onboarding Assistance for a one-time fee ({starter} on Starter, {pro} on Pro). A specialist configures your WhatsApp agent — building your Q&A knowledge base, Logic Flows, and AI setup — via assisted mode, typically within 30 days. It\'s entirely optional; you can always self-serve for free.',
   'pricing.faq4.q': 'What happens if I exceed my message limit?',

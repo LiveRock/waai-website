@@ -336,7 +336,7 @@ const ms: Record<string, string> = {
   'pricing.faq1.q': 'Bagaimana percubaan percuma berfungsi?',
   'pricing.faq1.a': 'Daftar hanya dengan e-mel anda — tiada kad kredit diperlukan. Anda mendapat akses penuh kepada ciri pelan Percubaan selama {days} hari. Selepas itu, pilih pelan berbayar atau teruskan dengan ciri terhad.',
   'pricing.faq2.q': 'Boleh saya tukar pelan pada bila-bila masa?',
-  'pricing.faq2.a': 'Ya, anda boleh menaik taraf atau menurunkan pelan pada bila-bila masa. Apabila menaik taraf, anda mendapat akses serta-merta kepada ciri baharu. Apabila menurunkan, perubahan berkuat kuasa pada kitaran bil seterusnya.',
+  'pricing.faq2.a': 'Anda boleh menaik taraf pelan pada bila-bila masa — peningkatan berkuat kuasa serta-merta dengan caj prorata untuk baki kitaran bil anda, dan anda boleh bertukar antara pengebilan bulanan dan tahunan dalam pelan yang sama. Penurunan ke pelan yang lebih rendah tidak ditawarkan secara kendiri; jika anda memerlukan pelan yang lebih rendah, hubungi kami di info@waai.me dan kami akan membantu.',
   'pricing.faq3.q': 'Apakah Bantuan Onboarding Pilihan?',
   'pricing.faq3.a': 'Jika anda tidak mahu menetapkannya sendiri, tambah Bantuan Onboarding dengan yuran sekali ({starter} pada Pemula, {pro} pada Pro). Pakar akan mengkonfigurasi ejen WhatsApp anda — membina pangkalan pengetahuan Soal Jawab, Aliran Logik dan persediaan AI anda — melalui mod dibantu, biasanya dalam 30 hari. Ia sepenuhnya pilihan; anda sentiasa boleh self-serve secara percuma.',
   'pricing.faq4.q': 'Apakah berlaku jika saya melebihi had mesej saya?',
