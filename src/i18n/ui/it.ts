@@ -336,7 +336,7 @@ const it: Record<string, string> = {
   'pricing.faq1.q': 'Come funziona la prova gratuita?',
   'pricing.faq1.a': 'Iscriviti con la sola email — nessuna carta di credito richiesta. Avrai pieno accesso alle funzionalità del piano Trial per {days} giorni. Dopodiché, scegli un piano a pagamento o continua con funzionalità limitate.',
   'pricing.faq2.q': 'Posso cambiare piano in qualsiasi momento?',
-  'pricing.faq2.a': 'Sì, puoi passare a un piano superiore o inferiore in qualsiasi momento. Con l\'upgrade hai accesso immediato alle nuove funzionalità. Con il downgrade, la modifica avrà effetto dal prossimo ciclo di fatturazione.',
+  'pricing.faq2.a': 'Puoi passare a un piano superiore in qualsiasi momento: il passaggio ha effetto immediato con un addebito prorato per il resto del tuo ciclo di fatturazione, e puoi passare tra fatturazione mensile e annuale sullo stesso piano. Il downgrade a un piano inferiore non è self-service; se hai bisogno di un piano inferiore, scrivici a info@waai.me e ti aiuteremo.',
   'pricing.faq3.q': 'Cos\'è l\'Assistenza Onboarding Opzionale?',
   'pricing.faq3.a': 'Se preferisci non configurare tutto da solo, aggiungi l\'Assistenza Onboarding con un costo una tantum ({starter} su Starter, {pro} su Pro). Uno specialista configura il tuo agente WhatsApp — costruendo la tua base di conoscenza Q&A, i Flussi Logici e la configurazione AI — tramite modalità assistita, in genere entro 30 giorni. È del tutto opzionale; puoi sempre procedere autonomamente gratuitamente.',
   'pricing.faq4.q': 'Cosa succede se supero il limite di messaggi?',

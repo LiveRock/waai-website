@@ -336,7 +336,7 @@ const fr: Record<string, string> = {
   'pricing.faq1.q': 'Comment fonctionne l’essai gratuit ?',
   'pricing.faq1.a': 'Inscrivez-vous avec simplement votre e-mail — aucune carte bancaire requise. Vous bénéficiez d’un accès complet aux fonctionnalités du forfait Trial pendant {days} jours. Ensuite, choisissez un forfait payant ou poursuivez avec des fonctionnalités limitées.',
   'pricing.faq2.q': 'Puis-je changer de forfait à tout moment ?',
-  'pricing.faq2.a': 'Oui, vous pouvez augmenter ou réduire votre forfait à tout moment. En cas de montée en gamme, vous accédez immédiatement aux nouvelles fonctionnalités. En cas de réduction, le changement prend effet à votre prochain cycle de facturation.',
+  'pricing.faq2.a': 'Vous pouvez améliorer votre forfait à tout moment : la montée en gamme prend effet immédiatement avec un prorata pour le reste de votre cycle de facturation, et vous pouvez passer entre facturation mensuelle et annuelle sur le même forfait. Les réductions vers un forfait inférieur ne sont pas en libre-service ; pour un forfait inférieur, écrivez-nous à info@waai.me et nous vous aiderons.',
   'pricing.faq3.q': 'Qu’est-ce que l’Assistance d’onboarding en option ?',
   'pricing.faq3.a': 'Si vous préférez ne pas configurer les choses vous-même, ajoutez l’Assistance d’onboarding moyennant des frais uniques ({starter} sur Starter, {pro} sur Pro). Un spécialiste configure votre agent WhatsApp — en construisant votre base de connaissances Q&A, vos Flux Logiques et votre configuration IA — via le mode assisté, généralement sous 30 jours. C’est entièrement facultatif ; vous pouvez toujours le faire vous-même gratuitement.',
   'pricing.faq4.q': 'Que se passe-t-il si je dépasse ma limite de messages ?',
