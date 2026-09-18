@@ -13,7 +13,7 @@ const API_URLS = [
   'https://waaichat.hsi.asia/api/public/plans',
 ];
 
-let dbPlans: { name: string; display_name: string; description: string | null; price_monthly: number; price_yearly: number; max_qa_pairs: number | null; max_flows: number | null; max_messages_monthly: number | null; max_respondents: number | null; max_web_pages: number | null; max_drive_sends_monthly: number | null; max_qa_translations_per_lang_monthly: number | null; max_flow_translations_per_lang_monthly: number | null; max_bookings_monthly: number | null; max_booking_branches: number | null; max_booking_services: number | null; max_catalog_products: number | null; max_contacts: number | null; max_broadcasts_monthly: number | null; trial_days: number | null }[] = [];
+let dbPlans: { name: string; display_name: string; description: string | null; price_monthly: number; price_yearly: number; currencies?: Record<string, { monthly?: number; yearly?: number }> | null; max_qa_pairs: number | null; max_flows: number | null; max_messages_monthly: number | null; max_respondents: number | null; max_web_pages: number | null; max_drive_sends_monthly: number | null; max_qa_translations_per_lang_monthly: number | null; max_flow_translations_per_lang_monthly: number | null; max_bookings_monthly: number | null; max_booking_branches: number | null; max_booking_services: number | null; max_catalog_products: number | null; max_contacts: number | null; max_broadcasts_monthly: number | null; trial_days: number | null }[] = [];
 for (const url of API_URLS) {
   try {
     const res = await fetch(url);
@@ -43,7 +43,28 @@ const formatPrice = (cents: number | null | undefined): string => {
   if (cents === null || cents === undefined) return t('pricing.contactPrice');
   if (cents === 0) return t('pricing.free');
   const dollars = cents / 100;
-  return dollars % 1 === 0 ? `$${dollars.toLocaleString()}` : `$${dollars.toFixed(2)}`;
+  return dollars % 1 === 0 ? `S$${dollars.toLocaleString()}` : `S$${dollars.toFixed(2)}`;
+};
+
+// Geo-currency pricing (SG→SGD, MY→MYR, rest→USD): render every currency as a
+// data-prices JSON map; /js/waai-currency.js swaps the visible text at runtime
+// (SGD is the server-rendered default for SEO/noscript). The fallback map
+// matches the live Stripe catalog.
+const CUR_SYM: Record<string, string> = { sgd: 'S$', usd: 'US$', myr: 'RM' };
+const FALLBACK_PACKAGE_PRICES: Record<'starter' | 'pro', Record<string, { monthly: number; yearly: number }>> = {
+  starter: { sgd: { monthly: 2000, yearly: 22000 }, usd: { monthly: 1560, yearly: 17248 }, myr: { monthly: 6300, yearly: 70300 } },
+  pro: { sgd: { monthly: 9900, yearly: 99000 }, usd: { monthly: 7770, yearly: 77600 }, myr: { monthly: 31600, yearly: 316700 } },
+};
+const fmtCur = (cents: number, cur: string): string => {
+  const v = cents / 100;
+  return CUR_SYM[cur] + (v % 1 === 0 ? v.toLocaleString() : v.toFixed(2));
+};
+const packageCents = (p: (typeof dbPlans)[number] | undefined, plan: 'starter' | 'pro', cycle: 'monthly' | 'yearly', cur: string): number =>
+  p?.currencies?.[cur]?.[cycle] ?? FALLBACK_PACKAGE_PRICES[plan][cur][cycle];
+const priceAttr = (p: (typeof dbPlans)[number] | undefined, plan: 'starter' | 'pro', cycle: 'monthly' | 'yearly'): string => {
+  const map: Record<string, string> = {};
+  for (const cur of ['sgd', 'usd', 'myr']) map[cur] = fmtCur(packageCents(p, plan, cycle, cur), cur);
+  return JSON.stringify(map);
 };
 const formatLimit = (val: number | null | undefined): string =>
   (val === null || val === undefined) ? t('pricing.unlimited') : val.toLocaleString();
@@ -86,6 +107,8 @@ const plans = dbPlans.length > 0
       display_name: p.display_name,
       key: p.name,
       price: formatPrice(p.price_monthly),
+      priceAttrM: (p.name === 'starter' || p.name === 'pro') ? priceAttr(p, p.name, 'monthly') : '',
+      priceAttrY: (p.name === 'starter' || p.name === 'pro') ? priceAttr(p, p.name, 'yearly') : '',
       period: p.price_monthly === 0 ? t('pricing.daysPeriod').replace('{n}', String(p.trial_days || 30)) : t('pricing.perMonth'),
       yearlyPrice: p.price_yearly > 0 ? formatPrice(p.price_yearly) : '',
       description: t(`plan.${p.name}.desc`),
@@ -99,10 +122,10 @@ const plans = dbPlans.length > 0
       ],
     }))
   : [
-      { name: 'trial', display_name: 'Trial', key: 'trial', price: t('pricing.free'), period: t('pricing.daysPeriod').replace('{n}', '30'), yearlyPrice: '', description: t('plan.trial.desc'), highlighted: false, cta: ctaKey('trial'), ctaHref: ctaHref('trial'), features: planFeatureMap.trial.map((k) => t(k)) },
-      { name: 'starter', display_name: 'Starter', key: 'starter', price: '$20', period: t('pricing.perMonth'), yearlyPrice: '$220', description: t('plan.starter.desc'), highlighted: false, cta: ctaKey('starter'), ctaHref: ctaHref('starter'), features: [...planFeatureMap.starter.map((k) => t(k)), ...(onboardingLabel('starter') ? [onboardingLabel('starter') as string] : [])] },
-      { name: 'pro', display_name: 'Pro', key: 'pro', price: '$99', period: t('pricing.perMonth'), yearlyPrice: '$1,099', description: t('plan.pro.desc'), highlighted: true, cta: ctaKey('pro'), ctaHref: ctaHref('pro'), features: [...planFeatureMap.pro.map((k) => t(k)), ...(onboardingLabel('pro') ? [onboardingLabel('pro') as string] : [])] },
-      { name: 'custom', display_name: 'Custom', key: 'custom', price: t('pricing.contactPrice'), period: '', yearlyPrice: '', description: t('plan.custom.desc'), highlighted: false, cta: ctaKey('custom'), ctaHref: ctaHref('custom'), features: [] },
+      { name: 'trial', display_name: 'Trial', key: 'trial', price: t('pricing.free'), priceAttrM: '', priceAttrY: '', period: t('pricing.daysPeriod').replace('{n}', '30'), yearlyPrice: '', description: t('plan.trial.desc'), highlighted: false, cta: ctaKey('trial'), ctaHref: ctaHref('trial'), features: planFeatureMap.trial.map((k) => t(k)) },
+      { name: 'starter', display_name: 'Starter', key: 'starter', price: 'S$20', priceAttrM: priceAttr(undefined, 'starter', 'monthly'), priceAttrY: priceAttr(undefined, 'starter', 'yearly'), period: t('pricing.perMonth'), yearlyPrice: 'S$220', description: t('plan.starter.desc'), highlighted: false, cta: ctaKey('starter'), ctaHref: ctaHref('starter'), features: [...planFeatureMap.starter.map((k) => t(k)), ...(onboardingLabel('starter') ? [onboardingLabel('starter') as string] : [])] },
+      { name: 'pro', display_name: 'Pro', key: 'pro', price: 'S$99', priceAttrM: priceAttr(undefined, 'pro', 'monthly'), priceAttrY: priceAttr(undefined, 'pro', 'yearly'), period: t('pricing.perMonth'), yearlyPrice: 'S$990', description: t('plan.pro.desc'), highlighted: true, cta: ctaKey('pro'), ctaHref: ctaHref('pro'), features: [...planFeatureMap.pro.map((k) => t(k)), ...(onboardingLabel('pro') ? [onboardingLabel('pro') as string] : [])] },
+      { name: 'custom', display_name: 'Custom', key: 'custom', price: t('pricing.contactPrice'), priceAttrM: '', priceAttrY: '', period: '', yearlyPrice: '', description: t('plan.custom.desc'), highlighted: false, cta: ctaKey('custom'), ctaHref: ctaHref('custom'), features: [] },
     ];
 
 const tablePlans = dbPlans.length > 0 ? dbPlans.filter((p) => p.name !== 'custom') : [];
@@ -192,12 +215,13 @@ const comparisonFeatureRows = [
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <SectionHeading as="h1" title={t('pricing.title')} subtitle={t('pricing.sub')} />
 
-      <!-- Pricing Toggle -->
-      <div class="flex justify-center mb-12">
+      <!-- Pricing Toggle + currency switcher (geo-detected default, manual override) -->
+      <div class="flex justify-center items-center gap-4 mb-12 flex-wrap">
         <div class="inline-flex items-center gap-3 bg-gray-100 rounded-full px-1.5 py-1.5">
           <button id="toggle-monthly" onclick="togglePricing('monthly')" class="px-5 py-2 text-sm font-semibold rounded-full bg-wa-green text-white transition-all cursor-pointer">{t('pricing.monthly')}</button>
           <button id="toggle-yearly" onclick="togglePricing('yearly')" class="px-5 py-2 text-sm font-semibold rounded-full text-gray-600 hover:text-gray-800 transition-all cursor-pointer">{t('pricing.yearly')} <span class="text-xs text-wa-green font-normal">{t('pricing.yearlySave')}</span></button>
         </div>
+        <div data-currency-switcher class="inline-flex items-center gap-1 rounded-full border border-gray-200 p-0.5 text-xs"></div>
       </div>
 
       <!-- Plan Cards -->
@@ -218,12 +242,12 @@ const comparisonFeatureRows = [
             </div>
             <div class="mb-6">
               <div class="flex items-baseline gap-1 monthly-price" data-monthly={plan.key}>
-                <span class="text-4xl font-extrabold text-gray-900">{plan.price}</span>
+                <span class="text-4xl font-extrabold text-gray-900" data-prices={plan.priceAttrM || undefined}>{plan.price}</span>
                 <span class="text-gray-500">{plan.period}</span>
               </div>
               {plan.yearlyPrice && (
                 <div class="flex items-baseline gap-1 yearly-price hidden" data-yearly={plan.key}>
-                  <span class="text-4xl font-extrabold text-gray-900">{plan.yearlyPrice}</span>
+                  <span class="text-4xl font-extrabold text-gray-900" data-prices={plan.priceAttrY || undefined}>{plan.yearlyPrice}</span>
                   <span class="text-gray-500">{t('pricing.yearSuffix')}</span>
                 </div>
               )}
@@ -340,3 +364,4 @@ const comparisonFeatureRows = [
     }
   }
 </script>
+<script is:inline src="/js/waai-currency.js" defer></script>

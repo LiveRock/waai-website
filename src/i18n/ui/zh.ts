@@ -237,7 +237,6 @@ const zh: Record<string, string> = {
 
   // ---- 定价页（通用；方案详情/FAQ 暂留英文） ----
   'page.pricing.title': 'WhatsApp AI 价格 — 免费 {days} 天试用',
-  'page.pricing.description': '透明的新币（SGD）WhatsApp AI 智能体定价。Starter 与 Pro 套餐、可选入门服务，以及 {days} 天免费试用 — 无需信用卡。',
   'pricing.title': '简单定价，强大功能',
   'pricing.sub': '免费开始，随业务增长而扩展。无隐藏费用，无意外。',
   'pricing.monthly': '按月',
@@ -328,7 +327,6 @@ const zh: Record<string, string> = {
 
   // 常见问题
   'pricing.faq1.q': '免费试用如何运作？',
-  'pricing.faq1.a': '只需邮箱即可注册——无需信用卡。您可在 {days} 天内完整体验入门版功能。之后可选择付费方案，或继续使用有限功能。',
   'pricing.faq2.q': '我可以随时更换方案吗？',
   'pricing.faq2.a': '您可以随时升级套餐——升级立即生效，剩余计费周期按比例计费；同一套餐内还可在月付与年付之间切换。降级到更低套餐不支持自助操作，如需更低套餐请联系 info@waai.me，我们会为您处理。',
   'pricing.faq3.q': '什么是可选上线协助？',
@@ -346,9 +344,7 @@ const zh: Record<string, string> = {
 
   // ---- 注册页（通用；表单详情暂留英文） ----
   'page.signup.title': '开始您的 {days} 天免费试用',
-  'page.signup.description': '创建您的 waai 账户，几分钟内上线 WhatsApp AI 客服。无需信用卡。',
   'signup.heading': '创建您的账户',
-  'signup.sub': '选择方案，然后填写您的信息。无需信用卡。',
   'signup.create': '创建账户',
   'signup.creating': '创建账户中……',
   'signup.verifyContinue': '验证并继续',
@@ -365,6 +361,11 @@ const zh: Record<string, string> = {
   'signup.prereq1': '一个 Facebook 账户',
   'signup.prereq2': '一个目前未在 WhatsApp 上使用的手机号',
   'signup.choosePlan': '选择您的方案',
+  'signup.billedMonthly': '按月',
+  'signup.billedYearly': '按年',
+  'signup.cardNote': '付费套餐需要信用卡 — {days} 天免费试用期结束后才会扣款，可随时取消。',
+  'signup.freeTitle': '免费开始 — 无需信用卡',
+  'signup.freeDesc': '以受限功能试用 waai，随时升级。',
   'signup.onboardingPre': '更希望人工配置？注册后添加',
   'signup.onboardingStrong': '可选上线协助',
   'signup.onboardingPost': '——我们为您配置客服（入门版 {starter} / 专业版 {pro}，一次性）。',

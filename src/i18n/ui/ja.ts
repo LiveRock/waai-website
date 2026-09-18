@@ -243,7 +243,6 @@ const ja: Record<string, string> = {
 
   // ---- Pricing page (chrome; plan details/FAQ stay English for now) ----
   'page.pricing.title': 'WhatsApp AI料金 — {days}日間無料トライアル',
-  'page.pricing.description': 'SGD建ての透明なWhatsApp AIエージェント料金。StarterおよびProプラン、オプションのオンボーディング、{days}日間無料トライアル — クレジットカード不要。',
   'pricing.title': 'シンプルな料金、強力な機能',
   'pricing.sub': '無料で始めて、成長に合わせてスケール。隠れた費用も予想外の請求もありません。',
   'pricing.monthly': '月額',
@@ -334,7 +333,6 @@ const ja: Record<string, string> = {
 
   // FAQ
   'pricing.faq1.q': '無料トライアルはどのように機能しますか？',
-  'pricing.faq1.a': 'メールアドレスだけでサインアップ — クレジットカードは不要です。トライアルプランの全機能に{days}日間アクセスできます。その後は有料プランをお選びいただくか、機能制限版を継続してご利用いただけます。',
   'pricing.faq2.q': 'いつでもプランを変更できますか？',
   'pricing.faq2.a': 'プランはいつでもアップグレードできます。アップグレードは直ちに有効になり、請求サイクルの残り期間に応じた日割り料金が発生します。同じプラン内で月額払いと年額払いの切り替えも可能です。下位プランへのダウングレードはセルフサービスでは提供していません。下位プランが必要な場合は info@waai.me までご連絡ください。',
   'pricing.faq3.q': 'オプションのオンボーディング支援とは何ですか？',
@@ -352,9 +350,7 @@ const ja: Record<string, string> = {
 
   // ---- Signup page (chrome; form details stay English for now) ----
   'page.signup.title': '{days}日間無料トライアルを始める',
-  'page.signup.description': 'waaiアカウントを作成して、数分でWhatsApp AIエージェントを立ち上げましょう。クレジットカードは不要です。',
   'signup.heading': 'アカウントを作成',
-  'signup.sub': 'プランを選択し、情報を入力してください。クレジットカードは不要です。',
   'signup.create': 'アカウントを作成',
   'signup.creating': 'アカウントを作成中...',
   'signup.verifyContinue': '確認して続行',
@@ -371,6 +367,11 @@ const ja: Record<string, string> = {
   'signup.prereq1': 'Facebookアカウント',
   'signup.prereq2': '現在WhatsAppで使われていない携帯電話番号',
   'signup.choosePlan': 'プランをお選びください',
+  'signup.billedMonthly': '月額',
+  'signup.billedYearly': '年額',
+  'signup.cardNote': '有料パッケージにはカードが必要です — {days}日間の無料トライアル終了後にのみ請求されます。いつでもキャンセルできます。',
+  'signup.freeTitle': '無料で開始 — カード不要',
+  'signup.freeDesc': '機能制限のあるwaaiを試せます。いつでもアップグレード可能です。',
   'signup.onboardingPre': '実践的なセットアップをご希望ですか？',
   'signup.onboardingStrong': 'オプションのオンボーディング支援',
   'signup.onboardingPost': 'をサインアップ後に追加 — ボットの設定を代行します（{starter} Starter / {pro} Pro、1回限り）。',

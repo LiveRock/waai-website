@@ -256,7 +256,7 @@ const en: Record<string, string> = {
   // ---- Pricing page (chrome; plan details/FAQ stay English for now) ----
   'page.pricing.title': 'WhatsApp AI Pricing — Free {days}-Day Trial',
   'page.pricing.description':
-    'Transparent WhatsApp AI agent pricing in SGD. Starter and Pro plans, optional onboarding, and a free {days}-day trial — no credit card.',
+    'Transparent WhatsApp AI agent pricing in SGD, USD, and MYR. Starter and Pro plans with a {days}-day free trial (card charged only at trial end), optional onboarding, and a no-card free option.',
   'pricing.title': 'Simple Pricing, Powerful Features',
   'pricing.sub': 'Start free, scale as you grow. No hidden fees, no surprises.',
   'pricing.monthly': 'Monthly',
@@ -347,7 +347,7 @@ const en: Record<string, string> = {
 
   // FAQ
   'pricing.faq1.q': 'How does the free trial work?',
-  'pricing.faq1.a': 'Sign up with just your email — no credit card required. You get full access to the Trial plan features for {days} days. After that, choose a paid plan or continue with limited features.',
+  'pricing.faq1.a': 'Every paid package starts with a {days}-day free trial — we only charge your card when the trial ends, and you can cancel anytime before that. You can also start on the free Trial plan with no card at all and upgrade later.',
   'pricing.faq2.q': 'Can I switch plans at any time?',
   'pricing.faq2.a': 'You can upgrade at any time — upgrades take effect immediately with a prorated charge for the rest of your billing cycle, and you can switch between monthly and yearly billing on the same plan. Downgrades to a lower-tier plan are not self-service; if you need a lower plan, contact us at info@waai.me and we will help.',
   'pricing.faq3.q': 'What is Optional Onboarding Assistance?',
@@ -365,9 +365,9 @@ const en: Record<string, string> = {
 
   // ---- Signup page (chrome; form details stay English for now) ----
   'page.signup.title': 'Start Your {days}-Day Free Trial',
-  'page.signup.description': 'Create your waai account and launch your WhatsApp AI agent in minutes. No credit card required.',
+  'page.signup.description': 'Create your waai account and launch your WhatsApp AI agent in minutes. Every package starts with a {days}-day free trial — your card is only charged when the trial ends. Prefer to start without a card? There is a free option.',
   'signup.heading': 'Create Your Account',
-  'signup.sub': 'Choose a plan, then fill in your details. No credit card required.',
+  'signup.sub': 'Pick a package — the {days}-day trial is free and your card is only charged when it ends (cancel anytime). Prefer no card? Choose the free option.',
   'signup.create': 'Create Account',
   'signup.creating': 'Creating account...',
   'signup.verifyContinue': 'Verify & continue',
@@ -384,6 +384,11 @@ const en: Record<string, string> = {
   'signup.prereq1': 'A Facebook account',
   'signup.prereq2': 'A mobile number not currently used on WhatsApp',
   'signup.choosePlan': 'Choose Your Plan',
+  'signup.billedMonthly': 'Monthly',
+  'signup.billedYearly': 'Yearly',
+  'signup.cardNote': 'Card required for paid packages — charged only after your {days}-day free trial. Cancel anytime.',
+  'signup.freeTitle': 'Start free — no card needed',
+  'signup.freeDesc': 'Try waai with limited features. Upgrade anytime.',
   'signup.onboardingPre': 'Prefer hands-on setup? Add',
   'signup.onboardingStrong': 'Optional Onboarding Assistance',
   'signup.onboardingPost': 'after signup — we configure your bot for you ({starter} Starter / {pro} Pro, one-time).',
