@@ -206,7 +206,7 @@ const startOverHref = variant === 'landing' ? Astro.url.pathname : localizePath(
             );
           })}
         </div>
-        <p class="text-xs text-gray-500 mt-2">{t('signup.cardNote')}</p>
+        <p class="text-xs text-gray-500 mt-2">{t('signup.cardNote').replace('{days}', String(trialDays))}</p>
 
         <label class="mt-3 block cursor-pointer">
           <input type="radio" name="plan_name" value="trial" class="peer sr-only" />
