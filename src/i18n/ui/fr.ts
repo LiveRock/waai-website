@@ -243,7 +243,6 @@ const fr: Record<string, string> = {
 
   // ---- Pricing page (chrome; plan details/FAQ stay English for now) ----
   'page.pricing.title': 'Tarifs IA WhatsApp — Essai gratuit de {days} jours',
-  'page.pricing.description': 'Tarification transparente des agents IA WhatsApp en SGD. Offres Starter et Pro, onboarding optionnel et essai gratuit de {days} jours — sans carte bancaire.',
   'pricing.title': 'Tarifs simples, fonctionnalités puissantes',
   'pricing.sub': 'Commencez gratuitement, évoluez selon votre croissance. Aucuns frais cachés, aucune mauvaise surprise.',
   'pricing.monthly': 'Mensuel',
@@ -334,7 +333,6 @@ const fr: Record<string, string> = {
 
   // FAQ
   'pricing.faq1.q': 'Comment fonctionne l’essai gratuit ?',
-  'pricing.faq1.a': 'Inscrivez-vous avec simplement votre e-mail — aucune carte bancaire requise. Vous bénéficiez d’un accès complet aux fonctionnalités du forfait Trial pendant {days} jours. Ensuite, choisissez un forfait payant ou poursuivez avec des fonctionnalités limitées.',
   'pricing.faq2.q': 'Puis-je changer de forfait à tout moment ?',
   'pricing.faq2.a': 'Vous pouvez améliorer votre forfait à tout moment : la montée en gamme prend effet immédiatement avec un prorata pour le reste de votre cycle de facturation, et vous pouvez passer entre facturation mensuelle et annuelle sur le même forfait. Les réductions vers un forfait inférieur ne sont pas en libre-service ; pour un forfait inférieur, écrivez-nous à info@waai.me et nous vous aiderons.',
   'pricing.faq3.q': 'Qu’est-ce que l’Assistance d’onboarding en option ?',
@@ -352,9 +350,7 @@ const fr: Record<string, string> = {
 
   // ---- Signup page (chrome; form details stay English for now) ----
   'page.signup.title': 'Commencez votre essai gratuit de {days} jours',
-  'page.signup.description': 'Créez votre compte waai et lancez votre agent IA WhatsApp en quelques minutes. Aucune carte bancaire requise.',
   'signup.heading': 'Créez votre compte',
-  'signup.sub': 'Choisissez un forfait, puis remplissez vos coordonnées. Aucune carte bancaire requise.',
   'signup.create': 'Créer le compte',
   'signup.creating': 'Création du compte...',
   'signup.verifyContinue': 'Vérifier & continuer',
@@ -371,6 +367,11 @@ const fr: Record<string, string> = {
   'signup.prereq1': 'Un compte Facebook',
   'signup.prereq2': 'Un numéro de mobile non utilisé actuellement sur WhatsApp',
   'signup.choosePlan': 'Choisissez votre forfait',
+  'signup.billedMonthly': 'Mensuel',
+  'signup.billedYearly': 'Annuel',
+  'signup.cardNote': 'Une carte est requise pour les forfaits payants — elle n\'est débitée qu\'à la fin de votre essai gratuit de {days} jours. Annulez à tout moment.',
+  'signup.freeTitle': 'Commencez gratuitement — sans carte',
+  'signup.freeDesc': 'Essayez waai avec des fonctionnalités limitées. Passez à un forfait supérieur à tout moment.',
   'signup.onboardingPre': 'Vous préférez une configuration assistée ? Ajoutez',
   'signup.onboardingStrong': 'l’Assistance d’onboarding en option',
   'signup.onboardingPost': 'après l’inscription — nous configurons votre bot pour vous ({starter} Starter / {pro} Pro, unique).',

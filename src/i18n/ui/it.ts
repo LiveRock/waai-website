@@ -243,7 +243,6 @@ const it: Record<string, string> = {
 
   // ---- Pricing page (chrome; plan details/FAQ stay English for now) ----
   'page.pricing.title': 'Prezzi AI WhatsApp — Prova gratuita di {days} giorni',
-  'page.pricing.description': 'Prezzi trasparenti degli agenti AI WhatsApp in SGD. Piani Starter e Pro, onboarding opzionale e prova gratuita di {days} giorni — senza carta di credito.',
   'pricing.title': 'Prezzi Semplici, Funzionalità Potenti',
   'pricing.sub': 'Inizia gratis, scala con la tua crescita. Nessun costo nascosto, nessuna sorpresa.',
   'pricing.monthly': 'Mensile',
@@ -334,7 +333,6 @@ const it: Record<string, string> = {
 
   // FAQ
   'pricing.faq1.q': 'Come funziona la prova gratuita?',
-  'pricing.faq1.a': 'Iscriviti con la sola email — nessuna carta di credito richiesta. Avrai pieno accesso alle funzionalità del piano Trial per {days} giorni. Dopodiché, scegli un piano a pagamento o continua con funzionalità limitate.',
   'pricing.faq2.q': 'Posso cambiare piano in qualsiasi momento?',
   'pricing.faq2.a': 'Puoi passare a un piano superiore in qualsiasi momento: il passaggio ha effetto immediato con un addebito prorato per il resto del tuo ciclo di fatturazione, e puoi passare tra fatturazione mensile e annuale sullo stesso piano. Il downgrade a un piano inferiore non è self-service; se hai bisogno di un piano inferiore, scrivici a info@waai.me e ti aiuteremo.',
   'pricing.faq3.q': 'Cos\'è l\'Assistenza Onboarding Opzionale?',
@@ -352,9 +350,7 @@ const it: Record<string, string> = {
 
   // ---- Signup page (chrome; form details stay English for now) ----
   'page.signup.title': 'Inizia la tua prova gratuita di {days} giorni',
-  'page.signup.description': 'Crea il tuo account waai e lancia il tuo agente AI per WhatsApp in pochi minuti. Nessuna carta di credito richiesta.',
   'signup.heading': 'Crea il Tuo Account',
-  'signup.sub': 'Scegli un piano, poi compila i tuoi dati. Nessuna carta di credito richiesta.',
   'signup.create': 'Crea Account',
   'signup.creating': 'Creazione account in corso...',
   'signup.verifyContinue': 'Verifica e continua',
@@ -371,6 +367,11 @@ const it: Record<string, string> = {
   'signup.prereq1': 'Un account Facebook',
   'signup.prereq2': 'Un numero di cellulare non attualmente usato su WhatsApp',
   'signup.choosePlan': 'Scegli il Tuo Piano',
+  'signup.billedMonthly': 'Mensile',
+  'signup.billedYearly': 'Annuale',
+  'signup.cardNote': 'Per i pacchetti a pagamento è richiesta una carta — l\'addebito avviene solo al termine dei {days} giorni di prova gratuiti. Disdici quando vuoi.',
+  'signup.freeTitle': 'Inizia gratis — senza carta',
+  'signup.freeDesc': 'Prova waai con funzioni limitate. Passa a un piano superiore quando vuoi.',
   'signup.onboardingPre': 'Preferisci una configurazione guidata? Aggiungi',
   'signup.onboardingStrong': 'Assistenza Onboarding Opzionale',
   'signup.onboardingPost': 'dopo la registrazione — configuriamo il tuo bot per te ({starter} Starter / {pro} Pro, una tantum).',

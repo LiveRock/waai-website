@@ -243,7 +243,6 @@ const ko: Record<string, string> = {
 
   // ---- Pricing page (chrome; plan details/FAQ stay English for now) ----
   'page.pricing.title': 'WhatsApp AI 요금 — {days}일 무료 체험',
-  'page.pricing.description': 'SGD 기준 투명한 WhatsApp AI 에이전트 요금. Starter와 Pro 플랜, 선택형 온보딩, {days}일 무료 체험 — 신용카드 불필요.',
   'pricing.title': '간단한 요금제, 강력한 기능',
   'pricing.sub': '무료로 시작하고 성장에 맞춰 확장하세요. 숨겨진 비용도, 깜짝 요금도 없습니다.',
   'pricing.monthly': '월간',
@@ -334,7 +333,6 @@ const ko: Record<string, string> = {
 
   // FAQ
   'pricing.faq1.q': '무료 체험은 어떻게 작동하나요?',
-  'pricing.faq1.a': '이메일만으로 가입하세요 — 신용카드 불필요. {days}일 동안 Trial 요금제 기능을 모두 사용할 수 있습니다. 이후 유료 요금제를 선택하거나 제한된 기능으로 계속 사용하세요.',
   'pricing.faq2.q': '언제든지 요금제를 변경할 수 있나요?',
   'pricing.faq2.a': '언제든지 요금제를 업그레이드할 수 있습니다. 업그레이드는 즉시 적용되며 남은 결제 주기에 대해 일할 계산된 금액이 청구됩니다. 같은 요금제 내에서 월간·연간 결제 전환도 가능합니다. 하위 요금제로의 다운그레이드는 셀프서비스로 제공되지 않습니다. 하위 요금제가 필요하시면 info@waai.me 로 연락해 주시면 도와드리겠습니다.',
   'pricing.faq3.q': '옵션 온보딩 지원이란 무엇인가요?',
@@ -352,9 +350,7 @@ const ko: Record<string, string> = {
 
   // ---- Signup page (chrome; form details stay English for now) ----
   'page.signup.title': '{days}일 무료 체험 시작하기',
-  'page.signup.description': 'waai 계정을 만들고 몇 분 만에 WhatsApp AI 에이전트를 실행하세요. 신용카드 불필요.',
   'signup.heading': '계정 만들기',
-  'signup.sub': '요금제를 선택한 후 세부 정보를 입력하세요. 신용카드 불필요.',
   'signup.create': '계정 만들기',
   'signup.creating': '계정 생성 중...',
   'signup.verifyContinue': '인증 및 계속',
@@ -371,6 +367,11 @@ const ko: Record<string, string> = {
   'signup.prereq1': 'Facebook 계정',
   'signup.prereq2': '현재 WhatsApp에 사용되지 않는 휴대전화 번호',
   'signup.choosePlan': '요금제 선택',
+  'signup.billedMonthly': '월간',
+  'signup.billedYearly': '연간',
+  'signup.cardNote': '유료 패키지에는 카드가 필요합니다 — {days}일 무료 체험이 끝난 후에만 청구됩니다. 언제든 취소할 수 있습니다.',
+  'signup.freeTitle': '무료로 시작 — 카드 불필요',
+  'signup.freeDesc': '제한된 기능으로 waai를 체험해 보세요. 언제든 업그레이드할 수 있습니다.',
   'signup.onboardingPre': '직접 설정을 원하시나요? ',
   'signup.onboardingStrong': '옵션 온보딩 지원',
   'signup.onboardingPost': '을(를) 가입 후에 추가하시면 봇을 대신 설정해 드립니다 ({starter} Starter / {pro} Pro, 1회성).',

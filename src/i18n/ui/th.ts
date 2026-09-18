@@ -243,7 +243,6 @@ const th: Record<string, string> = {
 
   // ---- Pricing page (chrome; plan details/FAQ stay English for now) ----
   'page.pricing.title': 'ราคา WhatsApp AI — ทดลองใช้ฟรี {days} วัน',
-  'page.pricing.description': 'ราคา WhatsApp AI เอเจนต์ที่โปร่งใสในสกุล SGD แพ็กเกจ Starter และ Pro บริการออนบอร์ดิงเสริม และทดลองใช้ฟรี {days} วัน — ไม่ต้องใช้บัตรเครดิต',
   'pricing.title': 'ราคาเรียบง่าย ฟีเจอร์ทรงพลัง',
   'pricing.sub': 'เริ่มฟรี ขยายตามที่คุณเติบโต ไม่มีค่าใช้จ่ายซ่อนเร้น ไม่มีความเซอร์ไพรส์',
   'pricing.monthly': 'รายเดือน',
@@ -334,7 +333,6 @@ const th: Record<string, string> = {
 
   // FAQ
   'pricing.faq1.q': 'การทดลองใช้ฟรีทำงานอย่างไร?',
-  'pricing.faq1.a': 'สมัครด้วยอีเมลเพียงอย่างเดียว — ไม่ต้องใช้บัตรเครดิต คุณจะเข้าถึงฟีเจอร์ของแผน Trial ได้อย่างเต็มรูปแบบเป็นเวลา {days} วัน หลังจากนั้น เลือกแผนที่ชำระเงินหรือใช้ฟีเจอร์จำกัดต่อไป',
   'pricing.faq2.q': 'ฉันเปลี่ยนแผนได้ตลอดเวลาหรือไม่?',
   'pricing.faq2.a': 'คุณสามารถอัปเกรดแผนได้ทุกเมื่อ — การอัปเกรดมีผลทันทีพร้อมค่าใช้จ่ายตามสัดส่วนของรอบบิลที่เหลือ และคุณสลับระหว่างการเรียกเก็บเงินรายเดือนและรายปีในแผนเดียวกันได้ การดาวน์เกรดไปยังแผนที่ต่ำกว่าไม่รองรับแบบบริการตนเอง หากคุณต้องการแผนที่ต่ำกว่าโปรดติดต่อเราที่ info@waai.me แล้วเราจะช่วยเหลือคุณ',
   'pricing.faq3.q': 'บริการตั้งค่าเบื้องต้นเพิ่มเติมคืออะไร?',
@@ -352,9 +350,7 @@ const th: Record<string, string> = {
 
   // ---- Signup page (chrome; form details stay English for now) ----
   'page.signup.title': 'เริ่มทดลองใช้ฟรี {days} วัน',
-  'page.signup.description': 'สร้างบัญชี waai และเปิดตัว AI Agent สำหรับ WhatsApp ของคุณในไม่กี่นาที ไม่ต้องใช้บัตรเครดิต',
   'signup.heading': 'สร้างบัญชีของคุณ',
-  'signup.sub': 'เลือกแผน แล้วกรอกรายละเอียดของคุณ ไม่ต้องใช้บัตรเครดิต',
   'signup.create': 'สร้างบัญชี',
   'signup.creating': 'กำลังสร้างบัญชี...',
   'signup.verifyContinue': 'ยืนยันและดำเนินการต่อ',
@@ -371,6 +367,11 @@ const th: Record<string, string> = {
   'signup.prereq1': 'บัญชี Facebook',
   'signup.prereq2': 'หมายเลขโทรศัพท์ที่ยังไม่ได้ใช้บน WhatsApp',
   'signup.choosePlan': 'เลือกแผนของคุณ',
+  'signup.billedMonthly': 'รายเดือน',
+  'signup.billedYearly': 'รายปี',
+  'signup.cardNote': 'แพ็กเกจแบบชำระเงินต้องใช้บัตร — จะถูกเรียกเก็บเงินหลังจบทดลองใช้ฟรี {days} วันเท่านั้น ยกเลิกได้ทุกเมื่อ',
+  'signup.freeTitle': 'เริ่มฟรี — ไม่ต้องใช้บัตร',
+  'signup.freeDesc': 'ลองใช้ waai ด้วยฟีเจอร์จำกัด อัปเกรดได้ทุกเมื่อ',
   'signup.onboardingPre': 'ต้องการให้ตั้งค่าให้? เพิ่ม',
   'signup.onboardingStrong': 'บริการตั้งค่าเบื้องต้นเพิ่มเติม',
   'signup.onboardingPost': 'หลังสมัคร — เราตั้งค่าบอทให้คุณ ({starter} Starter / {pro} Pro, ครั้งเดียว)',

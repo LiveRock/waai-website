@@ -243,7 +243,6 @@ const ms: Record<string, string> = {
 
   // ---- Laman harga (chrome; butiran pelan/FAQ kekal English buat masa ini) ----
   'page.pricing.title': 'Harga AI WhatsApp — Percubaan {days} Hari Percuma',
-  'page.pricing.description': 'Harga ejen AI WhatsApp yang telus dalam SGD. Pelan Starter dan Pro, onboarding pilihan, dan percubaan percuma {days} hari — tanpa kad kredit.',
   'pricing.title': 'Harga Mudah, Ciri Berkuasa',
   'pricing.sub': 'Mula percuma, berkembang seiring pertumbuhan anda. Tiada yuran tersembunyi, tiada kejutan.',
   'pricing.monthly': 'Bulanan',
@@ -334,7 +333,6 @@ const ms: Record<string, string> = {
 
   // Soalan lazim
   'pricing.faq1.q': 'Bagaimana percubaan percuma berfungsi?',
-  'pricing.faq1.a': 'Daftar hanya dengan e-mel anda — tiada kad kredit diperlukan. Anda mendapat akses penuh kepada ciri pelan Percubaan selama {days} hari. Selepas itu, pilih pelan berbayar atau teruskan dengan ciri terhad.',
   'pricing.faq2.q': 'Boleh saya tukar pelan pada bila-bila masa?',
   'pricing.faq2.a': 'Anda boleh menaik taraf pelan pada bila-bila masa — peningkatan berkuat kuasa serta-merta dengan caj prorata untuk baki kitaran bil anda, dan anda boleh bertukar antara pengebilan bulanan dan tahunan dalam pelan yang sama. Penurunan ke pelan yang lebih rendah tidak ditawarkan secara kendiri; jika anda memerlukan pelan yang lebih rendah, hubungi kami di info@waai.me dan kami akan membantu.',
   'pricing.faq3.q': 'Apakah Bantuan Onboarding Pilihan?',
@@ -352,9 +350,7 @@ const ms: Record<string, string> = {
 
   // ---- Laman pendaftaran (chrome; butiran borang kekal English buat masa ini) ----
   'page.signup.title': 'Mula Percubaan Percuma {days} Hari Anda',
-  'page.signup.description': 'Cipta akaun waai anda dan lancarkan ejen AI WhatsApp anda dalam beberapa minit. Tiada kad kredit diperlukan.',
   'signup.heading': 'Cipta Akaun Anda',
-  'signup.sub': 'Pilih pelan, kemudian isi butiran anda. Tiada kad kredit diperlukan.',
   'signup.create': 'Cipta Akaun',
   'signup.creating': 'Mencipta akaun...',
   'signup.verifyContinue': 'Sahkan & teruskan',
@@ -371,6 +367,11 @@ const ms: Record<string, string> = {
   'signup.prereq1': 'Akaun Facebook',
   'signup.prereq2': 'Nombor mudah alih yang belum digunakan di WhatsApp',
   'signup.choosePlan': 'Pilih Pelan Anda',
+  'signup.billedMonthly': 'Bulanan',
+  'signup.billedYearly': 'Tahunan',
+  'signup.cardNote': 'Paket berbayar memerlukan kad — hanya ditagih setelah uji coba gratis {days} hari anda berakhir. Batalkan bila-bila masa.',
+  'signup.freeTitle': 'Mula percuma — tanpa kad',
+  'signup.freeDesc': 'Cuba waai dengan ciri terhad. Naik taraf bila-bila masa.',
   'signup.onboardingPre': 'Lebih suka persediaan langsung? Tambah',
   'signup.onboardingStrong': 'Bantuan Onboarding Pilihan',
   'signup.onboardingPost': 'selepas pendaftaran — kami mengkonfigurasi bot anda untuk anda ({starter} Pemula / {pro} Pro, sekali).',
