@@ -52,7 +52,7 @@ const formatPrice = (cents: number | null | undefined): string => {
 // matches the live Stripe catalog.
 const CUR_SYM: Record<string, string> = { sgd: 'S$', usd: 'US$', myr: 'RM' };
 const FALLBACK_PACKAGE_PRICES: Record<'starter' | 'pro', Record<string, { monthly: number; yearly: number }>> = {
-  starter: { sgd: { monthly: 2000, yearly: 22000 }, usd: { monthly: 1560, yearly: 17248 }, myr: { monthly: 6300, yearly: 70300 } },
+  starter: { sgd: { monthly: 2000, yearly: 22000 }, usd: { monthly: 1600, yearly: 17248 }, myr: { monthly: 6300, yearly: 70300 } },
   pro: { sgd: { monthly: 9900, yearly: 99000 }, usd: { monthly: 7770, yearly: 77600 }, myr: { monthly: 31600, yearly: 316700 } },
 };
 const fmtCur = (cents: number, cur: string): string => {
