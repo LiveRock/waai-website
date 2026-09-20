@@ -501,10 +501,10 @@ const zh: LocaleContent = {
       company: 'OUTSOURCE2US',
       quote: '我总是奔波在路上。回复消息既麻烦又分心。如今无论何时何地，我都能安心无忧。',
     },
-    'Priya Sharma': {
-      role: '客户成功负责人',
-      company: 'CloudServe Solutions',
-      quote: '逻辑流程太强大了。我们一天就搭建了完整的线索筛选系统。以前销售团队每条线索要花 30 分钟，现在只要 30 秒。',
+    'Golden Tay': {
+      role: '创始人兼首席顾问',
+      company: 'TGT ADVISORY SOLUTIONS',
+      quote: 'waai 最让我印象深刻的，是它远不止一个聊天机器人。它把 AI 带进了 WhatsApp——企业和客户每天都在使用的沟通渠道。作为智能商务助手，waai 帮助企业更稳定地回应咨询、分享知识并持续维系客户。我认为它是一个务实且对马来西亚中小企业具有巨大潜力的 AI 解决方案。',
     },
   },
 

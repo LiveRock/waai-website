@@ -501,10 +501,10 @@ const ms: LocaleContent = {
       company: 'OUTSOURCE2US',
       quote: 'Saya sentiasa berada di jalan raya. Membalas mesej merupakan kerumitan dan gangguan. Akhirnya, saya menikmati ketenangan fikiran, pada bila-bila masa dan di mana sahaja saya berada.',
     },
-    'Priya Sharma': {
-      role: 'Ketua Kejayaan Pelanggan',
-      company: 'CloudServe Solutions',
-      quote: 'Aliran logik itu luar biasa. Kami membina sistem kelayakan bakal pelanggan lengkap dalam sehari. Yang dulu mengambil pasukan jualan kami 30 minit setiap bakal pelanggan kini mengambil 30 saat.',
+    'Golden Tay': {
+      role: 'Pengasas & Penasihat Utama',
+      company: 'TGT ADVISORY SOLUTIONS',
+      quote: 'Perkara yang paling mengkagumkan saya tentang waai ialah ia jauh melebihi sekadar chatbot. Ia membawa AI ke WhatsApp — saluran komunikasi yang sudah digunakan oleh perniagaan dan pelanggan setiap hari. Sebagai Pembantu Perniagaan Pintar, waai membantu perniagaan membalas pertanyaan, berkongsi maklumat dan melibatkan pelanggan dengan lebih konsisten. Saya melihatnya sebagai penyelesaian AI yang praktikal dengan potensi besar untuk PKS di Malaysia.',
     },
   },
 
