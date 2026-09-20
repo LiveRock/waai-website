@@ -501,10 +501,10 @@ const fr: LocaleContent = {
       company: 'OUTSOURCE2US',
       quote: 'Je suis toujours en déplacement. Répondre aux messages était une corvée et une source de distraction. Enfin, j’ai l’esprit tranquille, à tout moment et où que je sois.',
     },
-    'Priya Sharma': {
-      role: 'Responsable de la réussite client',
-      company: 'CloudServe Solutions',
-      quote: 'Les flux logiques sont incroyables. Nous avons construit un système complet de qualification de prospects en une journée. Ce qui prenait 30 minutes par prospect à notre équipe commerciale prend maintenant 30 secondes.',
+    'Golden Tay': {
+      role: 'Fondateur et conseiller principal',
+      company: 'TGT ADVISORY SOLUTIONS',
+      quote: 'Ce qui m’a le plus impressionné chez waai, c’est qu’il va bien au-delà d’un simple chatbot. Il apporte l’IA dans WhatsApp, le canal de communication que les entreprises et les clients utilisent déjà chaque jour. En tant qu’assistant commercial intelligent, waai aide les entreprises à répondre aux demandes, à partager leurs connaissances et à engager leurs clients de manière plus cohérente. J’y vois une solution d’IA concrète, avec un fort potentiel pour les PME malaisiennes.',
     },
   },
 

@@ -2,6 +2,13 @@
 
 Running log of significant work sessions. Newest first.
 
+## 2026-09-20
+
+### Golden Tay (TGT Advisory) testimonial + marquee logo
+- Replaced the Priya Sharma / CloudServe Solutions testimonial with **Golden Tay, Founder & Principal Advisor, TGT ADVISORY SOLUTIONS** (quote supplied verbatim by Peter) in `src/data/testimonials.ts` + all 9 locale overlays (role/quote translated, company kept as proper noun).
+- `Testimonials.astro` now renders the `avatar` field as a circular `<img>` (initials-circle fallback) — the field was previously dead; the old `placeholder-*.svg` paths pointed at files that never existed (blanked). TGT logo square-cropped 160×160 → `public/images/testimonials/tgt-advisory.jpg` (white-on-black GT monogram source). Shows on homepage + all 100 trial LPs (shared component).
+- **LogoCarousel** ("Trusted by businesses worldwide"): TGT monogram flattened to flat `#374151` on transparent (luminance→alpha, `-level 15%,85%` to de-JPEG the edges) → `public/images/logos/tgt-advisory.png` 194×200, added as 3rd logo. Seamless loop intact (12 % 3 === 0 keeps marquee halves identical; keep logo count a divisor of 12).
+
 ## 2026-09-16
 
 ### SEO overhaul: og image, structured data, keyword titles, /solutions hub

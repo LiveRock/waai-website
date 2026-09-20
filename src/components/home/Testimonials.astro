@@ -26,9 +26,13 @@ const testimonials = getTestimonials(lang);
           </div>
           <blockquote class="text-gray-700 leading-relaxed mb-6">“{tm.quote}”</blockquote>
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-gradient-to-br from-wa-green to-wa-teal rounded-full flex items-center justify-center text-white font-bold text-sm">
-              {tm.name.charAt(0)}
-            </div>
+            {tm.avatar ? (
+              <img src={tm.avatar} alt={`${tm.company} logo`} class="w-10 h-10 rounded-full object-cover ring-1 ring-gray-200" width="40" height="40" loading="lazy" />
+            ) : (
+              <div class="w-10 h-10 bg-gradient-to-br from-wa-green to-wa-teal rounded-full flex items-center justify-center text-white font-bold text-sm">
+                {tm.name.charAt(0)}
+              </div>
+            )}
             <div>
               <div class="font-medium text-gray-900 text-sm">{tm.name}</div>
               <div class="text-xs text-gray-500">{tm.role ? `${tm.role}, ${tm.company}` : tm.company}</div>

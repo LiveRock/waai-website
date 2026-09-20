@@ -501,10 +501,10 @@ const es: LocaleContent = {
       company: 'OUTSOURCE2US',
       quote: 'Siempre estoy en la carretera. Responder mensajes era una molestia y una distracción. Por fin tengo tranquilidad, en cualquier momento y dondequiera que esté.',
     },
-    'Priya Sharma': {
-      role: 'Responsable de Éxito del Cliente',
-      company: 'CloudServe Solutions',
-      quote: 'Los flujos lógicos son increíbles. Construimos un sistema completo de cualificación de leads en un día. Lo que antes le llevaba a nuestro equipo de ventas 30 minutos por lead ahora lleva 30 segundos.',
+    'Golden Tay': {
+      role: 'Fundador y asesor principal',
+      company: 'TGT ADVISORY SOLUTIONS',
+      quote: 'Lo que más me impresionó de waai es que va mucho más allá de un chatbot. Lleva la IA a WhatsApp, el canal de comunicación que empresas y clientes ya usan a diario. Como asistente de negocios inteligente, waai ayuda a las empresas a responder consultas, compartir conocimiento e interactuar con los clientes de forma más constante. Lo veo como una solución de IA práctica y con gran potencial para las pymes malasias.',
     },
   },
 
