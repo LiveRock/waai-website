@@ -2,12 +2,22 @@
 
 Running log of significant work sessions. Newest first.
 
+## 2026-09-23
+
+### Prohibited-uses T&C clause + waai.me as single T&C source (PRs #45/#46)
+- Gap found: §5 Acceptable Use had only generic language ("violate any applicable law", "obscene material") — no enumerated vices. Added a **Prohibited Uses** paragraph (gambling/betting/lotteries incl. online · porn/adult content/escort services · illegal drugs/controlled substances/paraphernalia · weapons/explosives · prostitution/human trafficking · money laundering/terrorist financing · fraud/scams/phishing · counterfeit goods · catch-all) plus enforcement: **immediate termination/suspension without prior notice and without any refund**, accrued fees remain payable, possible disclosure to authorities. Last updated → September 23, 2026.
+- **Single source of truth**: the waaichat app's `/terms` route now redirects here and all its in-app links open `waai.me/terms/` directly (waaichat PR #562). Its old 5-locale terms text in `site_content` was replaced with a localized pointer so nothing can drift; the app's SA legal editor is privacy-only. **Future T&C edits happen only in this repo** (recorded in both CLAUDE.md's).
+
 ## 2026-09-20
 
 ### Golden Tay (TGT Advisory) testimonial + marquee logo
 - Replaced the Priya Sharma / CloudServe Solutions testimonial with **Golden Tay, Founder & Principal Advisor, TGT ADVISORY SOLUTIONS** (quote supplied verbatim by Peter) in `src/data/testimonials.ts` + all 9 locale overlays (role/quote translated, company kept as proper noun).
 - `Testimonials.astro` now renders the `avatar` field as a circular `<img>` (initials-circle fallback) — the field was previously dead; the old `placeholder-*.svg` paths pointed at files that never existed (blanked). TGT logo square-cropped 160×160 → `public/images/testimonials/tgt-advisory.jpg` (white-on-black GT monogram source). Shows on homepage + all 100 trial LPs (shared component).
 - **LogoCarousel** ("Trusted by businesses worldwide"): TGT monogram flattened to flat `#374151` on transparent (luminance→alpha, `-level 15%,85%` to de-JPEG the edges) → `public/images/logos/tgt-advisory.png` 194×200, added as 3rd logo. Seamless loop intact (12 % 3 === 0 keeps marquee halves identical; keep logo count a divisor of 12).
+
+### Terms & privacy: cancellation/no-refund + 6-month trial inactivity (PR #43)
+- Terms §4: cancellation effective at end of billing period, no refunds for unused annual months/portion, account reverts to trial, data retained until self-deletion or the inactivity policy. §10: user-initiated deletion + trial accounts inactive 6 months (no sign-ins and no agent conversations) may be auto-deleted. Privacy §9 aligned (post-cancellation retention + inactivity deletion). Dates → September 20, 2026.
+- Mirrors the waaichat implementation (PR #544): new `daily_inactive_trial_purge` cron (09:31, 180-day rule, soft-delete → existing 30-day hard-delete pipeline with support restore), localized courtesy email, and app terms/privacy ×5 locales pushed to the live DB. First possible purge ≈ 2027-01-02; 0 accounts eligible at deploy.
 
 ## 2026-09-16
 
