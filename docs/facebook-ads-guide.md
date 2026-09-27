@@ -84,7 +84,7 @@ https://waai.me/[locale/]trial/[industry]/?utm_source=meta&utm_medium=paid&utm_c
 - `https://waai.me/trial/restaurants/?utm_source=meta&utm_medium=paid&utm_campaign=sg-restaurants-sep26&utm_content=video-a`
 - `https://waai.me/zh/trial/fitness/?utm_source=meta&utm_medium=paid&utm_campaign=sg-fitness-zh`
 
-**Optional pre-fill params** (useful if you ever email/link directly): `?name=`, `?email=`, `?company=`, `?phone=` pre-fill the signup form. Facebook cannot inject the user's details into a click URL — the form itself collects them.
+**Optional pre-fill params** (useful if you ever email/link directly): `?email=`, `?ref=` pre-fill the signup form. (Since the 2026-09 minimal signup, `?name=`/`?company=`/`?phone=` no longer apply — the form asks only for email; business details are collected in the onboarding wizard.) Facebook cannot inject the user's details into a click URL — the form itself collects them.
 
 **⚠️ Do NOT use `?ref=` in ad URLs.** The referral code is a real waaiChat feature — it identifies which actual customer referred a signup (mandatory field, default `888888`). Made-up ad codes like `FBAD01` would be posted to waaiChat as a referral code, polluting or failing its validation. **Ad attribution rides entirely on the `utm_*` params**, which the site captures and forwards to waaiChat automatically. The `?ref=` pre-fill mechanism exists for the genuine referral program: real referrers can share links like `waai.me/signup?ref=<THEIR-CODE>` and the field fills itself.
 
