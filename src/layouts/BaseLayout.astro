@@ -53,11 +53,18 @@ const orgJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'waai',
+  alternateName: 'waai.me',
   url: SITE,
   logo: `${SITE}/images/logos/logo.jpg`,
+  // Entity association: everything Google can use to connect the "waai"
+  // brand to this domain (app listings + social profiles).
   sameAs: [
     'https://apps.apple.com/sg/app/waai-assistant/id6766452095',
     'https://play.google.com/store/apps/details?id=net.hotsource.waai',
+    'https://www.facebook.com/waai.smart.assistant',
+    'https://www.instagram.com/waai.me/',
+    'https://www.youtube.com/@waai-me',
+    'https://www.tiktok.com/@peterwaailum',
   ],
   contactPoint: [{
     '@type': 'ContactPoint',
