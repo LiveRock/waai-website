@@ -1,6 +1,7 @@
 ---
 title: "WhatsApp AI for Tutoring and Education Centres: Automate Enrolment, Scheduling and Parent Comms"
 description: "Discover how tuition centres, trainers and edtech teams use WhatsApp AI to handle enrolment enquiries, automate class bookings and reply to parents in their own language — 24/7."
+heroImage: "/images/blog/whatsapp-ai-for-tutoring-and-education-centres-3.jpg"
 pubDate: 2026-10-13
 author: waai
 category: Industry

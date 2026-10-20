@@ -1,6 +1,7 @@
 ---
 title: "WhatsApp Broadcast Campaigns: A 2026 Guide"
 description: "Learn how to run WhatsApp broadcast campaigns the right way in 2026 — contacts, segmentation, message templates, the 24-hour window, and personalization. Plus how waai's CRM + broadcast toolkit makes it simple."
+heroImage: "/images/blog/whatsapp-broadcast-campaigns-2026-guide.jpg"
 pubDate: 2026-09-29
 author: waai
 category: Product

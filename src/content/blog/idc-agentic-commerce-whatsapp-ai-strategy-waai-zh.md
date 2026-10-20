@@ -1,6 +1,7 @@
 ---
 title: "IDC 报告揭示智能商业未来：为什么对话平台是中小企业 AI 转型的最佳战场"
 description: "解读 IDC 与 Meta 最新研究：为何在智能代理时代，WhatsApp 等 IM 平台不仅是沟通工具，更是企业积累上下文数据、实现自动化运营的核心资产。"
+heroImage: "/images/blog/idc-agentic-commerce-whatsapp-ai-strategy-waai-zh.jpg"
 pubDate: 2026-08-28
 author: waai
 category: News

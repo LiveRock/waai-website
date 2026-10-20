@@ -1,6 +1,7 @@
 ---
 title: "WhatsApp Chatbot Builders Compared: What to Look For"
 description: "A practical framework for evaluating WhatsApp chatbot and AI platforms — builder depth, integrations, booking, AI model choice, data ownership, pricing, and reseller options — with waai as the benchmark."
+heroImage: "/images/blog/whatsapp-chatbot-builders-compared-what-to-look-for-2.jpg"
 pubDate: 2026-10-06
 author: waai
 category: Comparisons

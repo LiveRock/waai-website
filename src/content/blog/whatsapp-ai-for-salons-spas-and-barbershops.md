@@ -1,6 +1,7 @@
 ---
 title: "WhatsApp AI for Salons, Spas & Barbershops: The End of No-Shows"
 description: "Discover how salons, spas, and barbershops use waai's WhatsApp AI automation for 24/7 multi-branch booking, staff scheduling, deposits, and reminders to stop no-shows."
+heroImage: "/images/blog/whatsapp-ai-for-salons-spas-and-barbershops.jpg"
 pubDate: 2026-08-25
 author: waai
 category: Industry

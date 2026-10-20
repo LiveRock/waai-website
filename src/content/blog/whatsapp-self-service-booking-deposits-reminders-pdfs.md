@@ -1,6 +1,7 @@
 ---
 title: "Self-Service Booking on WhatsApp: Deposits, Reminders & PDFs"
 description: "See how waai's booking system handles the full appointment lifecycle on WhatsApp — self-service slots, deposits, automated reminders, reschedules, PDF receipts and Google Calendar sync — all without a human touch."
+heroImage: "/images/blog/whatsapp-self-service-booking-deposits-reminders-pdfs.jpg"
 pubDate: 2026-10-20
 author: waai
 category: Product

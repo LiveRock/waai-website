@@ -1,6 +1,7 @@
 ---
 title: "Why Agentic Commerce Needs Messaging More Than Your Website"
 description: "Recent IDC research commissioned by Meta highlights messaging as the bridge between AI convenience and business context. Here is how waai turns that prediction into daily operations."
+heroImage: "/images/blog/why-agentic-commerce-needs-messaging-more-than-your-website.jpg"
 pubDate: 2026-08-28
 author: waai
 category: News

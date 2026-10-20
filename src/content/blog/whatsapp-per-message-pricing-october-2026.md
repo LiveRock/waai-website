@@ -1,6 +1,7 @@
 ---
 title: "WhatsApp's October 2026 Per-Message Pricing: What Businesses Should Know"
 description: "Meta is moving WhatsApp Business API billing from per-conversation to per-message pricing on 1 October 2026 — and service messages inside the 24-hour window will now cost money. Here's what changes, what it means for your costs, and why automation is suddenly your best cost-control tool."
+heroImage: "/images/blog/whatsapp-per-message-pricing-october-2026.jpg"
 pubDate: 2026-09-15
 author: waai
 category: News

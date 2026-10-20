@@ -1,6 +1,7 @@
 ---
 title: "How Agencies Can Resell WhatsApp AI Under Their Own Brand"
 description: "Meta's free WhatsApp Business Agent has no reseller program. Learn how agencies and MSPs can white-label WhatsApp AI automation with waai, keep clients under their own brand, and earn recurring commission."
+heroImage: "/images/blog/resell-whatsapp-ai-white-label-agency-guide.jpg"
 pubDate: 2026-09-08
 author: waai
 category: Guides

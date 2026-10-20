@@ -1,6 +1,7 @@
 ---
 title: "waai's Biggest Update Yet: Bookings, Catalog, and CRM — All Inside WhatsApp"
 description: "waai now books appointments against real availability, takes stock-aware orders in chat, and shows you which Facebook ads actually turn chats into revenue. Here's what's new and what it means for your business."
+heroImage: "/images/blog/whatsapp-booking-catalog-crm-launch.jpg"
 pubDate: 2026-08-23
 author: waai
 category: Product

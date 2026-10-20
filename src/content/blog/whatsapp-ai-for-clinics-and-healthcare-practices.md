@@ -1,6 +1,7 @@
 ---
 title: "WhatsApp AI for Clinics and Healthcare Practices: Booking, Reminders, and Privacy-First Automation"
 description: "How clinics, dental practices, and medical offices use WhatsApp AI to automate appointment booking, cut no-shows with reminders, handle triage-style FAQs, and keep patient data under their own control."
+heroImage: "/images/blog/whatsapp-ai-for-clinics-and-healthcare-practices.jpg"
 pubDate: 2026-09-22
 author: waai
 category: Industry

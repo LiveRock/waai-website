@@ -17,6 +17,7 @@
  *   SOURCE_NAME    display name for the source override, e.g. "IDC via WhatsApp for Business"
  */
 import { writeFileSync, readFileSync, existsSync, appendFileSync, mkdirSync } from 'node:fs';
+import { generateBlogImage } from './generate-blog-image.mjs';
 
 const ZAI_API_KEY = process.env.ZAI_API_KEY;
 if (!ZAI_API_KEY) {
@@ -421,6 +422,20 @@ while (existsSync(path)) {
 }
 const finalSlug = path.replace(`${OUT_DIR}/`, '').replace(/\.md$/, '');
 
+// ---- feature/og image: Pollinations art + branded overlay (gradient fallback) ----
+// Never fatal — if the image service or ImageMagick is unavailable the post
+// ships without heroImage and falls back to the site-default og card.
+let heroImage = null;
+try {
+  heroImage = await generateBlogImage({
+    slug: finalSlug,
+    title: post.title,
+    category: post.category || brief.category,
+  });
+} catch (err) {
+  console.warn(`! image generation failed, shipping without heroImage: ${err.message}`);
+}
+
 // ---- write the markdown with frontmatter matching src/content.config.ts ----
 const today = now.toISOString().slice(0, 10);
 const tags = post.tags?.length ? post.tags : brief.tags;
@@ -428,6 +443,7 @@ const frontmatter = [
   '---',
   `title: ${JSON.stringify(post.title)}`,
   `description: ${JSON.stringify(post.description)}`,
+  heroImage ? `heroImage: ${JSON.stringify(heroImage)}` : null,
   `pubDate: ${today}`,
   `author: waai`,
   `category: ${post.category || brief.category}`,

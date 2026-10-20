@@ -1,6 +1,7 @@
 ---
 title: "Meta Business Agent vs waai: Which WhatsApp AI Is Right for Your Business? (2026)"
 description: "Meta Business Agent is free for basic WhatsApp FAQs — but it stops fast. Here's exactly when it's enough, and when you need waai's booking, flows, integrations & reseller platform."
+heroImage: "/images/blog/meta-business-agent-vs-waai.jpg"
 pubDate: 2026-08-03
 author: waai
 category: Comparisons

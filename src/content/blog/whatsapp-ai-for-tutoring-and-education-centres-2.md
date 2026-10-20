@@ -1,6 +1,7 @@
 ---
 title: "Automasi WhatsApp AI untuk Pusat Tuisyen: Tip Pantas Pengurusan Pelajar"
 description: "Ketahui cara pusat tuisyen menggunakan WhatsApp AI untuk urusan temujanji, soalan lazim, dan komunikasi berbilang bahasa dengan ibu bapa secara efisien."
+heroImage: "/images/blog/whatsapp-ai-for-tutoring-and-education-centres-2.jpg"
 pubDate: 2026-09-01
 author: waai
 category: Industry

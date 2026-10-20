@@ -1,6 +1,7 @@
 ---
 title: "WhatsApp Business App vs WhatsApp Business API: Which Do You Need in 2026?"
 description: "The App is free but basic; the API unlocks automation, bots, and scale. Here's exactly what each does, what they cost in 2026, and how to choose — including Meta's October per-message pricing change."
+heroImage: "/images/blog/whatsapp-business-app-vs-api.jpg"
 pubDate: 2026-08-05
 author: waai
 category: Guides

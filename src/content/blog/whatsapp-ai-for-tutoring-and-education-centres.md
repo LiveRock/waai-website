@@ -1,6 +1,7 @@
 ---
 title: "WhatsApp AI untuk Pusat Tuisyen dan Pendidikan: Automasi Pendaftaran & Jadual Kelas"
 description: "Ketahui bagaimana pusat tuisyen dan pendidik menggunakan WhatsApp AI untuk menguruskan pertanyaan, penjadualan kelas, dan komunikasi ibu bapa berbilang bahasa dengan lebih cekap."
+heroImage: "/images/blog/whatsapp-ai-for-tutoring-and-education-centres.jpg"
 pubDate: 2026-09-01
 author: waai
 category: Industry
