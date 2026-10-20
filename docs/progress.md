@@ -2,6 +2,23 @@
 
 Running log of significant work sessions. Newest first.
 
+## 2026-10-20
+
+### Per-post blog feature/og images (all 17 posts + weekly automation)
+Every blog post now ships a unique `heroImage` (1200×630 JPEG in `public/images/blog/`) — used as og:image, twitter card, JSON-LD image and in-page hero (`BlogPost.astro` already had the plumbing; it was just never populated). Composition: Pollinations flux art (deterministic seed from slug hash, teal/purple palette) + ImageMagick overlay (dark-teal scrim, category label, white Inter title, waai.me mark). New `scripts/generate-blog-image.mjs` (CLI `--all` / `<post.md> [--force]`); `generate-blog-post.mjs` calls it for every new weekly post, non-fatal on failure (brand-gradient fallback → weekly loop can never break). Battles: **Pollinations watermarks despite `nologo=true`** (3-layer defense: crop 94×84% + bottom-right blur/darken + opaque scrim band — verified clean by zoomed neutral OCR), **free tier = 1 image/45s/IP** (script paces 47–50s), error responses are 322B JSON (<5KB guard). zh/ms posts get art-only (no CJK font bundled). 15/17 have real art; 2 (resell guide, agentic-commerce) on the gradient card after this IP exhausted the quota — re-run `--force` later if wanted. Inter TTFs in `scripts/assets/`.
+
+### Directory-submission backlink campaign kit
+`docs/directory-submissions.md` + `docs/submission-tracker.csv` (44 pre-vetted targets across AI/agent/SaaS/launch tiers, each pre-assigned one of 4 distinct copy variants — AI-directory / SaaS-alternative-vs-Wati-SleekFlow-respond.io / AI-agent / launch — plus facts pack, submission checklist, KPI targets). PNG logo variants (1024/512/256) exported to `public/images/logos/`. **Blocked on Peter: 5–8 product screenshots 1920×1080** — sole gap before batch 1. Also identified competitor **Merlion Labs** (SG WhatsApp-AI-agent startup, S$29, Meta partner) via r/singaporestartups.
+
+### SEO: "waai" brand-query invisibility — schema + canonical-redirect fixes
+Diagnosis: site indexed (`site:waai.me` ✓) but ranking for nothing, incl. bare "waai" — ~zero referring domains, entity disconnected (Peter's own Play Store app outranked the site), and **http:// + https://www. served the full site with 200, no redirects** (3 duplicate copies of 605 pages).
+- Organization JSON-LD: `sameAs` += the 4 new social profiles; `alternateName: "waai.me"` (every page, all locales).
+- **Apache canonical 301s** in `/etc/apache2/sites-available/waai.me.conf` (backup `.bak-pre-seo-redirects`): port 80 → `https://waai.me` (skips `/.well-known` for ACME + `/mail/config-v1.1.xml` for mail autoconfig); `www.` → apex on 443. Verified: SSL-renewal path, awstats (401 auth), webmail redirect, autoconfig all intact. Same Virtualmin re-save hazard as the awstats-icon alias — documented in CLAUDE.md.
+- Peter's homework: Search Console setup (DNS TXT via GoDaddy → sitemap → request indexing) + waai.me as website in all 4 social bios. Bare "waai" needs the backlink campaign (contested term: Wikipedia manga magazine, WAAI FM, Afrikaans/Japanese dictionary word, waai.co.il/the-waai.com/waai.net).
+
+### Footer social links
+Facebook (waai.smart.assistant), Instagram (waai.me), YouTube (@waai-me), TikTok (@peterwaailum) as inline simple-icons SVGs in the footer brand column below the store badges (same pattern as the Meta Tech Provider lockup; gray → waai-green hover). TikTok share-tracking params stripped.
+
 ## 2026-09-23
 
 ### Prohibited-uses T&C clause + waai.me as single T&C source (PRs #45/#46)
