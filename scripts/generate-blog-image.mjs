@@ -2,13 +2,15 @@
 /**
  * Per-post blog feature/og images (1200×630 JPEG in public/images/blog/).
  *
- * Composition: photorealistic scene photo from Pollinations (keyless flux,
- * deterministic seed per slug — real people in real workplaces, e.g. salon
- * stylist, clinic receptionist, tutoring centre, picked from the post title)
- * + bottom scrim + category line + white title + waai.me mark, composited
- * with ImageMagick. If Pollinations is unreachable the script falls back to a
- * brand gradient — the weekly blog pipeline must never block on an image
- * service.
+ * Composition (split card): LEFT 680px dark-teal brand panel (category line,
+ * white Inter title, waai.me mark) + RIGHT 520×630 photo panel. The photo is
+ * generated PORTRAIT (4:5) — Pollinations' free cap is ~0.59MP of area at any
+ * aspect, so a portrait request yields ~1.8× the pixels the panel needs and
+ * the photo is DOWNSCALED to native-panel sharpness (the old full-bleed design
+ * upscaled a wide 1059×556 render and read blurry). Scene = real people in
+ * real workplaces (SCENE_RULES keyword map). If Pollinations is unreachable
+ * the script falls back to a full-canvas brand gradient — the weekly blog
+ * pipeline must never block on an image service.
  *
  * CLI:
  *   node scripts/generate-blog-image.mjs src/content/blog/<post>.md [--force]
@@ -29,6 +31,8 @@ const FONT_SEMI = path.join(ROOT, 'scripts', 'assets', 'Inter-600.ttf');
 
 const W = 1200;
 const H = 630;
+const PW = 520; // photo panel width — art renders here at NATIVE resolution
+const LX = W - PW; // text/brand panel width (680)
 
 /** Deterministic 32-bit FNV-1a hash → Pollinations seed (same post = same art). */
 function seedFromSlug(slug) {
@@ -90,7 +94,11 @@ async function fetchArt(title, seed) {
       `highly detailed skin and fabric texture, crisp professional color grading, ` +
       `editorial stock photography, no text, no words, no letters, no watermark`
   );
-  const url = `https://image.pollinations.ai/prompt/${prompt}?width=${W}&height=${H}&nologo=true&seed=${seed}&model=flux`;
+  // Portrait request: the free-tier cap is ~0.59MP of AREA at any aspect, so a
+  // 4:5 request returns ~687×858 — 1.8× the pixels the 520×630 photo panel
+  // needs, letting the panel DOWNSCALE (native-res sharp) instead of the old
+  // wide design's ~1.2× upscale from 1059×556.
+  const url = `https://image.pollinations.ai/prompt/${prompt}?width=848&height=1059&nologo=true&seed=${seed}&model=flux`;
   // Free tier: 1 image / 45s / IP (HTTP 402 FREE_LIMIT) — space out retries.
   for (let attempt = 1; attempt <= 3; attempt++) {
     try {
@@ -110,27 +118,6 @@ async function fetchArt(title, seed) {
 function hasIM() {
   try { execFileSync('convert', ['-version'], { stdio: 'ignore' }); return true; }
   catch { return false; }
-}
-
-/**
- * Two-layer scrim: a light full-height tint plus a bottom band that reaches
- * FULL opacity — Pollinations watermarks the lower area of its art (even with
- * nologo=true), so the bottom must be solid. The tint stays LIGHT (max ~0.32):
- * the band alone carries title contrast, and a heavy veil reads as a washed,
- * soft photo.
- */
-function makeScrim(tmp) {
-  const tint = path.join(tmp, 'tint.png');
-  const band = path.join(tmp, 'band.png');
-  const p = path.join(tmp, 'scrim.png');
-  execFileSync('convert', [
-    '-size', `${W}x${H}`, 'gradient:rgba(5,28,22,0.04)-rgba(5,28,22,0.32)', tint,
-  ]);
-  execFileSync('convert', [
-    '-size', `${W}x280`, 'gradient:rgba(5,28,22,0)-rgba(5,28,22,1.0)', band,
-  ]);
-  execFileSync('convert', [tint, band, '-gravity', 'south', '-composite', p]);
-  return p;
 }
 
 /** Render wrapped white text as a transparent PNG, auto-height. Returns {path, height}. */
@@ -160,91 +147,112 @@ export async function generateBlogImage({ slug, title, category }) {
   const asciiTitle = /^[\x20-\x7E]*$/.test(title);
 
   try {
-    // 1. Background art — AI illustration, or brand gradient fallback.
+    // 1. Brand panel (left, 680px — or the full canvas as gradient fallback).
     const art = await fetchArt(title, seedFromSlug(slug));
-    let base = path.join(tmp, 'base.png');
+    const panelW = art ? LX : W;
+    const base = path.join(tmp, 'base.png');
+    const panelL = path.join(tmp, 'panelL.png');
+    execFileSync('convert', [
+      '-size', `${panelW}x${H}`, 'gradient:#05291f-#0b3f2e',
+      '-fill', 'rgba(52,211,153,0.07)', '-draw', `circle ${panelW - 90},96 ${panelW - 90},10`,
+      '-fill', 'rgba(167,139,250,0.06)', '-draw', `circle 120,${H - 80} 120,${H - 200}`,
+      panelL,
+    ]);
+    if (art) {
+      execFileSync('convert', [
+        '-size', `${W}x${H}`, 'xc:#05291f',
+        panelL, '-gravity', 'West', '-geometry', '+0+0', '-composite',
+        base,
+      ]);
+    } else {
+      console.warn('  pollinations unreachable — brand gradient fallback (no photo panel)');
+      execFileSync('convert', [panelL, base]);
+    }
+
+    // 2. Photo panel (right, 520×630) — rendered at native resolution.
     if (art) {
       const artPath = path.join(tmp, 'art.jpg');
       fs.writeFileSync(artPath, art);
-      // Pollinations stamps its watermark on the lower area of the art even
-      // with nologo=true. Triple defense: (1) crop the bottom/right strips,
-      // (2) blur+darken the whole bottom-right quadrant (unreadable smudge),
-      // (3) the opaque scrim band covers whatever remains.
+      const [sw, sh] = execFileSync('identify', ['-format', '%w %h', artPath]).toString().split(/\s+/).map(Number);
+      // Crop to the panel aspect, anchored North (heads stay in frame; the
+      // art's bottom strip — where the Pollinations watermark lives — drops).
+      const PA = PW / H;
+      const cropArgs = sw / sh >= PA
+        ? [Math.round(sh * PA), sh, 'Center']
+        : [sw, Math.round(sw / PA), 'North'];
       const cropped = path.join(tmp, 'cropped.jpg');
       execFileSync('convert', [
-        artPath, '-gravity', 'NorthWest', '-crop', '94x84%+0+0', '+repage', cropped,
+        artPath, '-gravity', cropArgs[2], '-crop', `${cropArgs[0]}x${cropArgs[1]}+0+0`, '+repage', cropped,
       ]);
-      // Watermark patch: blur+darken the bottom-right quadrant, edges FEATHERED
-      // (a hard-edged paste leaves a visible rectangular seam).
+
+      // Watermark defense (no scrim over the photo): feathered blur patch on
+      // the bottom-right quadrant + a dark fade along the panel's bottom edge.
       const patch = path.join(tmp, 'patch.png');
       const patchRaw = path.join(tmp, 'patch-raw.png');
       const patchMask = path.join(tmp, 'patch-mask.png');
       execFileSync('convert', [
-        cropped, '-gravity', 'SouthEast', '-crop', '55%x25%+0+0', '+repage',
+        cropped, '-gravity', 'SouthEast', '-crop', '55%x22%+0+0', '+repage',
         '-blur', '0x22', '-modulate', '80,90', patchRaw,
       ]);
       const dim = execFileSync('identify', ['-format', '%wx%h', patchRaw]).toString();
       execFileSync('convert', [
-        '-size', dim, 'xc:white', '-shave', '18x18',
-        '-bordercolor', 'black', '-border', '18', '-blur', '0x9', patchMask,
+        '-size', dim, 'xc:white', '-shave', '14x14',
+        '-bordercolor', 'black', '-border', '14', '-blur', '0x7', patchMask,
       ]);
       execFileSync('convert', [
         patchRaw, patchMask, '-alpha', 'off', '-compose', 'CopyOpacity', '-composite', patch,
       ]);
+
+      // Downscale to the panel (source is ~1.8× the panel's pixels — this is
+      // where the sharpness comes from) + a light unsharp touch.
+      const photo = path.join(tmp, 'photo.png');
       execFileSync('convert', [
         cropped, patch, '-gravity', 'SouthEast', '-geometry', '+0+0', '-composite',
-        // Pollinations free tier caps flux at ~1059×556 (whatever you request),
-        // so the resize UPSCALES ~1.2× — and free flux is inherently soft.
-        // Dual-radius unsharp (fine detail + local contrast) + slight saturation
-        // + gentle sigmoidal curve: edge-contrast +63% vs a single modest pass
-        // (measured, 2026-10-21 A/B — vision models flip on this, trust metrics).
-        '-resize', `${W}x${H}^`,
-        '-unsharp', '0x0.8+1.4+0.008', '-unsharp', '0x2.5+0.5+0.01',
-        '-modulate', '100,108', '-sigmoidal-contrast', '1.5x50%',
-        '-gravity', 'center', '-extent', `${W}x${H}`, '-strip', base,
+        '-resize', `${PW}x${H}^`, '-gravity', 'center', '-extent', `${PW}x${H}`,
+        '-unsharp', '0x0.8+0.6+0.02', photo,
       ]);
-    } else {
-      console.warn('  pollinations unreachable — using brand gradient fallback');
+      const fade = path.join(tmp, 'fade.png');
       execFileSync('convert', [
-        '-size', `${W}x${H}`,
-        'gradient:#062e22-#2e1065',
-        '-fill', 'rgba(52,211,153,0.16)', '-draw', `circle 950,140 950,20`,
-        '-fill', 'rgba(167,139,250,0.13)', '-draw', `circle 220,520 220,400`,
+        '-size', `${PW}x110`, 'gradient:rgba(5,28,22,0)-rgba(5,28,22,0.85)', fade,
+      ]);
+      execFileSync('convert', [photo, fade, '-gravity', 'South', '-composite', photo]);
+      execFileSync('convert', [
+        base, photo, '-gravity', 'East', '-geometry', '+0+0', '-composite',
+        '-fill', 'rgba(52,211,153,0.9)', '-draw', `rectangle ${LX - 2},0 ${LX + 1},${H}`,
         base,
       ]);
     }
 
-    // 2. Text overlay (ASCII titles only — no CJK font bundled; CJK posts get art-only).
+    // 3. Text on the brand panel (ASCII titles only — no CJK font bundled;
+    //    CJK posts get the mark alone).
+    const mark = path.join(tmp, 'mark.png');
+    execFileSync('convert', [
+      '-background', 'none', '-fill', 'rgba(255,255,255,0.82)',
+      '-font', FONT_SEMI, '-pointsize', '26',
+      'caption:waai.me', mark,
+    ]);
     if (asciiTitle) {
-      const scrim = makeScrim(tmp);
-      execFileSync('convert', [base, scrim, '-composite', base]);
-
-      const size = title.length <= 55 ? 54 : title.length <= 90 ? 46 : 38;
-      const title2 = captionPng(title, {
-        font: FONT_BOLD, pointsize: size, fill: 'white', width: 940,
-        tmp, name: 'title.png',
-      });
+      const size = title.length <= 40 ? 50 : title.length <= 75 ? 42 : 34;
       const cat = captionPng((category || 'Blog').toUpperCase(), {
-        font: FONT_SEMI, pointsize: 26, fill: '#6ee7b7', width: 940,
+        font: FONT_SEMI, pointsize: 26, fill: '#6ee7b7', width: LX - 96,
         tmp, name: 'cat.png',
       });
-
-      const mark = path.join(tmp, 'mark.png');
-      execFileSync('convert', [
-        '-background', 'none', '-fill', 'rgba(255,255,255,0.82)',
-        '-font', FONT_SEMI, '-pointsize', '26',
-        `caption:waai.me`, mark,
-      ]);
-
+      const title2 = captionPng(title, {
+        font: FONT_BOLD, pointsize: size, fill: 'white', width: LX - 96,
+        tmp, name: 'title.png',
+      });
       execFileSync('convert', [
         base,
-        title2.path, '-gravity', 'southwest', '-geometry', '+48+96', '-composite',
-        cat.path, '-gravity', 'southwest', '-geometry', `+48+${96 + title2.height + 16}`, '-composite',
-        mark, '-gravity', 'southeast', '-geometry', '+48+40', '-composite',
+        cat.path, '-gravity', 'NorthWest', '-geometry', '+48+64', '-composite',
+        title2.path, '-gravity', 'NorthWest', '-geometry', `+48+${64 + cat.height + 26}`, '-composite',
+        mark, '-gravity', 'SouthWest', '-geometry', '+48+40', '-composite',
         '-strip', '-quality', '90', outAbs,
       ]);
     } else {
-      execFileSync('convert', [base, '-strip', '-quality', '90', outAbs]);
+      execFileSync('convert', [
+        base, mark, '-gravity', 'SouthWest', '-geometry', '+48+40', '-composite',
+        '-strip', '-quality', '90', outAbs,
+      ]);
     }
 
     console.log(`  image → ${outRel}`);
