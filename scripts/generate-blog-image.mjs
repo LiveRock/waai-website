@@ -2,11 +2,13 @@
 /**
  * Per-post blog feature/og images (1200×630 JPEG in public/images/blog/).
  *
- * Composition: AI illustration from Pollinations (keyless flux, deterministic
- * seed per slug) + bottom scrim + category line + white title + waai.me mark,
- * composited with ImageMagick. If Pollinations is unreachable the script falls
- * back to a brand gradient — the weekly blog pipeline must never block on an
- * image service.
+ * Composition: photorealistic scene photo from Pollinations (keyless flux,
+ * deterministic seed per slug — real people in real workplaces, e.g. salon
+ * stylist, clinic receptionist, tutoring centre, picked from the post title)
+ * + bottom scrim + category line + white title + waai.me mark, composited
+ * with ImageMagick. If Pollinations is unreachable the script falls back to a
+ * brand gradient — the weekly blog pipeline must never block on an image
+ * service.
  *
  * CLI:
  *   node scripts/generate-blog-image.mjs src/content/blog/<post>.md [--force]
@@ -51,11 +53,41 @@ function topicFromTitle(title) {
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-async function fetchArt(topic, seed) {
+/**
+ * Scene fragments that put real people and workplaces in the frame — first
+ * keyword match on the title wins, so each industry post gets its own setting.
+ */
+const SCENE_RULES = [
+  [/salon|spa|barber|hair|beauty|nail/, "a hairstylist styling a client's hair in a bright modern salon"],
+  [/clinic|health|dental|medical|patient/, 'a friendly receptionist greeting a patient at a modern clinic front desk'],
+  [/tutor|education|school|student|class|teacher|course/, 'a teacher helping students with worksheets at a tutoring centre'],
+  [/restaurant|cafe|coffee|food|kitchen|waiter|bakery/, 'a smiling waiter serving guests in a warm modern cafe'],
+  [/retail|shop|store|boutique|grocer|catalog/, 'a shop owner arranging products on shelves in a small retail store'],
+  [/hotel|travel|booking|appointment|reserv|schedul|deposit/, 'a receptionist confirming a booking on a computer at a hotel front desk'],
+  [/ecommerce|commerce|order|pack|ship|deliver|warehouse/, 'a small business owner packing customer orders in a bright workshop'],
+  [/agency|reseller|white.?label|consult|freelanc|partner/, 'a consultant showing a laptop to a client across a desk in a modern office'],
+  [/broadcast|marketing|campaign|promo|newsletter/, 'a marketing manager reviewing a campaign dashboard on a large screen'],
+  [/developer|builder|api|integrat|software|chatbot|automat/, 'a product team collaborating around computer monitors in a modern office'],
+  [/pric|cost|billing|plan|fee|budget|per-message/, 'a business team comparing pricing options on a laptop in a meeting room'],
+  [/team|office|business|company|workplace|staff|agent/, 'a diverse small business team having a friendly meeting in a modern office'],
+];
+const DEFAULT_SCENE = 'a smiling small business owner using a smartphone at their workplace counter';
+
+function sceneFromTitle(title) {
+  const t = title.toLowerCase();
+  for (const [re, scene] of SCENE_RULES) if (re.test(t)) return scene;
+  return DEFAULT_SCENE;
+}
+
+async function fetchArt(title, seed) {
+  const scene = sceneFromTitle(title);
+  const topic = topicFromTitle(title);
   const prompt = encodeURIComponent(
-    `modern flat vector illustration, ${topic}, whatsapp business messaging theme, ` +
-      `teal green and soft purple palette, clean minimal professional SaaS blog hero art, ` +
-      `soft gradients, subtle geometric shapes, no text, no words, no letters`
+    `photorealistic lifestyle photograph of ${scene}, business messaging and ${topic} context, ` +
+      `person interacting with a smartphone, real workplace environment in the background, ` +
+      `warm natural window light, candid authentic moment, subtle teal color accents, ` +
+      `sharp focus on the subject, everything clearly visible, editorial stock photography, ` +
+      `no text, no words, no letters, no watermark`
   );
   const url = `https://image.pollinations.ai/prompt/${prompt}?width=${W}&height=${H}&nologo=true&seed=${seed}&model=flux`;
   // Free tier: 1 image / 45s / IP (HTTP 402 FREE_LIMIT) — space out retries.
@@ -126,7 +158,7 @@ export async function generateBlogImage({ slug, title, category }) {
 
   try {
     // 1. Background art — AI illustration, or brand gradient fallback.
-    const art = await fetchArt(topicFromTitle(title), seedFromSlug(slug));
+    const art = await fetchArt(title, seedFromSlug(slug));
     let base = path.join(tmp, 'base.png');
     if (art) {
       const artPath = path.join(tmp, 'art.jpg');
@@ -146,8 +178,10 @@ export async function generateBlogImage({ slug, title, category }) {
       ]);
       execFileSync('convert', [
         cropped, patch, '-gravity', 'SouthEast', '-geometry', '+0+0', '-composite',
-        '-resize', `${W}x${H}^`, '-gravity', 'center',
-        '-extent', `${W}x${H}`, '-strip', base,
+        // Pollinations free tier caps flux at ~1059×556 (whatever you request),
+        // so the resize UPSCALES ~1.2× — unsharp recovers the lost edge definition.
+        '-resize', `${W}x${H}^`, '-unsharp', '0x1.2+0.8+0.02',
+        '-gravity', 'center', '-extent', `${W}x${H}`, '-strip', base,
       ]);
     } else {
       console.warn('  pollinations unreachable — using brand gradient fallback');
