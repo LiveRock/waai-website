@@ -86,8 +86,9 @@ async function fetchArt(title, seed) {
     `photorealistic lifestyle photograph of ${scene}, business messaging and ${topic} context, ` +
       `person interacting with a smartphone, real workplace environment in the background, ` +
       `warm natural window light, candid authentic moment, subtle teal color accents, ` +
-      `sharp focus on the subject, everything clearly visible, editorial stock photography, ` +
-      `no text, no words, no letters, no watermark`
+      `shot on Canon EOS R5 with 50mm lens, tack-sharp focus on the subject, ` +
+      `highly detailed skin and fabric texture, crisp professional color grading, ` +
+      `editorial stock photography, no text, no words, no letters, no watermark`
   );
   const url = `https://image.pollinations.ai/prompt/${prompt}?width=${W}&height=${H}&nologo=true&seed=${seed}&model=flux`;
   // Free tier: 1 image / 45s / IP (HTTP 402 FREE_LIMIT) — space out retries.
@@ -112,16 +113,18 @@ function hasIM() {
 }
 
 /**
- * Two-layer scrim: a light full-height tint (title contrast) plus a bottom
- * band that reaches FULL opacity — Pollinations watermarks the lower area of
- * its art (even with nologo=true), so the bottom must be solid.
+ * Two-layer scrim: a light full-height tint plus a bottom band that reaches
+ * FULL opacity — Pollinations watermarks the lower area of its art (even with
+ * nologo=true), so the bottom must be solid. The tint stays LIGHT (max ~0.32):
+ * the band alone carries title contrast, and a heavy veil reads as a washed,
+ * soft photo.
  */
 function makeScrim(tmp) {
   const tint = path.join(tmp, 'tint.png');
   const band = path.join(tmp, 'band.png');
   const p = path.join(tmp, 'scrim.png');
   execFileSync('convert', [
-    '-size', `${W}x${H}`, 'gradient:rgba(5,28,22,0.06)-rgba(5,28,22,0.55)', tint,
+    '-size', `${W}x${H}`, 'gradient:rgba(5,28,22,0.04)-rgba(5,28,22,0.32)', tint,
   ]);
   execFileSync('convert', [
     '-size', `${W}x280`, 'gradient:rgba(5,28,22,0)-rgba(5,28,22,1.0)', band,
@@ -171,16 +174,33 @@ export async function generateBlogImage({ slug, title, category }) {
       execFileSync('convert', [
         artPath, '-gravity', 'NorthWest', '-crop', '94x84%+0+0', '+repage', cropped,
       ]);
+      // Watermark patch: blur+darken the bottom-right quadrant, edges FEATHERED
+      // (a hard-edged paste leaves a visible rectangular seam).
       const patch = path.join(tmp, 'patch.png');
+      const patchRaw = path.join(tmp, 'patch-raw.png');
+      const patchMask = path.join(tmp, 'patch-mask.png');
       execFileSync('convert', [
         cropped, '-gravity', 'SouthEast', '-crop', '55%x25%+0+0', '+repage',
-        '-blur', '0x22', '-modulate', '80,90', patch,
+        '-blur', '0x22', '-modulate', '80,90', patchRaw,
+      ]);
+      const dim = execFileSync('identify', ['-format', '%wx%h', patchRaw]).toString();
+      execFileSync('convert', [
+        '-size', dim, 'xc:white', '-shave', '18x18',
+        '-bordercolor', 'black', '-border', '18', '-blur', '0x9', patchMask,
+      ]);
+      execFileSync('convert', [
+        patchRaw, patchMask, '-alpha', 'off', '-compose', 'CopyOpacity', '-composite', patch,
       ]);
       execFileSync('convert', [
         cropped, patch, '-gravity', 'SouthEast', '-geometry', '+0+0', '-composite',
         // Pollinations free tier caps flux at ~1059×556 (whatever you request),
-        // so the resize UPSCALES ~1.2× — unsharp recovers the lost edge definition.
-        '-resize', `${W}x${H}^`, '-unsharp', '0x1.2+0.8+0.02',
+        // so the resize UPSCALES ~1.2× — and free flux is inherently soft.
+        // Dual-radius unsharp (fine detail + local contrast) + slight saturation
+        // + gentle sigmoidal curve: edge-contrast +63% vs a single modest pass
+        // (measured, 2026-10-21 A/B — vision models flip on this, trust metrics).
+        '-resize', `${W}x${H}^`,
+        '-unsharp', '0x0.8+1.4+0.008', '-unsharp', '0x2.5+0.5+0.01',
+        '-modulate', '100,108', '-sigmoidal-contrast', '1.5x50%',
         '-gravity', 'center', '-extent', `${W}x${H}`, '-strip', base,
       ]);
     } else {
@@ -221,10 +241,10 @@ export async function generateBlogImage({ slug, title, category }) {
         title2.path, '-gravity', 'southwest', '-geometry', '+48+96', '-composite',
         cat.path, '-gravity', 'southwest', '-geometry', `+48+${96 + title2.height + 16}`, '-composite',
         mark, '-gravity', 'southeast', '-geometry', '+48+40', '-composite',
-        '-strip', '-quality', '85', outAbs,
+        '-strip', '-quality', '90', outAbs,
       ]);
     } else {
-      execFileSync('convert', [base, '-strip', '-quality', '85', outAbs]);
+      execFileSync('convert', [base, '-strip', '-quality', '90', outAbs]);
     }
 
     console.log(`  image → ${outRel}`);
