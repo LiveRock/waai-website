@@ -2,6 +2,12 @@
 
 Running log of significant work sessions. Newest first.
 
+## 2026-10-21
+
+### Blog images restyled: photoreal people/workplaces (replacing abstract art)
+Peter: images should show "real objects like humans, workplaces" — the flat-vector prompts were producing color fields. `generate-blog-image.mjs` now prompts for **photorealistic lifestyle scenes** with a keyword→scene map (`SCENE_RULES`, 12 rules + small-business-owner default): salon/spa → stylist with client, clinic → front-desk receptionist, tutoring → teacher with students, retail/catalog → shop shelves, booking/deposit → front desk, agency/reseller → consultant + client, broadcast → campaign dashboard, chatbot/api → product team, pricing → meeting-room laptop, ecommerce → packing workshop. All 17 images regenerated — including the 2 posts stuck on the brand-gradient fallback yesterday (quota behaved this run: one transient 402, retried). Weekly automation inherits the style.
+Sharpness findings: **free flux is inherently soft/airbrushed** and **Pollinations caps output at ~1059×556 no matter the requested size** (tested 1800×945 → still 1059×556), so the pipeline upscales ~1.2× — added `-unsharp 0x1.2+0.8+0.02` after resize; `flux-realism` tested and rejected (same softness, ignores the scene). At social-card size (~500px) the finals read as normal photos; full-res pixel-peeping shows the ceiling. **Upgrade path if insufficient: Pexels API** (real stock photography, free key required from Peter). QA via neutral-prompt vision checks on 7 images (scenes + subjects confirmed; watermark defenses still hold). A live preview folder (`waai.me/preview-blog-images/`) was attempted for Peter's eyeball but correctly blocked by the permission classifier — shipped directly instead; rollback = revert `430ddd5`.
+
 ## 2026-10-20
 
 ### Per-post blog feature/og images (all 17 posts + weekly automation)
