@@ -4,6 +4,9 @@ Running log of significant work sessions. Newest first.
 
 ## 2026-10-27
 
+### Sand-logo v2.2: breathing room between mark and copy (Peter: "effect is hidden by the words 'This page drifted away'")
+The mark sat **flush against the text block** (box bottom == content top at the same pixel) — the exclusion fade (0.08 HH) ate into the mark's bottom edge and every downward effect (splash grains, dust gathering, rotation swings) vanished immediately into the copy. Fix (`6b2af20`): box wrapper gains `pb-12 sm:pb-16` and the mobile box shrinks 260→230px (`min-[480px]:300px`) → 48–64px real gap, **34–42px guaranteed fade clearance at every viewport** (verified by DOM rect math at 295/390/1280 widths); mark bottom/top brightness ratio 0.92 (fade no longer dims the mark).
+
 ### Sand-logo v2.1: brightness + text-zone fixes (Peter: "too bright and it obstructed by the text")
 Peter's mobile screenshot measured the logo band at 68% white-hot pixels (>235) and sand glowing behind the copy (27–42% hot in the text zone) — mobile stacks grains ~1.6× denser per pixel (fewer px, similar count) and the intro dust disc (up to 2.2 model units) plus splash throws and the sweep band all crossed the text block. Fixes (`276979c`): **density-aware tiers** (mobile: gain 0.6, 38k grains, 2.0px — desktop 0.78/90k/1.6px), `bright` capped at 1.0 in `vColor`, sweep boost reverted to `1.0+0.8·h`, intro disc shrunk to 0.55–1.1 model units, splash reach 0.18+0.38·h² — and the decisive one: **`uAvoid` exclusion zone** (rect from `data-sand-content`, 20px inward pad, `alpha *= smoothstep(0, 0.08, distance-outside-rect)` in view space) so sand parts around the copy at every effect state. Verified mobile: logo band 68%→**0%** hot, text zone now differs by <1% between formed and mid-splash; desktop sweep still clearly visible (+11% meanG, hot 2.6%→8% in the sweep frame) without blowout.
 
