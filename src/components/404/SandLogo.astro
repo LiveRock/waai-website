@@ -93,7 +93,7 @@
     // --- Tunables -----------------------------------------------------------
     const GRID = 512; // logo sampling resolution (logo-512.png is 512²)
     const TEX_W = 512; // grain texture grid — keep in sync with the shader's 512
-    const INTRO_END = 3.8; // dust fully gathered by ~3.5s + slack
+    const INTRO_END = 2.3; // mark fully materialised by ~2.1s + slack
     const BREATH_PERIOD = 5.6; // s, one slow breath of the whole mark
     const TURB_AMP = 0.004; // idle turbulence amplitude (logo units)
     const CURSOR_SIGMA = 0.16; // pointer influence falloff (half-height units)
@@ -163,18 +163,16 @@ void main() {
   float alpha = 1.0;
   float bright = 0.1 * m.z; // nearer grains catch a little more light
 
-  // Intro: scattered dust gathers into the mark — staggered, arced, eased.
+  // Intro: the mark materialises in place — each grain fades in where it belongs,
+  // settling from a small local scatter (never transiting the copy area below).
   if (uTime < uIntroEnd) {
-    float delay = 0.4 + 0.9 * r1;
-    float dur = 1.4 + 0.8 * r2;
+    float delay = 0.3 + 0.6 * r1;
+    float dur = 0.8 + 0.4 * r2;
     float t = clamp((uTime - delay) / dur, 0.0, 1.0);
     float e = smoother(t);
-    float ang = r3 * 6.2831853;
-    float rad = 0.55 + 0.55 * r4; // stays near the mark — no dust behind the copy
-    vec3 start = vec3(cos(ang) * rad, sin(ang) * rad * 0.8, (r5 - 0.5) * 0.6);
-    vec3 arcDir = normalize(vec3(-sin(ang), cos(ang), (r6 - 0.5) * 0.8));
-    m = mix(start, m, e) + arcDir * sin(3.14159265 * t) * (0.08 + 0.25 * r2);
-    alpha = smoothstep(0.0, 0.25, t);
+    vec3 scatter = vec3(r3 - 0.5, r4 - 0.5, r5 - 0.5) * 0.14;
+    m = mix(m + scatter, m, e);
+    alpha = smoothstep(0.0, 0.45, t);
   }
 
   // Breathing: one slow, slightly asymmetric breath of the whole mark.
@@ -541,9 +539,9 @@ void main() {
       viewProj(yaw + swayYaw, pitch + swayPitch, logoRect[0], logoRect[1]);
 
       draw(t, splashT, sweepT);
-      if (t >= 0.9 && !fallbackHidden) {
-        // Cross-fade the <img> out only once the gathering dust can carry the mark —
-        // reads as the logo crumbling into sand, not as a flash.
+      if (t >= 1.0 && !fallbackHidden) {
+        // Cross-fade the <img> out as the sand materialises in the same spot —
+        // the logo dissolves into sand, in place.
         fallbackHidden = true;
         fallback.classList.add('opacity-0');
       }
