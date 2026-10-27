@@ -2,6 +2,15 @@
 
 Running log of significant work sessions. Newest first.
 
+## 2026-10-27
+
+### 404 page: sand-particle logo (WebGL2)
+Peter asked to reverse-engineer the effects on gather.be-of-dao.com ("Gather 聚 Lite" — an image-as-sand audio visualizer) and apply them to the waai logo. Scope settled with Peter: **404 page only**, ambient + click splash. The 404 was rewritten from the plain white stub to a dark hero-style teal gradient section featuring the logo as ~45–90k luminous sand grains (`src/components/404/SandLogo.astro`, ~5 KB hashed chunk; page keeps `noindex`/`noCanonical`, EN-only).
+
+Clean-room re-implementation (techniques studied from their shaders, code written from scratch — stateless time-driven vertex shader over `texelFetch`-sampled RGBA32F home/color textures; no transform feedback, one `drawArrays` per frame): grains sampled from `logo-512.png` weighted by `α^1.15 × luminance × |∇α|` (edges denser — crisp glowing contours), pseudo-depth from blurred alpha; effects = intro dust→form (staggered quintic flights with bell arcs), asymmetric 5.6 s breathing, sum-of-sines turbulence, stationary-pointer push + moving-pointer wake/swirl, click splash (ballistic throw `(1−e^−12τ)` + smoothstep regather, 1.65 s hard cooldown), premultiplied soft-disc sprites with `ONE, ONE_MINUS_SRC_COLOR` additive blending over the CSS gradient. Gamma-lift (γ=0.72) on sampled colors so the mark's dark-purple side doesn't vanish additively. Full GalaxyCanvas lifecycle discipline (IO/visibility/reduced-motion gates, AbortController+pagehide, DPR cap, RO → `fit()` only since homes are logo-local — no field rebuild on resize), `<img>` fallback that cross-fades out at t≈0.9 s once the dust can carry the mark (and stays forever if WebGL2/logo load/shaders fail), webglcontextlost→img / restored→re-boot.
+
+Gotchas hit: (1) **module-level TDZ** — `boot()` ran before `ctxWatchers`/`stopCurrent` consts below it (minifier renamed one to `dt`, so the error read "Cannot access 'dt'"); boot call now sits at the end of the script. (2) **texImage2D silently rejects short buffers** — `Float32Array(4n)` < `512×texH×4` uploads fail with a GL error only, leaving an all-zeros homes texture → every grain at logo-centre, invisible (90k black points = one dark dot). Buffers now allocated at exact texture size + a `getError()` guard after upload. Also: puppeteer + request-abort + `networkidle0` hangs forever — use `domcontentloaded`; vision models can serve stale/misleading analyses of overwritten files (pixel metrics + frame-diff RMSE are ground truth: formed vs splash 52% divergence, cursor-hold 19%). Verified headless: intro/crossfade, splash burst+regather, wake, reduced-motion static frame with zero rAF, no-WebGL2 fallback, mobile + touch splash, no console errors; 22–28 fps under SwiftShader *software* GL (hardware GPUs trivial — one draw call, tiny sprites).
+
 ## 2026-10-21
 
 ### Blog images restyled: photoreal people/workplaces (replacing abstract art)

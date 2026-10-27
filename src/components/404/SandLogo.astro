@@ -1,0 +1,654 @@
+<canvas
+  data-sand-canvas
+  class="absolute inset-0 h-full w-full pointer-events-none"
+  aria-hidden="true"
+></canvas>
+<div class="relative z-10 pt-20 sm:pt-28">
+  <div
+    data-sand-box
+    class="relative mx-auto aspect-square w-[260px] min-[480px]:w-[320px] sm:w-[400px] lg:w-[460px]"
+  >
+    <img
+      data-sand-fallback
+      src="/images/logos/logo-512.png"
+      alt=""
+      width="512"
+      height="512"
+      decoding="async"
+      class="h-full w-full object-contain transition-opacity duration-500"
+    />
+  </div>
+</div>
+
+<script>
+  // Sand-logo — the waai mark as ~45–90k luminous sand grains (WebGL2 point sprites).
+  // Technique adapted (clean-room) from the "image as sand" effect popularised by
+  // gather.be-of-dao.com: grains sampled from the image weighted by luminance × edge
+  // strength, all motion a pure function of (grainId, time, splash clock, pointer) in
+  // the vertex shader — no physics buffers, one drawArrays per frame.
+  // Runs only while on screen and the tab is visible; renders a single static frame
+  // when prefers-reduced-motion is set. A plain <img> stays on screen until the first
+  // WebGL frames draw (and forever if WebGL2/logo loading is unavailable).
+  const canvas = document.querySelector('[data-sand-canvas]');
+  // Module state first — boot() below touches these, so they must exist before it runs.
+  const ctxWatchers = new WeakSet<HTMLCanvasElement>();
+  let stopCurrent: () => void = () => {};
+
+  function boot(canvas: HTMLCanvasElement) {
+    const section = canvas.closest('section');
+    const box = document.querySelector('[data-sand-box]');
+    const fallback = document.querySelector('[data-sand-fallback]');
+    if (!section || !(box instanceof HTMLElement) || !(fallback instanceof HTMLImageElement)) return;
+
+    let gl: WebGL2RenderingContext | null = null;
+    try {
+      gl = canvas.getContext('webgl2', {
+        alpha: true,
+        premultipliedAlpha: true,
+        antialias: false,
+        depth: false,
+        stencil: false,
+        powerPreference: 'low-power',
+      });
+    } catch {
+      gl = null;
+    }
+    if (!gl) return; // fallback <img> stays
+
+    // Context loss under memory pressure (iOS): fall back to the <img>, and if the
+    // context comes back, boot everything again. Registered once — init() re-runs on
+    // restore, so a per-boot listener would stack.
+    if (!ctxWatchers.has(canvas)) {
+      ctxWatchers.add(canvas);
+      canvas.addEventListener('webglcontextlost', (e) => {
+        e.preventDefault();
+        stopCurrent();
+        fallback.classList.remove('opacity-0');
+      });
+      canvas.addEventListener('webglcontextrestored', () => {
+        boot(canvas);
+      });
+    }
+
+    init(canvas, section, box, fallback, gl).catch(() => {
+      /* logo fetch/decode failed — fallback <img> stays */
+    });
+  }
+
+  async function init(
+    canvas: HTMLCanvasElement,
+    section: HTMLElement,
+    box: HTMLElement,
+    fallback: HTMLImageElement,
+    gl: WebGL2RenderingContext
+  ) {
+    // (Re)booting on context restore replaces the previous run's stop hook.
+    // --- Tunables -----------------------------------------------------------
+    const GRID = 512; // logo sampling resolution (logo-512.png is 512²)
+    const TEX_W = 512; // grain texture grid — keep in sync with the shader's 512
+    const INTRO_END = 3.8; // dust fully gathered by ~3.5s + slack
+    const BREATH_PERIOD = 5.6; // s, one slow breath of the whole mark
+    const BREATH_AMP = 0.011; // ±1.1% scale
+    const TURB_AMP = 0.004; // idle turbulence amplitude (logo units)
+    const CURSOR_SIGMA = 0.16; // pointer influence falloff (half-height units)
+    const CURSOR_PUSH = 0.05; // stationary pointer displacement
+    const WAKE_SIGMA = 0.16;
+    const WAKE_DECAY = 0.35; // s, push fade after the pointer moves on
+    const WAKE_GAIN = 0.035; // velocity → push conversion
+    const SPLASH_TOTAL = 1.5; // s until fully regathered
+    const SPLASH_STAGGER = 0.15; // per-grain delay spread
+    const SPLASH_COOLDOWN = 1650; // ms — hard gate: mid-flight retriggers would snap
+    const SEED = 0xc0ffee;
+
+    const VERT = `#version 300 es
+precision highp float;
+precision highp sampler2D;
+uniform sampler2D uHomes;  // xy: home (logo units), z: relief, w: brightness factor
+uniform sampler2D uColors; // rgb: grain color
+uniform float uTime;
+uniform float uIntroEnd;
+uniform float uSplashT;    // seconds since splash; large when idle
+uniform vec4 uWake[3];     // xy: pointer history (half-height units), zw: push
+uniform vec4 uCursor;      // xy: smoothed pointer, z: presence 0..1, w: unused
+uniform vec4 uLogo;        // cx, cy, halfW, halfH (half-height units)
+uniform float uAspect;     // section width / height
+uniform float uGrainSize;  // device px
+uniform float uGain;
+out vec3 vColor;
+out float vAlpha;
+
+float h1(uint n) {
+  n = (n << 13u) ^ n;
+  n = n * (n * n * 15731u + 789221u) + 1376312589u;
+  return float(n & 0x7fffffffu) / float(0x7fffffffu);
+}
+float smoother(float x) { return x * x * x * (x * (x * 6.0 - 15.0) + 10.0); }
+
+void main() {
+  uint vid = uint(gl_VertexID);
+  ivec2 tc = ivec2(int(vid % 512u), int(vid / 512u)); // grid must match TEX_W
+  vec4 home = texelFetch(uHomes, tc, 0);
+  vec3 rgb = texelFetch(uColors, tc, 0).rgb;
+
+  float r1 = h1(vid * 3u + 17u);
+  float r2 = h1(vid * 5u + 29u);
+  float r3 = h1(vid * 7u + 43u);
+  float r4 = h1(vid * 11u + 71u);
+  float r5 = h1(vid * 13u + 113u);
+  float r6 = h1(vid * 17u + 191u);
+
+  vec3 p = vec3(home.xy, home.z * 0.5); // relief: stroke centres sit nearer
+  float alpha = 1.0;
+  float bright = 0.15 * p.z; // nearer grains catch a little more light
+
+  // Intro: scattered dust gathers into the mark — staggered, arced, eased.
+  if (uTime < uIntroEnd) {
+    float delay = 0.4 + 0.9 * r1;
+    float dur = 1.4 + 0.8 * r2;
+    float t = clamp((uTime - delay) / dur, 0.0, 1.0);
+    float e = smoother(t);
+    float ang = r3 * 6.2831853;
+    float rad = 0.9 + 1.3 * r4;
+    vec3 start = vec3(cos(ang) * rad, sin(ang) * rad * 0.8, (r5 - 0.5) * 0.6);
+    vec3 arcDir = normalize(vec3(-sin(ang), cos(ang), (r6 - 0.5) * 0.8));
+    p = mix(start, p, e) + arcDir * sin(3.14159265 * t) * (0.08 + 0.25 * r2);
+    alpha = smoothstep(0.0, 0.25, t);
+  }
+
+  // Breathing: one slow, slightly asymmetric breath of the whole mark.
+  float bx = fract(uTime / ${BREATH_PERIOD.toFixed(1)} + (r5 - 0.5) * 0.12);
+  float tri = bx < 0.58 ? bx / 0.58 : 1.0 - (bx - 0.58) / 0.42;
+  float b = sin(tri * 3.14159265); // 0 → 1 → 0, smooth
+  p.xy *= 1.0 + ${BREATH_AMP.toFixed(3)} * b;
+  p.z += 0.06 * b * home.z;
+
+  // Idle turbulence: sum of sines, per-grain frequency jitter — never quite still.
+  float tt = uTime;
+  p.xy += ${TURB_AMP.toFixed(3)} * vec2(
+    sin((0.7 + 0.6 * r1) * 1.7 * tt + r2 * 6.2831) + 0.5 * sin((0.7 + 0.6 * r3) * 3.1 * tt + r4 * 6.2831),
+    cos((0.7 + 0.6 * r2) * 1.3 * tt + r3 * 6.2831) + 0.5 * sin((0.7 + 0.6 * r4) * 2.3 * tt + r1 * 6.2831)
+  );
+
+  // Splash: the hit throws the sand outward, then every grain is drawn back home.
+  float tau = uSplashT - ${SPLASH_STAGGER.toFixed(2)} * r6;
+  if (tau >= 0.0 && tau < ${SPLASH_TOTAL.toFixed(1)}) {
+    float m = (1.0 - exp(-12.0 * tau)) * (1.0 - smoother(clamp((tau - 0.45) / 1.05, 0.0, 1.0)));
+    vec2 dir = normalize(home.xy + (vec2(r1, r2) - 0.5) * 0.8 + vec2(0.0013, 0.0007));
+    float reach = 0.25 + 0.55 * r3 * r3; // most grains go a little way, a few go far
+    p.xy += dir * reach * m;
+    p.z += sin(3.14159265 * tau / ${SPLASH_TOTAL.toFixed(1)}) * 0.5 * r4; // loft
+    bright += 0.8 * m;
+  }
+
+  // Logo-local → section space (half-height units).
+  vec2 w = uLogo.xy + p.xy * (2.0 * uLogo.zw);
+
+  // Pointer: a finger held in the sand — near grains ease away and catch light.
+  vec2 cd = w - uCursor.xy;
+  float cf = exp(-dot(cd, cd) / ${(CURSOR_SIGMA * CURSOR_SIGMA).toFixed(4)}) * uCursor.z;
+  w += (cd / max(length(cd), 0.001)) * cf * ${CURSOR_PUSH.toFixed(3)};
+  bright += 0.4 * cf;
+
+  // Wake: the trail the pointer leaves — pushes and stirs, then lets go.
+  for (int k = 0; k < 3; k++) {
+    vec2 d = w - uWake[k].xy;
+    float f = exp(-dot(d, d) / ${(WAKE_SIGMA * WAKE_SIGMA).toFixed(4)});
+    float pw = length(uWake[k].zw);
+    w += (uWake[k].zw + vec2(-d.y, d.x) * 0.5) * f; // push + swirl
+    bright += 1.2 * f * min(1.0, pw * 12.0);
+  }
+
+  gl_Position = vec4(w.x / uAspect, w.y, 0.0, 1.0);
+  float size = uGrainSize * (0.6 + 0.9 * r4) * (1.0 + 0.25 * p.z) * (1.0 + 0.5 * min(bright, 1.6));
+  gl_PointSize = max(size, 1.0);
+  vColor = rgb * home.w * uGain * (0.9 + 0.2 * r1) * (1.0 + bright);
+  vAlpha = alpha;
+}`;
+
+    const FRAG = `#version 300 es
+precision mediump float;
+in vec3 vColor;
+in float vAlpha;
+out vec4 o;
+void main() {
+  float r = length(gl_PointCoord - 0.5) * 2.0;
+  float a = smoothstep(1.0, 0.35, r) * vAlpha;
+  o = vec4(vColor * a, a); // premultiplied — additive-style blend over the page
+}`;
+
+    // --- GL boot --------------------------------------------------------------
+    const prog = buildProgram(gl, VERT, FRAG);
+    if (!prog) return;
+    gl.useProgram(prog);
+    const u: Record<string, WebGLUniformLocation | null> = {};
+    for (const name of [
+      'uHomes', 'uColors', 'uTime', 'uIntroEnd', 'uSplashT', 'uWake[0]', 'uCursor',
+      'uLogo', 'uAspect', 'uGrainSize', 'uGain',
+    ]) {
+      u[name] = gl.getUniformLocation(prog, name);
+    }
+    gl.uniform1i(u['uHomes'], 0);
+    gl.uniform1i(u['uColors'], 1);
+    gl.uniform1f(u['uIntroEnd'], INTRO_END);
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_COLOR);
+    gl.clearColor(0, 0, 0, 0);
+    gl.bindVertexArray(gl.createVertexArray()); // attribute-less draw; VAO for old-driver safety
+
+    // --- Grains: the logo sampled into sand (all randomness lives here) -------
+    const img = await loadLogo();
+    if (!img || gl.isContextLost()) return;
+    const grains = buildGrains(img, section.clientWidth);
+    if (!grains || gl.isContextLost()) return;
+
+    const homes = gl.createTexture()!;
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, homes);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, TEX_W, grains.texH, 0, gl.RGBA, gl.FLOAT, grains.pos);
+    const colors = gl.createTexture()!;
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D, colors);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, TEX_W, grains.texH, 0, gl.RGBA, gl.UNSIGNED_BYTE, grains.col);
+    for (const t of [homes, colors]) {
+      gl.bindTexture(gl.TEXTURE_2D, t);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    }
+    if (gl.getError() !== gl.NO_ERROR) {
+      console.warn('[sand-logo] texture upload failed — fallback stays');
+      return;
+    }
+
+    const N = grains.n;
+    const pointMax = (gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE) as Float32Array)[1] || 64;
+
+    // --- State ----------------------------------------------------------------
+    let cssW = 0;
+    let cssH = 0;
+    let rafId = 0;
+    let t0 = 0;
+    let last = 0;
+    let intersecting = false;
+    let splashT0 = -1;
+    let lastSplash = -Infinity;
+    let fallbackHidden = false;
+    let resizeTimer: ReturnType<typeof setTimeout> | 0 = 0;
+    const wake = [
+      { x: 9, y: 9, px: 0, py: 0 },
+      { x: 9, y: 9, px: 0, py: 0 },
+      { x: 9, y: 9, px: 0, py: 0 },
+    ];
+    let cursorX = 9;
+    let cursorY = 9;
+    let cursorOn = 0; // spring-smoothed presence 0..1
+    let mouseOn = false;
+    let mouseClientX = 0;
+    let mouseClientY = 0;
+    let prevClientX = 0;
+    let prevClientY = 0;
+    let prevMoveT = 0;
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const controller = new AbortController();
+    const sig = { signal: controller.signal };
+
+    // --- Sizing (homes are logo-local — resize only re-anchors) ---------------
+    function fit() {
+      cssW = section.clientWidth;
+      cssH = section.clientHeight;
+      const dpr = Math.min(window.devicePixelRatio || 1, cssW < 660 ? 1.5 : 2);
+      canvas.width = Math.round(cssW * dpr);
+      canvas.height = Math.round(cssH * dpr);
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      const sr = section.getBoundingClientRect();
+      const br = box.getBoundingClientRect();
+      const hh = Math.max(1, cssH) / 2;
+      gl.uniform4f(
+        u['uLogo'],
+        (br.left + br.width / 2 - sr.left - cssW / 2) / hh,
+        -(br.top + br.height / 2 - sr.top - cssH / 2) / hh,
+        br.width / 2 / hh,
+        br.height / 2 / hh
+      );
+      gl.uniform1f(u['uAspect'], cssW / Math.max(1, cssH));
+      const base = cssW < 660 ? 2.2 : cssW < 1024 ? 1.8 : 1.6;
+      const maxBoost = 1.5 * 1.25 * 2.1; // size jitter × relief × bright ceilings
+      gl.uniform1f(u['uGrainSize'], Math.min(base * dpr, pointMax / maxBoost));
+      gl.uniform1f(u['uGain'], clamp(Math.sqrt(72000 / N), 0.75, 1.2));
+    }
+
+    function clamp(v: number, lo: number, hi: number) {
+      return Math.max(lo, Math.min(hi, v));
+    }
+
+    // --- Frame ----------------------------------------------------------------
+    function draw(t: number, splashT: number) {
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.uniform1f(u['uTime'], t);
+      gl.uniform1f(u['uSplashT'], splashT);
+      gl.uniform4f(u['uCursor'], cursorX, cursorY, cursorOn, 0);
+      const flat = new Float32Array(12);
+      for (let k = 0; k < 3; k++) {
+        flat[4 * k] = wake[k].x;
+        flat[4 * k + 1] = wake[k].y;
+        flat[4 * k + 2] = wake[k].px;
+        flat[4 * k + 3] = wake[k].py;
+      }
+      gl.uniform4fv(u['uWake[0]'], flat);
+      gl.drawArrays(gl.POINTS, 0, N);
+    }
+
+    function frame(now: number) {
+      const dt = Math.min(now - last, 50);
+      last = now;
+      const t = (now - t0) / 1000;
+      const splashT = splashT0 < 0 ? 1e9 : (now - splashT0) / 1000;
+
+      // Pointer → section space (half-height units), spring-smoothed.
+      const k = 1 - Math.exp(-10 * (dt / 1000));
+      if (mouseOn) {
+        const rect = canvas.getBoundingClientRect();
+        const hh = rect.height / 2;
+        const tx = (mouseClientX - rect.left - rect.width / 2) / hh;
+        const ty = -(mouseClientY - rect.top - rect.height / 2) / hh;
+        cursorX += (tx - cursorX) * k;
+        cursorY += (ty - cursorY) * k;
+      }
+      cursorOn += ((mouseOn ? 1 : 0) - cursorOn) * (1 - Math.exp(-6 * (dt / 1000)));
+
+      // Wake pushes decay; the trail relaxes back into the sand.
+      const decay = Math.exp(-dt / 1000 / WAKE_DECAY);
+      for (const wk of wake) {
+        wk.px *= decay;
+        wk.py *= decay;
+      }
+
+      draw(t, splashT);
+      if (t >= 0.9 && !fallbackHidden) {
+        // Cross-fade the <img> out only once the gathering dust can carry the mark —
+        // reads as the logo crumbling into sand, not as a flash.
+        fallbackHidden = true;
+        fallback.classList.add('opacity-0');
+      }
+      rafId = requestAnimationFrame(frame);
+    }
+
+    function updateRunning() {
+      const should = intersecting && !document.hidden && !reducedMotion && !gl.isContextLost();
+      if (should && !rafId) {
+        last = performance.now();
+        rafId = requestAnimationFrame(frame);
+      } else if (!should && rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = 0;
+      }
+    }
+
+    function stop() {
+      controller.abort();
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = 0;
+    }
+    stopCurrent = stop; // context-loss handler stops this run (see boot)
+
+    // --- Boot -----------------------------------------------------------------
+    fit();
+
+    if (reducedMotion) {
+      // One static frame of the formed mark — no listeners, no loop.
+      cursorOn = 0;
+      draw(INTRO_END + 1, 1e9);
+      fallbackHidden = true;
+      fallback.classList.add('opacity-0');
+      return;
+    }
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        intersecting = entries[0].isIntersecting;
+        updateRunning();
+      },
+      { threshold: 0 }
+    );
+    io.observe(section);
+
+    const ro = new ResizeObserver(() => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(fit, 150); // homes are logo-local: re-anchor only
+    });
+    ro.observe(section);
+
+    window.addEventListener(
+      'pointermove',
+      (e) => {
+        if (e.pointerType && e.pointerType !== 'mouse') return; // touch drag must not stir
+        const rect = canvas.getBoundingClientRect();
+        const hh = rect.height / 2;
+        const x = (e.clientX - rect.left - rect.width / 2) / hh;
+        const y = -(e.clientY - rect.top - rect.height / 2) / hh;
+        const now = performance.now();
+        const dt = Math.max(8, now - prevMoveT);
+        if (mouseOn) {
+          // A moved-through spot keeps pushing for a moment, then lets go.
+          let vx = ((e.clientX - prevClientX) / dt) * WAKE_GAIN * (rect.height / 300);
+          let vy = (-(e.clientY - prevClientY) / dt) * WAKE_GAIN * (rect.height / 300);
+          const vm = Math.hypot(vx, vy);
+          if (vm > 0.09) {
+            vx = (vx / vm) * 0.09;
+            vy = (vy / vm) * 0.09;
+          }
+          wake[2] = wake[1];
+          wake[1] = wake[0];
+          wake[0] = { x, y, px: vx, py: vy };
+        }
+        prevClientX = e.clientX;
+        prevClientY = e.clientY;
+        prevMoveT = now;
+        mouseOn = true;
+        mouseClientX = e.clientX;
+        mouseClientY = e.clientY;
+      },
+      sig
+    );
+    document.addEventListener('pointerleave', () => (mouseOn = false), sig);
+
+    section.addEventListener(
+      'pointerdown',
+      (e) => {
+        if (e.target instanceof Element && e.target.closest('a, button')) return;
+        const now = performance.now();
+        if (now - lastSplash < SPLASH_COOLDOWN) return; // mid-flight retrigger would snap
+        lastSplash = now;
+        splashT0 = now;
+      },
+      sig
+    );
+
+    document.addEventListener('visibilitychange', updateRunning, sig);
+    window.addEventListener('pagehide', stop, sig);
+
+    t0 = performance.now();
+    last = t0;
+    updateRunning();
+  }
+
+  // --- Logo → grains ----------------------------------------------------------
+  function loadLogo(): Promise<ImageBitmap | HTMLImageElement | null> {
+    return fetch('/images/logos/logo-512.png')
+      .then((res) => (res.ok ? res.blob() : Promise.reject(new Error('HTTP ' + res.status))))
+      .then((blob) => {
+        if ('createImageBitmap' in window) return createImageBitmap(blob);
+        return new Promise<HTMLImageElement>((resolve, reject) => {
+          const url = URL.createObjectURL(blob);
+          const img = new Image();
+          img.onload = () => {
+            URL.revokeObjectURL(url);
+            resolve(img);
+          };
+          img.onerror = () => {
+            URL.revokeObjectURL(url);
+            reject(new Error('decode failed'));
+          };
+          img.src = url;
+        });
+      })
+      .catch(() => null);
+  }
+
+  function buildGrains(
+    src: ImageBitmap | HTMLImageElement,
+    sectionW: number
+  ): { pos: Float32Array; col: Uint8Array; n: number; texH: number } | null {
+    const GRID = 512;
+    const TEX_W = 512;
+    const n = sectionW >= 1024 ? 90000 : sectionW < 660 ? 45000 : 65000;
+    const texH = Math.ceil(n / TEX_W);
+    const c = document.createElement('canvas');
+    c.width = c.height = GRID;
+    const g = c.getContext('2d', { willReadFrequently: true });
+    if (!g) return null;
+    g.drawImage(src, 0, 0, GRID, GRID);
+    let data: Uint8ClampedArray;
+    try {
+      data = g.getImageData(0, 0, GRID, GRID).data;
+    } catch {
+      return null;
+    }
+
+    const px = GRID * GRID;
+    const alpha = new Float32Array(px);
+    const lum = new Float32Array(px);
+    for (let i = 0; i < px; i++) {
+      const a = data[4 * i + 3] / 255;
+      alpha[i] = a;
+      if (a > 0.004) {
+        lum[i] =
+          (0.2126 * data[4 * i] + 0.7152 * data[4 * i + 1] + 0.0722 * data[4 * i + 2]) / 255;
+      }
+    }
+
+    // Edges (central differences of alpha) sample denser — crisp glowing contours.
+    const edge = new Float32Array(px);
+    for (let y = 1; y < GRID - 1; y++) {
+      for (let x = 1; x < GRID - 1; x++) {
+        const i = y * GRID + x;
+        const gx = alpha[i + 1] - alpha[i - 1];
+        const gy = alpha[i + GRID] - alpha[i - GRID];
+        edge[i] = Math.min(1, 3.5 * Math.hypot(gx, gy));
+      }
+    }
+
+    // Relief: blurred alpha → z, so stroke centres sit slightly nearer than edges.
+    const relief = boxBlur(boxBlur(alpha, GRID, GRID, 6), GRID, GRID, 6);
+
+    // Weighted CDF over luminance × edge (× alpha) — sand follows the mark's shading.
+    const cdf = new Float64Array(px);
+    let total = 0;
+    for (let i = 0; i < px; i++) {
+      let w = 0;
+      if (alpha[i] > 0.02) {
+        w = Math.pow(alpha[i], 1.15) * (0.3 + 0.7 * lum[i]) * (0.55 + 0.45 * edge[i]);
+      }
+      total += w;
+      cdf[i] = total;
+    }
+    if (total <= 0) return null;
+
+    const rand = mulberry32(0xc0ffee);
+    // Buffers must exactly fill the texture grid (texImage2D rejects short data
+    // with a silent GL error → an all-zeros homes texture → grains at the centre).
+    const texLen = TEX_W * texH * 4;
+    const pos = new Float32Array(texLen);
+    const col = new Uint8Array(texLen);
+    for (let k = 0; k < n; k++) {
+      const target = rand() * total;
+      let lo = 0;
+      let hi = px - 1;
+      while (lo < hi) {
+        const mid = (lo + hi) >> 1;
+        if (cdf[mid] < target) lo = mid + 1;
+        else hi = mid;
+      }
+      const i = lo;
+      const x = i % GRID;
+      const y = (i / GRID) | 0;
+      pos[4 * k] = (x + 0.5) / GRID - 0.5;
+      pos[4 * k + 1] = 0.5 - (y + 0.5) / GRID; // y up
+      pos[4 * k + 2] = relief[i] * 2 - 1;
+      pos[4 * k + 3] = 0.75 + 0.25 * lum[i]; // brighter pixels glow brighter
+      const j = 0.85 + 0.3 * rand(); // per-grain luminance jitter
+      // Gamma-lift sampled colors: dark tones (the mark's deep purple side) would
+      // vanish under additive blending on the dark teal — lift keeps hue, adds glow.
+      const GAMMA = 0.72;
+      col[4 * k] = Math.min(255, 255 * Math.pow((data[4 * i] / 255) * j, GAMMA));
+      col[4 * k + 1] = Math.min(255, 255 * Math.pow((data[4 * i + 1] / 255) * j, GAMMA));
+      col[4 * k + 2] = Math.min(255, 255 * Math.pow((data[4 * i + 2] / 255) * j, GAMMA));
+      col[4 * k + 3] = 255;
+    }
+    return { pos, col, n, texH };
+  }
+
+  function boxBlur(src: Float32Array, w: number, h: number, r: number): Float32Array {
+    const tmp = new Float32Array(src.length);
+    const out = new Float32Array(src.length);
+    const win = 2 * r + 1;
+    for (let y = 0; y < h; y++) {
+      let acc = 0;
+      for (let x = -r; x <= r; x++) acc += src[y * w + Math.min(w - 1, Math.max(0, x))];
+      for (let x = 0; x < w; x++) {
+        tmp[y * w + x] = acc / win;
+        acc += src[y * w + Math.min(w - 1, x + r + 1)] - src[y * w + Math.max(0, x - r)];
+      }
+    }
+    for (let x = 0; x < w; x++) {
+      let acc = 0;
+      for (let y = -r; y <= r; y++) acc += tmp[Math.min(h - 1, Math.max(0, y)) * w + x];
+      for (let y = 0; y < h; y++) {
+        out[y * w + x] = acc / win;
+        acc += tmp[Math.min(h - 1, y + r + 1) * w + x] - tmp[Math.max(0, y - r) * w + x];
+      }
+    }
+    return out;
+  }
+
+  function mulberry32(seed: number) {
+    let a = seed >>> 0;
+    return () => {
+      a = (a + 0x6d2b79f5) >>> 0;
+      let t = a;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  function buildProgram(gl: WebGL2RenderingContext, vert: string, frag: string): WebGLProgram | null {
+    const p = gl.createProgram();
+    if (!p) return null;
+    for (const [type, src] of [
+      [gl.VERTEX_SHADER, vert],
+      [gl.FRAGMENT_SHADER, frag],
+    ] as [number, string][]) {
+      const sh = gl.createShader(type);
+      if (!sh) return null;
+      gl.shaderSource(sh, src);
+      gl.compileShader(sh);
+      if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
+        console.warn('[sand-logo] shader:', gl.getShaderInfoLog(sh));
+        return null;
+      }
+      gl.attachShader(p, sh);
+    }
+    gl.linkProgram(p);
+    if (!gl.getProgramParameter(p, gl.LINK_STATUS)) {
+      console.warn('[sand-logo] link:', gl.getProgramInfoLog(p));
+      return null;
+    }
+    return p;
+  }
+
+  // Boot last — everything above is hoisted or already initialized.
+  if (canvas) boot(canvas as HTMLCanvasElement);
+</script>
