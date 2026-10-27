@@ -2,6 +2,11 @@
 
 Running log of significant work sessions. Newest first.
 
+## 2026-10-28
+
+### Sand-logo v2.3: in-place intro (Peter: "the sands drifted to behind the words — the effect should remain where the first logo position")
+The fly-in intro (dust starting on a disc around the mark, gathering home) put its lower transit zone at/behind the copy — on refresh the sand visibly drifted around the words before forming. Replaced with an **in-place materialise**: grains fade in *at their homes* from a ±0.07-model-unit local scatter while the `<img>` cross-fades out over the same spot (fade moved to t≥1.0s) — the logo dissolves into sand where it sits. Intro ends ~2.1s (`INTRO_END` 2.3), first sweep ~3.5s. Verified on mobile: mark band constant through the intro, below-mark band at pure background, h1 zone pixel-stable — zero sand transit through the copy. Also verified the live-serves-latest question (chunk hash + last-modified fresh; Apache serves etag-revalidation, no aggressive HTML cache).
+
 ## 2026-10-27
 
 ### Sand-logo v2.2: breathing room between mark and copy (Peter: "effect is hidden by the words 'This page drifted away'")
