@@ -12,7 +12,7 @@ import SandLogo from '../components/404/SandLogo.astro';
 >
   <section
     data-sand-section
-    class="relative overflow-hidden bg-gradient-to-br from-wa-teal via-wa-teal-light to-wa-green-dark"
+    class="relative touch-pan-y select-none overflow-hidden bg-gradient-to-br from-wa-teal via-wa-teal-light to-wa-green-dark"
   >
     <!-- Dark sky pocket so the additive sand glow pops (same tone as the hero galaxy). -->
     <div
@@ -32,7 +32,9 @@ import SandLogo from '../components/404/SandLogo.astro';
         <CTAButton href="/" size="lg">Go to Homepage</CTAButton>
         <CTAButton href="/contact" variant="secondary" size="lg">Contact Us</CTAButton>
       </div>
-      <p class="mt-8 text-sm text-green-100/50">Click anywhere to scatter the sand.</p>
+      <p class="mt-8 text-sm text-green-100/50">
+        Drag to turn the sand &middot; click it to poke a hole &middot; click outside to scatter it.
+      </p>
     </div>
   </section>
 </PageLayout>

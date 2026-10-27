@@ -22,10 +22,15 @@
 
 <script>
   // Sand-logo — the waai mark as ~45–90k luminous sand grains (WebGL2 point sprites).
-  // Technique adapted (clean-room) from the "image as sand" effect popularised by
+  // Clean-room re-implementation of the "image as sand" effect popularised by
   // gather.be-of-dao.com: grains sampled from the image weighted by luminance × edge
-  // strength, all motion a pure function of (grainId, time, splash clock, pointer) in
-  // the vertex shader — no physics buffers, one drawArrays per frame.
+  // strength; ALL motion is a pure function of (grainId, time, splash clock, holes,
+  // pointer) in the vertex shader — no physics buffers, one drawArrays per frame.
+  // The camera orbits the mark (drag to rotate, gentle sway when idle); a perspective
+  // projection gives the relief real depth. Clicking inside the mark punches a local
+  // hole in the sand (model space — it rotates with the mark); clicking outside
+  // splashes the whole logo. A light bar periodically sweeps top-left → bottom-right
+  // and the grains shimmer as it passes.
   // Runs only while on screen and the tab is visible; renders a single static frame
   // when prefers-reduced-motion is set. A plain <img> stays on screen until the first
   // WebGL frames draw (and forever if WebGL2/logo loading is unavailable).
@@ -88,7 +93,6 @@
     const TEX_W = 512; // grain texture grid — keep in sync with the shader's 512
     const INTRO_END = 3.8; // dust fully gathered by ~3.5s + slack
     const BREATH_PERIOD = 5.6; // s, one slow breath of the whole mark
-    const BREATH_AMP = 0.011; // ±1.1% scale
     const TURB_AMP = 0.004; // idle turbulence amplitude (logo units)
     const CURSOR_SIGMA = 0.16; // pointer influence falloff (half-height units)
     const CURSOR_PUSH = 0.05; // stationary pointer displacement
@@ -98,20 +102,34 @@
     const SPLASH_TOTAL = 1.5; // s until fully regathered
     const SPLASH_STAGGER = 0.15; // per-grain delay spread
     const SPLASH_COOLDOWN = 1650; // ms — hard gate: mid-flight retriggers would snap
+    const HOLE_R = 0.17; // hole radius (logo units)
+    const HOLE_TOTAL = 1.9; // s until the sand flows back in
+    const HOLE_COOLDOWN = 450; // ms between pokes
+    const SWEEP_DUR = 1.5; // s, light bar crossing the mark
+    const SWEEP_FIRST = 1.2; // s after the intro ends
+    const SWEEP_EVERY = [6800, 10400]; // ms random repeat range
+    const CAM_DIST = 3.4; // camera distance; fov chosen so the logo plane maps 1:1
+    const RELIEF = 0.16; // depth thickness of the mark (logo units)
+    const DRAG_SENS = 0.006; // rad per px of drag
+    const PITCH_CLAMP = 1.15; // rad, keep away from the gimbal
     const SEED = 0xc0ffee;
 
     const VERT = `#version 300 es
 precision highp float;
 precision highp sampler2D;
-uniform sampler2D uHomes;  // xy: home (logo units), z: relief, w: brightness factor
+uniform sampler2D uHomes;  // xy: home (logo units), z: relief -1..1, w: brightness factor
 uniform sampler2D uColors; // rgb: grain color
 uniform float uTime;
 uniform float uIntroEnd;
 uniform float uSplashT;    // seconds since splash; large when idle
+uniform vec4 uHoles[3];    // xy: hole centre (logo units), z: age s, w: unused
+uniform float uSweepT;     // seconds since the light bar started; large when idle
 uniform vec4 uWake[3];     // xy: pointer history (half-height units), zw: push
-uniform vec4 uCursor;      // xy: smoothed pointer, z: presence 0..1, w: unused
+uniform vec4 uCursor;      // xy: smoothed pointer, z: presence 0..1
 uniform vec4 uLogo;        // cx, cy, halfW, halfH (half-height units)
+uniform mat4 uVP;          // perspective × orbiting view
 uniform float uAspect;     // section width / height
+uniform float uDist;       // camera distance (logo plane maps 1:1 to the section)
 uniform float uGrainSize;  // device px
 uniform float uGain;
 out vec3 vColor;
@@ -137,9 +155,10 @@ void main() {
   float r5 = h1(vid * 13u + 113u);
   float r6 = h1(vid * 17u + 191u);
 
-  vec3 p = vec3(home.xy, home.z * 0.5); // relief: stroke centres sit nearer
+  // Model space: x/y in logo units (mark spans ±0.5), z = relief thickness.
+  vec3 m = vec3(home.xy, home.z * ${RELIEF.toFixed(2)});
   float alpha = 1.0;
-  float bright = 0.15 * p.z; // nearer grains catch a little more light
+  float bright = 0.1 * m.z; // nearer grains catch a little more light
 
   // Intro: scattered dust gathers into the mark — staggered, arced, eased.
   if (uTime < uIntroEnd) {
@@ -151,7 +170,7 @@ void main() {
     float rad = 0.9 + 1.3 * r4;
     vec3 start = vec3(cos(ang) * rad, sin(ang) * rad * 0.8, (r5 - 0.5) * 0.6);
     vec3 arcDir = normalize(vec3(-sin(ang), cos(ang), (r6 - 0.5) * 0.8));
-    p = mix(start, p, e) + arcDir * sin(3.14159265 * t) * (0.08 + 0.25 * r2);
+    m = mix(start, m, e) + arcDir * sin(3.14159265 * t) * (0.08 + 0.25 * r2);
     alpha = smoothstep(0.0, 0.25, t);
   }
 
@@ -159,47 +178,83 @@ void main() {
   float bx = fract(uTime / ${BREATH_PERIOD.toFixed(1)} + (r5 - 0.5) * 0.12);
   float tri = bx < 0.58 ? bx / 0.58 : 1.0 - (bx - 0.58) / 0.42;
   float b = sin(tri * 3.14159265); // 0 → 1 → 0, smooth
-  p.xy *= 1.0 + ${BREATH_AMP.toFixed(3)} * b;
-  p.z += 0.06 * b * home.z;
+  m.xy *= 1.0 + 0.011 * b;
+  m.z += 0.05 * b * home.z;
 
   // Idle turbulence: sum of sines, per-grain frequency jitter — never quite still.
   float tt = uTime;
-  p.xy += ${TURB_AMP.toFixed(3)} * vec2(
+  m.xy += ${TURB_AMP.toFixed(3)} * vec2(
     sin((0.7 + 0.6 * r1) * 1.7 * tt + r2 * 6.2831) + 0.5 * sin((0.7 + 0.6 * r3) * 3.1 * tt + r4 * 6.2831),
     cos((0.7 + 0.6 * r2) * 1.3 * tt + r3 * 6.2831) + 0.5 * sin((0.7 + 0.6 * r4) * 2.3 * tt + r1 * 6.2831)
   );
 
-  // Splash: the hit throws the sand outward, then every grain is drawn back home.
-  float tau = uSplashT - ${SPLASH_STAGGER.toFixed(2)} * r6;
-  if (tau >= 0.0 && tau < ${SPLASH_TOTAL.toFixed(1)}) {
-    float m = (1.0 - exp(-12.0 * tau)) * (1.0 - smoother(clamp((tau - 0.45) / 1.05, 0.0, 1.0)));
-    vec2 dir = normalize(home.xy + (vec2(r1, r2) - 0.5) * 0.8 + vec2(0.0013, 0.0007));
-    float reach = 0.25 + 0.55 * r3 * r3; // most grains go a little way, a few go far
-    p.xy += dir * reach * m;
-    p.z += sin(3.14159265 * tau / ${SPLASH_TOTAL.toFixed(1)}) * 0.5 * r4; // loft
-    bright += 0.8 * m;
+  // Holes: a poke throws the local sand out to the rim, then it flows back in.
+  // Model space, so a hole stays put while the mark is turned.
+  for (int k = 0; k < 3; k++) {
+    float age = uHoles[k].z;
+    if (age < 0.0 || age > ${HOLE_TOTAL.toFixed(1)}) continue;
+    vec2 d = m.xy - uHoles[k].xy;
+    float dist = length(d);
+    if (dist > ${(HOLE_R * 1.7).toFixed(2)}) continue;
+    float env = (1.0 - exp(-14.0 * age)) * (1.0 - smoother(clamp((age - 0.5) / 1.1, 0.0, 1.0)));
+    vec2 dir = d / max(dist, 0.001);
+    float inside = max(0.0, ${HOLE_R.toFixed(2)} - dist);
+    m.xy += dir * inside * 1.5 * env;              // cleared disc
+    m.z += (r6 - 0.5) * 0.28 * env * smoothstep(${(HOLE_R * 1.6).toFixed(2)}, 0.0, dist); // scatter
+    float rd = (dist - ${HOLE_R.toFixed(2)}) / 0.07; // lit rim (pow of negatives is NaN in GLSL)
+    bright += 0.9 * env * exp(-rd * rd);
   }
 
-  // Logo-local → section space (half-height units).
-  vec2 w = uLogo.xy + p.xy * (2.0 * uLogo.zw);
+  // Splash: the hit throws the whole mark outward, then every grain is drawn home.
+  float tau = uSplashT - ${SPLASH_STAGGER.toFixed(2)} * r6;
+  if (tau >= 0.0 && tau < ${SPLASH_TOTAL.toFixed(1)}) {
+    float mm = (1.0 - exp(-12.0 * tau)) * (1.0 - smoother(clamp((tau - 0.45) / 1.05, 0.0, 1.0)));
+    vec2 dir = normalize(home.xy + (vec2(r1, r2) - 0.5) * 0.8 + vec2(0.0013, 0.0007));
+    float reach = 0.25 + 0.55 * r3 * r3; // most grains go a little way, a few go far
+    m.xy += dir * reach * mm;
+    m.z += sin(3.14159265 * tau / ${SPLASH_TOTAL.toFixed(1)}) * 0.4 * r4; // loft
+    bright += 0.8 * mm;
+  }
+
+  // Model → world (half-height units; the mark lies in the z=0 plane through uLogo.xy).
+  vec3 world = vec3(uLogo.xy + m.xy * (2.0 * uLogo.zw), m.z * 2.0 * uLogo.w);
+  vec4 clip = uVP * vec4(world, 1.0);
+
+  // View space (what the user sees at the logo plane): pointer, wake, light bar.
+  vec2 view = (clip.xy / clip.w) * vec2(uAspect, 1.0);
+  vec2 push = vec2(0.0);
 
   // Pointer: a finger held in the sand — near grains ease away and catch light.
-  vec2 cd = w - uCursor.xy;
+  vec2 cd = view - uCursor.xy;
   float cf = exp(-dot(cd, cd) / ${(CURSOR_SIGMA * CURSOR_SIGMA).toFixed(4)}) * uCursor.z;
-  w += (cd / max(length(cd), 0.001)) * cf * ${CURSOR_PUSH.toFixed(3)};
+  push += (cd / max(length(cd), 0.001)) * cf * ${CURSOR_PUSH.toFixed(3)};
   bright += 0.4 * cf;
 
   // Wake: the trail the pointer leaves — pushes and stirs, then lets go.
   for (int k = 0; k < 3; k++) {
-    vec2 d = w - uWake[k].xy;
+    vec2 d = view - uWake[k].xy;
     float f = exp(-dot(d, d) / ${(WAKE_SIGMA * WAKE_SIGMA).toFixed(4)});
     float pw = length(uWake[k].zw);
-    w += (uWake[k].zw + vec2(-d.y, d.x) * 0.5) * f; // push + swirl
+    push += (uWake[k].zw + vec2(-d.y, d.x) * 0.5) * f; // push + swirl
     bright += 1.2 * f * min(1.0, pw * 12.0);
   }
 
-  gl_Position = vec4(w.x / uAspect, w.y, 0.0, 1.0);
-  float size = uGrainSize * (0.6 + 0.9 * r4) * (1.0 + 0.25 * p.z) * (1.0 + 0.5 * min(bright, 1.6));
+  // Light bar: a diagonal shine sweeping top-left → bottom-right; grains shimmer
+  // (and swell a touch) as it crosses them.
+  if (uSweepT >= 0.0 && uSweepT < ${SWEEP_DUR.toFixed(1)}) {
+    vec2 n = vec2(0.70710678);           // travel direction (1,1)/√2 in view units
+    float prog = uSweepT / ${SWEEP_DUR.toFixed(1)};
+    float span = 1.15 * (uAspect + 1.0); // corner-to-corner travel
+    float centre = -0.5 * span + prog * span;
+    float dist = dot(view, n) - centre;  // signed distance along the travel axis
+    float nd = dist / 0.16;              // (pow of negatives is NaN in GLSL)
+    float band = exp(-nd * nd);
+    bright += band * (1.6 + 1.1 * r5);   // per-grain sparkle variance
+  }
+
+  clip.xy += (push / vec2(uAspect, 1.0)) * clip.w; // screen-space push survives rotation
+  gl_Position = clip;
+  float size = uGrainSize * (0.6 + 0.9 * r4) * (uDist / max(clip.w, 0.1)) * (1.0 + 0.5 * min(bright, 1.6));
   gl_PointSize = max(size, 1.0);
   vColor = rgb * home.w * uGain * (0.9 + 0.2 * r1) * (1.0 + bright);
   vAlpha = alpha;
@@ -222,14 +277,15 @@ void main() {
     gl.useProgram(prog);
     const u: Record<string, WebGLUniformLocation | null> = {};
     for (const name of [
-      'uHomes', 'uColors', 'uTime', 'uIntroEnd', 'uSplashT', 'uWake[0]', 'uCursor',
-      'uLogo', 'uAspect', 'uGrainSize', 'uGain',
+      'uHomes', 'uColors', 'uTime', 'uIntroEnd', 'uSplashT', 'uHoles[0]', 'uSweepT',
+      'uWake[0]', 'uCursor', 'uLogo', 'uVP', 'uAspect', 'uDist', 'uGrainSize', 'uGain',
     ]) {
       u[name] = gl.getUniformLocation(prog, name);
     }
     gl.uniform1i(u['uHomes'], 0);
     gl.uniform1i(u['uColors'], 1);
     gl.uniform1f(u['uIntroEnd'], INTRO_END);
+    gl.uniform1f(u['uDist'], CAM_DIST);
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_COLOR);
     gl.clearColor(0, 0, 0, 0);
@@ -273,6 +329,7 @@ void main() {
     let intersecting = false;
     let splashT0 = -1;
     let lastSplash = -Infinity;
+    let lastHole = -Infinity;
     let fallbackHidden = false;
     let resizeTimer: ReturnType<typeof setTimeout> | 0 = 0;
     const wake = [
@@ -280,6 +337,9 @@ void main() {
       { x: 9, y: 9, px: 0, py: 0 },
       { x: 9, y: 9, px: 0, py: 0 },
     ];
+    const holes: { x: number; y: number; t0: number }[] = [];
+    let sweepT0 = -1;
+    let nextSweep = 0;
     let cursorX = 9;
     let cursorY = 9;
     let cursorOn = 0; // spring-smoothed presence 0..1
@@ -289,12 +349,76 @@ void main() {
     let prevClientX = 0;
     let prevClientY = 0;
     let prevMoveT = 0;
+    // Camera orbit: user drag + gentle idle sway.
+    let yaw = 0;
+    let pitch = 0;
+    let dragging = false;
+    let dragCandidate = false;
+    let dragX = 0;
+    let dragY = 0;
+    let moved = 0;
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const controller = new AbortController();
     const sig = { signal: controller.signal };
 
+    // --- Camera ---------------------------------------------------------------
+    // Perspective with fov chosen so the z=0 logo plane maps 1:1 onto the section
+    // (tan(fov/2) = 1/dist): relief depth reads as real parallax, sizes stay stable.
+    // Column-major 4×4s throughout (uniformMatrix4fv transpose=false).
+    const NEAR = 0.5, FAR = 30;
+    let aspect = 1;
+    const proj = new Float32Array(16);
+    const viewM = new Float32Array(16);
+    const vp = new Float32Array(16);
+
+    function mul4(a: Float32Array, b: Float32Array, out: Float32Array) {
+      for (let c = 0; c < 4; c++) {
+        for (let r = 0; r < 4; r++) {
+          out[c * 4 + r] =
+            a[r] * b[c * 4] + a[4 + r] * b[c * 4 + 1] + a[8 + r] * b[c * 4 + 2] + a[12 + r] * b[c * 4 + 3];
+        }
+      }
+    }
+
+    function buildProj() {
+      const f = CAM_DIST; // 1/tan(fov/2), tan = 1/dist → logo plane maps 1:1
+      const nf = 1 / (NEAR - FAR);
+      proj.fill(0);
+      proj[0] = f / Math.max(aspect, 0.001);
+      proj[5] = f;
+      proj[10] = (FAR + NEAR) * nf;
+      proj[11] = -1;
+      proj[14] = 2 * FAR * NEAR * nf;
+    }
+
+    function buildView(yaw: number, pitch: number, cx: number, cy: number) {
+      const cp = Math.cos(pitch), sp = Math.sin(pitch), cyw = Math.cos(yaw), syw = Math.sin(yaw);
+      // eye = C + dist·(sy·cp, sp, cy·cp); forward f = −e; right r = normalize(f × up);
+      // up u = r × f. (r = (cy, 0, −sy) after normalisation — cp cancels.)
+      const fx = -syw * cp, fy = -sp, fz = -cyw * cp;
+      const rx = cyw, ry = 0, rz = -syw;
+      const ux = ry * fz - rz * fy, uy = rz * fx - rx * fz, uz = rx * fy - ry * fx;
+      const ex = cx + CAM_DIST * syw * cp, ey = cy + CAM_DIST * sp, ez = CAM_DIST * cyw * cp;
+      viewM[0] = rx; viewM[1] = ux; viewM[2] = -fx; viewM[3] = 0;
+      viewM[4] = ry; viewM[5] = uy; viewM[6] = -fy; viewM[7] = 0;
+      viewM[8] = rz; viewM[9] = uz; viewM[10] = -fz; viewM[11] = 0;
+      viewM[12] = -(rx * ex + ry * ey + rz * ez);
+      viewM[13] = -(ux * ex + uy * ey + uz * ez);
+      viewM[14] = fx * ex + fy * ey + fz * ez;
+      viewM[15] = 1;
+    }
+
+    function viewProj(yaw: number, pitch: number, cx: number, cy: number) {
+      buildView(yaw, pitch, cx, cy);
+      mul4(proj, viewM, vp);
+    }
+
     // --- Sizing (homes are logo-local — resize only re-anchors) ---------------
+    let logoRect: [number, number, number, number] = [0, 0, 0.4, 0.4]; // cx, cy, halfW, halfH
+    function clamp(v: number, lo: number, hi: number) {
+      return Math.max(lo, Math.min(hi, v));
+    }
     function fit() {
       cssW = section.clientWidth;
       cssH = section.clientHeight;
@@ -302,41 +426,50 @@ void main() {
       canvas.width = Math.round(cssW * dpr);
       canvas.height = Math.round(cssH * dpr);
       gl.viewport(0, 0, canvas.width, canvas.height);
+      aspect = cssW / Math.max(1, cssH);
+      buildProj();
       const sr = section.getBoundingClientRect();
       const br = box.getBoundingClientRect();
       const hh = Math.max(1, cssH) / 2;
-      gl.uniform4f(
-        u['uLogo'],
+      logoRect = [
         (br.left + br.width / 2 - sr.left - cssW / 2) / hh,
         -(br.top + br.height / 2 - sr.top - cssH / 2) / hh,
         br.width / 2 / hh,
-        br.height / 2 / hh
-      );
-      gl.uniform1f(u['uAspect'], cssW / Math.max(1, cssH));
+        br.height / 2 / hh,
+      ];
+      gl.uniform4f(u['uLogo'], logoRect[0], logoRect[1], logoRect[2], logoRect[3]);
+      gl.uniform1f(u['uAspect'], aspect);
       const base = cssW < 660 ? 2.2 : cssW < 1024 ? 1.8 : 1.6;
-      const maxBoost = 1.5 * 1.25 * 2.1; // size jitter × relief × bright ceilings
+      const maxBoost = 1.5 * 1.25 * 2.1; // size jitter × perspective × bright ceilings
       gl.uniform1f(u['uGrainSize'], Math.min(base * dpr, pointMax / maxBoost));
       gl.uniform1f(u['uGain'], clamp(Math.sqrt(72000 / N), 0.75, 1.2));
     }
 
-    function clamp(v: number, lo: number, hi: number) {
-      return Math.max(lo, Math.min(hi, v));
-    }
-
     // --- Frame ----------------------------------------------------------------
-    function draw(t: number, splashT: number) {
+    const holesFlat = new Float32Array(12);
+    const wakeFlat = new Float32Array(12);
+    function draw(t: number, splashT: number, sweepT: number) {
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.uniform1f(u['uTime'], t);
       gl.uniform1f(u['uSplashT'], splashT);
+      gl.uniform1f(u['uSweepT'], sweepT);
       gl.uniform4f(u['uCursor'], cursorX, cursorY, cursorOn, 0);
-      const flat = new Float32Array(12);
       for (let k = 0; k < 3; k++) {
-        flat[4 * k] = wake[k].x;
-        flat[4 * k + 1] = wake[k].y;
-        flat[4 * k + 2] = wake[k].px;
-        flat[4 * k + 3] = wake[k].py;
+        wakeFlat[4 * k] = wake[k].x;
+        wakeFlat[4 * k + 1] = wake[k].y;
+        wakeFlat[4 * k + 2] = wake[k].px;
+        wakeFlat[4 * k + 3] = wake[k].py;
       }
-      gl.uniform4fv(u['uWake[0]'], flat);
+      gl.uniform4fv(u['uWake[0]'], wakeFlat);
+      for (let k = 0; k < 3; k++) {
+        const h = holes[k];
+        holesFlat[4 * k] = h ? h.x : 0;
+        holesFlat[4 * k + 1] = h ? h.y : 0;
+        holesFlat[4 * k + 2] = h ? t - h.t0 : -1;
+        holesFlat[4 * k + 3] = 0;
+      }
+      gl.uniform4fv(u['uHoles[0]'], holesFlat);
+      gl.uniformMatrix4fv(u['uVP'], false, vp);
       gl.drawArrays(gl.POINTS, 0, N);
     }
 
@@ -345,6 +478,17 @@ void main() {
       last = now;
       const t = (now - t0) / 1000;
       const splashT = splashT0 < 0 ? 1e9 : (now - splashT0) / 1000;
+
+      // Light bar: first sweep shortly after the dust settles, then every so often.
+      if (t >= INTRO_END) {
+        if (!nextSweep) {
+          nextSweep = t + SWEEP_FIRST;
+        } else if (t >= nextSweep) {
+          sweepT0 = now;
+          nextSweep = t + (SWEEP_EVERY[0] + Math.random() * (SWEEP_EVERY[1] - SWEEP_EVERY[0])) / 1000;
+        }
+      }
+      const sweepT = sweepT0 < 0 ? 1e9 : (now - sweepT0) / 1000;
 
       // Pointer → section space (half-height units), spring-smoothed.
       const k = 1 - Math.exp(-10 * (dt / 1000));
@@ -364,8 +508,14 @@ void main() {
         wk.px *= decay;
         wk.py *= decay;
       }
+      while (holes.length && t - holes[holes.length - 1].t0 > HOLE_TOTAL + 0.3) holes.pop();
 
-      draw(t, splashT);
+      // Camera: gentle sway when idle, the user's drag angle on top.
+      const swayYaw = 0.16 * Math.sin(0.23 * t);
+      const swayPitch = 0.05 * Math.sin(0.17 * t + 1);
+      viewProj(yaw + swayYaw, pitch + swayPitch, logoRect[0], logoRect[1]);
+
+      draw(t, splashT, sweepT);
       if (t >= 0.9 && !fallbackHidden) {
         // Cross-fade the <img> out only once the gathering dust can carry the mark —
         // reads as the logo crumbling into sand, not as a flash.
@@ -393,13 +543,119 @@ void main() {
     }
     stopCurrent = stop; // context-loss handler stops this run (see boot)
 
+    // --- Input: drag rotates, click pokes (inside the mark) or splashes --------
+    function pointerToView(e: { clientX: number; clientY: number }): { x: number; y: number } {
+      const rect = canvas.getBoundingClientRect();
+      const hh = rect.height / 2;
+      return {
+        x: (e.clientX - rect.left - rect.width / 2) / hh,
+        y: -(e.clientY - rect.top - rect.height / 2) / hh,
+      };
+    }
+    function viewToModel(x: number, y: number): { x: number; y: number } {
+      // The mark lies in the z=0 plane through its centre — undo the fit() mapping.
+      const r = logoRect;
+      return { x: (x - r[0]) / (2 * r[2]), y: (y - r[1]) / (2 * r[3]) };
+    }
+
+    section.addEventListener(
+      'pointerdown',
+      (e) => {
+        if (e.target instanceof Element && e.target.closest('a, button')) return;
+        dragCandidate = true;
+        dragging = false;
+        moved = 0;
+        dragX = e.clientX;
+        dragY = e.clientY;
+        try {
+          section.setPointerCapture(e.pointerId);
+        } catch {
+          /* capture is best-effort */
+        }
+      },
+      sig
+    );
+    section.addEventListener(
+      'pointermove',
+      (e) => {
+        if (dragCandidate) {
+          const dx = e.clientX - dragX;
+          const dy = e.clientY - dragY;
+          moved += Math.abs(dx) + Math.abs(dy);
+          if (moved > 6) dragging = true;
+          if (dragging) {
+            yaw += dx * DRAG_SENS;
+            pitch = clamp(pitch - dy * DRAG_SENS, -PITCH_CLAMP, PITCH_CLAMP);
+            dragX = e.clientX;
+            dragY = e.clientY;
+            return; // rotating — don't stir the wake with the same gesture
+          }
+        }
+        if (e.pointerType && e.pointerType !== 'mouse') return; // touch drag-scroll must not stir
+        const p = pointerToView(e);
+        const now = performance.now();
+        const mdt = Math.max(8, now - prevMoveT);
+        if (mouseOn) {
+          // A moved-through spot keeps pushing for a moment, then lets go.
+          let vx = ((e.clientX - prevClientX) / mdt) * WAKE_GAIN * (cssH / 300);
+          let vy = (-(e.clientY - prevClientY) / mdt) * WAKE_GAIN * (cssH / 300);
+          const vm = Math.hypot(vx, vy);
+          if (vm > 0.09) {
+            vx = (vx / vm) * 0.09;
+            vy = (vy / vm) * 0.09;
+          }
+          wake[2] = wake[1];
+          wake[1] = wake[0];
+          wake[0] = { x: p.x, y: p.y, px: vx, py: vy };
+        }
+        prevClientX = e.clientX;
+        prevClientY = e.clientY;
+        prevMoveT = now;
+        mouseOn = true;
+        mouseClientX = e.clientX;
+        mouseClientY = e.clientY;
+      },
+      sig
+    );
+    function endPointer(e: PointerEvent) {
+      if (!dragCandidate) return;
+      const wasDrag = dragging;
+      dragCandidate = false;
+      dragging = false;
+      if (wasDrag) return;
+      // A click (no drag): inside the mark → poke a hole; outside → splash it all.
+      const p = pointerToView(e);
+      const mdl = viewToModel(p.x, p.y);
+      const now = performance.now();
+      const inside =
+        !!mdl && Math.abs(mdl.x) <= 0.5 && Math.abs(mdl.y) <= 0.5;
+      if (inside) {
+        if (now - lastHole < HOLE_COOLDOWN) return;
+        lastHole = now;
+        holes.unshift({ x: mdl!.x, y: mdl!.y, t0: (now - t0) / 1000 });
+        if (holes.length > 3) holes.length = 3;
+      } else {
+        if (now - lastSplash < SPLASH_COOLDOWN) return;
+        lastSplash = now;
+        splashT0 = now;
+      }
+    }
+    section.addEventListener('pointerup', endPointer, sig);
+    section.addEventListener('pointercancel', () => {
+      dragCandidate = false;
+      dragging = false;
+    }, sig);
+
+    document.addEventListener('pointerleave', () => (mouseOn = false), sig);
+
     // --- Boot -----------------------------------------------------------------
     fit();
 
     if (reducedMotion) {
       // One static frame of the formed mark — no listeners, no loop.
       cursorOn = 0;
-      draw(INTRO_END + 1, 1e9);
+      viewProj(0, 0, logoRect[0], logoRect[1]);
+      draw(INTRO_END + 1, 1e9, 1e9);
       fallbackHidden = true;
       fallback.classList.add('opacity-0');
       return;
@@ -419,52 +675,6 @@ void main() {
       resizeTimer = setTimeout(fit, 150); // homes are logo-local: re-anchor only
     });
     ro.observe(section);
-
-    window.addEventListener(
-      'pointermove',
-      (e) => {
-        if (e.pointerType && e.pointerType !== 'mouse') return; // touch drag must not stir
-        const rect = canvas.getBoundingClientRect();
-        const hh = rect.height / 2;
-        const x = (e.clientX - rect.left - rect.width / 2) / hh;
-        const y = -(e.clientY - rect.top - rect.height / 2) / hh;
-        const now = performance.now();
-        const dt = Math.max(8, now - prevMoveT);
-        if (mouseOn) {
-          // A moved-through spot keeps pushing for a moment, then lets go.
-          let vx = ((e.clientX - prevClientX) / dt) * WAKE_GAIN * (rect.height / 300);
-          let vy = (-(e.clientY - prevClientY) / dt) * WAKE_GAIN * (rect.height / 300);
-          const vm = Math.hypot(vx, vy);
-          if (vm > 0.09) {
-            vx = (vx / vm) * 0.09;
-            vy = (vy / vm) * 0.09;
-          }
-          wake[2] = wake[1];
-          wake[1] = wake[0];
-          wake[0] = { x, y, px: vx, py: vy };
-        }
-        prevClientX = e.clientX;
-        prevClientY = e.clientY;
-        prevMoveT = now;
-        mouseOn = true;
-        mouseClientX = e.clientX;
-        mouseClientY = e.clientY;
-      },
-      sig
-    );
-    document.addEventListener('pointerleave', () => (mouseOn = false), sig);
-
-    section.addEventListener(
-      'pointerdown',
-      (e) => {
-        if (e.target instanceof Element && e.target.closest('a, button')) return;
-        const now = performance.now();
-        if (now - lastSplash < SPLASH_COOLDOWN) return; // mid-flight retrigger would snap
-        lastSplash = now;
-        splashT0 = now;
-      },
-      sig
-    );
 
     document.addEventListener('visibilitychange', updateRunning, sig);
     window.addEventListener('pagehide', stop, sig);
