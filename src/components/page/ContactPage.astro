@@ -1,6 +1,6 @@
 ---
 import PageLayout from '../../layouts/PageLayout.astro';
-import SectionHeading from '../shared/SectionHeading.astro';
+import SandLogo from '../shared/SandLogo.astro';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
@@ -16,14 +16,36 @@ const messages = {
 ---
 
 <PageLayout title={t('page.contact.title')} description={t('page.contact.description')} canonicalPath={Astro.url.pathname}>
-  <section class="py-20 sm:py-24 bg-white">
+  <!-- Sand hero: the waai mark dissolving into grains above the heading. -->
+  <section
+    data-sand-section
+    class="relative touch-pan-y select-none overflow-hidden bg-gradient-to-br from-wa-teal via-wa-teal-light to-wa-green-dark"
+  >
+    <div
+      class="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_50%_36%,rgba(3,26,22,0.82),rgba(3,26,22,0.38)_45%,transparent_72%)]"
+      aria-hidden="true"
+    ></div>
+    <SandLogo compact />
+    <div class="relative z-10 mx-auto max-w-xl px-4 pb-16 text-center sm:px-6 sm:pb-20">
+      <h1
+        class="mb-4 text-3xl font-extrabold text-white [text-shadow:0_2px_18px_rgba(3,26,22,0.95)] sm:text-4xl"
+      >
+        {t('contact.heading')}
+      </h1>
+      <p
+        class="text-base leading-relaxed text-green-100/80 [text-shadow:0_1px_10px_rgba(3,26,22,0.9)] sm:text-lg"
+      >
+        {t('contact.sub')}
+      </p>
+    </div>
+  </section>
+
+  <section class="py-16 sm:py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid lg:grid-cols-2 gap-16">
         <!-- Left Column: Info -->
         <div>
-          <SectionHeading as="h1" title={t('contact.heading')} subtitle={t('contact.sub')} align="left" />
-
-          <div class="space-y-6 mt-8">
+          <div class="space-y-6">
             <div class="flex items-start gap-4">
               <div class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center shrink-0">
                 <svg class="w-5 h-5 text-wa-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>

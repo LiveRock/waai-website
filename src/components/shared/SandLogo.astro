@@ -1,12 +1,28 @@
+---
+// Sand-logo effect — the waai mark as luminous WebGL2 sand grains (see CLAUDE.md
+// "404 sand-particle logo" for the full architecture). Render at most once per
+// page (hard-coded data-* hooks). `compact` = smaller mark + tighter spacing for
+// working pages (contact); default = the large 404 treatment.
+interface Props {
+  compact?: boolean;
+}
+const { compact = false } = Astro.props;
+---
+
 <canvas
   data-sand-canvas
   class="absolute inset-0 h-full w-full pointer-events-none"
   aria-hidden="true"
 ></canvas>
-<div class="relative z-10 pt-6 pb-[140px] sm:pt-10">
+<div class:list={['relative z-10 pt-6 sm:pt-10', compact ? 'pb-12 sm:pb-14' : 'pb-[140px]']}>
   <div
     data-sand-box
-    class="relative mx-auto aspect-square w-[230px] min-[480px]:w-[300px] sm:w-[400px] lg:w-[460px]"
+    class:list={[
+      'relative mx-auto aspect-square',
+      compact
+        ? 'w-[180px] min-[480px]:w-[210px] sm:w-[240px] lg:w-[280px]'
+        : 'w-[230px] min-[480px]:w-[300px] sm:w-[400px] lg:w-[460px]',
+    ]}
   >
     <img
       data-sand-fallback
