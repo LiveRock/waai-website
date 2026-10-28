@@ -4,6 +4,11 @@ Running log of significant work sessions. Newest first.
 
 ## 2026-10-28
 
+### Sand-logo v2.4: effects unobstructed — exclusion zone removed (Peter: "Revert to previous. I just do not want the logo effects to be obstructed by the text")
+Key clarification of Peter's intent after three rounds: he LIKES the sand flying everywhere (dust drift, splash crossing the page) — what he never wanted was the effects being **hidden/erased near the text**, which is precisely what the v2.1 `uAvoid` exclusion zone did (grains faded entering the copy block, so splash/dust looked swallowed by the words). v2.4 (`ef98fa5`): **exclusion zone removed entirely** (uniform, measurement, `data-sand-content` hook all gone) — sand flows freely across the whole section behind the copy; **fly-in intro restored** (disc 0.55–1.1 model units, arcs, `INTRO_END` 3.8, img crossfade at 0.9s — the v2.3 in-place materialise reverted); copy legibility handled with a soft dark `[text-shadow:…]` on eyebrow/h1/body instead of erasing grains. Kept from earlier rounds: brightness tiers, breathing-room layout. Verified mobile: mid-intro dust visible around the words (0.375), splash floods the band below the mark 0.19→0.78 — fully unobstructed, no page errors.
+
+### Sand-logo v2.3: in-place intro (Peter: "the sands drifted to behind the words — the effect should remain where the first logo position")
+
 ### Sand-logo v2.3: in-place intro (Peter: "the sands drifted to behind the words — the effect should remain where the first logo position")
 The fly-in intro (dust starting on a disc around the mark, gathering home) put its lower transit zone at/behind the copy — on refresh the sand visibly drifted around the words before forming. Replaced with an **in-place materialise**: grains fade in *at their homes* from a ±0.07-model-unit local scatter while the `<img>` cross-fades out over the same spot (fade moved to t≥1.0s) — the logo dissolves into sand where it sits. Intro ends ~2.1s (`INTRO_END` 2.3), first sweep ~3.5s. Verified on mobile: mark band constant through the intro, below-mark band at pure background, h1 zone pixel-stable — zero sand transit through the copy. Also verified the live-serves-latest question (chunk hash + last-modified fresh; Apache serves etag-revalidation, no aggressive HTML cache).
 
