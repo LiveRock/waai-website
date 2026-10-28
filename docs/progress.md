@@ -4,6 +4,11 @@ Running log of significant work sessions. Newest first.
 
 ## 2026-10-28
 
+### Sand-logo on /contact (Peter: "use this effect in this page")
+`SandLogo.astro` promoted `src/components/404/` → `src/components/shared/` with a **`compact` prop** (180–280px mark, pb-12/14 vs the 404's 230–460px + pb-140). `ContactPage.astro` (one body, all 10 locales) gained a dark teal sand hero above the existing content: gradient + sky-pocket section, compact mark, then the existing `contact.heading`/`contact.sub` as white h1/p with the legibility text-shadows; the white info+form section follows (its old SectionHeading removed — the h1 now lives in the hero; zero new i18n keys). Verified desktop/mobile/zh: mark in its box (pixel-profiled), heading 48–56px below, form intact, fallback crossfade, no page errors.
+
+### Sand-logo v2.6: the offset root-caused (camera look-at) + 3 more fixes
+
 ### Sand-logo v2.6: the offset root-caused (camera look-at) + 3 more fixes
 Peter: (1) initial solid logo in the right position but the effects elsewhere, (2) cursor circle smaller, (3) click explosions intermittent, (4) `/x` didn't show the custom 404.
 
