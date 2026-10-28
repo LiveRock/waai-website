@@ -94,8 +94,8 @@
     const INTRO_END = 3.8; // dust fully gathered by ~3.5s + slack
     const BREATH_PERIOD = 5.6; // s, one slow breath of the whole mark
     const TURB_AMP = 0.004; // idle turbulence amplitude (logo units)
-    const CURSOR_SIGMA = 0.16; // pointer influence falloff (half-height units)
-    const CURSOR_PUSH = 0.05; // stationary pointer displacement
+    const CURSOR_SIGMA = 0.10; // pointer influence falloff (half-height units)
+    const CURSOR_PUSH = 0.045; // stationary pointer displacement
     const WAKE_SIGMA = 0.16;
     const WAKE_DECAY = 0.35; // s, push fade after the pointer moves on
     const WAKE_GAIN = 0.035; // velocity → push conversion
@@ -104,7 +104,6 @@
     const SPLASH_COOLDOWN = 1650; // ms — hard gate: mid-flight retriggers would snap
     const HOLE_R = 0.17; // hole radius (logo units)
     const HOLE_TOTAL = 1.9; // s until the sand flows back in
-    const HOLE_COOLDOWN = 450; // ms between pokes
     const SWEEP_DUR = 1.5; // s, light bar crossing the mark
     const SWEEP_FIRST = 1.2; // s after the intro ends
     const SWEEP_EVERY = [6800, 10400]; // ms random repeat range
@@ -329,7 +328,6 @@ void main() {
     let intersecting = false;
     let splashT0 = -1;
     let lastSplash = -Infinity;
-    let lastHole = -Infinity;
     let fallbackHidden = false;
     let resizeTimer: ReturnType<typeof setTimeout> | 0 = 0;
     const wake = [
@@ -479,6 +477,42 @@ void main() {
       gl.drawArrays(gl.POINTS, 0, N);
     }
 
+    // Re-anchor every frame from live rects: whatever the browser does to the
+    // layout after boot (iOS dynamic viewport, font swap), the sand follows the
+    // <img>'s box within a frame — no stale-measurement drift possible.
+    function reanchor() {
+      const sr = section.getBoundingClientRect();
+      const br = box.getBoundingClientRect();
+      const w = Math.max(1, sr.width);
+      const h = Math.max(1, sr.height);
+      const cx = (br.left + br.width / 2 - sr.left - w / 2) / (h / 2);
+      const cy = -(br.top + br.height / 2 - sr.top - h / 2) / (h / 2);
+      const hw = br.width / 2 / (h / 2);
+      const hh = br.height / 2 / (h / 2);
+      const asp = w / h;
+      if (
+        Math.abs(cx - logoRect[0]) < 0.001 && Math.abs(cy - logoRect[1]) < 0.001 &&
+        Math.abs(hw - logoRect[2]) < 0.001 && Math.abs(hh - logoRect[3]) < 0.001 &&
+        Math.abs(asp - aspect) < 0.001
+      ) {
+        return;
+      }
+      logoRect = [cx, cy, hw, hh];
+      aspect = asp;
+      buildProj();
+      gl.uniform4f(u['uLogo'], cx, cy, hw, hh);
+      gl.uniform1f(u['uAspect'], aspect);
+      if (Math.abs(w - cssW) > 0.5 || Math.abs(h - cssH) > 0.5) {
+        // Section resized — the backing store must follow or the drawing stretches.
+        cssW = w;
+        cssH = h;
+        const dpr = Math.min(window.devicePixelRatio || 1, w < 660 ? 1.5 : 2);
+        canvas.width = Math.round(w * dpr);
+        canvas.height = Math.round(h * dpr);
+        gl.viewport(0, 0, canvas.width, canvas.height);
+      }
+    }
+
     function frame(now: number) {
       const dt = Math.min(now - last, 50);
       last = now;
@@ -516,10 +550,13 @@ void main() {
       }
       while (holes.length && t - holes[holes.length - 1].t0 > HOLE_TOTAL + 0.3) holes.pop();
 
-      // Camera: gentle sway when idle, the user's drag angle on top.
+      // Camera: gentle sway when idle, the user's drag angle on top. The look-at
+      // target is the SECTION centre (world origin) — targeting the mark would
+      // re-centre the whole scene on the canvas and detach it from its box.
       const swayYaw = 0.16 * Math.sin(0.23 * t);
       const swayPitch = 0.05 * Math.sin(0.17 * t + 1);
-      viewProj(yaw + swayYaw, pitch + swayPitch, logoRect[0], logoRect[1]);
+      reanchor();
+      viewProj(yaw + swayYaw, pitch + swayPitch, 0, 0);
 
       draw(t, splashT, sweepT);
       if (t >= 0.9 && !fallbackHidden) {
@@ -629,21 +666,17 @@ void main() {
       dragCandidate = false;
       dragging = false;
       if (wasDrag) return;
-      // A click (no drag): inside the mark → poke a hole; outside → splash it all.
+      // Every click explodes the mark; clicking ON the mark additionally pokes a
+      // hole at the click point (one shared cooldown so rapid clicks are consistent).
+      const now = performance.now();
+      if (now - lastSplash < SPLASH_COOLDOWN) return;
+      lastSplash = now;
+      splashT0 = now;
       const p = pointerToView(e);
       const mdl = viewToModel(p.x, p.y);
-      const now = performance.now();
-      const inside =
-        !!mdl && Math.abs(mdl.x) <= 0.5 && Math.abs(mdl.y) <= 0.5;
-      if (inside) {
-        if (now - lastHole < HOLE_COOLDOWN) return;
-        lastHole = now;
-        holes.unshift({ x: mdl!.x, y: mdl!.y, t0: (now - t0) / 1000 });
+      if (mdl && Math.abs(mdl.x) <= 0.5 && Math.abs(mdl.y) <= 0.5) {
+        holes.unshift({ x: mdl.x, y: mdl.y, t0: (now - t0) / 1000 });
         if (holes.length > 3) holes.length = 3;
-      } else {
-        if (now - lastSplash < SPLASH_COOLDOWN) return;
-        lastSplash = now;
-        splashT0 = now;
       }
     }
     section.addEventListener('pointerup', endPointer, sig);
@@ -660,7 +693,7 @@ void main() {
     if (reducedMotion) {
       // One static frame of the formed mark — no listeners, no loop.
       cursorOn = 0;
-      viewProj(0, 0, logoRect[0], logoRect[1]);
+      viewProj(0, 0, 0, 0);
       draw(INTRO_END + 1, 1e9, 1e9);
       fallbackHidden = true;
       fallback.classList.add('opacity-0');
