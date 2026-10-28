@@ -4,6 +4,11 @@ Running log of significant work sessions. Newest first.
 
 ## 2026-10-28
 
+### Sand-logo v2.5: mark anchored right under the header (Peter: "too low with green blank space on top — position it promptly above all the text")
+Peter's iPhone showed the mark ~150px below its box (green gap above). Two fixes: (1) layout — top padding `pt-20/28` → `pt-6/10`, so the mark sits **23px under the header**, directly above the copy (80px effects room kept); (2) the likely device-side anchor drift — `fit()` now **fully `getBoundingClientRect`-based** (it mixed `clientWidth/Height` with viewport-relative rects, which disagree on iOS while the dynamic viewport settles), plus re-fits on `document.fonts.ready` and 800ms after boot for late layout settles. Verified @3x iPhone-geometry emulation: header→mark 23px, mark→h1 80px.
+
+### Sand-logo v2.4: effects unobstructed — exclusion zone removed (Peter: "Revert to previous. I just do not want the logo effects to be obstructed by the text")
+
 ### Sand-logo v2.4: effects unobstructed — exclusion zone removed (Peter: "Revert to previous. I just do not want the logo effects to be obstructed by the text")
 Key clarification of Peter's intent after three rounds: he LIKES the sand flying everywhere (dust drift, splash crossing the page) — what he never wanted was the effects being **hidden/erased near the text**, which is precisely what the v2.1 `uAvoid` exclusion zone did (grains faded entering the copy block, so splash/dust looked swallowed by the words). v2.4 (`ef98fa5`): **exclusion zone removed entirely** (uniform, measurement, `data-sand-content` hook all gone) — sand flows freely across the whole section behind the copy; **fly-in intro restored** (disc 0.55–1.1 model units, arcs, `INTRO_END` 3.8, img crossfade at 0.9s — the v2.3 in-place materialise reverted); copy legibility handled with a soft dark `[text-shadow:…]` on eyebrow/h1/body instead of erasing grains. Kept from earlier rounds: brightness tiers, breathing-room layout. Verified mobile: mid-intro dust visible around the words (0.375), splash floods the band below the mark 0.19→0.78 — fully unobstructed, no page errors.
 
