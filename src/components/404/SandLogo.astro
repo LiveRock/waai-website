@@ -44,7 +44,6 @@
     const box = document.querySelector('[data-sand-box]');
     const fallback = document.querySelector('[data-sand-fallback]');
     if (!section || !(box instanceof HTMLElement) || !(fallback instanceof HTMLImageElement)) return;
-    const content = section.querySelector('[data-sand-content]');
 
     let gl: WebGL2RenderingContext | null = null;
     try {
@@ -76,7 +75,7 @@
       });
     }
 
-    init(canvas, section, box, fallback, content, gl).catch(() => {
+    init(canvas, section, box, fallback, gl).catch(() => {
       /* logo fetch/decode failed — fallback <img> stays */
     });
   }
@@ -86,14 +85,13 @@
     section: HTMLElement,
     box: HTMLElement,
     fallback: HTMLImageElement,
-    content: Element | null,
     gl: WebGL2RenderingContext
   ) {
     // (Re)booting on context restore replaces the previous run's stop hook.
     // --- Tunables -----------------------------------------------------------
     const GRID = 512; // logo sampling resolution (logo-512.png is 512²)
     const TEX_W = 512; // grain texture grid — keep in sync with the shader's 512
-    const INTRO_END = 2.3; // mark fully materialised by ~2.1s + slack
+    const INTRO_END = 3.8; // dust fully gathered by ~3.5s + slack
     const BREATH_PERIOD = 5.6; // s, one slow breath of the whole mark
     const TURB_AMP = 0.004; // idle turbulence amplitude (logo units)
     const CURSOR_SIGMA = 0.16; // pointer influence falloff (half-height units)
@@ -129,7 +127,6 @@ uniform float uSweepT;     // seconds since the light bar started; large when id
 uniform vec4 uWake[3];     // xy: pointer history (half-height units), zw: push
 uniform vec4 uCursor;      // xy: smoothed pointer, z: presence 0..1
 uniform vec4 uLogo;        // cx, cy, halfW, halfH (half-height units)
-uniform vec4 uAvoid;       // text-block rect (same units); grains fade inside it
 uniform mat4 uVP;          // perspective × orbiting view
 uniform float uAspect;     // section width / height
 uniform float uDist;       // camera distance (logo plane maps 1:1 to the section)
@@ -163,16 +160,18 @@ void main() {
   float alpha = 1.0;
   float bright = 0.1 * m.z; // nearer grains catch a little more light
 
-  // Intro: the mark materialises in place — each grain fades in where it belongs,
-  // settling from a small local scatter (never transiting the copy area below).
+  // Intro: scattered dust gathers into the mark — staggered, arced, eased.
   if (uTime < uIntroEnd) {
-    float delay = 0.3 + 0.6 * r1;
-    float dur = 0.8 + 0.4 * r2;
+    float delay = 0.4 + 0.9 * r1;
+    float dur = 1.4 + 0.8 * r2;
     float t = clamp((uTime - delay) / dur, 0.0, 1.0);
     float e = smoother(t);
-    vec3 scatter = vec3(r3 - 0.5, r4 - 0.5, r5 - 0.5) * 0.14;
-    m = mix(m + scatter, m, e);
-    alpha = smoothstep(0.0, 0.45, t);
+    float ang = r3 * 6.2831853;
+    float rad = 0.55 + 0.55 * r4;
+    vec3 start = vec3(cos(ang) * rad, sin(ang) * rad * 0.8, (r5 - 0.5) * 0.6);
+    vec3 arcDir = normalize(vec3(-sin(ang), cos(ang), (r6 - 0.5) * 0.8));
+    m = mix(start, m, e) + arcDir * sin(3.14159265 * t) * (0.08 + 0.25 * r2);
+    alpha = smoothstep(0.0, 0.25, t);
   }
 
   // Breathing: one slow, slightly asymmetric breath of the whole mark.
@@ -224,10 +223,6 @@ void main() {
   // View space (what the user sees at the logo plane): pointer, wake, light bar.
   vec2 view = (clip.xy / clip.w) * vec2(uAspect, 1.0);
   vec2 push = vec2(0.0);
-
-  // Keep the copy clear: grains fade away as they enter the text block.
-  vec2 ad = abs(view - uAvoid.xy) - uAvoid.zw;
-  alpha *= smoothstep(0.0, 0.08, length(max(ad, 0.0)));
 
   // Pointer: a finger held in the sand — near grains ease away and catch light.
   vec2 cd = view - uCursor.xy;
@@ -283,7 +278,7 @@ void main() {
     const u: Record<string, WebGLUniformLocation | null> = {};
     for (const name of [
       'uHomes', 'uColors', 'uTime', 'uIntroEnd', 'uSplashT', 'uHoles[0]', 'uSweepT',
-      'uWake[0]', 'uCursor', 'uLogo', 'uAvoid', 'uVP', 'uAspect', 'uDist', 'uGrainSize', 'uGain',
+      'uWake[0]', 'uCursor', 'uLogo', 'uVP', 'uAspect', 'uDist', 'uGrainSize', 'uGain',
     ]) {
       u[name] = gl.getUniformLocation(prog, name);
     }
@@ -443,21 +438,6 @@ void main() {
         br.height / 2 / hh,
       ];
       gl.uniform4f(u['uLogo'], logoRect[0], logoRect[1], logoRect[2], logoRect[3]);
-      // The text block is a sand-free zone (shrunk 20px so the fade never touches
-      // the mark itself; negative halves disable it if the block is missing).
-      const cr = content?.getBoundingClientRect();
-      if (cr && cr.height > 4) {
-        const pad = 20;
-        gl.uniform4f(
-          u['uAvoid'],
-          (cr.left + cr.width / 2 - sr.left - cssW / 2) / hh,
-          -(cr.top + cr.height / 2 - sr.top - cssH / 2) / hh,
-          Math.max(0, cr.width / 2 - pad) / hh,
-          Math.max(0, cr.height / 2 - pad) / hh
-        );
-      } else {
-        gl.uniform4f(u['uAvoid'], 0, 0, -1, -1);
-      }
       gl.uniform1f(u['uAspect'], aspect);
       // Grain size and gain per tier — the mark is denser per pixel on mobile
       // (fewer px, similar grain count), so gain drops to keep it from blowing out.
@@ -539,9 +519,9 @@ void main() {
       viewProj(yaw + swayYaw, pitch + swayPitch, logoRect[0], logoRect[1]);
 
       draw(t, splashT, sweepT);
-      if (t >= 1.0 && !fallbackHidden) {
-        // Cross-fade the <img> out as the sand materialises in the same spot —
-        // the logo dissolves into sand, in place.
+      if (t >= 0.9 && !fallbackHidden) {
+        // Cross-fade the <img> out once the gathering dust can carry the mark —
+        // reads as the logo crumbling into sand, not as a flash.
         fallbackHidden = true;
         fallback.classList.add('opacity-0');
       }
