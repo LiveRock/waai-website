@@ -4,6 +4,14 @@ Running log of significant work sessions. Newest first.
 
 ## 2026-10-28
 
+### Sand-logo v2.6: the offset root-caused (camera look-at) + 3 more fixes
+Peter: (1) initial solid logo in the right position but the effects elsewhere, (2) cursor circle smaller, (3) click explosions intermittent, (4) `/x` didn't show the custom 404.
+
+**(1) ROOT CAUSE — found at last, and it explains weeks of "too low / behind the words":** the 3D camera added in v2 used the **mark's centre as its look-at target**, which optically re-centres the whole scene on the canvas — the sand rendered at the **section's vertical centre**, never at its box (the `<img>` was always right because it's plain DOM). Verified by masking-free profiling: box at CSS y88–318, sand blob at y400–560 ≈ section centre. Fix: the camera orbits the **section centre (world origin)**; the mark keeps its true off-centre world position (view.y→ndc.y maps 1:1 at the logo plane by the fov trick, so sand lands exactly on the box on any device/rotation). Belt-and-braces: per-frame `reanchor()` re-measures box+section rects and re-uploads uniforms on change (also fixes the backing store if the section resizes). Post-fix profile: bright rows CSS y140–260 inside the box, background outside.
+**(2)** `CURSOR_SIGMA` 0.16→0.10 (+push 0.05→0.045). **(3)** every click now explodes the mark (`splashT0` always set; on-mark clicks additionally poke the hole; one shared 1.65s cooldown — measured: tap→explode, second tap after cooldown→explode again). **(4)** Apache had no `ErrorDocument` — added `ErrorDocument 404 /404.html` to **both waai.me vhosts** (`/etc/apache2/sites-available/waai.me.conf`, backup `.bak-pre-errordoc-20261028`, configtest + reload) — verified `/x`, `/x/`, `/foo/bar/`, `/x.jpg` all return 404 with the sand page. ⚠️ Same Virtualmin re-save hazard as the awstats alias and canonical redirects — re-check this directive if the vhost is ever re-saved.
+
+### Sand-logo v2.5: mark anchored right under the header (Peter: "too low with green blank space on top — position it promptly above all the text")
+
 ### Sand-logo v2.5: mark anchored right under the header (Peter: "too low with green blank space on top — position it promptly above all the text")
 Peter's iPhone showed the mark ~150px below its box (green gap above). Two fixes: (1) layout — top padding `pt-20/28` → `pt-6/10`, so the mark sits **23px under the header**, directly above the copy (80px effects room kept); (2) the likely device-side anchor drift — `fit()` now **fully `getBoundingClientRect`-based** (it mixed `clientWidth/Height` with viewport-relative rects, which disagree on iOS while the dynamic viewport settles), plus re-fits on `document.fonts.ready` and 800ms after boot for late layout settles. Verified @3x iPhone-geometry emulation: header→mark 23px, mark→h1 80px.
 
