@@ -65,19 +65,21 @@ const panels = [
 
 <section class="py-20 sm:py-24 bg-gray-50">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-12">
+    <div class="lg:grid lg:grid-cols-[auto_minmax(0,1fr)] lg:items-center lg:gap-12">
       <SectionHeading
         title={t('home.journey.title')}
         subtitle={t('home.journey.subtitle')}
         align="left"
       />
-      <!-- Phone mockup (hero's frame at ~90%) playing another waai Short.
-           lg:mb-12 mirrors SectionHeading's baked-in bottom margin so both
-           columns optically centre on the same line. -->
-      <div class="flex justify-center lg:mb-12">
+      <!-- Phone mockup (hero-sized) playing another waai Short; desktop-only
+           lg:order-first puts it LEFT of the heading — DOM stays heading-first
+           so mobile keeps heading-above-phone. lg:mb-12 mirrors
+           SectionHeading's baked-in bottom margin so both columns optically
+           centre on the same line. -->
+      <div class="flex justify-center lg:order-first lg:mb-12">
         <div class="relative">
-          <div class="w-[260px] h-[525px] bg-gray-900 rounded-[3.25rem] p-3 shadow-2xl">
-            <div class="relative w-full h-full bg-black rounded-[2.6rem] overflow-hidden">
+          <div class="w-72 h-[580px] bg-gray-900 rounded-[3rem] p-3 shadow-2xl">
+            <div class="relative w-full h-full bg-black rounded-[2.4rem] overflow-hidden">
               <!-- waai promo Short, self-hosted (muted loop; script below gates playback) -->
               <video
                 data-journey-video
