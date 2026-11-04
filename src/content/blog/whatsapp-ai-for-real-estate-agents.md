@@ -1,6 +1,7 @@
 ---
 title: "WhatsApp AI for Real Estate Agents: Qualify Leads, Book Viewings, and Generate Documents Automatically"
 description: "Property agents live on WhatsApp. Here's how AI-powered logic flows, multi-branch booking, and Google Drive document generation turn WhatsApp into a full lead-to-LOI pipeline for real estate."
+heroImage: "/images/blog/whatsapp-ai-for-real-estate-agents.jpg"
 pubDate: 2026-11-04
 author: waai
 category: Industry
