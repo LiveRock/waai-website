@@ -42,6 +42,15 @@ jobs:
         with:
           node-version: 22
 
+      # ubuntu-24.04+ runner images dropped ImageMagick (broke post hero images
+      # from 2026-11-01); the generator accepts IM6 convert or IM7 magick.
+      - name: Ensure ImageMagick
+        run: |
+          if ! command -v convert >/dev/null 2>&1 && ! command -v magick >/dev/null 2>&1; then
+            sudo apt-get update -qq && sudo apt-get install -y -qq imagemagick
+            command -v convert || command -v magick
+          fi
+
       - name: Determine language
         id: lang
         env:

@@ -24,6 +24,17 @@ import fs from 'node:fs';
 import os from 'node:os';
 import { execFileSync } from 'node:child_process';
 
+// ImageMagick binary: IM6 names are `convert`/`identify`; IM7 (Ubuntu 26+) is
+// `magick` with subcommands. GitHub's newer runner images ship neither legacy
+// name (ubuntu-24.04+ dropped ImageMagick entirely — the workflow apt-installs
+// it; this box keeps IM6). Resolve whichever exists once.
+const IM = ['convert', 'magick'].find((bin) => {
+  try { execFileSync(bin, ['-version'], { stdio: 'ignore' }); return true; } catch { return false; }
+});
+const im = (args) => execFileSync(IM, args);
+const imIdentify = (args) =>
+  IM === 'magick' ? execFileSync(IM, ['identify', ...args]) : execFileSync('identify', args);
+
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT_DIR = path.join(ROOT, 'public', 'images', 'blog');
 const FONT_BOLD = path.join(ROOT, 'scripts', 'assets', 'Inter-700.ttf');
@@ -115,22 +126,19 @@ async function fetchArt(title, seed) {
   return null;
 }
 
-function hasIM() {
-  try { execFileSync('convert', ['-version'], { stdio: 'ignore' }); return true; }
-  catch { return false; }
-}
+const hasIM = () => IM !== undefined;
 
 /** Render wrapped white text as a transparent PNG, auto-height. Returns {path, height}. */
 function captionPng(text, { font, pointsize, fill, width, tmp, name }) {
   const p = path.join(tmp, name);
-  execFileSync('convert', [
+  im([
     '-background', 'none', '-fill', fill,
     '-font', font, '-pointsize', String(pointsize),
     '-size', `${width}x`,
     `caption:${text}`,
     p,
   ]);
-  const h = parseInt(execFileSync('identify', ['-format', '%h', p]).toString(), 10);
+  const h = parseInt(imIdentify(['-format', '%h', p]).toString(), 10);
   return { path: p, height: h };
 }
 
@@ -139,7 +147,7 @@ function captionPng(text, { font, pointsize, fill, width, tmp, name }) {
  * @returns {Promise<string>} site-relative path, e.g. /images/blog/<slug>.jpg
  */
 export async function generateBlogImage({ slug, title, category }) {
-  if (!hasIM()) throw new Error('ImageMagick (convert) not available');
+  if (!hasIM()) throw new Error('ImageMagick not available (neither convert nor magick — install imagemagick)');
   fs.mkdirSync(OUT_DIR, { recursive: true });
   const outAbs = path.join(OUT_DIR, `${slug}.jpg`);
   const outRel = `/images/blog/${slug}.jpg`;
@@ -152,28 +160,28 @@ export async function generateBlogImage({ slug, title, category }) {
     const panelW = art ? LX : W;
     const base = path.join(tmp, 'base.png');
     const panelL = path.join(tmp, 'panelL.png');
-    execFileSync('convert', [
+    im([
       '-size', `${panelW}x${H}`, 'gradient:#05291f-#0b3f2e',
       '-fill', 'rgba(52,211,153,0.07)', '-draw', `circle ${panelW - 90},96 ${panelW - 90},10`,
       '-fill', 'rgba(167,139,250,0.06)', '-draw', `circle 120,${H - 80} 120,${H - 200}`,
       panelL,
     ]);
     if (art) {
-      execFileSync('convert', [
+      im([
         '-size', `${W}x${H}`, 'xc:#05291f',
         panelL, '-gravity', 'West', '-geometry', '+0+0', '-composite',
         base,
       ]);
     } else {
       console.warn('  pollinations unreachable — brand gradient fallback (no photo panel)');
-      execFileSync('convert', [panelL, base]);
+      im([panelL, base]);
     }
 
     // 2. Photo panel (right, 520×630) — rendered at native resolution.
     if (art) {
       const artPath = path.join(tmp, 'art.jpg');
       fs.writeFileSync(artPath, art);
-      const [sw, sh] = execFileSync('identify', ['-format', '%w %h', artPath]).toString().split(/\s+/).map(Number);
+      const [sw, sh] = imIdentify(['-format', '%w %h', artPath]).toString().split(/\s+/).map(Number);
       // Crop to the panel aspect, anchored North (heads stay in frame; the
       // art's bottom strip — where the Pollinations watermark lives — drops).
       const PA = PW / H;
@@ -181,7 +189,7 @@ export async function generateBlogImage({ slug, title, category }) {
         ? [Math.round(sh * PA), sh, 'Center']
         : [sw, Math.round(sw / PA), 'North'];
       const cropped = path.join(tmp, 'cropped.jpg');
-      execFileSync('convert', [
+      im([
         artPath, '-gravity', cropArgs[2], '-crop', `${cropArgs[0]}x${cropArgs[1]}+0+0`, '+repage', cropped,
       ]);
 
@@ -190,33 +198,33 @@ export async function generateBlogImage({ slug, title, category }) {
       const patch = path.join(tmp, 'patch.png');
       const patchRaw = path.join(tmp, 'patch-raw.png');
       const patchMask = path.join(tmp, 'patch-mask.png');
-      execFileSync('convert', [
+      im([
         cropped, '-gravity', 'SouthEast', '-crop', '55%x22%+0+0', '+repage',
         '-blur', '0x22', '-modulate', '80,90', patchRaw,
       ]);
-      const dim = execFileSync('identify', ['-format', '%wx%h', patchRaw]).toString();
-      execFileSync('convert', [
+      const dim = imIdentify(['-format', '%wx%h', patchRaw]).toString();
+      im([
         '-size', dim, 'xc:white', '-shave', '14x14',
         '-bordercolor', 'black', '-border', '14', '-blur', '0x7', patchMask,
       ]);
-      execFileSync('convert', [
+      im([
         patchRaw, patchMask, '-alpha', 'off', '-compose', 'CopyOpacity', '-composite', patch,
       ]);
 
       // Downscale to the panel (source is ~1.8× the panel's pixels — this is
       // where the sharpness comes from) + a light unsharp touch.
       const photo = path.join(tmp, 'photo.png');
-      execFileSync('convert', [
+      im([
         cropped, patch, '-gravity', 'SouthEast', '-geometry', '+0+0', '-composite',
         '-resize', `${PW}x${H}^`, '-gravity', 'center', '-extent', `${PW}x${H}`,
         '-unsharp', '0x0.8+0.6+0.02', photo,
       ]);
       const fade = path.join(tmp, 'fade.png');
-      execFileSync('convert', [
+      im([
         '-size', `${PW}x110`, 'gradient:rgba(5,28,22,0)-rgba(5,28,22,0.85)', fade,
       ]);
-      execFileSync('convert', [photo, fade, '-gravity', 'South', '-composite', photo]);
-      execFileSync('convert', [
+      im([photo, fade, '-gravity', 'South', '-composite', photo]);
+      im([
         base, photo, '-gravity', 'East', '-geometry', '+0+0', '-composite',
         '-fill', 'rgba(52,211,153,0.9)', '-draw', `rectangle ${LX - 2},0 ${LX + 1},${H}`,
         base,
@@ -226,7 +234,7 @@ export async function generateBlogImage({ slug, title, category }) {
     // 3. Text on the brand panel (ASCII titles only — no CJK font bundled;
     //    CJK posts get the mark alone).
     const mark = path.join(tmp, 'mark.png');
-    execFileSync('convert', [
+    im([
       '-background', 'none', '-fill', 'rgba(255,255,255,0.82)',
       '-font', FONT_SEMI, '-pointsize', '26',
       'caption:waai.me', mark,
@@ -241,7 +249,7 @@ export async function generateBlogImage({ slug, title, category }) {
         font: FONT_BOLD, pointsize: size, fill: 'white', width: LX - 96,
         tmp, name: 'title.png',
       });
-      execFileSync('convert', [
+      im([
         base,
         cat.path, '-gravity', 'NorthWest', '-geometry', '+48+64', '-composite',
         title2.path, '-gravity', 'NorthWest', '-geometry', `+48+${64 + cat.height + 26}`, '-composite',
@@ -249,7 +257,7 @@ export async function generateBlogImage({ slug, title, category }) {
         '-strip', '-quality', '90', outAbs,
       ]);
     } else {
-      execFileSync('convert', [
+      im([
         base, mark, '-gravity', 'SouthWest', '-geometry', '+48+40', '-composite',
         '-strip', '-quality', '90', outAbs,
       ]);

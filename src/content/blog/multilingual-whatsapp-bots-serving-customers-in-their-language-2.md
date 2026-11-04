@@ -1,6 +1,7 @@
 ---
 title: "Bot WhatsApp Berbilang Bahasa: Melayani Pelanggan Dalam Bahasa Mereka"
 description: "Ketahui mengapa sokongan berbilang bahasa penting untuk perniagaan di Malaysia dan Asia Tenggara, cara pengesanan bahasa dan penghalaan automatik berfungsi, serta cara waai membantu anda melayani pelanggan dalam 5 bahasa tanpa kerumitan."
+heroImage: "/images/blog/multilingual-whatsapp-bots-serving-customers-in-their-language-2.jpg"
 pubDate: 2026-11-01
 author: waai
 category: Guides

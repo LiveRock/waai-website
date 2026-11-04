@@ -1,6 +1,7 @@
 ---
 title: "Multilingual WhatsApp Bots: Serving Customers in Their Language"
 description: "Learn why multilingual support matters for WhatsApp automation in Southeast Asia, how language detection and routing work, and how to serve customers in their own language — automatically."
+heroImage: "/images/blog/multilingual-whatsapp-bots-serving-customers-in-their-language.jpg"
 pubDate: 2026-10-27
 author: waai
 category: Guides
