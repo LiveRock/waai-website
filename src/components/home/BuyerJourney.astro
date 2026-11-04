@@ -71,13 +71,13 @@ const panels = [
         subtitle={t('home.journey.subtitle')}
         align="left"
       />
-      <!-- Phone mockup (hero's frame at ~72%) playing another waai Short.
+      <!-- Phone mockup (hero's frame at ~90%) playing another waai Short.
            lg:mb-12 mirrors SectionHeading's baked-in bottom margin so both
            columns optically centre on the same line. -->
       <div class="flex justify-center lg:mb-12">
         <div class="relative">
-          <div class="w-52 h-[420px] bg-gray-900 rounded-[2.6rem] p-2.5 shadow-2xl">
-            <div class="relative w-full h-full bg-black rounded-[2.1rem] overflow-hidden">
+          <div class="w-[260px] h-[525px] bg-gray-900 rounded-[3.25rem] p-3 shadow-2xl">
+            <div class="relative w-full h-full bg-black rounded-[2.6rem] overflow-hidden">
               <!-- waai promo Short, self-hosted (muted loop; script below gates playback) -->
               <video
                 data-journey-video
@@ -98,8 +98,8 @@ const panels = [
                 aria-label={t('home.hero.video.play')}
                 class="lg:hidden absolute inset-0 z-10 flex items-center justify-center bg-black/20 cursor-pointer group"
               >
-                <span class="flex items-center justify-center w-14 h-14 rounded-full bg-wa-green shadow-xl ring-4 ring-white/40 group-hover:scale-110 group-active:scale-95 transition-transform">
-                  <svg class="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+                <span class="flex items-center justify-center w-16 h-16 rounded-full bg-wa-green shadow-xl ring-4 ring-white/40 group-hover:scale-110 group-active:scale-95 transition-transform">
+                  <svg class="w-7 h-7 text-white ml-1" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
                 </span>
               </button>
               <!-- Sound toggle (video autoplays muted) -->
@@ -110,10 +110,10 @@ const panels = [
                 data-label-off={t('home.hero.video.soundOff')}
                 aria-pressed="false"
                 aria-label={t('home.hero.video.soundOn')}
-                class="absolute bottom-2.5 right-2.5 z-10 flex items-center justify-center w-9 h-9 rounded-full bg-black/50 backdrop-blur-sm text-white/90 shadow-lg ring-1 ring-white/25 hover:bg-black/65 hover:scale-105 active:scale-95 transition cursor-pointer"
+                class="absolute bottom-3 right-3 z-10 flex items-center justify-center w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm text-white/90 shadow-lg ring-1 ring-white/25 hover:bg-black/65 hover:scale-105 active:scale-95 transition cursor-pointer"
               >
-                <svg data-icon-muted class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
-                <svg data-icon-on class="w-4 h-4 hidden" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                <svg data-icon-muted class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+                <svg data-icon-on class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
               </button>
             </div>
           </div>
