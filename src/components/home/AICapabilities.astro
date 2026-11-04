@@ -1,5 +1,6 @@
 ---
 import SectionHeading from '../shared/SectionHeading.astro';
+import RobotHead from '../shared/RobotHead.astro';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -7,11 +8,21 @@ const t = useTranslations(lang);
 
 <section class="py-20 sm:py-24 bg-white">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <SectionHeading
-      title={t('home.ai.title')}
-      subtitle={t('home.ai.subtitle')}
-      badge={t('home.ai.badge')}
-    />
+    <div class="lg:grid lg:grid-cols-[auto_minmax(0,1fr)] lg:items-center lg:gap-10">
+      <!-- TV robot mascot in waai colors (canvas; hops draw past its box) -->
+      <div class="flex justify-center lg:justify-start mb-2 lg:mb-12">
+        <RobotHead state="idle" size={140} />
+      </div>
+      <!-- lg:mb-12 on the robot mirrors SectionHeading's baked-in mb-12 so both
+           columns optically centre on the same line; the heading keeps the
+           section's heading→cards rhythm on all viewports -->
+      <SectionHeading
+        title={t('home.ai.title')}
+        subtitle={t('home.ai.subtitle')}
+        badge={t('home.ai.badge')}
+        align="left"
+      />
+    </div>
 
     <div class="grid md:grid-cols-3 gap-8">
       <!-- Card 1 -->

@@ -1,0 +1,174 @@
+---
+// TV-headed robot mascot, drawn on a 2D canvas. The drawing core is vendored
+// (src/lib/robot-heads, MIT © Fayaz Ahmed); this wrapper is a vanilla port of
+// the upstream React component (RobotHead.tsx) so the site ships no React.
+// The element is a size × size box with the robot at rest centred in it —
+// hops, antenna glow and floor shadow draw past its edges without taking
+// layout room (so avoid an overflow-hidden parent tight around it).
+interface Props {
+  shape?: 'rectangle' | 'square' | 'circle' | 'hexagon';
+  state?: 'idle' | 'thinking' | 'searching' | 'listening' | 'speaking' | 'working' | 'happy' | 'error' | 'sleeping';
+  /** px box the robot rests in (default 140) */
+  size?: number;
+  /** shell colour (default wa-green) */
+  color?: string;
+  /** ears + antenna collar (default ai-purple) */
+  trimColor?: string;
+  /** screen LEDs (default pale mint) */
+  screenColor?: string;
+  /** multiplier on every animation */
+  speed?: number;
+  /** follow the pointer, hop+spin on click (default true) */
+  interactive?: boolean;
+  /** draw the antenna stem + light (default true) */
+  antenna?: boolean;
+  /** soft floor shadow (default true) */
+  floorShadow?: boolean;
+  /** aria-label override (default "Robot, <state>") */
+  label?: string;
+}
+
+const {
+  shape = 'rectangle',
+  state = 'idle',
+  size = 140,
+  color = '#25D366',
+  trimColor = '#7C3AED',
+  screenColor = '#EAFFF2',
+  speed = 1,
+  interactive = true,
+  antenna = true,
+  floorShadow = true,
+  label,
+} = Astro.props;
+---
+
+<span
+  data-robot-head
+  data-shape={shape}
+  data-state={state}
+  data-size={size}
+  data-color={color}
+  data-trim={trimColor}
+  data-screen={screenColor}
+  data-speed={speed}
+  data-interactive={interactive ? 'true' : 'false'}
+  data-antenna={antenna ? 'true' : 'false'}
+  data-shadow={floorShadow ? 'true' : 'false'}
+  role="img"
+  aria-label={label ?? `Robot, ${state}`}
+  style={`position:relative;display:block;flex:none;width:${size}px;height:${size}px;${interactive ? 'cursor:pointer;' : ''}`}
+>
+  <canvas aria-hidden="true" style="position:absolute;pointer-events:none;display:block;"></canvas>
+</span>
+
+<script>
+  // One head per [data-robot-head]; all heads share the vendored ticker loop,
+  // which sleeps while the tab is hidden. An IntersectionObserver keeps an
+  // offscreen head from painting frames (ticker on its own only handles the
+  // hidden-tab case).
+  import { RobotSim, restPose } from '../../lib/robot-heads/tv/sim';
+  import { RobotRenderer, frameFor, type Palette } from '../../lib/robot-heads/tv/render';
+  import { getShape } from '../../lib/robot-heads/tv/geometry';
+  import { linear } from '../../lib/robot-heads/tv/light';
+  import { parseColor } from '../../lib/robot-heads/color';
+  import { subscribe, pointer } from '../../lib/robot-heads/ticker';
+  import type { RobotHeadShape, RobotHeadState } from '../../lib/robot-heads/types';
+
+  function palette(color: string, trim: string, screen: string): Palette {
+    const shell = parseColor(color) ?? [48, 80, 172];
+    const metal = parseColor(trim) ?? [150, 168, 200];
+    const led = parseColor(screen) ?? [232, 242, 255];
+    return {
+      shell: { albedo: linear(shell), f0: 0.05, metal: 0.15, spec: 0.55, shininess: 70, rim: 0.9 },
+      trim: { albedo: linear(metal), f0: 0.2, metal: 0.65, spec: 0.8, shininess: 45, rim: 0.7 },
+      led,
+    };
+  }
+
+  const reducedMotion = () =>
+    typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll<HTMLElement>('[data-robot-head]').forEach((box, i) => {
+    const canvas = box.querySelector('canvas');
+    if (!canvas) return;
+    const shape = (box.dataset.shape || 'rectangle') as RobotHeadShape;
+    const state = (box.dataset.state || 'idle') as RobotHeadState;
+    const size = Number(box.dataset.size) || 140;
+    const speed = Number(box.dataset.speed) || 1;
+    const interactive = box.dataset.interactive !== 'false';
+    const antenna = box.dataset.antenna !== 'false';
+    const floorShadow = box.dataset.shadow !== 'false';
+    const pal = palette(
+      box.dataset.color || '#25D366',
+      box.dataset.trim || '#7C3AED',
+      box.dataset.screen || '#EAFFF2'
+    );
+    const seed = (i % 10) / 10; // desyncs blinks if a row of heads ever appears
+
+    const sim = new RobotSim(seed, state);
+    const renderer = new RobotRenderer();
+    const shapeObj = getShape(shape);
+    const frame = frameFor(shapeObj, antenna, size);
+
+    // The canvas spans the box plus the frame's pads, so hops/glow/shadow
+    // overflow the layout box (upstream convention).
+    canvas.style.left = `${-frame.padSide}px`;
+    canvas.style.top = `${-frame.padTop}px`;
+    canvas.style.width = `${frame.box + 2 * frame.padSide}px`;
+    canvas.style.height = `${frame.box + frame.padTop + frame.padBottom}px`;
+
+    const paint = (animated: boolean) => {
+      const dpr = Math.min(2, (typeof devicePixelRatio === 'number' && devicePixelRatio) || 1);
+      const w = Math.round((frame.box + 2 * frame.padSide) * dpr);
+      const h = Math.round((frame.box + frame.padTop + frame.padBottom) * dpr);
+      if (canvas.width !== w || canvas.height !== h) {
+        canvas.width = w;
+        canvas.height = h;
+      }
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      renderer.draw(
+        ctx, frame, dpr,
+        animated ? sim.pose : restPose(state),
+        animated ? sim : null,
+        state, shapeObj, pal,
+        { floorShadow, antenna }
+      );
+    };
+
+    if (interactive) box.addEventListener('click', () => sim.poke());
+
+    if (reducedMotion()) {
+      paint(false); // still pose, no loop
+      return;
+    }
+
+    let unsubscribe: (() => void) | null = null;
+    const run = (on: boolean) => {
+      if (on && !unsubscribe) {
+        unsubscribe = subscribe((dt) => {
+          if (interactive && Number.isFinite(pointer.x)) {
+            // measured from the resting head's centre (upstream math)
+            const rect = box.getBoundingClientRect();
+            const dx = pointer.x - (rect.left + rect.width / 2);
+            const dy = pointer.y - (rect.top + frame.cy - frame.padTop);
+            sim.pointer = Math.hypot(dx, dy) < 700 ? { x: dx, y: dy } : null;
+          } else {
+            sim.pointer = null;
+          }
+          sim.update(dt * speed);
+          paint(true);
+        });
+      } else if (!on && unsubscribe) {
+        unsubscribe();
+        unsubscribe = null;
+      }
+    };
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((entries) => run(entries[0].isIntersecting), { threshold: 0 }).observe(box);
+    } else {
+      run(true);
+    }
+  });
+</script>
