@@ -65,13 +65,64 @@ const panels = [
 
 <section class="py-20 sm:py-24 bg-gray-50">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <SectionHeading
-      title={t('home.journey.title')}
-      subtitle={t('home.journey.subtitle')}
-    />
+    <div class="lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-12">
+      <SectionHeading
+        title={t('home.journey.title')}
+        subtitle={t('home.journey.subtitle')}
+        align="left"
+      />
+      <!-- Phone mockup (hero's frame at ~72%) playing another waai Short.
+           lg:mb-12 mirrors SectionHeading's baked-in bottom margin so both
+           columns optically centre on the same line. -->
+      <div class="flex justify-center lg:mb-12">
+        <div class="relative">
+          <div class="w-52 h-[420px] bg-gray-900 rounded-[2.6rem] p-2.5 shadow-2xl">
+            <div class="relative w-full h-full bg-black rounded-[2.1rem] overflow-hidden">
+              <!-- waai promo Short, self-hosted (muted loop; script below gates playback) -->
+              <video
+                data-journey-video
+                src="/videos/journey-waai-short.mp4"
+                poster="/videos/journey-waai-short.jpg"
+                muted
+                loop
+                playsinline
+                preload="metadata"
+                disablepictureinpicture
+                class="w-full h-full object-cover"
+                aria-label="waai — every WhatsApp conversation counts"
+              ></video>
+              <!-- Mobile tap-to-play overlay (desktop autoplays muted instead) -->
+              <button
+                type="button"
+                data-journey-play
+                aria-label={t('home.hero.video.play')}
+                class="lg:hidden absolute inset-0 z-10 flex items-center justify-center bg-black/20 cursor-pointer group"
+              >
+                <span class="flex items-center justify-center w-14 h-14 rounded-full bg-wa-green shadow-xl ring-4 ring-white/40 group-hover:scale-110 group-active:scale-95 transition-transform">
+                  <svg class="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+                </span>
+              </button>
+              <!-- Sound toggle (video autoplays muted) -->
+              <button
+                type="button"
+                data-journey-sound
+                data-label-on={t('home.hero.video.soundOn')}
+                data-label-off={t('home.hero.video.soundOff')}
+                aria-pressed="false"
+                aria-label={t('home.hero.video.soundOn')}
+                class="absolute bottom-2.5 right-2.5 z-10 flex items-center justify-center w-9 h-9 rounded-full bg-black/50 backdrop-blur-sm text-white/90 shadow-lg ring-1 ring-white/25 hover:bg-black/65 hover:scale-105 active:scale-95 transition cursor-pointer"
+              >
+                <svg data-icon-muted class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+                <svg data-icon-on class="w-4 h-4 hidden" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Tabs -->
-    <div class="flex justify-center mb-12">
+    <div class="flex justify-center mt-12 lg:mt-0 mb-12">
       <div class="inline-flex bg-white rounded-xl border border-gray-200 p-1.5 gap-1">
         {panels.map((p, i) => (
           <button class:list={['buyer-tab px-5 py-2.5 text-sm font-semibold rounded-lg transition-all', i === 0 ? 'active bg-wa-green text-white' : 'text-gray-500 hover:text-gray-700']} data-tab={p.tab}>
@@ -140,4 +191,81 @@ const panels = [
       document.getElementById(`panel-${target}`)?.classList.remove('hidden');
     });
   });
+</script>
+
+<script is:inline>
+  // Journey phone video — same gates as the hero phone. Desktop (>=1024px):
+  // muted autoplay loop while on screen and motion is allowed. Mobile: poster
+  // + tap-to-play overlay — the tap is the user gesture browsers require, so
+  // playback starts WITH sound; afterwards scrolling away pauses and returning
+  // resumes it.
+  (function () {
+    var video = document.querySelector('[data-journey-video]');
+    if (!video) return;
+    var desktop = window.matchMedia('(min-width: 1024px)');
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var overlay = document.querySelector('[data-journey-play]');
+    var soundBtn = document.querySelector('[data-journey-sound]');
+    var iconMuted = soundBtn && soundBtn.querySelector('[data-icon-muted]');
+    var iconOn = soundBtn && soundBtn.querySelector('[data-icon-on]');
+    var onScreen = true;
+    var userStarted = false; // set on first tap — opts the video into resume-on-visible
+
+    function syncSound() {
+      if (!soundBtn) return;
+      var audible = !video.muted;
+      iconMuted.classList.toggle('hidden', audible);
+      iconOn.classList.toggle('hidden', !audible);
+      soundBtn.setAttribute('aria-pressed', audible ? 'true' : 'false');
+      soundBtn.setAttribute('aria-label', audible ? soundBtn.getAttribute('data-label-off') : soundBtn.getAttribute('data-label-on'));
+    }
+    function syncOverlay() {
+      if (overlay) overlay.classList.toggle('hidden', !video.paused);
+    }
+    function update() {
+      if (onScreen && (userStarted || (desktop.matches && !reduced.matches))) {
+        var p = video.play();
+        if (p && p.catch) p.catch(function () {});
+      } else {
+        video.pause();
+      }
+      syncOverlay();
+    }
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        onScreen = entries[0].isIntersecting;
+        update();
+      }, { threshold: 0 }).observe(video);
+    }
+    desktop.addEventListener('change', update);
+    reduced.addEventListener('change', update);
+
+    // Mobile: tap the poster overlay to start the video with sound.
+    if (overlay) {
+      overlay.addEventListener('click', function () {
+        userStarted = true;
+        video.muted = false;
+        video.volume = 1;
+        var p = video.play();
+        if (p && p.catch) p.catch(function () {});
+        syncSound();
+        syncOverlay();
+      });
+    }
+    // Sound toggle — video autoplays muted; click unmutes it (user gesture,
+    // so autoplay policies are satisfied). Click again to re-mute.
+    if (soundBtn) {
+      soundBtn.addEventListener('click', function () {
+        video.muted = !video.muted;
+        if (!video.muted) {
+          video.volume = 1;
+          var p = video.play();
+          if (p && p.catch) p.catch(function () {});
+        }
+        syncSound();
+      });
+    }
+    syncSound();
+    update();
+  })();
 </script>
