@@ -268,36 +268,59 @@ const body = {
     { role: 'user', content: USER },
   ],
   temperature: 0.7,
-  max_tokens: 6000,
+  max_tokens: 8000,
   response_format: { type: 'json_object' },
 };
 if (isCoding) body.thinking = { type: 'disabled' }; // coding endpoint enables reasoning by default; disable for speed
 
-async function callModel() {
-  const res = await fetch(`${ZAI_BASE}/chat/completions`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${ZAI_API_KEY}` },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) {
-    console.error(`✖ z.ai HTTP ${res.status}: ${(await res.text()).slice(0, 500)}`);
-    console.error('  If "insufficient balance" / 429: your key may be coding-plan-only on the wrong endpoint, or rate-limited. Adjust ZAI_BASE_URL / ZAI_MODEL.');
-    process.exit(1);
-  }
-  const data = await res.json();
-  const raw = data.choices?.[0]?.message?.content || '';
+// A JSON body cut off at max_tokens (finish_reason "length") or otherwise
+// unparseable is a transient generation failure, not a reason to die — the
+// 2026-11-03 weekly run crashed on exactly that (uncaught JSON.parse on a
+// truncated body at line 299). Retry with a raised cap before giving up.
+const MAX_CALL_ATTEMPTS = 3;
 
-  // parse JSON (defensive: strip fences / extract first object)
+function parseModelJson(raw) {
+  // models occasionally wrap even json_object output in ```fences — strip them
+  const stripped = String(raw).replace(/^\s*```(?:json)?\s*\n?/i, '').replace(/\n?```\s*$/, '').trim();
   try {
-    return JSON.parse(raw);
+    return JSON.parse(stripped);
   } catch {
-    const m = raw.match(/\{[\s\S]*\}/);
-    if (!m) {
-      console.error('✖ Could not parse JSON from model output:\n', raw.slice(0, 800));
+    const m = stripped.match(/\{[\s\S]*\}/); // first { … last } of a truncated-but-complete object
+    if (m) return JSON.parse(m[0]);
+    throw new Error(`no JSON object in model output (${stripped.length} chars): ${stripped.slice(0, 200)}…`);
+  }
+}
+
+async function callModel() {
+  let lastErr;
+  for (let attempt = 1; attempt <= MAX_CALL_ATTEMPTS; attempt++) {
+    const res = await fetch(`${ZAI_BASE}/chat/completions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${ZAI_API_KEY}` },
+      body: JSON.stringify({ ...body, max_tokens: body.max_tokens + (attempt - 1) * 2000 }),
+    });
+    if (!res.ok) {
+      console.error(`✖ z.ai HTTP ${res.status}: ${(await res.text()).slice(0, 500)}`);
+      console.error('  If "insufficient balance" / 429: your key may be coding-plan-only on the wrong endpoint, or rate-limited. Adjust ZAI_BASE_URL / ZAI_MODEL.');
       process.exit(1);
     }
-    return JSON.parse(m[0]);
+    const data = await res.json();
+    const choice = data.choices?.[0];
+    const raw = choice?.message?.content || '';
+    if (choice?.finish_reason === 'length') {
+      lastErr = new Error('output truncated at max_tokens (finish_reason "length")');
+      console.warn(`⚠ callModel attempt ${attempt}/${MAX_CALL_ATTEMPTS}: ${lastErr.message}${attempt < MAX_CALL_ATTEMPTS ? ' — retrying with a higher cap' : ''}`);
+      continue;
+    }
+    try {
+      return parseModelJson(raw);
+    } catch (err) {
+      lastErr = err;
+      console.warn(`⚠ callModel attempt ${attempt}/${MAX_CALL_ATTEMPTS}: ${err.message}${attempt < MAX_CALL_ATTEMPTS ? ' — resampling' : ''}`);
+    }
   }
+  console.error(`✖ callModel failed after ${MAX_CALL_ATTEMPTS} attempts. Last error: ${lastErr?.message}`);
+  process.exit(1);
 }
 
 // ---- originality check (news mode): refuse to write near-verbatim output ----
