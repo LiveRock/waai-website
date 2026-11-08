@@ -391,6 +391,8 @@ const ja: Record<string, string> = {
   'home.hero.subhead':
     'すべてのWhatsAppメッセージをチャンスに変えましょう。AIを活用した自動応答、予約、注文、シームレスなヒューマンハンドオフ — もう二度とお客様をお待たせしません。',
   'home.hero.trialNote': 'クレジットカード不要。無料トライアル。',
+  // ---- Homepage: entity definition (GEO) ----
+  'home.definition': "waaiは商用マルチテナント型のAI WhatsAppビジネスアシスタントです — 公式WhatsApp Business APIの上で、中小企業の顧客対応、予約、カタログ注文、サポートを自動化するSaaSプラットフォームです。",
   'home.hero.badge.responseTime': '応答時間',
   'home.hero.badge.responseValue': '< 3秒',
   'home.hero.badge.aiPowered': 'AI搭載',

@@ -391,6 +391,8 @@ const th: Record<string, string> = {
   'home.hero.subhead':
     'เปลี่ยนทุกข้อความ WhatsApp ให้เป็นโอกาส ตอบกลับอัตโนมัติด้วย AI การจองนัดหมาย คำสั่งซื้อ และการส่งต่อให้พนักงานอย่างราบรื่น — ลูกค้าของคุณจะไม่ต้องรออีกต่อไป',
   'home.hero.trialNote': 'ไม่ต้องใช้บัตรเครดิต ทดลองใช้ฟรี',
+  // ---- Homepage: entity definition (GEO) ----
+  'home.definition': "waai คือผู้ช่วยธุรกิจ AI บน WhatsApp แบบพาณิชย์หลายผู้ใช้ (multi-tenant) — แพลตฟอร์ม SaaS ที่ทำให้การสนทนากับลูกค้า การจอง ออเดอร์แคตตาล็อก และการซัพพอร์ตเป็นไปโดยอัตโนมัติบน WhatsApp Business API อย่างเป็นทางการ สำหรับธุรกิจขนาดเล็กและขนาดกลาง",
   'home.hero.badge.responseTime': 'เวลาตอบกลับ',
   'home.hero.badge.responseValue': '< 3 วินาที',
   'home.hero.badge.aiPowered': 'ขับเคลื่อนด้วย AI',

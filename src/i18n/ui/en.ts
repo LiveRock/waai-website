@@ -443,6 +443,8 @@ const en: Record<string, string> = {
   'home.hero.subhead':
     'Turn every WhatsApp message into an opportunity. AI auto-responses, bookings, orders, and seamless human handoff — your customers never wait again.',
   'home.hero.trialNote': 'No credit card required. Free trial.',
+  // ---- Homepage: entity definition (GEO) ----
+  'home.definition': "waai is a commercial, multi-tenant AI WhatsApp business assistant — a SaaS platform that automates customer conversations, bookings, catalog orders and support on the official WhatsApp Business API for small and medium businesses.",
   // Universal program label — intentionally EN-only (other locales fall back, like nav.blog).
   // Word order matches Meta's official partner badge verbatim. Used in hero + footer.
   'meta.techProvider': 'Official Meta Tech Provider',

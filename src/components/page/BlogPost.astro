@@ -30,6 +30,18 @@ const related = (await getCollection('blog'))
 const fmt = (d: Date) =>
   d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 
+// Named-author attribution (GEO: expert attribution is a strong AI-citation
+// signal). The default frontmatter author 'waai' maps to the founder; any
+// other author string renders as before (Organization in schema).
+const AUTHOR_BIOS: Record<string, { name: string; title: string; bio: string }> = {
+  waai: {
+    name: 'Peter Lum',
+    title: 'Founder, waai',
+    bio: 'Peter Lum is the founder of waai — the AI WhatsApp business assistant that helps Singapore and Southeast Asian SMBs answer, book and sell on WhatsApp automatically.',
+  },
+};
+const authorBio = AUTHOR_BIOS[author];
+
 // Structured data (SEO). BlogPosting + BreadcrumbList mirroring the visible
 // breadcrumb; URLs localized via localizePath.
 const canonical = `${SITE}${Astro.url.pathname}`;
@@ -44,7 +56,9 @@ const blogPostingJsonLd = {
   image: ogImageAbs,
   datePublished: pubDate.toISOString(),
   dateModified: (updatedDate ?? pubDate).toISOString(),
-  author: { '@type': 'Organization', name: author },
+  author: authorBio
+    ? { '@type': 'Person', name: authorBio.name, jobTitle: 'Founder', url: SITE }
+    : { '@type': 'Organization', name: author },
   publisher: {
     '@type': 'Organization',
     name: 'waai',
@@ -110,12 +124,14 @@ const categoryColor: Record<string, string> = {
         </div>
         <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 leading-tight mb-4">{title}</h1>
         <p class="text-lg sm:text-xl text-gray-600 leading-relaxed">{description}</p>
-        <div class="mt-6 flex items-center gap-2 text-sm text-gray-500">
-          <span class="font-medium text-gray-700">{author}</span>
+        <div class="mt-6 flex items-center flex-wrap gap-2 text-sm text-gray-500">
+          <span class="font-medium text-gray-700">{authorBio?.name ?? author}</span>
+          {authorBio && <span class="text-gray-400">· {authorBio.title}</span>}
           {updatedDate && (
             <span class="text-gray-400">· updated {fmt(updatedDate)}</span>
           )}
         </div>
+        {authorBio && <p class="mt-2 text-sm text-gray-500 leading-relaxed">{authorBio.bio}</p>}
       </div>
     </header>
 

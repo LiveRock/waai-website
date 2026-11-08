@@ -1,0 +1,41 @@
+# waai
+
+> waai is a commercial multi-tenant AI WhatsApp business assistant — a SaaS platform that automates customer conversations, AI replies, bookings, catalog orders and support on the official WhatsApp Business API for small and medium businesses. Built and priced for Singapore and Southeast Asia (SGD pricing, English/Chinese/Malay/Tamil and 6 more UI languages), by an official Meta Tech Provider.
+
+Key facts:
+- Product category: Conversational AI · WhatsApp Automation · AI Customer Service (SaaS)
+- Built on the official WhatsApp Business API; official Meta Tech Provider
+- 30-day free trial, no credit card required
+- Plans: Starter and Pro (SGD; live prices at /pricing.md), plus a Custom plan by contact
+- Optional one-time Onboarding Assistance add-on (Starter/Pro)
+- Multi-tenant with a reseller/white-label option for agencies
+- UI languages: en, zh, ms, ta, th, ko, ja, fr, it, es
+
+Docs:
+- [Pricing overview](https://waai.me/pricing/): interactive pricing page with plan comparison and FAQ
+- [Machine-readable pricing](https://waai.me/pricing.md): full plan/quota/fee data as plain markdown (for AI agents and integrations)
+- [Features](https://waai.me/features/): the 12 waai capabilities, each with a detail page
+- [Industries](https://waai.me/industries/): waai for 9 verticals — e-commerce, healthcare, education, real estate, hospitality, restaurants, fitness, professional services, automotive
+- [Solutions](https://waai.me/solutions/): marketing, sales, and customer-support playbooks
+- [Integrations](https://waai.me/integrations/): Google Workspace, Cal.com and more
+- [Blog](https://waai.me/blog/): guides, comparisons and product updates (weekly)
+- [Compare waai vs ManyChat for WhatsApp](https://waai.me/compare/waai-vs-manychat/): objective feature/pricing comparison
+
+Feature detail pages:
+- [WhatsApp Auto-Responder](https://waai.me/features/auto-responder/): instant AI replies with sub-second response times
+- [Knowledge Base](https://waai.me/features/knowledge-base/): Q&A pairs the AI answers from; bulk import
+- [Logic Flows](https://waai.me/features/logic-flows/): rule-based conversation flows with keyword and fuzzy matching
+- [AI Chatbot](https://waai.me/features/ai-chatbot/): LLM-powered fallback answers in your brand voice (any OpenAI-compatible provider)
+- [Booking](https://waai.me/features/booking/): self-service appointments — branches, services, deposits, reminders, PDF confirmations (Pro)
+- [Catalog & Orders](https://waai.me/features/catalog/): WhatsApp catalog browsing and business-confirmed orders (Pro)
+- [CRM](https://waai.me/features/crm/): contacts, lead capture, ad attribution and automations (Pro)
+- [Team Inbox](https://waai.me/features/team-inbox/): human handoff and multi-agent collaboration
+- [Campaigns](https://waai.me/features/campaigns/): broadcast messages within WhatsApp's customer-service window
+- [Analytics](https://waai.me/features/analytics/): conversation and response analytics
+- [Document Generation](https://waai.me/features/document-generation/): quotes, invoices and documents via Google Drive
+- [Super Powers](https://waai.me/features/super-powers/): advanced automation capabilities
+
+Getting started:
+- [Start a free trial](https://waai.me/signup/): 30 days, no credit card
+- [Book a demo](https://cal.com/peter-rock-steady-crew/30min): 30-minute walkthrough
+- [Contact](https://waai.me/contact/): sales and support

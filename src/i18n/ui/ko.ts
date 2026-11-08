@@ -391,6 +391,8 @@ const ko: Record<string, string> = {
   'home.hero.subhead':
     '모든 WhatsApp 메시지를 기회로 바꾸세요. AI 기반 자동 응답, 예약, 주문, 매끄러운 상담원 연결 — 고객은 더 이상 기다리지 않습니다.',
   'home.hero.trialNote': '신용카드 불필요. 무료 체험.',
+  // ---- Homepage: entity definition (GEO) ----
+  'home.definition': "waai는 상용 멀티테넌트 AI WhatsApp 비즈니스 어시스턴트입니다 — 공식 WhatsApp Business API 위에서 중소기업의 고객 대화, 예약, 카탈로그 주문, 고객 지원을 자동화하는 SaaS 플랫폼입니다.",
   'home.hero.badge.responseTime': '응답 시간',
   'home.hero.badge.responseValue': '< 3초',
   'home.hero.badge.aiPowered': 'AI 구동',

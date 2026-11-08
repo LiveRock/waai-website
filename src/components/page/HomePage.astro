@@ -1,5 +1,6 @@
 ---
 import PageLayout from '../../layouts/PageLayout.astro';
+import JsonLd from '../seo/JsonLd.astro';
 import Hero from '../home/Hero.astro';
 import LogoCarousel from '../home/LogoCarousel.astro';
 import VideoCarousel from '../home/VideoCarousel.astro';
@@ -11,9 +12,48 @@ import Stats from '../home/Stats.astro';
 import Testimonials from '../home/Testimonials.astro';
 import FinalCTA from '../home/FinalCTA.astro';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { SITE } from '../../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+
+// SoftwareApplication on the root domain (GEO: LLMs parse product attributes
+// here, not only /pricing) — same build-time plans API + no-rating convention
+// as PricingPage's schema.
+const PLAN_URLS = [
+  'http://127.0.0.1:8000/api/public/plans',
+  'https://waaichat.hsi.asia/api/public/plans',
+];
+let dbPlans: { name: string; price_monthly: number | null }[] = [];
+for (const url of PLAN_URLS) {
+  try {
+    const res = await fetch(url);
+    if (res.ok) {
+      dbPlans = await res.json();
+      break;
+    }
+  } catch {}
+}
+const starterMonthly = dbPlans.find((p) => p.name === 'starter')?.price_monthly ?? 2000;
+const proMonthly = dbPlans.find((p) => p.name === 'pro')?.price_monthly ?? 9900;
+const softwareJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'waai',
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Web',
+  description: t('page.home.description'),
+  url: SITE,
+  image: `${SITE}/images/og-default.jpg`,
+  offers: {
+    '@type': 'AggregateOffer',
+    priceCurrency: 'SGD',
+    lowPrice: starterMonthly / 100,
+    highPrice: proMonthly / 100,
+    offerCount: 2,
+    url: `${SITE}/pricing/`,
+  },
+};
 ---
 
 <PageLayout
@@ -21,7 +61,15 @@ const t = useTranslations(lang);
   description={t('page.home.description')}
   canonicalPath={Astro.url.pathname}
 >
+  <JsonLd data={softwareJsonLd} />
   <Hero />
+  <!-- Plain-language entity definition — the first content after the hero, for
+       LLMs (and skimmers) that need "what is waai" stated unambiguously. -->
+  <section class="bg-white py-6 sm:py-8">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <p class="text-base sm:text-lg text-gray-600 leading-relaxed">{t('home.definition')}</p>
+    </div>
+  </section>
   <LogoCarousel />
   <VideoCarousel />
   <AICapabilities />

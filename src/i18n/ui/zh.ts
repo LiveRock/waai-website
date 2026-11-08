@@ -417,6 +417,8 @@ const zh: Record<string, string> = {
   'home.hero.subhead':
     '把每条 WhatsApp 消息变成商机。AI 自动回复、预约、订单，加上无缝人工接管——让客户不再等待。',
   'home.hero.trialNote': '无需信用卡。免费试用。',
+  // ---- Homepage: entity definition (GEO) ----
+  'home.definition': "waai 是一个商业化多租户 AI WhatsApp 商务助手——一个基于 WhatsApp 官方 Business API 的 SaaS 平台，为中小企业自动化客户对话、预约、目录订单与客户支持。",
   'home.hero.badge.responseTime': '响应时间',
   'home.hero.badge.responseValue': '< 3 秒',
   'home.hero.badge.aiPowered': 'AI 驱动',

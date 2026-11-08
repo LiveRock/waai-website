@@ -423,6 +423,8 @@ const ta: Record<string, string> = {
   'home.hero.subhead':
     'ஒவ்வொரு WhatsApp செய்தியையும் வாய்ப்பாக மாற்றுங்கள். AI தானியக்க பதில்கள், பதிவுகள், ஆர்டர்கள் மற்றும் தடையின்றி மனித மாற்றம் — உங்கள் வாடிக்கையாளர்கள் இனி காத்திருக்க மாட்டார்கள்.',
   'home.hero.trialNote': 'கிரெடிட் கார்டு தேவையில்லை. இலவச சோதனை.',
+  // ---- Homepage: entity definition (GEO) ----
+  'home.definition': "waai என்பது வணிக ரீதியிலான பல-குடியிருப்போர் AI WhatsApp வணிக உதவியாளர் — சிறு மற்றும் நடுத்தர வணிகங்களுக்காக, அதிகாரப்பூர்வ WhatsApp Business API வழியாக வாடிக்கையாளர் உரையாடல்கள், முன்பதிவுகள், பட்டியல் ஆர்டர்கள் மற்றும் ஆதரவை தானியக்கமாக்கும் SaaS தளம்.",
   'home.hero.badge.responseTime': 'பதில் நேரம்',
   'home.hero.badge.responseValue': '< 3 வினாடிகள்',
   'home.hero.badge.aiPowered': 'AI இயக்கப்பட்ட',

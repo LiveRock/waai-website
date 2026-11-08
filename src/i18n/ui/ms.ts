@@ -423,6 +423,8 @@ const ms: Record<string, string> = {
   'home.hero.subhead':
     'Tukarkan setiap mesej WhatsApp menjadi peluang. Auto-respons berkuasa AI, tempahan, pesanan dan serah manusia yang lancar — pelanggan anda tidak perlu menunggu lagi.',
   'home.hero.trialNote': 'Tiada kad kredit diperlukan. Percubaan percuma.',
+  // ---- Homepage: entity definition (GEO) ----
+  'home.definition': "waai ialah pembantu perniagaan AI WhatsApp komersial pelbagai penyewa — platform SaaS yang mengautomasikan perbualan pelanggan, tempahan, pesanan katalog dan sokongan melalui WhatsApp Business API rasmi untuk perniagaan kecil dan sederhana.",
   'home.hero.badge.responseTime': 'Masa Respons',
   'home.hero.badge.responseValue': '< 3 saat',
   'home.hero.badge.aiPowered': 'Dikuasakan AI',

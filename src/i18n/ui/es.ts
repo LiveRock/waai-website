@@ -391,6 +391,8 @@ const es: Record<string, string> = {
   'home.hero.subhead':
     'Convierte cada mensaje de WhatsApp en una oportunidad. Respuestas automáticas con IA, reservas, pedidos y derivación fluida a humanos: tus clientes ya no vuelven a esperar.',
   'home.hero.trialNote': 'Sin tarjeta de crédito. Prueba gratis.',
+  // ---- Homepage: entity definition (GEO) ----
+  'home.definition': "waai es un asistente comercial de IA para WhatsApp multiinquilino — una plataforma SaaS que automatiza las conversaciones con clientes, las reservas, los pedidos de catálogo y el soporte sobre la API oficial de WhatsApp Business para las pequeñas y medianas empresas.",
   'home.hero.badge.responseTime': 'Tiempo de respuesta',
   'home.hero.badge.responseValue': '< 3 segundos',
   'home.hero.badge.aiPowered': 'Con IA',
