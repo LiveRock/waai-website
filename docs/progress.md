@@ -2,6 +2,15 @@
 
 Running log of significant work sessions. Newest first.
 
+## 2026-11-08
+
+### AI SEO (GEO) — Gemini-analysis implementation
+Peter brought a Gemini GEO analysis; planned against it, then implemented in three phases (all decisions per the approved plan).
+- **Phase A — entity positioning:** `/llms.txt`; `/pricing.md` static endpoint (build-time from the plans API; fallback degrades to price-only + note — verified live when a build caught the remote API briefly down, never publishes invented quotas); homepage SoftwareApplication + AggregateOffer JSON-LD (root domain, ×10 locales); `home.definition` entity strip under the hero (×10 dictionaries); blog byline 'waai' → Peter Lum (Founder) + Person schema via AUTHOR_BIOS.
+- **Phase B — conversational content:** `/compare/waai-vs-manychat/` permanent EN-only page (direct-answer callout, fair verdict cards, 2 tables, pricing compared — ManyChat 5 contact-tiers verified Nov 2026 vs waai build-time prices, FAQ ×5, Article+Breadcrumb+FAQPage schema; one Astro gotcha: element literals can't live in frontmatter — string markers + conditional render). Two GEO topics appended to blog-topics.json (16 total): "Top WhatsApp AI Assistant Platforms for Small Business (2026)" + "How to Automate Customer Service on WhatsApp with AI".
+- **Phase C — ecosystem (Peter executes):** `docs/ai-seo/directory-and-citation-pack.md` — paste-ready profiles for G2/Capterra/Product Hunt/AlternativeTo/Crunchbase, Reddit/Quora templates with disclosure etiquette, GitHub public-docs recommendation.
+- Verified: build 646 pages; llms.txt + pricing.md in dist; homepage 3 JSON-LD blocks parse with SGD offers; compare page desktop+mobile no overflow, all schema blocks valid, in sitemap; title-suffix gotcha caught and fixed (PageLayout appends "| waai.me"). robots.txt already AI-bot open (audit item, no change).
+
 ## 2026-11-04
 
 ### Homepage refresh: hero particles removed, robot head + journey phone added

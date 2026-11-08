@@ -197,6 +197,17 @@ Positioning is **Singapore-forward** (Peter's call, 2026-09-16): SGD pricing, `-
 - **H1 convention**: `SectionHeading` accepts `as?: 'h1'|'h2'` — pages whose only heading is a SectionHeading (pricing, blog, contact, signup, integrations) pass `as="h1"`; same styling either way.
 - **`/solutions/` index** (new 2026-09-16, ×10 locales): `SolutionsIndex.astro` + 2 thin routes; fixes the breadcrumb target (was `/solutions/marketing`) and gives footer/header a hub link.
 
+## AI SEO / GEO (2026-11-08, Gemini-analysis implementation)
+
+- **`/llms.txt`** (`public/llms.txt`, static) — llmstxt.org-format entity overview: canonical "waai is a…" line, key facts, links to all features/industries/solutions, `/pricing.md`, and the compare page. Update when adding major pages.
+- **`/pricing.md`** (`src/pages/pricing.md.ts` static endpoint, rss.xml.ts pattern) — machine-readable markdown pricing generated at build time from the same plans + onboarding APIs as PricingPage. **Fallback is honest**: if both API endpoints are unreachable the file ships price-only with a "fallback prices" note — never invented quotas (0 quotas render "Not available on this plan", NULL renders "Unlimited"). Discovery link sits under the /pricing FAQ.
+- **Homepage SoftwareApplication JSON-LD** — HomePage.astro fetches the plans API build-time and renders SoftwareApplication + AggregateOffer (SGD) at the root domain (was /pricing-only). No aggregateRating (site convention). All 10 locale homepages inherit.
+- **Entity definition strip** — `home.definition` key (×10 locales) renders a one-sentence "waai is a…" paragraph between Hero and LogoCarousel. Keep it in sync with llms.txt's entity line.
+- **Blog author mapping** — `AUTHOR_BIOS` in BlogPost.astro maps the frontmatter author `'waai'` → Peter Lum (Founder) with bio; BlogPosting schema author becomes `@type: Person`. New human authors: add to AUTHOR_BIOS.
+- **`/compare/waai-vs-manychat/`** — permanent EN-only comparison page (CompareManychat.astro; no [lang] route). GEO structure: direct-answer callout first, fair verdict cards both ways, at-a-glance + feature tables, pricing compared (waai from build-time API vs ManyChat contact tiers), FAQ ×5. Schema: Article (Person author) + BreadcrumbList + FAQPage. **`LAST_UPDATED` const** drives the visible date + schema dates; ManyChat prices verified Nov 2026 (manychat.com/pricing) — re-verify on refresh.
+- **Directory & citation pack** — `docs/ai-seo/directory-and-citation-pack.md`: paste-ready G2/Capterra/Product Hunt/AlternativeTo/Crunchbase profiles, Reddit/Quora answer templates, GitHub public-docs recommendation. Submitted by Peter (accounts needed).
+- robots.txt verified open to all AI crawlers (GPTBot, ClaudeBot, PerplexityBot, Google-Extended); nothing to maintain.
+
 ## Analytics (GA4 + AWStats)
 
 Two layers: a client-side **GA4** tag (events/engagement/conversions) and a server-side **AWStats** portal (raw visit/host/bandwidth/referrer log analysis).
