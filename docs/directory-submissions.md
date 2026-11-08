@@ -3,7 +3,9 @@
 **Goal:** referring domains + brand-entity signals so waai.me ranks for "waai" and category queries.
 **Started:** 2026-10-20 · **Tracker:** [`docs/submission-tracker.csv`](./submission-tracker.csv)
 
-## Phase 0 — Readiness (as of 2026-10-20)
+## Phase 0 — Readiness (as of 2026-11-08)
+
+Site screenshots ready in `docs/screenshots/` (7 shots); still pending from Peter: 2–3 waaiChat app UI screenshots (G2/Capterra), Search Console verification, waai.me in social bios.
 
 | # | Requirement | Status |
 |---|---|---|
