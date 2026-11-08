@@ -53,9 +53,10 @@ so consistent name/category/description across all of them is the point.
 - **Description:** entity line (short version)
 - **Founder/leadership:** Peter Lum — link his profile (also good for the Person entity graph)
 
-### Assets needed (from the pending brand-campaign screenshot batch)
+### Assets — site screenshots DONE, app screenshots pending
+- **Site screenshots (ready):** `docs/screenshots/` — 7 product shots captured 2026-11-08 from the live build: homepage hero, AI capabilities (robot), full features grid, pricing plans, pricing comparison table, waai-vs-ManyChat page, booking feature. Use for any listing that accepts uploads.
+- **App UI screenshots (Peter, 2–3 needed):** real waaiChat product views — e.g. the flow builder / knowledge base editor, booking settings, a live conversation with AI answers. Needed for G2/Capterra where reviewers expect the actual product UI, not the marketing site.
 - Logo: `public/images/logos/logo.jpg` (source of truth; favicon set already derived)
-- 3+ product screenshots: homepage hero (phone video frame), pricing comparison table, a booking demo conversation
 - Banner 1200×630: `public/images/og-default.jpg` works as-is
 
 ---
