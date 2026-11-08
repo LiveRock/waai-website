@@ -1,0 +1,324 @@
+---
+// waai vs ManyChat — permanent comparison page (EN-only v1, like legal pages).
+// GEO structure: direct-answer block first, objective tables, sourced stats,
+// FAQ mirroring AI-query phrasing, visible last-updated date.
+import PageLayout from '../../layouts/PageLayout.astro';
+import SectionHeading from '../shared/SectionHeading.astro';
+import Accordion from '../shared/Accordion.astro';
+import CTAButton from '../shared/CTAButton.astro';
+import JsonLd from '../seo/JsonLd.astro';
+import { SITE } from '../../i18n/utils';
+
+const LAST_UPDATED = '2026-11-08';
+const canonical = `${SITE}/compare/waai-vs-manychat/`;
+
+// waai plan prices from the same build-time API as /pricing (fallback = the
+// site's hardcoded fallback prices, cents).
+const PLAN_URLS = [
+  'http://127.0.0.1:8000/api/public/plans',
+  'https://waaichat.hsi.asia/api/public/plans',
+];
+let dbPlans: { name: string; price_monthly: number | null; price_yearly: number | null; max_messages_monthly: number | null; trial_days: number | null }[] = [];
+for (const url of PLAN_URLS) {
+  try {
+    const res = await fetch(url);
+    if (res.ok) {
+      dbPlans = await res.json();
+      break;
+    }
+  } catch {}
+}
+const starter = dbPlans.find((p) => p.name === 'starter');
+const pro = dbPlans.find((p) => p.name === 'pro');
+const starterMonthly = (starter?.price_monthly ?? 2000) / 100;
+const starterYearly = (starter?.price_yearly ?? 22000) / 100;
+const proMonthly = (pro?.price_monthly ?? 9900) / 100;
+const proYearly = (pro?.price_yearly ?? 99000) / 100;
+const trialDays = dbPlans.find((p) => p.name === 'trial')?.trial_days ?? 30;
+
+// ManyChat pricing as of Nov 2026 (manychat.com/pricing; contact-based tiers,
+// USD, Meta per-conversation fees not included).
+const manychatTiers = [
+  { name: 'Free', price: '$0', contacts: '~25 active contacts', notes: '1,000 credits/mo, unlimited flows' },
+  { name: 'Essential', price: '$17/mo ($14 annual)', contacts: '~250 active contacts', notes: 'WhatsApp, email, SMS channels' },
+  { name: 'Pro', price: '$39/mo ($29 annual)', contacts: '2,500 active contacts', notes: 'AI features (credit-based), 14-day trial' },
+  { name: 'Business', price: '$99/mo', contacts: '7,500 active contacts', notes: 'Priority support' },
+  { name: 'Advanced', price: '$199/mo', contacts: '25,000 active contacts', notes: 'Scale tier, overage per contact' },
+];
+
+const faqItems = [
+  {
+    question: 'Is ManyChat good for WhatsApp?',
+    answer:
+      'Yes — ManyChat is a solid choice for no-code multi-channel chatbots, and it works with the official WhatsApp Business API. Its strength is drag-and-drop flow building across Instagram, Facebook Messenger, WhatsApp, email and SMS in one tool. If WhatsApp is your primary or only channel and you want AI that answers customer questions out of the box (not just flows you build), a WhatsApp-first platform like waai typically gets you live faster.',
+  },
+  {
+    question: 'What is cheaper than ManyChat for WhatsApp AI?',
+    answer:
+      `It depends on your contact count and usage. waai is priced per plan with message quotas (Starter S$${starterMonthly}/month, Pro S$${proMonthly}/month) rather than per active contact, so at a few thousand contacts waai Pro can cost less than ManyChat Business. ManyChat has a free tier (~25 contacts), which waai answers with a ${trialDays}-day full-feature free trial instead. Neither price includes Meta's per-conversation WhatsApp fees, which both platforms pass through.`,
+  },
+  {
+    question: 'Does waai or ManyChat have better AI answers on WhatsApp?',
+    answer:
+      'waai is built around AI answering: a knowledge base of Q&A pairs plus rule-based logic flows, with an LLM-powered fallback (any OpenAI-compatible provider) so unmatched questions still get answered in your brand voice. ManyChat is flow-first — AI features exist on paid tiers and consume credits, but the default experience is flows you build yourself. If you want to maintain answers as content rather than build conversation trees, waai is the closer fit; if you want precise scripted journeys (contests, drip sequences, ad replies), ManyChat\'s flow builder is excellent.',
+  },
+  {
+    question: 'Can ManyChat do bookings, catalog orders and CRM like waai?',
+    answer:
+      'Not natively to the same depth. waai includes self-service booking with branches, services, deposits, reminders and PDF confirmations, WhatsApp catalog browsing with business-confirmed orders, and a CRM with contacts, lead capture and ad attribution. ManyChat covers these through integrations and third-party apps configured per flow, which is flexible but means more moving parts. Google Workspace users should also note waai\'s native Gmail/Calendar/Drive integration.',
+  },
+  {
+    question: 'Which is better for agencies and resellers?',
+    answer:
+      'waai is multi-tenant with a reseller/white-label option, so agencies can run WhatsApp AI for many clients under their own brand. ManyChat serves agencies through its Business tier and agency program. If white-labeling a WhatsApp-only AI assistant to SMB clients (especially in Singapore/Southeast Asia) is the goal, waai is purpose-built for it; multi-channel agencies generally prefer ManyChat\'s breadth.',
+  },
+];
+
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'waai vs ManyChat for WhatsApp (2026): An Objective Comparison',
+  description:
+    'waai vs ManyChat compared for WhatsApp in 2026 — AI answering, booking, catalog orders, CRM, integrations and real pricing in SGD and USD.',
+  url: canonical,
+  mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+  datePublished: LAST_UPDATED,
+  dateModified: LAST_UPDATED,
+  author: { '@type': 'Person', name: 'Peter Lum', jobTitle: 'Founder', url: SITE },
+  publisher: {
+    '@type': 'Organization',
+    name: 'waai',
+    logo: { '@type': 'ImageObject', url: `${SITE}/images/logos/logo.jpg` },
+  },
+};
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: SITE },
+    { '@type': 'ListItem', position: 2, name: 'waai vs ManyChat' },
+  ],
+};
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((f) => ({
+    '@type': 'Question',
+    name: f.question,
+    acceptedAnswer: { '@type': 'Answer', text: f.answer },
+  })),
+};
+
+const featureRows: { label: string; waai: string; manychat: string }[] = [
+  { label: 'AI answering without building flows', waai: '✓', manychat: '—' },
+  { label: 'Knowledge base (Q&A pairs) + bulk import', waai: '✓', manychat: 'Via AI steps' },
+  { label: 'Rule-based logic flows', waai: '✓', manychat: '✓' },
+  { label: 'LLM fallback answers (any OpenAI-compatible provider)', waai: '✓', manychat: 'ManyChat AI (paid tiers, credits)' },
+  { label: 'Self-service booking (branches, services, deposits, PDF confirmations)', waai: '✓', manychat: 'Via integrations' },
+  { label: 'WhatsApp catalog browsing + business-confirmed orders', waai: '✓', manychat: 'Via integrations' },
+  { label: 'CRM (contacts, lead capture, ad attribution, automations)', waai: '✓', manychat: 'Via integrations' },
+  { label: 'Team inbox + human handoff', waai: '✓', manychat: '✓' },
+  { label: 'Broadcast campaigns within WhatsApp windows', waai: '✓', manychat: '✓' },
+  { label: 'Google Workspace (Gmail/Calendar/Drive) integration', waai: '✓', manychat: 'Via Zapier/Make' },
+  { label: 'Document generation (quotes, invoices via Google Drive)', waai: '✓', manychat: '—' },
+  { label: 'Instagram / Messenger / email / SMS channels', waai: '—', manychat: '✓' },
+  { label: 'Per-language Q&A + flow translations', waai: '✓', manychat: 'Manual flow setup per language' },
+  { label: 'Multi-tenant white-label for agencies', waai: '✓', manychat: 'Agency program' },
+];
+---
+
+<PageLayout
+  title="waai vs ManyChat for WhatsApp (2026 Comparison)"
+  description="waai vs ManyChat compared for WhatsApp in 2026: AI answering, booking, catalog orders, CRM and real pricing (SGD vs USD) — an objective look at which fits your business."
+  canonicalPath="/compare/waai-vs-manychat/"
+>
+  <JsonLd data={articleJsonLd} />
+  <JsonLd data={breadcrumbJsonLd} />
+  <JsonLd data={faqJsonLd} />
+
+  <section class="py-16 sm:py-20 bg-white">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <SectionHeading
+        as="h1"
+        title="waai vs ManyChat for WhatsApp"
+        subtitle="An objective, feature-by-feature comparison for businesses choosing a WhatsApp automation platform in 2026."
+        badge="Comparison"
+      />
+
+      <!-- Direct answer (self-contained, extractable) -->
+      <div class="max-w-4xl mx-auto bg-green-50 border-l-4 border-wa-green rounded-r-2xl p-6 sm:p-8">
+        <p class="text-lg text-gray-800 leading-relaxed">
+          <strong>What's the difference between waai and ManyChat for WhatsApp?</strong>
+          waai is a WhatsApp-first AI agent platform built on the official WhatsApp Business API by a Meta Tech
+          Provider — AI answers from a knowledge base, self-service booking with deposits, catalog orders and CRM.
+          ManyChat is a broader no-code chatbot builder for Instagram, Messenger, WhatsApp, email and SMS with a
+          generous free tier. Choose waai for WhatsApp-only depth with AI answering out of the box; choose ManyChat
+          for multi-channel drag-and-drop flows.
+        </p>
+      </div>
+
+      <!-- TL;DR verdict cards -->
+      <div class="grid md:grid-cols-2 gap-8 mt-12">
+        <div class="bg-white rounded-2xl border border-gray-100 p-8 shadow-sm">
+          <h3 class="text-xl font-bold text-gray-900 mb-4">Choose waai if…</h3>
+          <ul class="space-y-3 text-gray-600 leading-relaxed list-disc pl-5">
+            <li>WhatsApp is your primary (or only) customer channel</li>
+            <li>You want AI that answers real customer questions immediately — maintain answers as content, not conversation trees</li>
+            <li>You need booking with deposits, catalog orders, or CRM without stitching together integrations</li>
+            <li>You use Google Workspace (Gmail, Calendar, Drive)</li>
+            <li>You're an agency that wants to white-label a WhatsApp AI assistant for SMB clients</li>
+            <li>You prefer simple plan pricing with message quotas (SGD)</li>
+          </ul>
+        </div>
+        <div class="bg-white rounded-2xl border border-gray-100 p-8 shadow-sm">
+          <h3 class="text-xl font-bold text-gray-900 mb-4">Choose ManyChat if…</h3>
+          <ul class="space-y-3 text-gray-600 leading-relaxed list-disc pl-5">
+            <li>You automate across Instagram, Facebook Messenger, email and SMS as well as WhatsApp</li>
+            <li>You want precise, scripted journeys (click-to-WhatsApp ad funnels, drip sequences, giveaways)</li>
+            <li>You need a free tier to start with a small contact list</li>
+            <li>Your team lives in a visual drag-and-drop flow builder</li>
+            <li>You want a large template library and established community</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- At a glance -->
+      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mt-16 mb-6">At a glance</h2>
+      <div class="overflow-x-auto rounded-2xl border border-gray-100">
+        <table class="w-full min-w-[560px]">
+          <thead>
+            <tr class="border-b border-gray-200 bg-gray-50">
+              <th class="py-4 px-4 text-left text-sm font-semibold text-gray-900"></th>
+              <th class="py-4 px-4 text-center text-sm font-semibold text-wa-green">waai</th>
+              <th class="py-4 px-4 text-center text-sm font-semibold text-gray-900">ManyChat</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-gray-100"><td class="py-3 px-4 text-sm text-gray-600">Category</td><td class="py-3 px-4 text-sm text-center text-gray-800">WhatsApp AI agent platform (SaaS)</td><td class="py-3 px-4 text-sm text-center text-gray-800">Multi-channel no-code chatbot builder</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 px-4 text-sm text-gray-600">Channels</td><td class="py-3 px-4 text-sm text-center text-gray-800">WhatsApp only</td><td class="py-3 px-4 text-sm text-center text-gray-800">WhatsApp, Instagram, Messenger, email, SMS</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 px-4 text-sm text-gray-600">Built on official WhatsApp Business API</td><td class="py-3 px-4 text-sm text-center">✓</td><td class="py-3 px-4 text-sm text-center">✓</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 px-4 text-sm text-gray-600">Primary way to answer customers</td><td class="py-3 px-4 text-sm text-center text-gray-800">AI (knowledge base + logic flows + LLM fallback)</td><td class="py-3 px-4 text-sm text-center text-gray-800">Flows you build (AI available on paid tiers)</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 px-4 text-sm text-gray-600">Pricing model</td><td class="py-3 px-4 text-sm text-center text-gray-800">Per plan, message quotas (SGD)</td><td class="py-3 px-4 text-sm text-center text-gray-800">Per active contact, tiered (USD)</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 px-4 text-sm text-gray-600">Entry paid price</td><td class="py-3 px-4 text-sm text-center text-gray-800">S${starterMonthly}/mo (Starter)</td><td class="py-3 px-4 text-sm text-center text-gray-800">$17/mo (Essential, ~250 contacts)</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 px-4 text-sm text-gray-600">Free option</td><td class="py-3 px-4 text-sm text-center text-gray-800">{trialDays}-day full-feature trial, no card</td><td class="py-3 px-4 text-sm text-center text-gray-800">Free tier (~25 contacts, 1,000 credits/mo)</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 px-4 text-sm text-gray-600">Bookings, catalog orders, CRM</td><td class="py-3 px-4 text-sm text-center">✓ Built in</td><td class="py-3 px-4 text-sm text-center text-gray-800">Via integrations</td></tr>
+            <tr class="border-b border-gray-100"><td class="py-3 px-4 text-sm text-gray-600">Best for</td><td class="py-3 px-4 text-sm text-center text-gray-800">SMBs & agencies, WhatsApp-first (SG/SEA)</td><td class="py-3 px-4 text-sm text-center text-gray-800">Multi-channel marketing automation</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Feature table -->
+      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mt-16 mb-6">Feature-by-feature</h2>
+      <div class="overflow-x-auto rounded-2xl border border-gray-100">
+        <table class="w-full min-w-[560px]">
+          <thead>
+            <tr class="border-b border-gray-200 bg-gray-50">
+              <th class="py-4 px-4 text-left text-sm font-semibold text-gray-900">Capability</th>
+              <th class="py-4 px-4 text-center text-sm font-semibold text-wa-green">waai</th>
+              <th class="py-4 px-4 text-center text-sm font-semibold text-gray-900">ManyChat</th>
+            </tr>
+          </thead>
+          <tbody>
+            {featureRows.map((row) => (
+              <tr class="border-b border-gray-100">
+                <td class="py-3 px-4 text-sm text-gray-600">{row.label}</td>
+                <td class="py-3 px-4 text-sm text-center text-gray-800">
+                  {row.waai === '✓' ? (
+                    <svg class="w-5 h-5 text-wa-green mx-auto" fill="currentColor" viewBox="0 0 20 20" aria-label="Yes"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                  ) : row.waai === '—' ? (
+                    <span class="text-gray-400">—</span>
+                  ) : (
+                    <span>{row.waai}</span>
+                  )}
+                </td>
+                <td class="py-3 px-4 text-sm text-center text-gray-600">
+                  {row.manychat === '✓' ? (
+                    <svg class="w-5 h-5 text-wa-green mx-auto" fill="currentColor" viewBox="0 0 20 20" aria-label="Yes"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                  ) : row.manychat === '—' ? (
+                    <span class="text-gray-400">—</span>
+                  ) : (
+                    <span>{row.manychat}</span>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-4 text-sm text-gray-400">Feature availability by plan varies on both platforms — see <a href="/pricing/" class="underline hover:text-gray-600">waai pricing</a> and manychat.com/pricing for tier details.</p>
+
+      <!-- Pricing -->
+      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mt-16 mb-6">Pricing compared</h2>
+      <p class="text-gray-600 leading-relaxed mb-8 max-w-3xl">
+        The platforms price differently, so raw numbers mislead. waai charges per plan with message
+        quotas (Singapore dollars). ManyChat charges per <em>active contact</em> in US dollars, with
+        overage fees beyond each tier. Neither includes Meta's WhatsApp per-conversation fees, which
+        both pass through.
+      </p>
+      <div class="grid lg:grid-cols-2 gap-8">
+        <div class="bg-white rounded-2xl border border-gray-100 p-8 shadow-sm">
+          <h3 class="text-lg font-bold text-gray-900 mb-4">waai (SGD, per plan)</h3>
+          <ul class="space-y-3 text-sm text-gray-600">
+            <li><strong class="text-gray-900">Trial</strong> — Free for {trialDays} days, no credit card</li>
+            <li><strong class="text-gray-900">Starter</strong> — S${starterMonthly}/mo or S${starterYearly}/yr</li>
+            <li><strong class="text-gray-900">Pro</strong> — S${proMonthly}/mo or S${proYearly}/yr</li>
+            <li><strong class="text-gray-900">Custom</strong> — tailored volumes and quotas</li>
+            <li>Optional one-time onboarding assistance for Starter/Pro</li>
+          </ul>
+          <a href="/pricing/" class="mt-6 inline-block text-sm font-medium text-wa-green hover:underline">Full quotas and comparison →</a>
+        </div>
+        <div class="bg-white rounded-2xl border border-gray-100 p-8 shadow-sm">
+          <h3 class="text-lg font-bold text-gray-900 mb-4">ManyChat (USD, per active contact)</h3>
+          <ul class="space-y-3 text-sm text-gray-600">
+            {manychatTiers.map((tier) => (
+              <li><strong class="text-gray-900">{tier.name}</strong> — {tier.price} · {tier.contacts} · {tier.notes}</li>
+            ))}
+          </ul>
+          <p class="mt-6 text-xs text-gray-400">ManyChat prices as of Nov 2026 (manychat.com/pricing); annual billing ~25% lower on mid tiers.</p>
+        </div>
+      </div>
+      <p class="mt-6 text-gray-600 leading-relaxed max-w-3xl">
+        <strong>Rule of thumb:</strong> below ~250 contacts ManyChat's free and Essential tiers are
+        cheaper; from roughly a thousand active contacts upward, waai Pro
+        (S${proMonthly}/mo with {pro?.max_messages_monthly ? (pro.max_messages_monthly / 1000).toFixed(0) + 'k' : '20k'} messages/month) compares
+        against ManyChat Business at $99/mo — and unlike contact-tier pricing, a busy month of
+        conversations doesn't reprice your plan.
+      </p>
+
+      <!-- Where each wins -->
+      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mt-16 mb-6">Where each platform wins</h2>
+      <div class="prose-waai-body space-y-4 text-gray-600 leading-relaxed max-w-3xl">
+        <p>
+          <strong class="text-gray-900">waai's edge is depth on a single channel.</strong> Every feature — AI
+          answering, booking with deposits, catalog orders, CRM, document generation — is built for WhatsApp and
+          maintained as content rather than as flows, which keeps it manageable for a small business without a
+          automation team. The Google Workspace integration and white-label option make it practical for
+          Singapore/SEA SMBs and the agencies serving them.
+        </p>
+        <p>
+          <strong class="text-gray-900">ManyChat's edge is breadth and maturity.</strong> One builder across five
+          channels, a decade of templates and a large community, click-to-WhatsApp ad funnels, and a genuinely
+          useful free tier. For scripted marketing journeys — giveaways, drip sequences, Instagram comment
+          automation — it remains the category default.
+        </p>
+      </div>
+
+      <!-- FAQ -->
+      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mt-16 mb-8">FAQ</h2>
+      <div class="max-w-3xl">
+        <Accordion items={faqItems} />
+      </div>
+
+      <div class="mt-16 bg-gray-50 rounded-2xl p-8 sm:p-10 text-center">
+        <h3 class="text-2xl font-bold text-gray-900 mb-3">See waai on your own WhatsApp</h3>
+        <p class="text-gray-600 mb-6 max-w-xl mx-auto">Try waai free for {trialDays} days — no credit card required. Or book a 30-minute demo.</p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <CTAButton href="/signup/" variant="primary">Start free trial</CTAButton>
+          <CTAButton href="https://cal.com/peter-rock-steady-crew/30min" variant="secondary" external>Book a demo</CTAButton>
+        </div>
+      </div>
+
+      <p class="mt-10 text-center text-sm text-gray-400">Last updated: {LAST_UPDATED} · Prices checked against manychat.com/pricing and the waai plans API.</p>
+    </div>
+  </section>
+</PageLayout>
