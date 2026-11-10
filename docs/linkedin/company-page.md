@@ -111,12 +111,16 @@ manager** after every refresh (or accept re-doing the browser auth when the box 
 
 ---
 
-## 2. The page (ALREADY CREATED — company ID 145444138)
+## 2. The page (LIVE — company ID 145444138)
 
 Peter created the company page and is its admin (2026-11-10):
-`https://www.linkedin.com/company/145444138/admin/dashboard/`. Remaining setup work =
-logo, banner, tagline/About/specialties from §3, vanity URL claim (`/company/waai` if
-not yet set: admin → Settings → Page URL), first post from §4.
+`https://www.linkedin.com/company/145444138/admin/dashboard/` · public:
+**`https://www.linkedin.com/company/waaichat/home`** (claimed slug `waaichat`; the
+bare `/company/waai` slug appears FREE — search shows only `waai-inc` and
+`waai-agence-ia` — switching = admin Settings → Page URL; flagged to Peter, his call).
+Setup DONE 2026-11-10: logo (logo-512.png), banner (emailed + uploaded), tagline,
+About (entity-line copy), specialties found + filled, vanity URL claimed. Open:
+founder position on Peter's profile (Experience → Founder at waai).
 
 ### Original creation steps (kept for reference / other pages)
 
@@ -209,8 +213,8 @@ and scripted:
   address-bar URL** into `~/.config/waai-website/oauth-code.txt` → `python3
   scripts/linkedin-token-exchange.py` (verifies state, exchanges, stores token 600,
   prints OIDC userinfo). Access token = **60 days, no refresh token** (`offline_access`
-  → `invalid_scope` until the app passes verification — verify the app email if/when
-  LinkedIn sends it, then re-test).
+  → still `invalid_scope` even after the Standard-Tier OIDC approval email of
+  2026-11-10, app id 264225540 — re-probe at each renewal; it may flip days later).
 - **Identity confirmed via OIDC:** the token's `/v2/userinfo` = Peter Lum /
   peter@hotsource.net.
 - **Scope reality (bisected 2026-11-10):** grantable = `openid profile email
@@ -225,6 +229,17 @@ and scripted:
   page, which **auto-redirects to the redirect_uri after 5 s** — it looks like a
   half-success (dead localhost page) but is a failure; the address bar carries
   `error=…`, not `code=…`.
+- **FIRST POST SHIPPED 2026-11-10** (Peter-approved ManyChat comparison, text + link;
+  `scripts/post-to-linkedin.py`, API 201). Two API gates found en route:
+  (1) `LinkedIn-Version` header must name an ACTIVE YYYYMM (`202611` → 426
+  NONEXISTENT_VERSION even though the month had started; `202610` active) and the
+  version gate is enforced inconsistently — GETs may skip it — so resolve by retrying
+  the real call; (2) **image uploads are partner-gated** for young apps
+  (`partnerApiAssets…registerUpload` → 403 despite `w_member_social`) — posts are
+  **text + link** for now; the link's og:image card carries the visual. Image posts
+  need app review ("media upload" permission) or a Buffer-class tool.
+  RestLI returns the new post URN in the **`x-restli-id` response header** (empty
+  body) — don't parse the body for it.
 
 ⚠️ **Confirmed 2026-11-10:** the "Community Management API" product's Request-access is
 **dimmed** for self-serve apps — LinkedIn gates it to approved partners, so
