@@ -197,26 +197,40 @@ one product/industry angle per week from `docs/screenshots/`.
 - [ ] Page URL added to `docs/submission-tracker.csv` + the G2/Capterra profiles later
 - [ ] Site backlink: consider adding a LinkedIn icon to the site footer later (not urgent)
 
-## 6. Phase 2 (optional, later): auto-posting via API
+## 6. Phase 2: API access — BOOTSTRAPPED 2026-11-10 ✅
 
-Only worth building once the page has been manually alive for a few weeks. Design sketch
-so the secrets above make sense now:
+The dev app exists (client id/secret in `linkedin-credentials.json`), products attached:
+"Share on LinkedIn" + "Sign In with LinkedIn using OpenID Connect". Token flow is live
+and scripted:
 
-1. Peter creates an app at **developer.linkedin.com** (needs the company page to exist
-   first — do §2 before this), adds the **"Share on LinkedIn"** and **"Sign In with
-   LinkedIn using OpenID Connect"** products.
-2. One-time browser auth as Peter (page admin) → access + refresh tokens land in
-   `~/.config/waai-website/linkedin-credentials.json`.
-3. A small `scripts/post-to-linkedin.mjs` (mirrors the blog tooling): refreshes the
-   access token when <7 days to expiry (rewrites the file), posts text + link + image
-   to the page via `POST /rest/posts` with the organization URN.
-4. Hook: after a blog PR merges (deploy fires), post the new article — either extend the
-   on-box review daemon (it already knows about merges) or a tiny GH Action using only
-   the static client secrets.
+- **Bootstrap / 60-day renewal:** `python3 scripts/linkedin-authorize-url.py` → prints
+  the authorize URL (fresh CSRF state) → Peter opens it logged in, clicks Allow, lands
+  on the dead `localhost:8080/callback?code=…` page (expected), pastes the **full
+  address-bar URL** into `~/.config/waai-website/oauth-code.txt` → `python3
+  scripts/linkedin-token-exchange.py` (verifies state, exchanges, stores token 600,
+  prints OIDC userinfo). Access token = **60 days, no refresh token** (`offline_access`
+  → `invalid_scope` until the app passes verification — verify the app email if/when
+  LinkedIn sends it, then re-test).
+- **Identity confirmed via OIDC:** the token's `/v2/userinfo` = Peter Lum /
+  peter@hotsource.net.
+- **Scope reality (bisected 2026-11-10):** grantable = `openid profile email
+  w_member_social`. `w_organization_social`/`r_organization_social` →
+  `unauthorized_scope_error` (CM API partner-gated; the dimmed "Request access"
+  button). So **posting as the company page via this app is not possible** — page posts
+  stay manual-paste (§4) or via a Buffer-class partner tool. **Posting as Peter**
+  (mentioning/tagging the page) IS possible via `w_member_social` — `POST /rest/posts`
+  with the member URN; the first such post awaits Peter's go (nothing is published to
+  his profile without approval).
+- Scope-error UX gotcha: rejected scopes show LinkedIn's "Bummer, something went wrong"
+  page, which **auto-redirects to the redirect_uri after 5 s** — it looks like a
+  half-success (dead localhost page) but is a failure; the address bar carries
+  `error=…`, not `code=…`.
 
-⚠️ **Honest caveat:** LinkedIn has tightened organization posting — the
-`w_organization_social` scope now sits under the Community Management API, which can
-require app review even for your own page. For your own page + your own app + you as
-admin it generally still works, but if LinkedIn blocks it, the fallback is: manual
-posting (1/week is fine), or post from Peter's personal profile and reshare from the
-page. Decide when we get there.
+⚠️ **Confirmed 2026-11-10:** the "Community Management API" product's Request-access is
+**dimmed** for self-serve apps — LinkedIn gates it to approved partners, so
+`w_organization_social` (posting *as the page*) is not grantable via a self-serve app.
+**Split plan:** (a) company-page posts = manual paste in Peter's browser (all copy in
+§4) or a partner tool with page access (Buffer/Hootsuite class); (b) automated posting
+**as Peter** via `w_member_social` (mentioning/tagging the page) + profile APIs via
+OIDC — one authorize flow covers both; the URL requests org scopes anyway in case the
+page-admin app-owner legacy grant still applies (expect `invalid_scope`).
