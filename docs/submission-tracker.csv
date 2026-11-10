@@ -39,8 +39,9 @@ PeerPush,1,https://peerpush.net/submit,Launch,25,Yes,,,Draft,,D,,
 PitchWall,1,https://pitchwall.co/submit,Launch,25,Yes,,,Draft,,D,,
 Tiny Launch,1,https://tinylaunch.com/submit,Launch,20,Yes,,,Draft,,D,,
 Launching Next,1,https://launchingnext.com/submit,Launch,30,Yes,,,Draft,,D,,Editorial — needs story angle
-G2,2,https://my.g2.com/sellers/welcome,WhatsApp Marketing,92,Yes,2026-11-10,In Progress,,B,,LinkedIn SSO login; List now; then 10-in-30 review asks with real customers
-Capterra,2,https://www.capterra.com/vendors,WhatsApp Marketing,93,Yes,,,Draft,,B,,Owned by G2 — reviews drive everything
-GetApp,2,https://www.getapp.com/vendors,Customer Service,78,Yes,,,Draft,,B,,May auto-sync from Capterra
+G2,2,https://my.g2.com/sellers/welcome,WhatsApp Marketing,92,Yes,2026-11-10,In Progress,,B,,LinkedIn SSO login; claimed 2026-11-10 — profile 3/7 complete (AI-prefilled from waai.me); one profile feeds Capterra+GetApp+Software Advice; then 10-in-30 review asks with real customers
+Capterra,2,https://www.capterra.com/vendors,WhatsApp Marketing,93,Yes,2026-11-10,In Progress,,B,,LinkedIn SSO; profile 4/6 via my.G2 shared profile
+GetApp,2,https://www.getapp.com/vendors,Customer Service,78,Yes,2026-11-10,In Progress,,B,,profile 5/6 via my.G2 shared profile
+Software Advice,2,https://www.softwareadvice.com,Customer Service,60,Yes,2026-11-10,In Progress,,B,,profile 1/3 via my.G2 shared profile (G2-owned; auto-lists)
 TrustRadius,2,https://www.trustradius.com/vendors,Customer Service,72,Yes,,,Draft,,B,,
 Product Hunt,1,https://producthunt.com,Launch,91,Yes,,,Draft,,D,,DO NOT SUBMIT YET — separate planned launch (3-week warm-up first)
