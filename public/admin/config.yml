@@ -54,7 +54,6 @@ collections:
                 name: "values"
                 widget: "list"
                 hint: "The grid is designed for 4 values (e.g. 99.9%, <1s, 24/7, AES)."
-                field: { widget: "string" }
           - label: "AI Capabilities"
             name: "ai"
             widget: "object"
