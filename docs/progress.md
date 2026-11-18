@@ -11,6 +11,7 @@ Peter asked for a free Astro CMS enabling simple changes + auto blogs — turned
 - **Front page layout** → `src/data/home-layout.json` orders/toggles sections; `HomePage.astro` renders via an id→component `SECTIONS` registry (hero fixed first; definition extracted to its own component). Verified by test-build: disabling `videos` removes the carousel, EN shows a JSON headline edit while zh keeps its translated one.
 - **Gotcha found:** Vite/rollup has **no YAML import support in this Astro setup** — `.yaml` imports are parsed as JS (`Expected ';'` build error). Everything is JSON (`resolveJsonModule: true` added), which Sveltia/Decap edit natively.
 - **Regression-proof:** built before/after — all 646 pages byte-identical except invisible whitespace-between-tags on the 10 locale homepages (Astro renders map()-produced sections without inter-element spaces). CMS saves rewrite the JSONs wholesale, so schema-unknown keys are dropped — config.yml fields + the loader must change together (documented in CLAUDE.md).
+- **Hotfix (PRs #60/#61, same day):** Peter's first /admin load failed — Sveltia browser-validates config.yml and rejected `field: {widget: string}` on the stats values list ("The name option is required"); a plain string list takes NO `field` key (blog.tags shape). config.yml ships verbatim in dist/ and is never build-validated, so this only surfaced at runtime — CLAUDE.md now says test /admin after any config change.
 
 ## 2026-11-10
 
