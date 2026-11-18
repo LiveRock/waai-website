@@ -17,6 +17,7 @@ import ja from './ui/ja';
 import fr from './ui/fr';
 import it from './ui/it';
 import es from './ui/es';
+import { HOME_STRINGS } from './homeContent';
 
 export const SITE = 'https://waai.me';
 
@@ -90,9 +91,22 @@ export function getAlternates(pathname: string): { lang: Lang; hreflang: string;
 /**
  * Translation function bound to a locale. Falls back to English, then to the
  * literal key (so untranslated strings surface visibly rather than disappearing).
+ *
+ * Between the locale and English sits the CMS layer: HOME_STRINGS (from
+ * src/data/home-content.yaml, edited at /admin) is the editable English base
+ * for front-page copy. A locale's own translation always wins; locales without
+ * one inherit the CMS value.
  */
 export function useTranslations(lang: Lang): Translator {
-  return (key: string) => DICTS[lang]?.[key] ?? DICTS[DEFAULT_LANG][key] ?? key;
+  // For the default (English) locale the dictionary must NOT shadow the CMS:
+  // HOME_STRINGS is the editable base for its keys, so it comes first. For
+  // other locales their own translation wins, then the CMS value (the English
+  // base), then the English dictionary.
+  return (key: string) =>
+    (lang === DEFAULT_LANG ? undefined : DICTS[lang]?.[key]) ??
+    HOME_STRINGS[key] ??
+    DICTS[DEFAULT_LANG][key] ??
+    key;
 }
 
 export { LANGS, LOCALES, DEFAULT_LANG, type Lang };

@@ -1,0 +1,64 @@
+{
+  "hero": {
+    "badge": "Your WhatsApp AI Agent",
+    "headline": "Why am I losing customers to slow responses?",
+    "subhead": "Turn every WhatsApp message into an opportunity. AI auto-responses, bookings, orders, and seamless human handoff — your customers never wait again.",
+    "trialNote": "No credit card required. Free trial.",
+    "badgeResponseLabel": "Response Time",
+    "badgeResponseValue": "< 3 seconds",
+    "badgeAiLabel": "AI Powered",
+    "badgeAiValue": "24/7 Active"
+  },
+  "definition": "waai is a commercial, multi-tenant AI WhatsApp business assistant — a SaaS platform that automates customer conversations, bookings, catalog orders and support on the official WhatsApp Business API for small and medium businesses.",
+  "logoTitle": "Trusted by businesses worldwide",
+  "videoHeading": "why not?",
+  "stats": {
+    "badge": "Infrastructure",
+    "title": "Built for Reliability. Designed for Growth.",
+    "subtitle": "Enterprise-grade infrastructure powering businesses around the clock.",
+    "values": [
+      "99.9%",
+      "<1s",
+      "24/7",
+      "AES"
+    ]
+  },
+  "ai": {
+    "badge": "AI Capabilities",
+    "title": "One AI Agent. Three Superpowers.",
+    "subtitle": "Your waai.me agent understands context, thinks like your best employee, and takes action on your behalf.",
+    "c1Title": "Understands Context",
+    "c1Body": "Fuzzy matching finds the right answer even with typos, slang, or partial questions. Your knowledge base works the way real people talk.",
+    "c2Title": "Thinks Like You",
+    "c2Body": "When no rule matches, your AI steps in with LLM-powered responses. Choose OpenAI, Anthropic, or any provider. Your brand voice, amplified.",
+    "c3Title": "Acts on Your Behalf",
+    "c3Body": "Your agent books appointments against real availability, takes orders with live stock, and files every chat into your CRM — automatically."
+  },
+  "features": {
+    "badge": "Features",
+    "title": "Everything You Need to Win on WhatsApp",
+    "subtitle": "From auto-responses to bookings, orders, and CRM — your AI agent runs the entire customer journey."
+  },
+  "integrations": {
+    "badge": "Integrations",
+    "title": "Connect With the Tools You Already Use",
+    "subtitle": "Google Workspace integration and AI Super Powers — your WhatsApp agent extends into your entire workflow."
+  },
+  "journey": {
+    "title": "Why Me? Because Every Conversation Counts.",
+    "subtitle": "Whether you’re marketing, selling, or supporting — your AI agent handles it all on WhatsApp."
+  },
+  "testimonials": {
+    "badge": "Testimonials",
+    "title": "Businesses Love Their Smart Business Assistant",
+    "subtitle": "See why companies choose waai.me to automate their WhatsApp customer conversations."
+  },
+  "finalCta": {
+    "title": "Ready to Stop Asking “Why Me?”",
+    "subtitle": "Your customers are messaging you right now. Give them instant, intelligent responses — and get your time back.",
+    "startTrial": "Start Your Free Trial",
+    "freeTrial": "Free trial",
+    "noCard": "No credit card required",
+    "setup": "Setup in minutes"
+  }
+}

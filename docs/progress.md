@@ -2,6 +2,16 @@
 
 Running log of significant work sessions. Newest first.
 
+## 2026-11-18
+
+### CMS-editable front page + testimonials
+Peter asked for a free Astro CMS enabling simple changes + auto blogs — turned out both already existed (Sveltia at `/admin` + weekly auto-blog PRs), but the CMS only exposed the blog. Extended it to the two things he wanted editable:
+- **Testimonials** → `src/data/testimonials.json` (`items[]`: name/role/company/quote/avatar with image upload into `public/images/testimonials/`); `src/data/testimonials.ts` keeps the typed surface, normalizing optional keys the CMS may omit.
+- **Front page content** → `src/data/home-content.json` = the editable **English base** for ~40 `home.*` strings (hero incl. floating badges, definition line, logo-strip title, video heading, stats titles + the 4 locale-neutral stat VALUES, AI-cards, section titles/subtitles, final CTA). New `src/i18n/homeContent.ts` flattens it into dotted keys; `useTranslations` chain is now **locale dict → CMS JSON → en dict → key** (English reads the CMS base first — otherwise en.ts would shadow every CMS edit; a locale's own translation still wins). Buyer-Journey steps / feature-card text / video titles deliberately stay dictionary-only (deep copy, fully translated everywhere).
+- **Front page layout** → `src/data/home-layout.json` orders/toggles sections; `HomePage.astro` renders via an id→component `SECTIONS` registry (hero fixed first; definition extracted to its own component). Verified by test-build: disabling `videos` removes the carousel, EN shows a JSON headline edit while zh keeps its translated one.
+- **Gotcha found:** Vite/rollup has **no YAML import support in this Astro setup** — `.yaml` imports are parsed as JS (`Expected ';'` build error). Everything is JSON (`resolveJsonModule: true` added), which Sveltia/Decap edit natively.
+- **Regression-proof:** built before/after — all 646 pages byte-identical except invisible whitespace-between-tags on the 10 locale homepages (Astro renders map()-produced sections without inter-element spaces). CMS saves rewrite the JSONs wholesale, so schema-unknown keys are dropped — config.yml fields + the loader must change together (documented in CLAUDE.md).
+
 ## 2026-11-10
 
 ### LinkedIn page live + first API post shipped (evening)

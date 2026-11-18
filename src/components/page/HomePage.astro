@@ -2,6 +2,7 @@
 import PageLayout from '../../layouts/PageLayout.astro';
 import JsonLd from '../seo/JsonLd.astro';
 import Hero from '../home/Hero.astro';
+import Definition from '../home/Definition.astro';
 import LogoCarousel from '../home/LogoCarousel.astro';
 import VideoCarousel from '../home/VideoCarousel.astro';
 import AICapabilities from '../home/AICapabilities.astro';
@@ -13,6 +14,26 @@ import Testimonials from '../home/Testimonials.astro';
 import FinalCTA from '../home/FinalCTA.astro';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 import { SITE } from '../../i18n/utils';
+import layoutRaw from '../../data/home-layout.json';
+import type { AstroComponentFactory } from 'astro';
+
+// Section registry — the CMS (src/data/home-layout.json) controls order and
+// visibility. Hero stays fixed at the top; unknown ids are skipped.
+const SECTIONS: Record<string, AstroComponentFactory> = {
+  definition: Definition,
+  logos: LogoCarousel,
+  videos: VideoCarousel,
+  aiCapabilities: AICapabilities,
+  buyerJourney: BuyerJourney,
+  features: FeaturesGrid,
+  integrations: Integrations,
+  stats: Stats,
+  testimonials: Testimonials,
+  finalCta: FinalCTA,
+};
+type LayoutSection = { id: string; enabled?: boolean };
+const layout = (layoutRaw as { sections?: LayoutSection[] }).sections ?? [];
+const sections = layout.filter((s) => s.enabled !== false && SECTIONS[s.id]);
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -63,20 +84,8 @@ const softwareJsonLd = {
 >
   <JsonLd data={softwareJsonLd} />
   <Hero />
-  <!-- Plain-language entity definition — the first content after the hero, for
-       LLMs (and skimmers) that need "what is waai" stated unambiguously. -->
-  <section class="bg-white py-6 sm:py-8">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <p class="text-base sm:text-lg text-gray-600 leading-relaxed">{t('home.definition')}</p>
-    </div>
-  </section>
-  <LogoCarousel />
-  <VideoCarousel />
-  <AICapabilities />
-  <BuyerJourney />
-  <FeaturesGrid />
-  <Integrations />
-  <Stats />
-  <Testimonials />
-  <FinalCTA />
+  {sections.map((s) => {
+    const Section = SECTIONS[s.id];
+    return <Section />;
+  })}
 </PageLayout>
