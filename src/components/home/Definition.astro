@@ -1,0 +1,15 @@
+---
+// Plain-language entity definition — the first content after the hero, for
+// LLMs (and skimmers) that need "what is waai" stated unambiguously.
+// Extracted from HomePage so the CMS can reorder it like every other section.
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<section class="bg-white py-6 sm:py-8">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <p class="text-base sm:text-lg text-gray-600 leading-relaxed">{t('home.definition')}</p>
+  </div>
+</section>

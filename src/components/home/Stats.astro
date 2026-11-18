@@ -1,8 +1,11 @@
 ---
 import SectionHeading from '../shared/SectionHeading.astro';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import { HOME_STATS_VALUES } from '../../i18n/homeContent';
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+// Stat values come from the CMS (home-content.yaml); labels stay translated.
+const [v1 = '99.9%', v2 = '<1s', v3 = '24/7', v4 = 'AES'] = HOME_STATS_VALUES;
 ---
 
 <section class="py-20 sm:py-24 bg-wa-teal relative overflow-hidden">
@@ -18,19 +21,19 @@ const t = useTranslations(lang);
     />
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 mt-12">
       <div class="text-center">
-        <div class="text-4xl sm:text-5xl font-extrabold text-white mb-2">99.9%</div>
+        <div class="text-4xl sm:text-5xl font-extrabold text-white mb-2">{v1}</div>
         <div class="text-green-200 text-sm font-medium">{t('home.stats.uptime')}</div>
       </div>
       <div class="text-center">
-        <div class="text-4xl sm:text-5xl font-extrabold text-wa-green mb-2">&lt;1s</div>
+        <div class="text-4xl sm:text-5xl font-extrabold text-wa-green mb-2">{v2}</div>
         <div class="text-green-200 text-sm font-medium">{t('home.stats.response')}</div>
       </div>
       <div class="text-center">
-        <div class="text-4xl sm:text-5xl font-extrabold text-white mb-2">24/7</div>
+        <div class="text-4xl sm:text-5xl font-extrabold text-white mb-2">{v3}</div>
         <div class="text-green-200 text-sm font-medium">{t('home.stats.availability')}</div>
       </div>
       <div class="text-center">
-        <div class="text-4xl sm:text-5xl font-extrabold text-wa-green mb-2">AES</div>
+        <div class="text-4xl sm:text-5xl font-extrabold text-wa-green mb-2">{v4}</div>
         <div class="text-green-200 text-sm font-medium">{t('home.stats.encrypted')}</div>
       </div>
     </div>

@@ -1,0 +1,44 @@
+{
+  "sections": [
+    {
+      "id": "definition",
+      "enabled": true
+    },
+    {
+      "id": "logos",
+      "enabled": true
+    },
+    {
+      "id": "videos",
+      "enabled": true
+    },
+    {
+      "id": "aiCapabilities",
+      "enabled": true
+    },
+    {
+      "id": "buyerJourney",
+      "enabled": true
+    },
+    {
+      "id": "features",
+      "enabled": true
+    },
+    {
+      "id": "integrations",
+      "enabled": true
+    },
+    {
+      "id": "stats",
+      "enabled": true
+    },
+    {
+      "id": "testimonials",
+      "enabled": true
+    },
+    {
+      "id": "finalCta",
+      "enabled": true
+    }
+  ]
+}

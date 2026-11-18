@@ -18,6 +18,144 @@ media_folder: "public/images/blog"
 public_folder: "/images/blog"
 
 collections:
+  - name: "front-page"
+    label: "Front Page"
+    label_singular: "Page"
+    description: "Homepage copy and section layout. This is the English base — languages with their own translation keep it; the rest follow your edits."
+    files:
+      - name: "content"
+        label: "Content"
+        file: "src/data/home-content.json"
+        description: "Hero, section titles, stats values, final CTA. Merging to main redeploys waai.me automatically (1–2 min)."
+        fields:
+          - label: "Hero"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "Top badge", name: "badge", widget: "string" }
+              - { label: "Headline", name: "headline", widget: "string" }
+              - { label: "Sub-headline", name: "subhead", widget: "text" }
+              - { label: "Trial note (under the buttons)", name: "trialNote", widget: "string" }
+              - { label: "Floating badge — response label", name: "badgeResponseLabel", widget: "string" }
+              - { label: "Floating badge — response value", name: "badgeResponseValue", widget: "string" }
+              - { label: "Floating badge — AI label", name: "badgeAiLabel", widget: "string" }
+              - { label: "Floating badge — AI value", name: "badgeAiValue", widget: "string" }
+          - { label: "Definition line (the 'what is waai' sentence under the hero — keep it one self-contained sentence)", name: "definition", widget: "text" }
+          - { label: "Logo strip title", name: "logoTitle", widget: "string" }
+          - { label: "Videos section heading", name: "videoHeading", widget: "string" }
+          - label: "Stats"
+            name: "stats"
+            widget: "object"
+            fields:
+              - { label: "Badge", name: "badge", widget: "string" }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Subtitle", name: "subtitle", widget: "text" }
+              - label: "Values"
+                name: "values"
+                widget: "list"
+                hint: "The grid is designed for 4 values (e.g. 99.9%, <1s, 24/7, AES)."
+                field: { widget: "string" }
+          - label: "AI Capabilities"
+            name: "ai"
+            widget: "object"
+            fields:
+              - { label: "Badge", name: "badge", widget: "string" }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Subtitle", name: "subtitle", widget: "text" }
+              - { label: "Card 1 title", name: "c1Title", widget: "string" }
+              - { label: "Card 1 body", name: "c1Body", widget: "text" }
+              - { label: "Card 2 title", name: "c2Title", widget: "string" }
+              - { label: "Card 2 body", name: "c2Body", widget: "text" }
+              - { label: "Card 3 title", name: "c3Title", widget: "string" }
+              - { label: "Card 3 body", name: "c3Body", widget: "text" }
+          - label: "Features"
+            name: "features"
+            widget: "object"
+            fields:
+              - { label: "Badge", name: "badge", widget: "string" }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Subtitle", name: "subtitle", widget: "text" }
+          - label: "Integrations"
+            name: "integrations"
+            widget: "object"
+            fields:
+              - { label: "Badge", name: "badge", widget: "string" }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Subtitle", name: "subtitle", widget: "text" }
+          - label: "Buyer Journey"
+            name: "journey"
+            widget: "object"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Subtitle", name: "subtitle", widget: "text" }
+          - label: "Testimonials section"
+            name: "testimonials"
+            widget: "object"
+            fields:
+              - { label: "Badge", name: "badge", widget: "string" }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Subtitle", name: "subtitle", widget: "text" }
+          - label: "Final CTA"
+            name: "finalCta"
+            widget: "object"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Subtitle", name: "subtitle", widget: "text" }
+              - { label: "Start-trial button label", name: "startTrial", widget: "string" }
+              - { label: "Bullet — free trial", name: "freeTrial", widget: "string" }
+              - { label: "Bullet — no credit card", name: "noCard", widget: "string" }
+              - { label: "Bullet — setup", name: "setup", widget: "string" }
+      - name: "layout"
+        label: "Section Layout"
+        file: "src/data/home-layout.json"
+        description: "Drag sections to reorder the homepage, or untick to hide one. The hero is always first."
+        fields:
+          - label: "Sections (top to bottom)"
+            name: "sections"
+            widget: "list"
+            fields:
+              - label: "Section"
+                name: "id"
+                widget: "select"
+                options:
+                  - { label: "Definition (what is waai)", value: "definition" }
+                  - { label: "Customer logos", value: "logos" }
+                  - { label: "Videos", value: "videos" }
+                  - { label: "AI Capabilities", value: "aiCapabilities" }
+                  - { label: "Buyer Journey", value: "buyerJourney" }
+                  - { label: "Features grid", value: "features" }
+                  - { label: "Integrations", value: "integrations" }
+                  - { label: "Stats", value: "stats" }
+                  - { label: "Testimonials", value: "testimonials" }
+                  - { label: "Final CTA", value: "finalCta" }
+              - { label: "Enabled", name: "enabled", widget: "boolean", default: true }
+
+  - name: "testimonials"
+    label: "Testimonials"
+    label_singular: "Testimonial"
+    description: "Customer quotes on the homepage. Languages without a translation for a person show this English quote."
+    files:
+      - name: "testimonials"
+        label: "Homepage Testimonials"
+        file: "src/data/testimonials.json"
+        fields:
+          - label: "Testimonials"
+            name: "items"
+            widget: "list"
+            fields:
+              - { label: "Person's name", name: "name", widget: "string" }
+              - { label: "Role (optional)", name: "role", widget: "string", required: false, default: "" }
+              - { label: "Company", name: "company", widget: "string" }
+              - { label: "Quote", name: "quote", widget: "text" }
+              - label: "Photo / logo (optional)"
+                name: "avatar"
+                widget: "image"
+                required: false
+                default: ""
+                hint: "Leave empty for the initials circle. Translations are keyed by the person's name — renaming or adding someone means other languages fall back to this English quote."
+                media_folder: "public/images/testimonials"
+                public_folder: "/images/testimonials"
+
   - name: "blog"
     label: "Blog Posts"
     label_singular: "Post"
